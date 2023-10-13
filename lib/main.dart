@@ -47,7 +47,8 @@ Future<void> main() async {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
   }
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+      name: 'mitwatv-3c8bf', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

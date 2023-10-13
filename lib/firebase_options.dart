@@ -44,13 +44,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-      apiKey: "AIzaSyDyugNhMh9OLugoGGdwEWgdSCZ_RS7EIO4",
-      authDomain: "mitwatv-3c8bf.firebaseapp.com",
-      projectId: "mitwatv-3c8bf",
-      storageBucket: "mitwatv-3c8bf.appspot.com",
-      messagingSenderId: "663533434843",
-      appId: "1:663533434843:web:c6ae9531d361de38fe99fe",
-      measurementId: "G-8V44NX4CJH");
+    apiKey: 'AIzaSyDyugNhMh9OLugoGGdwEWgdSCZ_RS7EIO4',
+    appId: '1:663533434843:web:c6ae9531d361de38fe99fe',
+    messagingSenderId: '663533434843',
+    projectId: 'mitwatv-3c8bf',
+    authDomain: 'mitwatv-3c8bf.firebaseapp.com',
+    storageBucket: 'mitwatv-3c8bf.appspot.com',
+    measurementId: 'G-8V44NX4CJH',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw',
@@ -62,16 +63,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBeHiYJJtmhC-s7OO5zAAcRoQXh7EvCkN4',
-    appId: '1:663533434843:ios:a970e3070013e276fe99fe',
+    appId: '1:663533434843:ios:d3a2e284b645a2a8fe99fe',
     messagingSenderId: '663533434843',
     projectId: 'mitwatv-3c8bf',
     storageBucket: 'mitwatv-3c8bf.appspot.com',
-    androidClientId:
-        '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
-    iosClientId:
-        '663533434843-mkmepm2adcbuptvla3uvb61r1ifce1fv.apps.googleusercontent.com',
-    // iosBundleId: 'com.ott.mitwaapp',
-    iosBundleId: 'com.release.mitwatv',
+    androidClientId: '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
+    iosClientId: '663533434843-bmd78mrv0udr6qosqk59n6qp3rin561g.apps.googleusercontent.com',
+    iosBundleId: 'com.divinetechs.dtliveapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,10 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '663533434843',
     projectId: 'mitwatv-3c8bf',
     storageBucket: 'mitwatv-3c8bf.appspot.com',
-    androidClientId:
-        '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
-    iosClientId:
-        '663533434843-aqnt2cv02epkfn98n59ajeaur73gr2iv.apps.googleusercontent.com',
+    androidClientId: '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
+    iosClientId: '663533434843-aqnt2cv02epkfn98n59ajeaur73gr2iv.apps.googleusercontent.com',
     iosBundleId: 'com.release.mitwatvapp',
   );
 }

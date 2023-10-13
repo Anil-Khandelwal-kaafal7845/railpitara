@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>346606981660-rcf3siicukjvl2nlqtafb26ufs6mumc5.apps.googleusercontent.com</string>
+	<string>663533434843-mkmepm2adcbuptvla3uvb61r1ifce1fv.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.346606981660-rcf3siicukjvl2nlqtafb26ufs6mumc5</string>
+	<string>com.googleusercontent.apps.663533434843-mkmepm2adcbuptvla3uvb61r1ifce1fv</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>346606981660-150eiiccap50sdco81aaj0av5lgn59us.apps.googleusercontent.com</string>
+	<string>663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB0KoOQEiQixmNx7PJfO6hjhuXhxxvYCds</string>
+	<string>AIzaSyBeHiYJJtmhC-s7OO5zAAcRoQXh7EvCkN4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>346606981660</string>
+	<string>663533434843</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.divinetechs.dtliveapp</string>
+	<string>com.ott.mitwaapp</string>
 	<key>PROJECT_ID</key>
-	<string>primevideoapp-43bf6</string>
+	<string>mitwatv-3c8bf</string>
 	<key>STORAGE_BUCKET</key>
-	<string>primevideoapp-43bf6.appspot.com</string>
+	<string>mitwatv-3c8bf.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:346606981660:ios:ceb6dbea2605e8d82fc5d9</string>
+	<string>1:663533434843:ios:a970e3070013e276fe99fe</string>
 </dict>
 </plist>
