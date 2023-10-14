@@ -122,6 +122,7 @@ dependencies:
   numeral: ^2.0.1
   gradient_borders: ^1.0.0
   screen_protector: ^1.2.0
+  flutter_launcher_icons: ^0.13.1
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'
@@ -159,6 +160,13 @@ flutter:
     - assets/locales/sq.json
     - assets/locales/tr.json
     - assets/locales/vi.json
+
+flutter_icons:
+  android: false
+  ios: true
+  image_path: "assets/images/appicon.png"
+  remove_alpha_ios: true    
+  #flutter pub run flutter_launcher_icons:main    
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
