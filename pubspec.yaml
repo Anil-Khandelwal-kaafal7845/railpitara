@@ -162,7 +162,7 @@ flutter:
     - assets/locales/vi.json
 
 flutter_icons:
-  android: false
+  android: true
   ios: true
   image_path: "assets/images/appicon.png"
   remove_alpha_ios: true    
