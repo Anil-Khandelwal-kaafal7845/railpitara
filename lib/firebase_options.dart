@@ -67,9 +67,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '663533434843',
     projectId: 'mitwatv-3c8bf',
     storageBucket: 'mitwatv-3c8bf.appspot.com',
-    androidClientId: '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
-    iosClientId: '663533434843-bmd78mrv0udr6qosqk59n6qp3rin561g.apps.googleusercontent.com',
-    iosBundleId: 'com.divinetechs.dtliveapp',
+    androidClientId:
+        '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
+    iosClientId:
+        '663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com',
+    iosBundleId: 'com.ott.mitwaapp',
+    // apiKey: 'AIzaSyBeHiYJJtmhC-s7OO5zAAcRoQXh7EvCkN4',
+    // appId: '1:663533434843:ios:d3a2e284b645a2a8fe99fe',
+    // messagingSenderId: '663533434843',
+    // projectId: 'mitwatv-3c8bf',
+    // storageBucket: 'mitwatv-3c8bf.appspot.com',
+    // androidClientId: '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
+    // iosClientId: '663533434843-bmd78mrv0udr6qosqk59n6qp3rin561g.apps.googleusercontent.com',
+    // iosBundleId: 'com.divinetechs.dtliveapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -78,8 +88,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '663533434843',
     projectId: 'mitwatv-3c8bf',
     storageBucket: 'mitwatv-3c8bf.appspot.com',
-    androidClientId: '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
-    iosClientId: '663533434843-aqnt2cv02epkfn98n59ajeaur73gr2iv.apps.googleusercontent.com',
+    androidClientId:
+        '663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com',
+    iosClientId:
+        '663533434843-aqnt2cv02epkfn98n59ajeaur73gr2iv.apps.googleusercontent.com',
     iosBundleId: 'com.release.mitwatvapp',
   );
 }
