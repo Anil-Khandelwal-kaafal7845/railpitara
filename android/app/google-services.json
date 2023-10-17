@@ -1,54 +1,39 @@
 {
-    "project_info": {
-      "project_number": "663533434843",
-      "project_id": "mitwatv-3c8bf",
-      "storage_bucket": "mitwatv-3c8bf.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:663533434843:android:025c021a2250cc0afe99fe",
-          "android_client_info": {
-            "package_name": "com.release.mitwatv"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "663533434843-9g2v2lca9fntsitgi8okom2t6hj2e5il.apps.googleusercontent.com",
-            "client_type": 1,
-            "android_info": {
-              "package_name": "com.release.mitwatv",
-              "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
+  "project_info": {
+    "project_number": "1053442770629",
+    "project_id": "amuzi-5f9d4",
+    "storage_bucket": "amuzi-5f9d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053442770629:android:573ed8cae666c8d81192ac",
+        "android_client_info": {
+          "package_name": "com.ott.amuzi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053442770629-knjtae1livosi5s12al65evt9gqbv02k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053442770629-knjtae1livosi5s12al65evt9gqbv02k.apps.googleusercontent.com",
+              "client_type": 3
             }
-          },
-          {
-            "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
-                "client_type": 3
-              },
-              {
-                "client_id": "663533434843-aqnt2cv02epkfn98n59ajeaur73gr2iv.apps.googleusercontent.com",
-                "client_type": 2,
-                "ios_info": {
-                  "bundle_id": "com.release.mitwatvapp"
-                }
-              }
-            ]
-          }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}

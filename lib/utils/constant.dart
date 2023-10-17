@@ -3,10 +3,10 @@ import 'package:dtlive/model/subtitlemodel.dart';
 
 class Constant {
   // static const String baseurl = '';
-  static const String baseurl = 'https://social.kaafal.com/public/api/';
+  static const String baseurl = 'https://amuzi.ottpeople.in/public/api/';
 
-  static String appName = "Mitwa TV";
-  static String appPackageName = "com.release.mitwatv";
+  static String appName = "Amuzi";
+  static String appPackageName = "com.ott.amuzi";
   static String appleAppId = "6449380090";
 
   /* OneSignal App ID */
