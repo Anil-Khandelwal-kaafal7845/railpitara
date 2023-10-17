@@ -246,7 +246,7 @@ class HomeState extends State<Home> {
                     await getTabData(0, homeProvider.sectionTypeModel.result);
                   },
                   child:
-                      MyImage(width: 80, height: 60, imagePath: "appicon.png"),
+                      MyImage(width: 100, height: 100, imagePath: "appicon.png"),
                 ),
               ), // This is the title in the app bar.
               pinned: false,
