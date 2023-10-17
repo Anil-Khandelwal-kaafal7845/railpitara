@@ -123,6 +123,7 @@ dependencies:
   gradient_borders: ^1.0.0
   screen_protector: ^1.2.0
   flutter_launcher_icons: ^0.13.1
+  dot_navigation_bar: ^1.0.2
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'

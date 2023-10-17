@@ -333,16 +333,18 @@ class HomeState extends State<Home> {
                 },
                 child: Container(
                   constraints: const BoxConstraints(maxHeight: 35),
-                  decoration: Utils.setBackground(
-                    homeProvider.selectedIndex == index
-                        ? white
-                        : transparentColor,
-                    20,
-                  ),
+                  // decoration: Utils.setBackground(
+                  //   homeProvider.selectedIndex == index
+                  //       ? white
+                  //       : transparentColor,
+                  //   20,
+                  // ),
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: MyText(
-                    color: homeProvider.selectedIndex == index ? black : white,
+                    color: homeProvider.selectedIndex == index
+                    ? colorPrimary
+                    : white,
                     multilanguage: false,
                     text: index == 0
                         ? "Home"
@@ -588,7 +590,7 @@ class HomeState extends State<Home> {
                   effect: const ScrollingDotsEffect(
                     spacing: 8,
                     radius: 4,
-                    activeDotColor: dotsActiveColor,
+                    activeDotColor: colorPrimary,
                     dotColor: dotsDefaultColor,
                     dotHeight: 8,
                     dotWidth: 8,
