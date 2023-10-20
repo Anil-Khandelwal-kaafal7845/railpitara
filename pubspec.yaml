@@ -123,6 +123,7 @@ dependencies:
   gradient_borders: ^1.0.0
   screen_protector: ^1.2.0
   dot_navigation_bar: ^1.0.2
+  lottie: ^2.6.0
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'
@@ -148,6 +149,7 @@ flutter_launcher_icons:
 flutter:
   assets: 
     - assets/
+    - assets/json/
     - assets/images/
     - assets/locales/en.json
     - assets/locales/af.json

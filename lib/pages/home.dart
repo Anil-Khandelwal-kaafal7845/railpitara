@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/videosbyid.dart';
@@ -26,6 +27,7 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -245,10 +247,24 @@ class HomeState extends State<Home> {
                   onTap: () async {
                     await getTabData(0, homeProvider.sectionTypeModel.result);
                   },
-                  child:
-                      MyImage(width: 100, height: 100, imagePath: "appicon.png"),
+                  child: Stack(
+                    children: [
+                      Container(
+                          child: MyImage(
+                              width: 100,
+                              height: 100,
+                              imagePath: "appicon.png")),
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Lottie.asset('assets/json/ball.json',
+                            repeat: false, reverse: false),
+                      )
+                    ],
+                  ),
                 ),
-              ), // This is the title in the app bar.
+              ),
+
               pinned: false,
               expandedHeight: 0,
               forceElevated: innerBoxIsScrolled,
@@ -321,47 +337,64 @@ class HomeState extends State<Home> {
           return Consumer<HomeProvider>(
             builder: (context, homeProvider, child) {
               return InkWell(
-                borderRadius: BorderRadius.circular(25),
-                onTap: () async {
-                  debugPrint("index ===========> $index");
-                  AdHelper.showFullscreenAd(context, Constant.interstialAdType,
-                      () async {
-                    if (kIsWeb) _onItemTapped("");
-                    await getTabData(
-                        index, homeProvider.sectionTypeModel.result);
-                  });
-                },
-                child: Container(
-                  constraints: const BoxConstraints(maxHeight: 35),
-                  // decoration: Utils.setBackground(
-                  //   homeProvider.selectedIndex == index
-                  //       ? white
-                  //       : transparentColor,
-                  //   20,
-                  // ),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
-                  child: MyText(
-                    color: homeProvider.selectedIndex == index
-                    ? colorPrimary
-                    : white,
-                    multilanguage: false,
-                    text: index == 0
-                        ? "Home"
-                        : index > 0
-                            ? (sectionTypeList?[index - 1].name.toString() ??
-                                "")
-                            : "",
-                    fontsizeNormal: 12,
-                    fontweight: FontWeight.w700,
-                    fontsizeWeb: 14,
-                    maxline: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textalign: TextAlign.center,
-                    fontstyle: FontStyle.normal,
-                  ),
-                ),
-              );
+                  borderRadius: BorderRadius.circular(25),
+                  onTap: () async {
+                    debugPrint("index ===========> $index");
+                    AdHelper.showFullscreenAd(
+                        context, Constant.interstialAdType, () async {
+                      if (kIsWeb) _onItemTapped("");
+                      await getTabData(
+                          index, homeProvider.sectionTypeModel.result);
+                    });
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
+                        constraints: const BoxConstraints(maxHeight: 35),
+                        // decoration: Utils.setBackground(
+                        //   homeProvider.selectedIndex == index
+                        //       ? white
+                        //       : transparentColor,
+                        //   20,
+                        // ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
+                        child: MyText(
+                          color: homeProvider.selectedIndex == index
+                              ? colorPrimary
+                              : white,
+                          multilanguage: false,
+                          text: index == 0
+                              ? "Home"
+                              : index > 0
+                                  ? (sectionTypeList?[index - 1]
+                                          .name
+                                          .toString() ??
+                                      "")
+                                  : "",
+                          fontsizeNormal: 12,
+                          fontweight: FontWeight.w700,
+                          fontsizeWeb: 14,
+                          maxline: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textalign: TextAlign.center,
+                          fontstyle: FontStyle.normal,
+                        ),
+                      ),
+                      homeProvider.selectedIndex == index
+                          ? Positioned(
+                              right:
+                                  -10, // Adjust the value to control the position from the right edge.
+                              child: Lottie.asset(
+                                "assets/json/footboll.json", // Replace with your animation file path.
+                                width: 40, // Adjust the width of the animation.
+                                height: 40,
+                                alignment: Alignment.centerRight,
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
+                  ));
             },
           );
         },
@@ -437,6 +470,9 @@ class HomeState extends State<Home> {
                     if (sectionDataProvider.sectionListModel.status == 200) {
                       return Column(
                         children: [
+                          SizedBox(
+                            height: 5,
+                          ),
                           /* Continue Watching */
                           (sectionDataProvider
                                       .sectionListModel.continueWatching !=
@@ -937,7 +973,6 @@ class HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 25),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: MyText(
@@ -953,7 +988,7 @@ class HomeState extends State<Home> {
                   fontstyle: FontStyle.normal,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 15),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: getRemainingDataHeight(
