@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1053442770629',
     projectId: 'amuzi-5f9d4',
     storageBucket: 'amuzi-5f9d4.appspot.com',
+    androidClientId: '1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com',
+    iosClientId: '1053442770629-fetpo1r4jp06ibg7mljd0jirn5o2lte6.apps.googleusercontent.com',
     iosBundleId: 'com.ott.mitwaapp',
   );
 
@@ -76,6 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1053442770629',
     projectId: 'amuzi-5f9d4',
     storageBucket: 'amuzi-5f9d4.appspot.com',
+    androidClientId: '1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com',
+    iosClientId: '1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com',
     iosBundleId: 'com.ott.amuziapp',
   );
 }
