@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1053442770629-knjtae1livosi5s12al65evt9gqbv02k.apps.googleusercontent.com",
+          "client_id": "1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ott.amuzi",
+            "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
+          }
+        },
+        {
+          "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1053442770629-knjtae1livosi5s12al65evt9gqbv02k.apps.googleusercontent.com",
+              "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ott.amuziapp"
+              }
             }
           ]
         }
