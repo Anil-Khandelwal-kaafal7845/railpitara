@@ -974,7 +974,7 @@ class HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: MyText(
                   color: white,
                   text: sectionList?[index].title.toString() ?? "",
