@@ -53,7 +53,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ott.amuzi"
+        applicationId "com.amuzi"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1

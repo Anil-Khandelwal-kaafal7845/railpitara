@@ -1,54 +1,90 @@
 {
-  "project_info": {
-    "project_number": "1053442770629",
-    "project_id": "amuzi-5f9d4",
-    "storage_bucket": "amuzi-5f9d4.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1053442770629:android:573ed8cae666c8d81192ac",
-        "android_client_info": {
-          "package_name": "com.ott.amuzi"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ott.amuzi",
-            "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
+    "project_info": {
+      "project_number": "1053442770629",
+      "project_id": "amuzi-5f9d4",
+      "storage_bucket": "amuzi-5f9d4.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:1053442770629:android:d1d2eb378f6703fc1192ac",
+          "android_client_info": {
+            "package_name": "com.amuzi"
           }
         },
-        {
-          "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.ott.amuziapp"
+        "oauth_client": [
+          {
+            "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
+                "client_type": 3
+              },
+              {
+                "client_id": "1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com",
+                "client_type": 2,
+                "ios_info": {
+                  "bundle_id": "com.ott.amuziapp"
+                }
               }
+            ]
+          }
+        }
+      },
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:1053442770629:android:573ed8cae666c8d81192ac",
+          "android_client_info": {
+            "package_name": "com.ott.amuzi"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com",
+            "client_type": 1,
+            "android_info": {
+              "package_name": "com.ott.amuzi",
+              "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
             }
-          ]
+          },
+          {
+            "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "1053442770629-2j8c7e5f4tb1ramtqdihteht573qaerj.apps.googleusercontent.com",
+                "client_type": 3
+              },
+              {
+                "client_id": "1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com",
+                "client_type": 2,
+                "ios_info": {
+                  "bundle_id": "com.ott.amuziapp"
+                }
+              }
+            ]
+          }
         }
       }
-    }
-  ],
-  "configuration_version": "1"
-}
+    ],
+    "configuration_version": "1"
+  }
