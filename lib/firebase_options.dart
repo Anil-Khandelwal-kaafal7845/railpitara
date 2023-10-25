@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8',
-    appId: '1:1053442770629:android:573ed8cae666c8d81192ac',
+    appId: '1:1053442770629:android:d1d2eb378f6703fc1192ac',
     messagingSenderId: '1053442770629',
     projectId: 'amuzi-5f9d4',
     storageBucket: 'amuzi-5f9d4.appspot.com',
@@ -74,12 +74,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyChIm3jlDaddFUmvpFrzcXeOAMr8Xd878M',
-    appId: '1:1053442770629:ios:2fd04d98b04c933a1192ac',
+    appId: '1:1053442770629:ios:817453f284f2f2841192ac',
     messagingSenderId: '1053442770629',
     projectId: 'amuzi-5f9d4',
     storageBucket: 'amuzi-5f9d4.appspot.com',
     androidClientId: '1053442770629-eqisq56ppghqj4siksp0pckk4tocmp7n.apps.googleusercontent.com',
-    iosClientId: '1053442770629-al7ar09vhgsj2827rccstuobej9ng0jr.apps.googleusercontent.com',
-    iosBundleId: 'com.ott.amuziapp',
+    iosClientId: '1053442770629-s8905vni5i0o50ljml0n5eb5aauduuh3.apps.googleusercontent.com',
+    iosBundleId: 'com.amuziapp',
   );
 }

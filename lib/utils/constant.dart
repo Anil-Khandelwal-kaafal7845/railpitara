@@ -6,7 +6,7 @@ class Constant {
   static const String baseurl = 'https://amuzi.ottpeople.in/public/api/';
 
   static String appName = "Amuzi";
-  static String appPackageName = "com.ott.amuzi";
+  static String appPackageName = "com.amuzi";
   static String appleAppId = "6449380090";
 
   /* OneSignal App ID */
