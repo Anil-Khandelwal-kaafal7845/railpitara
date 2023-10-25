@@ -48,7 +48,7 @@ Future<void> main() async {
     await MobileAds.instance.initialize();
   }
   await Firebase.initializeApp(
-      name: 'mitwatv-3c8bf', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'amuzi-5f9d4', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

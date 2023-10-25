@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ott.mitwaapp</string>
+	<string>com.amuzi.ott</string>
 	<key>PROJECT_ID</key>
 	<string>amuzi-5f9d4</string>
 	<key>STORAGE_BUCKET</key>
