@@ -44,14 +44,14 @@
 		};
 		99D38E522A188360006AE74A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
 				99D38E4D2A188360006AE74A /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -513,8 +513,10 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DTLive;
@@ -527,6 +529,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.amuzi.ott;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -654,8 +657,10 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DTLive;
@@ -668,6 +673,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.amuzi.ott;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -687,8 +693,10 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DTLive;
@@ -701,6 +709,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.amuzi.ott;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -722,7 +731,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
@@ -756,7 +765,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
@@ -789,7 +798,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5ZX7W865H9;
+				DEVELOPMENT_TEAM = W5FBXR8T3G;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
