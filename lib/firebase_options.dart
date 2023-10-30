@@ -44,42 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDelK_1Sc3kaXfS-KMAe8rw3v36WMZp8A0',
-    appId: '1:1053442770629:web:8fa49841148988471192ac',
-    messagingSenderId: '1053442770629',
-    projectId: 'amuzi-5f9d4',
-    authDomain: 'amuzi-5f9d4.firebaseapp.com',
-    storageBucket: 'amuzi-5f9d4.appspot.com',
-    measurementId: 'G-D34JPTXGCY',
+    apiKey: 'AIzaSyBd6LG1t7GZeU2Sq6kptlHNOX1WMvYeH18',
+    appId: '1:151680591442:web:96ce3e2fdd00a25008e18b',
+    messagingSenderId: '151680591442',
+    projectId: 'omtv-32b09',
+    authDomain: 'omtv-32b09.firebaseapp.com',
+    storageBucket: 'omtv-32b09.appspot.com',
+    measurementId: 'G-BVB05REQVJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDExgDjt2R9QeI9IRjXH-9a4mm-tviiXM8',
-    appId: '1:1053442770629:android:d1d2eb378f6703fc1192ac',
-    messagingSenderId: '1053442770629',
-    projectId: 'amuzi-5f9d4',
-    storageBucket: 'amuzi-5f9d4.appspot.com',
+    apiKey: 'AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0',
+    appId: '1:151680591442:android:4b413fb786f96b6c08e18b',
+    messagingSenderId: '151680591442',
+    projectId: 'omtv-32b09',
+    storageBucket: 'omtv-32b09.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyChIm3jlDaddFUmvpFrzcXeOAMr8Xd878M',
-    appId: '1:1053442770629:ios:e632b26e4e00ff271192ac',
-    messagingSenderId: '1053442770629',
-    projectId: 'amuzi-5f9d4',
-    storageBucket: 'amuzi-5f9d4.appspot.com',
-    androidClientId: '1053442770629-0ls8hqc0eu9v7rvvv122piqsg23rvmi5.apps.googleusercontent.com',
-    iosClientId: '1053442770629-keisnti2oj3m2p9op6gilh470bhuvj4f.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
+    appId: '1:151680591442:ios:663569928e856e2e08e18b',
+    messagingSenderId: '151680591442',
+    projectId: 'omtv-32b09',
+    storageBucket: 'omtv-32b09.appspot.com',
     iosBundleId: 'com.ott.omtvapp.ott',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyChIm3jlDaddFUmvpFrzcXeOAMr8Xd878M',
-    appId: '1:1053442770629:ios:817453f284f2f2841192ac',
-    messagingSenderId: '1053442770629',
-    projectId: 'amuzi-5f9d4',
-    storageBucket: 'amuzi-5f9d4.appspot.com',
-    androidClientId: '1053442770629-0ls8hqc0eu9v7rvvv122piqsg23rvmi5.apps.googleusercontent.com',
-    iosClientId: '1053442770629-s8905vni5i0o50ljml0n5eb5aauduuh3.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
+    appId: '1:151680591442:ios:f7aade1cc3c5723e08e18b',
+    messagingSenderId: '151680591442',
+    projectId: 'omtv-32b09',
+    storageBucket: 'omtv-32b09.appspot.com',
     iosBundleId: 'com.ott.omtvappapp',
   );
 }

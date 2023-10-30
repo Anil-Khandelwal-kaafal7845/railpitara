@@ -254,12 +254,12 @@ class HomeState extends State<Home> {
                               width: 100,
                               height: 100,
                               imagePath: "appicon.png")),
-                      SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: Lottie.asset('assets/json/ball.json',
-                            repeat: false, reverse: false),
-                      )
+                      // SizedBox(
+                      //   height: 100,
+                      //   width: 100,
+                      //   child: Lottie.asset('assets/json/ball.json',
+                      //       repeat: false, reverse: false),
+                      // )
                     ],
                   ),
                 ),
@@ -381,18 +381,18 @@ class HomeState extends State<Home> {
                           fontstyle: FontStyle.normal,
                         ),
                       ),
-                      homeProvider.selectedIndex == index
-                          ? Positioned(
-                              right:
-                                  -10, // Adjust the value to control the position from the right edge.
-                              child: Lottie.asset(
-                                "assets/json/footboll.json", // Replace with your animation file path.
-                                width: 40, // Adjust the width of the animation.
-                                height: 40,
-                                alignment: Alignment.centerRight,
-                              ),
-                            )
-                          : SizedBox(),
+                      // homeProvider.selectedIndex == index
+                      //     ? Positioned(
+                      //         right:
+                      //             -10, // Adjust the value to control the position from the right edge.
+                      //         child: Lottie.asset(
+                      //           "assets/json/footboll.json", // Replace with your animation file path.
+                      //           width: 40, // Adjust the width of the animation.
+                      //           height: 40,
+                      //           alignment: Alignment.centerRight,
+                      //         ),
+                      //       )
+                      //     : SizedBox(),
                     ],
                   ));
             },
