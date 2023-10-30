@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'amuzi-5f9d4.appspot.com',
     androidClientId: '1053442770629-0ls8hqc0eu9v7rvvv122piqsg23rvmi5.apps.googleusercontent.com',
     iosClientId: '1053442770629-keisnti2oj3m2p9op6gilh470bhuvj4f.apps.googleusercontent.com',
-    iosBundleId: 'com.amuzi.ott',
+    iosBundleId: 'com.ott.omtvapp.ott',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'amuzi-5f9d4.appspot.com',
     androidClientId: '1053442770629-0ls8hqc0eu9v7rvvv122piqsg23rvmi5.apps.googleusercontent.com',
     iosClientId: '1053442770629-s8905vni5i0o50ljml0n5eb5aauduuh3.apps.googleusercontent.com',
-    iosBundleId: 'com.amuziapp',
+    iosBundleId: 'com.ott.omtvappapp',
   );
 }

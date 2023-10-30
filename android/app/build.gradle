@@ -53,7 +53,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.amuzi"
+        applicationId "com.ott.omtvapp"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 12
