@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBd6LG1t7GZeU2Sq6kptlHNOX1WMvYeH18',
-    appId: '1:151680591442:web:96ce3e2fdd00a25008e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    authDomain: 'omtv-32b09.firebaseapp.com',
-    storageBucket: 'omtv-32b09.appspot.com',
-    measurementId: 'G-BVB05REQVJ',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0',
-    appId: '1:151680591442:android:4b413fb786f96b6c08e18b',
+    appId: '1:151680591442:android:9bf7d041290af0ae08e18b',
     messagingSenderId: '151680591442',
     projectId: 'omtv-32b09',
     storageBucket: 'omtv-32b09.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
-    appId: '1:151680591442:ios:663569928e856e2e08e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.appspot.com',
-    iosBundleId: 'com.ott.omtvapp.ott',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
-    appId: '1:151680591442:ios:f7aade1cc3c5723e08e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.appspot.com',
-    iosBundleId: 'com.ott.omtvappapp',
   );
 }
