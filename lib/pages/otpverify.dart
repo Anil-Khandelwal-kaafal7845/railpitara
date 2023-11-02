@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -37,14 +39,33 @@ class OTPVerifyState extends State<OTPVerify> {
   int? forceResendingToken;
   bool codeResended = false;
 
+
+  late Timer _resendTimer;
+  int _resendCountdown = 30;
+
+
   @override
   void initState() {
     super.initState();
     // _getDeviceToken();
+    startResendTimer();
     _sendWhatsappOTP();
     prDialog = ProgressDialog(context);
     // codeSend(false);
   }
+
+    void startResendTimer() {
+    _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_resendCountdown > 0) {
+          _resendCountdown--;
+        } else {
+          _resendTimer.cancel(); // Stop the timer when it reaches 0
+        }
+      });
+    });
+  }
+
 
   _sendWhatsappOTP() async {
     await ApiService().loginWithWhatsapp(widget.mobileNumber);
@@ -69,6 +90,7 @@ class OTPVerifyState extends State<OTPVerify> {
 
   @override
   void dispose() {
+  _resendTimer.cancel();
     FocusManager.instance.primaryFocus?.unfocus();
     numberController.dispose();
     super.dispose();
@@ -223,31 +245,62 @@ class OTPVerifyState extends State<OTPVerify> {
                 const SizedBox(height: 40),
 
                 /* Resend */
-                InkWell(
-                  borderRadius: BorderRadius.circular(10),
-                  onTap: () {
-                    _sendWhatsappOTP();
+                // InkWell(
+                //   borderRadius: BorderRadius.circular(10),
+                //   onTap: () {
+                //     _sendWhatsappOTP();
 
-                    // if (!codeResended) {
-                    //   codeSend(true);
-                    // }
-                  },
+                //     // if (!codeResended) {
+                //     //   codeSend(true);
+                //     // }
+                //   },
+                //   child: Container(
+                //     constraints: const BoxConstraints(minWidth: 70),
+                //     padding: const EdgeInsets.all(5),
+                //     child: MyText(
+                //       color: white,
+                //       text: "resend",
+                //       multilanguage: true,
+                //       fontsizeNormal: 16,
+                //       fontweight: FontWeight.w700,
+                //       maxline: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //       textalign: TextAlign.center,
+                //       fontstyle: FontStyle.normal,
+                //     ),
+                //   ),
+                // ),
+
+                    InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                   onTap: _resendCountdown == 0 ? () {
+                    _sendWhatsappOTP();
+                    setState(() {
+                      _resendCountdown = 30; // Reset the countdown
+                    });
+                    startResendTimer(); // Start the countdown again
+                  } : null, 
                   child: Container(
                     constraints: const BoxConstraints(minWidth: 70),
                     padding: const EdgeInsets.all(5),
-                    child: MyText(
-                      color: white,
-                      text: "resend",
-                      multilanguage: true,
-                      fontsizeNormal: 16,
-                      fontweight: FontWeight.w700,
-                      maxline: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textalign: TextAlign.center,
-                      fontstyle: FontStyle.normal,
-                    ),
+                    child: _resendCountdown == 0
+                        ? Text(
+                            "Resend",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500  ,
+                                fontSize: 20),
+                          )
+                        : Text("Resend OTP in 00:${_resendCountdown} second" ,style: TextStyle(
+                                color: whiteLight,
+                                fontWeight: FontWeight.w400  ,
+                                fontSize: 14)),
+                    
                   ),
                 ),
+            
+              
+              
               ],
             ),
           ),
