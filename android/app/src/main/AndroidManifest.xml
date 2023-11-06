@@ -82,7 +82,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="www.omtvlive.in" />
+                <data android:scheme="http" android:host="https://omtvstage.ottpeople.in/#/" />
                 <data android:scheme="https"/>
             </intent-filter>
            
