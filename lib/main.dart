@@ -212,11 +212,8 @@
 //   }
 // }
 
-
 // //TO BUILD APK
 // //flutter build appbundle --target-platform android-arm,android-arm64,android-x64
-
-
 
 import 'dart:io';
 import 'dart:ui';
@@ -269,7 +266,7 @@ Future<void> main() async {
     await MobileAds.instance.initialize();
   }
   await Firebase.initializeApp(
-      name: 'amuzi-5f9d4', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'omtv-32b09', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',
