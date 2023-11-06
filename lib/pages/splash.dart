@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:dtlive/pages/bottombar.dart';
-import 'package:dtlive/pages/intro.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
 import 'package:dtlive/utils/color.dart';
@@ -10,9 +11,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:dtlive/utils/utils.dart';
 
 class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+  bool isDynamicLink;
+  int? videoId;
+  int? upcomingType;
+  int? videoType;
+  int? typeId;
+
+  Splash(
+      {Key? key,
+      required this.isDynamicLink,
+      this.videoId,
+      this.upcomingType,
+      this.videoType,
+      this.typeId})
+      : super(key: key);
 
   @override
   State<Splash> createState() => SplashState();
@@ -74,7 +89,8 @@ class SplashState extends State<Splash> {
         ),
       );
     } else {
-      if (seen == "1") {
+      if (widget.isDynamicLink) {
+        log("DYNAMIC LINK");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -83,15 +99,36 @@ class SplashState extends State<Splash> {
             },
           ),
         );
+
+        Future.delayed(Duration.zero).then((value) {
+          if (!mounted) return;
+          Utils.openDetails(
+              context: context,
+              videoId: widget.videoId!,
+              upcomingType: widget.upcomingType!,
+              videoType: widget.videoType!,
+              typeId: widget.videoId!);
+        });
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return Bottombar();
-            },
-          ),
-        );
+        if (seen == "1") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const Bottombar();
+              },
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return Bottombar();
+              },
+            ),
+          );
+        }
       }
     }
   }
