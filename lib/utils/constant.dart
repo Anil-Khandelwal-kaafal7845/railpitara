@@ -3,7 +3,8 @@ import 'package:dtlive/model/subtitlemodel.dart';
 
 class Constant {
   // static const String baseurl = '';
-  static const String baseurl =  'https://omtv.ottpeople.in/public/api/';
+  static const String baseurl = 'https://omtv.ottpeople.in/public/api/';
+  static const String dynamicBaseUrl = 'https://omtvstage.ottpeople.in/';
 
   static String appName = "OM TV";
   static String appPackageName = "com.blackboardfilms.omtv";
