@@ -17,16 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
+          'DefaultFirebaseOptions have not been configured for android - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
+      case TargetPlatform.iOS:
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -49,21 +52,14 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBd6LG1t7GZeU2Sq6kptlHNOX1WMvYeH18',
-    appId: '1:151680591442:web:96ce3e2fdd00a25008e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    authDomain: 'omtv-32b09.firebaseapp.com',
-    storageBucket: 'omtv-32b09.appspot.com',
-    measurementId: 'G-BVB05REQVJ',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0',
-    appId: '1:151680591442:android:9bf7d041290af0ae08e18b',
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
+    appId: '1:151680591442:ios:9988a0ff6b7d58f308e18b',
     messagingSenderId: '151680591442',
     projectId: 'omtv-32b09',
     storageBucket: 'omtv-32b09.appspot.com',
+    androidClientId: '151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com',
+    iosClientId: '151680591442-ifc0k6h6k7btm59kvbdvbag45k0aseds.apps.googleusercontent.com',
+    iosBundleId: 'com.blackboardfilms.omtv',
   );
 }
