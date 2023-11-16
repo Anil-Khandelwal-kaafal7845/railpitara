@@ -103,6 +103,7 @@ class SettingState extends State<Setting> {
             margin: const EdgeInsets.all(22),
             child: Column(
               children: [
+            
                 /* Account Details */
                 _buildSettingButton(
                   title: 'accountdetails',
@@ -124,12 +125,16 @@ class SettingState extends State<Setting> {
                             builder: (context) => const LoginSocial(),
                           ),
                         );
+                    
+                    
                       }
                     });
                   },
                 ),
+               
+               
                 _buildLine(16.0, 16.0),
-
+            
                 /* Active TV */
                 _buildSettingButton(
                   title: 'activetv',
@@ -156,7 +161,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Watchlist */
                 _buildSettingButton(
                   title: 'watchlist',
@@ -183,7 +188,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Purchases */
                 _buildSettingButton(
                   title: 'purchases',
@@ -210,7 +215,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Downloads */
                 _buildSettingButton(
                   title: 'downloads',
@@ -237,7 +242,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Subscription */
                 _buildSettingButton(
                   title: 'subsciption',
@@ -264,7 +269,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Transactions */
                 _buildSettingButton(
                   title: 'transactions',
@@ -291,7 +296,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* MaltiLanguage */
                 _buildSettingButton(
                   title: 'change_language',
@@ -303,7 +308,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Push Notification enable/disable */
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -329,7 +334,7 @@ class SettingState extends State<Setting> {
                   ],
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Clear Cache */
                 if (!Platform.isIOS)
                   Row(
@@ -360,7 +365,7 @@ class SettingState extends State<Setting> {
                     ],
                   ),
                 if (!Platform.isIOS) _buildLine(16.0, 16.0),
-
+            
                 /* SignIn / SignOut */
                 _buildSettingButton(
                   title: Constant.userID == null
@@ -385,7 +390,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Rate App */
                 _buildSettingButton(
                   title: 'rateus',
@@ -398,7 +403,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Share App */
                 _buildSettingButton(
                   title: 'shareapp',
@@ -412,7 +417,7 @@ class SettingState extends State<Setting> {
                   },
                 ),
                 _buildLine(16.0, 16.0),
-
+            
                 /* Delete Account */
                 if (Constant.userID != null)
                   _buildSettingButton(
@@ -434,9 +439,12 @@ class SettingState extends State<Setting> {
                     },
                   ),
                 if (Constant.userID != null) _buildLine(16.0, 16.0),
-
+            
                 /* Pages */
                 _buildPages(),
+             
+             
+             
               ],
             ),
           ),
@@ -1096,4 +1104,7 @@ class SettingState extends State<Setting> {
       ),
     );
   }
+
+
+
 }

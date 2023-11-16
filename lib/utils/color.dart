@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 const colorPrimary = Color(0xffED7339);
 const colorPrimaryDark = Color(0xff0e0e16);
 const colorAccent = Color(0xffFA3457);
+const colorBottom = Color(0xff01021A);
+const colorBottom2 = Color(0xff010320);
+
+
 
 
 
