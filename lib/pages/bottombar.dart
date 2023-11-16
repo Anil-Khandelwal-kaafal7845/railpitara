@@ -77,7 +77,7 @@
 //       onWillPop: onBackPressed,
 //       child: Scaffold(
 //         resizeToAvoidBottomInset: false,
-//         body: 
+//         body:
 
 //          Stack(
 //                 children: [
@@ -107,28 +107,26 @@
 //                           DotNavigationBarItem(
 //                            icon: _buildBottomNavIcon(iconName: 'ic_channels', isSelected: selectedIndex == 2),
 //                             selectedColor: colorPrimary,
-                          
+
 //                           ),
 //                           DotNavigationBarItem(
 //                               icon: _buildBottomNavIcon(iconName: 'ic_store', isSelected: selectedIndex == 3),
-                          
+
 //                             selectedColor: colorPrimary,
 //                           ),
 //                           DotNavigationBarItem(
 //                            icon: _buildBottomNavIcon(iconName: 'ic_stuff', isSelected: selectedIndex == 4),
 //                             selectedColor: colorPrimary,
-                         
+
 //                           ),
 //                         ],
 //                       ),
 //                     ),
 //                   ),
-               
+
 //                 ],
 //               ))
-          
-          
-        
+
 //         // Column(
 //         //   children: [
 //         //     Expanded(
@@ -209,14 +207,9 @@
 //         //     onTap: _onItemTapped,
 //         //   ),
 //         // ),
-     
-     
-    
+
 //     );
 //   }
-
-
-
 
 // Widget _buildBottomNavIcon({
 //   required String iconName,
@@ -237,7 +230,6 @@
 //     ),
 //   );
 // }
-
 
 //   // Widget _buildBottomNavIcon(
 //   //     {required String iconName, required Color? iconColor}) {
@@ -273,6 +265,7 @@
 //   }
 // }
 
+import 'package:bottom_bar/bottom_bar.dart';
 import 'package:dtlive/pages/channels.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/home.dart';
@@ -305,7 +298,7 @@ class BottombarState extends State<Bottombar> {
 
   static List<Widget> widgetOptions = <Widget>[
     const Home(pageName: ""),
-    const Find(),
+   // const Find(),
     const Channels(),
     const RentStore(),
     const Setting(),
@@ -362,74 +355,141 @@ class BottombarState extends State<Bottombar> {
             Utils.showBannerAd(context),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: appBgColor,
-          padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),
-          elevation: 5,
-          child: BottomNavigationBar(
-            backgroundColor: appBgColor,
-            selectedLabelStyle: GoogleFonts.montserrat(
-              fontSize: 10,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w500,
-              color: colorPrimary,
+
+        bottomNavigationBar: BottomBar(
+          // height: 60,
+          textStyle: TextStyle(fontWeight: FontWeight.w500),
+          selectedIndex: selectedIndex,
+          onTap: _onItemTapped,
+          items: <BottomBarItem>[
+            BottomBarItem(
+              icon: Image.asset(
+                "assets/images/ic_home.png",
+                width: 15,
+                height: 15,
+                color: white,
+              ),
+              title:Text('Home' ,style: TextStyle(color: colorPrimary),),
+              activeColor: Colors.blue,
+              activeTitleColor: Colors.blue.shade600,
             ),
-            unselectedLabelStyle: GoogleFonts.montserrat(
-              fontSize: 10,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w500,
-              color: colorPrimary,
+          //   BottomBarItem(
+          //     icon: Image.asset(
+          //       "assets/images/ic_find.png",
+          //       width: 15,
+          //       height: 15,
+          //       color: white,
+          //     ),
+          //     title: Text('Find' ,style: TextStyle(color: colorPrimary),),
+          // activeColor: Colors.blue,
+          //     activeTitleColor: Colors.blue.shade600,
+          //   ),
+            BottomBarItem(
+              icon:Image.asset(
+                "assets/images/ic_channels.png",
+                width: 15,
+                height: 15,
+                color: white,
+              ),
+              title: Text('Channels' ,style: TextStyle(color: colorPrimary),),
+             // backgroundColorOpacity: 0.1,
+            activeColor: Colors.blue,
+              activeTitleColor: Colors.blue.shade600,
             ),
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            elevation: 5,
-            currentIndex: selectedIndex,
-            unselectedItemColor: gray,
-            selectedItemColor: colorPrimary,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView1,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_home', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(iconName: 'ic_home', iconColor: gray),
+            BottomBarItem(
+              icon:Image.asset(
+                "assets/images/ic_store.png",
+                width: 15,
+                height: 15,
+                color: white,
               ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView2,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_find', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(iconName: 'ic_find', iconColor: gray),
+              title: Text('Store' ,style: TextStyle(color: colorPrimary),),
+               activeColor: Colors.blue,
+              activeTitleColor: Colors.blue.shade600,
+            ),
+
+             BottomBarItem(
+              icon:Image.asset(
+                "assets/images/ic_stuff.png",
+                width: 15,
+                height: 15,
+                color: white,
               ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView3,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_channels', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(
-                    iconName: 'ic_channels', iconColor: gray),
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView4,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_store', iconColor: colorPrimary),
-                icon:
-                    _buildBottomNavIcon(iconName: 'ic_store', iconColor: gray),
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView5,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_stuff', iconColor: colorPrimary),
-                icon:
-                    _buildBottomNavIcon(iconName: 'ic_stuff', iconColor: gray),
-              ),
-            ],
-            onTap: _onItemTapped,
-          ),
+              title: Text('My Stuff' ,style: TextStyle(color: colorPrimary),),
+           activeColor: Colors.blue,
+              activeTitleColor: Colors.blue.shade600,
+            ),
+          ],
         ),
+
+        // bottomNavigationBar: BottomAppBar(
+        //   color: appBgColor,
+        //   padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),
+        //   elevation: 5,
+        //   child: BottomNavigationBar(
+        //     backgroundColor: appBgColor,
+        //     selectedLabelStyle: GoogleFonts.montserrat(
+        //       fontSize: 10,
+        //       fontStyle: FontStyle.normal,
+        //       fontWeight: FontWeight.w500,
+        //       color: colorPrimary,
+        //     ),
+        //     unselectedLabelStyle: GoogleFonts.montserrat(
+        //       fontSize: 10,
+        //       fontStyle: FontStyle.normal,
+        //       fontWeight: FontWeight.w500,
+        //       color: colorPrimary,
+        //     ),
+        //     selectedFontSize: 12,
+        //     unselectedFontSize: 12,
+        //     elevation: 5,
+        //     currentIndex: selectedIndex,
+        //     unselectedItemColor: gray,
+        //     selectedItemColor: colorPrimary,
+        //     type: BottomNavigationBarType.fixed,
+        //     items: [
+        //       BottomNavigationBarItem(
+        //         backgroundColor: black,
+        //         label: bottomView1,
+        //         activeIcon: _buildBottomNavIcon(
+        //             iconName: 'ic_home', iconColor: colorPrimary),
+        //         icon: _buildBottomNavIcon(iconName: 'ic_home', iconColor: gray),
+        //       ),
+        //       BottomNavigationBarItem(
+        //         backgroundColor: black,
+        //         label: bottomView2,
+        //         activeIcon: _buildBottomNavIcon(
+        //             iconName: 'ic_find', iconColor: colorPrimary),
+        //         icon: _buildBottomNavIcon(iconName: 'ic_find', iconColor: gray),
+        //       ),
+        //       BottomNavigationBarItem(
+        //         backgroundColor: black,
+        //         label: bottomView3,
+        //         activeIcon: _buildBottomNavIcon(
+        //             iconName: 'ic_channels', iconColor: colorPrimary),
+        //         icon: _buildBottomNavIcon(
+        //             iconName: 'ic_channels', iconColor: gray),
+        //       ),
+        //       BottomNavigationBarItem(
+        //         backgroundColor: black,
+        //         label: bottomView4,
+        //         activeIcon: _buildBottomNavIcon(
+        //             iconName: 'ic_store', iconColor: colorPrimary),
+        //         icon:
+        //             _buildBottomNavIcon(iconName: 'ic_store', iconColor: gray),
+        //       ),
+        //       BottomNavigationBarItem(
+        //         backgroundColor: black,
+        //         label: bottomView5,
+        //         activeIcon: _buildBottomNavIcon(
+        //             iconName: 'ic_stuff', iconColor: colorPrimary),
+        //         icon:
+        //             _buildBottomNavIcon(iconName: 'ic_stuff', iconColor: gray),
+        //       ),
+        //     ],
+        //     onTap: _onItemTapped,
+        //   ),
+        // ),
       ),
     );
   }
@@ -467,8 +527,3 @@ class BottombarState extends State<Bottombar> {
     }
   }
 }
-
-
-
-
-
