@@ -5,6 +5,13 @@ const colorPrimaryDark = Color(0xff0e0e16);
 const colorAccent = Color(0xffFA3457);
 const colorBottom = Color(0xff01021A);
 const colorBottom2 = Color(0xff010320);
+const colorBottom3 = Color(0xffC4AE98);
+const colorBottom4 = Color(0xff51514C);
+const colorBottom5 = Color(0xffA7A9AD);
+const colorBottom6 = Color(0xffBCBEBB);
+const colorBottom7 = Color(0xffE0D7DA);
+const colorBottom8 = Color(0xff7F85F5);
+
 
 
 
