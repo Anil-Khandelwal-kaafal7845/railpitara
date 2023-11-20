@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/castdetailmodel.dart';
 import 'package:dtlive/model/couponmodel.dart';
+import 'package:dtlive/model/force_update_model.dart';
 import 'package:dtlive/model/historymodel.dart';
 import 'package:dtlive/model/pagesmodel.dart';
 import 'package:dtlive/model/paymentoptionmodel.dart';
@@ -28,7 +29,47 @@ import 'package:dtlive/model/videobyidmodel.dart';
 import 'package:dtlive/model/watchlistmodel.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+
+class API {
+  final Dio _dio = Dio();
+  API() {
+    _dio.options.baseUrl = Constant.baseurl;
+    _dio.interceptors.add(PrettyDioLogger());
+  }
+  Dio get sendRequest => _dio;
+}
+
+Options optHeaders = Options(headers: <String, dynamic>{
+  'Content-Type': 'application/json',
+});
+
+class HomeScreenRepo {
+  API api = API();
+
+  // ignore: body_might_complete_normally_nullable
+  Future<ForceUpdatemodel?> forceUpdateApi(BuildContext context) async {
+    try {
+      Response response =
+          await api.sendRequest.get("/force_update", options: optHeaders);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ForceUpdatemodel featuredData =
+            ForceUpdatemodel.fromJson(response.data);
+        return featuredData;
+      } else {
+        Fluttertoast.showToast(msg: "serverError");
+      }
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      debugPrint("SOME ISSUES IN force update API");
+      throw (e.toString());
+    }
+  }
+}
 
 class ApiService {
   String baseUrl = Constant.baseurl;
