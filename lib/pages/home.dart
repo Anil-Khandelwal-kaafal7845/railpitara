@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:io';
+// import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/videosbyid.dart';
@@ -27,12 +28,16 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../model/force_update_model.dart';
+import '../webservice/apiservices.dart';
 
 class Home extends StatefulWidget {
   final String? pageName;
@@ -51,6 +56,8 @@ class HomeState extends State<Home> {
   late ListObserverController observerController;
   late HomeProvider homeProvider;
   int? videoId, videoType, typeId;
+    ForceUpdatemodel? forceUpdateData;
+  bool updateLoading = true;
   String? currentPage,
       langCatName,
       aboutUsUrl,
@@ -71,6 +78,7 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
+      fetchForceUpdateData();
     sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -83,6 +91,78 @@ class HomeState extends State<Home> {
     });
     if (!kIsWeb) {
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
+    }
+  }
+  fetchForceUpdateData() async {
+    await HomeScreenRepo().forceUpdateApi(context).then((value) {
+      setState(() {
+        forceUpdateData = value;
+        updateLoading = false;
+      });
+      checkForUpdate();
+    });
+  }
+
+  checkForUpdate() async {
+    if (forceUpdateData!.result!.appVersion! >
+        Constant.curentAppVersion) {
+      showDialog(
+        barrierDismissible:
+           forceUpdateData!.result!.forceUpdate== 1
+                ? false
+                : true,
+        context: context,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async =>
+                false, // prevent dialog from dismissing on back button press
+            child: AlertDialog(
+               contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+            surfaceTintColor: Theme.of(context).colorScheme.background,
+              title: const Text("New Update Available!!"),
+              content: const Text("A new app update is available"),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Visibility(
+                      visible:
+                    forceUpdateData!.result!.forceUpdate==
+                                  0
+                              ? true
+                              : false,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Cancel")),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            final appId = Platform.isAndroid
+                                ? Constant.appPackageName
+                                : Constant.appleAppId
+                                ;
+                            final url = Uri.parse(
+                              Platform.isAndroid
+                                  ? "market://details?id=$appId"
+                                  : "https://apps.apple.com/app/id$appId",
+                            );
+                            launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        child: const Text("UPDATE")),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   }
 
