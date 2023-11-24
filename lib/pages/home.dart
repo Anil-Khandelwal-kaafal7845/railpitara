@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 // import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/setting.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -329,11 +331,34 @@ class HomeState extends State<Home> {
                   },
                   child: Stack(
                     children: [
-                      Container(
-                          child: MyImage(
-                              width: 100,
-                              height: 100,
-                              imagePath: "appicon.png")),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyImage(
+                              width: 90, height: 90, imagePath: "appicon.png"),
+
+// SizedBox(width: 20,) ,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Find()),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5) ,
+                              child: Image.asset(
+                                "assets/images/ic_find.png",
+                                width: 17,
+                                height: 17,
+                                color: white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       // SizedBox(
                       //   height: 100,
                       //   width: 100,
@@ -463,14 +488,16 @@ class HomeState extends State<Home> {
                       ),
                       // homeProvider.selectedIndex == index
                       //     ? Positioned(
-                      //         right:
-                      //             -10, // Adjust the value to control the position from the right edge.
-                      //         child: Lottie.asset(
-                      //           "assets/json/footboll.json", // Replace with your animation file path.
-                      //           width: 40, // Adjust the width of the animation.
-                      //           height: 40,
-                      //           alignment: Alignment.centerRight,
-                      //         ),
+                      //         bottom:
+                      //             -0, // Adjust the value to control the position from the right edge.
+                      //         child: Center(
+                      //           child: Container(
+                      //             margin: EdgeInsets.only(left: 10),
+                      //             height: 1,
+                      //             width: 50,
+                      //             color: colorPrimary,
+                      //           ),
+                      //         )
                       //       )
                       //     : SizedBox(),
                     ],
@@ -660,44 +687,31 @@ class HomeState extends State<Home> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.only(top: 2 ,bottom: 2 ,left: 10 ,right: 10),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width,
+                          
                           height: Dimens.homeBanner,
-                          child: MyNetworkImage(
+                          child: MyNetworkImageTwo(
                             imageUrl: sectionBannerList?[index].landscape ?? "",
                             fit: BoxFit.fill,
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(0),
-                          width: MediaQuery.of(context).size.width,
-                          height: Dimens.homeBanner,
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                transparentColor,
-                                transparentColor,
-                                appBgColor,
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                     
+                  
+                     ],
                     ),
                   ),
                 );
               },
             ),
           ),
+
+          
           Positioned(
-            bottom: 0,
+            bottom: 10,
             child: Consumer<SectionDataProvider>(
               builder: (context, sectionDataProvider, child) {
                 return AnimatedSmoothIndicator(
@@ -1178,11 +1192,11 @@ class HomeState extends State<Home> {
             const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             focusColor: white,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(6),
             onTap: () {
               debugPrint("Clicked on index ==> $index");
               openDetailPage(
