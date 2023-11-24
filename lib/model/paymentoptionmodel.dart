@@ -60,18 +60,37 @@ class Result {
   PaymentGatewayData? cash;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-        inAppPurchage: PaymentGatewayData.fromJson(json["inapppurchage"]),
-        paypal: PaymentGatewayData.fromJson(json["paypal"]),
-        razorpay: PaymentGatewayData.fromJson(json["razorpay"]),
-        flutterWave: PaymentGatewayData.fromJson(json["flutterwave"]),
-        payUMoney: PaymentGatewayData.fromJson(json["payumoney"]),
-        payTm: PaymentGatewayData.fromJson(json["paytm"]),
-        stripe: PaymentGatewayData.fromJson(json["stripe"]),
-        paystack: PaymentGatewayData.fromJson(json["paystack"]),
-        instamojo: PaymentGatewayData.fromJson(json["instamojo"]),
-        cash: PaymentGatewayData.fromJson(json["cash"]),
+        inAppPurchage: json["inapppurchage"] != null
+            ? PaymentGatewayData.fromJson(json["inapppurchage"])
+            : null,
+        paypal: json["paypal"] != null
+            ? PaymentGatewayData.fromJson(json["paypal"])
+            : null,
+        razorpay: json["razorpay"] != null
+            ? PaymentGatewayData.fromJson(json["razorpay"])
+            : null,
+        flutterWave: json["flutterwave"] != null
+            ? PaymentGatewayData.fromJson(json["flutterwave"])
+            : null,
+        payUMoney: json["payumoney"] != null
+            ? PaymentGatewayData.fromJson(json["payumoney"])
+            : null,
+        payTm: json["paytm"] != null
+            ? PaymentGatewayData.fromJson(json["paytm"])
+            : null,
+        stripe: json["stripe"] != null
+            ? PaymentGatewayData.fromJson(json["stripe"])
+            : null,
+        paystack: json["paystack"] != null
+            ? PaymentGatewayData.fromJson(json["paystack"])
+            : null,
+        instamojo: json["instamojo"] != null
+            ? PaymentGatewayData.fromJson(json["instamojo"])
+            : null,
+        cash: json["cash"] != null
+            ? PaymentGatewayData.fromJson(json["cash"])
+            : null,
       );
-
   Map<String, dynamic> toJson() => {
         "inapppurchage":
             inAppPurchage == null ? {} : inAppPurchage?.toJson() ?? {},
