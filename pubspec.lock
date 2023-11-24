@@ -724,14 +724,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  google_nav_bar:
-    dependency: "direct main"
-    description:
-      name: google_nav_bar
-      sha256: "1c8e3882fa66ee7b74c24320668276ca23affbd58f0b14a24c1e5590f4d07ab0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.6"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -980,14 +972,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  motion_tab_bar_v2:
-    dependency: "direct main"
-    description:
-      name: motion_tab_bar_v2
-      sha256: "738dbbf3f2397c16d9a58f53d1090ea7501d697030aad92e06a6dec3237f39ae"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   nested:
     dependency: transitive
     description:
