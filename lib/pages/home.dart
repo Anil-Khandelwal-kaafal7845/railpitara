@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/find.dart';
@@ -81,8 +82,7 @@ class HomeState extends State<Home> {
   late GeneralProvider generalProvider;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
-    ForceUpdatemodel? forceUpdateData;
+  ForceUpdatemodel? forceUpdateData;
   bool updateLoading = true;
 
   String? currentPage,
@@ -144,11 +144,10 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     getUserData();
 
-      fetchForceUpdateData();
+    fetchForceUpdateData();
 
     sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
@@ -164,6 +163,7 @@ class HomeState extends State<Home> {
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
   }
+
   fetchForceUpdateData() async {
     await HomeScreenRepo().forceUpdateApi(context).then((value) {
       setState(() {
@@ -175,21 +175,18 @@ class HomeState extends State<Home> {
   }
 
   checkForUpdate() async {
-    if (forceUpdateData!.result!.appVersion! >
-        Constant.curentAppVersion) {
+    if (forceUpdateData!.result!.appVersion! > Constant.curentAppVersion) {
       showDialog(
         barrierDismissible:
-           forceUpdateData!.result!.forceUpdate== 1
-                ? false
-                : true,
+            forceUpdateData!.result!.forceUpdate == 1 ? false : true,
         context: context,
         builder: (context) {
           return WillPopScope(
             onWillPop: () async =>
                 false, // prevent dialog from dismissing on back button press
             child: AlertDialog(
-               contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-            surfaceTintColor: Theme.of(context).colorScheme.background,
+              contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+              surfaceTintColor: Theme.of(context).colorScheme.background,
               title: const Text("New Update Available!!"),
               content: const Text("A new app update is available"),
               actions: [
@@ -197,11 +194,9 @@ class HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Visibility(
-                      visible:
-                    forceUpdateData!.result!.forceUpdate==
-                                  0
-                              ? true
-                              : false,
+                      visible: forceUpdateData!.result!.forceUpdate == 0
+                          ? true
+                          : false,
                       child: TextButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -213,8 +208,7 @@ class HomeState extends State<Home> {
                           if (Platform.isAndroid || Platform.isIOS) {
                             final appId = Platform.isAndroid
                                 ? Constant.appPackageName
-                                : Constant.appleAppId
-                                ;
+                                : Constant.appleAppId;
                             final url = Uri.parse(
                               Platform.isAndroid
                                   ? "market://details?id=$appId"
