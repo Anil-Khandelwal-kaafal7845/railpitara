@@ -155,23 +155,25 @@ class SubscriptionState extends State<Subscription> {
                         MediaQuery.of(context).size.width > 720)
                     ? 40
                     : 12),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              alignment: Alignment.center,
-              child: MyText(
-                color: otherColor,
-                text: "subscriptiondesc",
-                multilanguage: true,
-                textalign: TextAlign.center,
-                fontsizeNormal: 16,
-                fontsizeWeb: 18,
-                maxline: 2,
-                fontweight: FontWeight.w600,
-                overflow: TextOverflow.ellipsis,
-                fontstyle: FontStyle.normal,
-              ),
-            ),
+            // Container(
+            //   width: MediaQuery.of(context).size.width,
+            //   padding: const EdgeInsets.only(left: 20, right: 20),
+            //   alignment: Alignment.center,
+            //   child: MyText(
+            //     color: otherColor,
+            //     text: "subscriptiondesc",
+            //     multilanguage: true,
+            //     textalign: TextAlign.center,
+            //     fontsizeNormal: 16,
+            //     fontsizeWeb: 18,
+            //     maxline: 2,
+            //     fontweight: FontWeight.w600,
+            //     overflow: TextOverflow.ellipsis,
+            //     fontstyle: FontStyle.normal,
+            //   ),
+            // ),
+           
+           
             SizedBox(
                 height: ((kIsWeb || Constant.isTV) &&
                         MediaQuery.of(context).size.width > 720)
@@ -220,32 +222,45 @@ class SubscriptionState extends State<Subscription> {
             crossAxisAlignment: WrapCrossAlignment.center,
             alignment: WrapAlignment.center,
             children: [
-              Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                elevation: 3,
-                color: (packageList[index].isBuy == 1
-                    ? colorPrimary
-                    : subscriptionBG),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+
+
+              Container(
+               
+                decoration: BoxDecoration(
+                  color: subscridark,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+          color: subscridark, 
+          width: 2.0, 
+        ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.only(left: 18, right: 18),
-                      constraints: const BoxConstraints(minHeight: 55),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: MyText(
+                child: Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 3,
+                  color: (packageList[index].isBuy == 1
+                      ? subscridark
+                      : subscrimain),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.only(left: 18, right: 18),
+                        constraints: const BoxConstraints(minHeight: 55),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                            ),
+                            MyText(
                               color: (packageList[index].isBuy == 1
-                                  ? black
-                                  : colorPrimary),
+                                  ? subscriblue
+                                  : subscriblue),
                               text: packageList[index].name ?? "",
                               textalign: TextAlign.start,
-                              fontsizeNormal: 18,
+                              fontsizeNormal: 20,
                               fontsizeWeb: 24,
                               maxline: 1,
                               multilanguage: false,
@@ -253,85 +268,89 @@ class SubscriptionState extends State<Subscription> {
                               fontweight: FontWeight.w700,
                               fontstyle: FontStyle.normal,
                             ),
-                          ),
-                          const SizedBox(width: 5),
-                          MyText(
-                            color: (packageList[index].isBuy == 1
-                                ? black
-                                : colorPrimary),
-                            text:
-                                "${Constant.currencySymbol} ${packageList[index].price.toString()} / ${packageList[index].time.toString()} ${packageList[index].type.toString()}",
-                            textalign: TextAlign.center,
-                            fontsizeNormal: 16,
-                            fontsizeWeb: 22,
-                            maxline: 1,
-                            multilanguage: false,
-                            overflow: TextOverflow.ellipsis,
-                            fontweight: FontWeight.w600,
-                            fontstyle: FontStyle.normal,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 0.5,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      color: otherColor,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(1, 9, 1, 9),
-                      constraints: const BoxConstraints(minHeight: 0),
-                      child: SingleChildScrollView(
-                        child: _buildBenefits(packageList, index),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    /* Choose Plan */
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(5),
-                        onTap: () async {
-                          _checkAndPay(packageList, index);
-                        },
-                        child: Container(
-                          height: 45,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          decoration: BoxDecoration(
-                            color: (packageList[index].isBuy == 1
-                                ? white
-                                : colorPrimary),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          alignment: Alignment.center,
-                          child: Consumer<SubscriptionProvider>(
-                            builder: (context, subscriptionProvider, child) {
-                              return MyText(
-                                color: black,
-                                text: (packageList[index].isBuy == 1)
-                                    ? "current"
-                                    : "chooseplan",
-                                textalign: TextAlign.center,
-                                fontsizeNormal: 16,
-                                fontsizeWeb: 20,
-                                fontweight: FontWeight.w700,
-                                multilanguage: true,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                fontstyle: FontStyle.normal,
-                              );
-                            },
-                          ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            MyText(
+                              color: (packageList[index].isBuy == 1
+                                  ? subscriblue
+                                  : subscriblue),
+                              text:
+                                  "\u{20B9} ${packageList[index].price.toString()}",
+                              textalign: TextAlign.center,
+                              fontsizeNormal: 40,
+                              fontsizeWeb: 22,
+                              maxline: 1,
+                              multilanguage: false,
+                              overflow: TextOverflow.ellipsis,
+                              fontweight: FontWeight.w600,
+                              fontstyle: FontStyle.normal,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                          ],
                         ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(1, 9, 1, 9),
+                        constraints: const BoxConstraints(minHeight: 0),
+                        child: SingleChildScrollView(
+                          child: _buildBenefits(packageList, index),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+              
+                      /* Choose Plan */
+                   Align(
+                alignment: Alignment.bottomCenter,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () async {
+                    _checkAndPay(packageList, index);
+                  },
+                  child: Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    decoration: BoxDecoration(
+                      color: (packageList[index].isBuy == 1 ? subscrimain : subscridark),
+                      borderRadius: BorderRadius.circular(20),
+                      // Add border here
+                      border: Border.all(
+                        color: subscrimain, // Set your desired border color
+                        width: 2,            // Set your desired border width
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                  ],
+                    alignment: Alignment.center,
+                    child: Consumer<SubscriptionProvider>(
+                      builder: (context, subscriptionProvider, child) {
+                        return MyText(
+                          color: subscriblue,
+                          text: (packageList[index].isBuy == 1) ? "current" : "chooseplan",
+                          textalign: TextAlign.center,
+                          fontsizeNormal: 16,
+                          fontsizeWeb: 20,
+                          fontweight: FontWeight.w700,
+                          multilanguage: true,
+                          maxline: 1,
+                          overflow: TextOverflow.ellipsis,
+                          fontstyle: FontStyle.normal,
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
+              
+                  
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
+          
+          
             ],
           );
         },
@@ -497,71 +516,84 @@ class SubscriptionState extends State<Subscription> {
           return Container(
             constraints: const BoxConstraints(minHeight: 15),
             width: MediaQuery.of(context).size.width,
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: MyText(
-                    color: (packageList?[index ?? 0].isBuy == 1
-                        ? black
-                        : otherColor),
-                    text: packageList?[index ?? 0].data?[position].packageKey ??
-                        "",
-                    textalign: TextAlign.start,
-                    multilanguage: false,
-                    fontsizeNormal: 15,
-                    fontsizeWeb: 18,
-                    maxline: 3,
-                    overflow: TextOverflow.ellipsis,
-                    fontweight: FontWeight.w600,
-                    fontstyle: FontStyle.normal,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                ((packageList?[index ?? 0].data?[position].packageValue ??
-                                "") ==
-                            "1" ||
-                        (packageList?[index ?? 0]
-                                    .data?[position]
-                                    .packageValue ??
-                                "") ==
-                            "0")
-                    ? MyImage(
-                        width: 23,
-                        height: 23,
-                        color: (packageList?[index ?? 0]
-                                        .data?[position]
-                                        .packageValue ??
-                                    "") ==
-                                "1"
-                            ? (packageList?[index ?? 0].isBuy == 1
-                                ? black
-                                : colorPrimary)
-                            : redColor,
-                        imagePath: (packageList?[index ?? 0]
-                                        .data?[position]
-                                        .packageValue ??
-                                    "") ==
-                                "1"
-                            ? "tick_mark.png"
-                            : "cross_mark.png",
-                      )
-                    : MyText(
+                Row(
+                  children: [
+                    Expanded(
+                      child: MyText(
                         color: (packageList?[index ?? 0].isBuy == 1
-                            ? black
-                            : otherColor),
+                            ? subscriblue
+                            : subscriblue),
                         text: packageList?[index ?? 0]
                                 .data?[position]
-                                .packageValue ??
+                                .packageKey ??
                             "",
-                        textalign: TextAlign.center,
-                        fontsizeNormal: 16,
-                        fontsizeWeb: 24,
+                        textalign: TextAlign.start,
                         multilanguage: false,
-                        maxline: 1,
+                        fontsizeNormal: 15,
+                        fontsizeWeb: 18,
+                        maxline: 3,
                         overflow: TextOverflow.ellipsis,
-                        fontweight: FontWeight.bold,
+                        fontweight: FontWeight.w600,
                         fontstyle: FontStyle.normal,
                       ),
+                    ),
+                    const SizedBox(width: 5),
+                    ((packageList?[index ?? 0].data?[position].packageValue ??
+                                    "") ==
+                                "1" ||
+                            (packageList?[index ?? 0]
+                                        .data?[position]
+                                        .packageValue ??
+                                    "") ==
+                                "0")
+                        ? MyImage(
+                            width: 23,
+                            height: 23,
+                            color: (packageList?[index ?? 0]
+                                            .data?[position]
+                                            .packageValue ??
+                                        "") ==
+                                    "1"
+                                ? (packageList?[index ?? 0].isBuy == 1
+                                    ? black
+                                    :subscrigreen)
+                                : redColor,
+                            imagePath: (packageList?[index ?? 0]
+                                            .data?[position]
+                                            .packageValue ??
+                                        "") ==
+                                    "1"
+                                ? "tick_mark.png"
+                                : "cross_mark.png",
+                          )
+                        : MyText(
+                            color: (packageList?[index ?? 0].isBuy == 1
+                                ? subscrigreen
+                                : subscrigreen),
+                            text: packageList?[index ?? 0]
+                                    .data?[position]
+                                    .packageValue ??
+                                "",
+                            textalign: TextAlign.center,
+                            fontsizeNormal: 16,
+                            fontsizeWeb: 24,
+                            multilanguage: false,
+                            maxline: 1,
+                            overflow: TextOverflow.ellipsis,
+                            fontweight: FontWeight.w600,
+                            fontstyle: FontStyle.normal,
+                          ),
+                  ],
+                ),
+
+                // Container(
+                //           width: MediaQuery.of(context).size.width/1.2,
+                //           height: 0.5,
+                //           margin: const EdgeInsets.only(bottom: 2 ,top: 20),
+                //           color: Colors.white.withOpacity(0.5),
+                //         ),
               ],
             ),
           );
