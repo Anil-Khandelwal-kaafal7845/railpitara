@@ -89,9 +89,9 @@ class SplashState extends State<Splash> {
             .transparent, // Set to transparent if your video has a transparent background
         child: _initialized
             ? AspectRatio(
-aspectRatio: MediaQuery.of(context).size.width/
-        MediaQuery.of(context).size.height,
-               // aspectRatio: _controller.value.aspectRatio,
+// aspectRatio: MediaQuery.of(context).size.width/
+//         MediaQuery.of(context).size.height,
+                aspectRatio: _controller.value.aspectRatio,
 
                 child: VideoPlayer(_controller),
               )

@@ -66,6 +66,8 @@ class SubscriptionState extends State<Subscription> {
           return;
         }
       }
+
+      
       if (packageList?[index].isBuy == 0) {
         await Navigator.pushReplacement(
           context,
