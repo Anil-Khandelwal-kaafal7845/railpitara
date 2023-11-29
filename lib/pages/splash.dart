@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dtlive/utils/utils.dart';
+import 'package:video_player/video_player.dart';
 
 class Splash extends StatefulWidget {
   bool isDynamicLink;
@@ -36,10 +37,20 @@ class Splash extends StatefulWidget {
 class SplashState extends State<Splash> {
   String? seen;
   SharedPre sharedPre = SharedPre();
+  late VideoPlayerController _controller;
+  bool _initialized = false;
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 500)).then((value) {
+    _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+      ..initialize().then((_) {
+        setState(() {
+          _initialized = true;
+        });
+        _controller.play();
+      });
+
+    Future.delayed(const Duration(seconds: 5)).then((value) {
       if (!mounted) return;
       isFirstCheck();
     });
@@ -50,22 +61,45 @@ class SplashState extends State<Splash> {
   void dispose() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    // return Scaffold(
+    //   body: Container(
+    //     width: MediaQuery.of(context).size.width,
+    //     height: MediaQuery.of(context).size.height,
+    //     alignment: Alignment.center,
+    //     color: appBgColor,
+    //     child: MyImage(
+    //       imagePath: (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
+    //       fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
+    //     ),
+    //   ),
+    // );
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
-        color: appBgColor,
-        child: MyImage(
-          imagePath: (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
-          fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
-        ),
+        color: Colors
+            .transparent, // Set to transparent if your video has a transparent background
+        child: _initialized
+            ? AspectRatio(
+aspectRatio: MediaQuery.of(context).size.width/
+        MediaQuery.of(context).size.height,
+               // aspectRatio: _controller.value.aspectRatio,
+
+                child: VideoPlayer(_controller),
+              )
+            : MyImage(
+                imagePath:
+                    (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
+                fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
+              ),
       ),
     );
   }
