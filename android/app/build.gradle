@@ -56,7 +56,7 @@ android {
         applicationId "com.blackboardfilms.omtv"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 19
+        versionCode 20
         versionName '2.5.1'
         multiDexEnabled true
         ndk {
