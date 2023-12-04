@@ -4,12 +4,12 @@ import 'package:dtlive/model/subtitlemodel.dart';
 class Constant {
   // static const String baseurl = '';
   static const String baseurl = 'https://omtv.ottpeople.in/public/api/';
-  static const String dynamicBaseUrl = 'https://omtvstage.ottpeople.in/';
+  static const String dynamicBaseUrl = 'https://omtvlive.in/';
 
   static String appName = "OM TV";
   static String appPackageName = "com.blackboardfilms.omtv";
   static String appleAppId = "6449380090";
-  static double curentAppVersion = 19;
+  static double curentAppVersion = 21;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
