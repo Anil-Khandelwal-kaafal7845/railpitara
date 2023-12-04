@@ -12,6 +12,13 @@ const colorBottom6 = Color(0xffBCBEBB);
 const colorBottom7 = Color(0xffE0D7DA);
 const colorBottom8 = Color(0xff7F85F5);
 
+const subscriblue = Color(0xff03084C);
+const subscrimain = Color(0xffFDAF5A);
+const subscridark = Color(0xffD57648);
+const subscrigreen = Color(0xff06802F);
+
+
+
 
 
 
