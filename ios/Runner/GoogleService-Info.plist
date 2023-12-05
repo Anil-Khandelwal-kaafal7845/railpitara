@@ -17,9 +17,9 @@
 	<key>BUNDLE_ID</key>
 	<string>com.blackboardfilms.omtv</string>
 	<key>PROJECT_ID</key>
-	<string>amuzi-5f9d4</string>
+	<string>omtv-32b09</string>
 	<key>STORAGE_BUCKET</key>
-	<string>amuzi-5f9d4.appspot.com</string>
+	<string>omtv-32b09.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>

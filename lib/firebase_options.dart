@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '151680591442',
     projectId: 'omtv-32b09',
     storageBucket: 'omtv-32b09.appspot.com',
-    androidClientId: '151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com',
+    androidClientId: '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
     iosClientId: '151680591442-ifc0k6h6k7btm59kvbdvbag45k0aseds.apps.googleusercontent.com',
     iosBundleId: 'com.blackboardfilms.omtv',
   );
