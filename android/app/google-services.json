@@ -14,11 +14,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackboardfilms.omtv",
+            "certificate_hash": "a586d5ad0867c0a2f8a1539abeea3d2a2f7af563"
+          }
+        },
+        {
           "client_id": "151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.blackboardfilms.omtv",
             "certificate_hash": "84bf9f4eedbb0b02c889815ddf0a19a3e3e77286"
+          }
+        },
+        {
+          "client_id": "151680591442-kf2q1pn28g3rq5avnv16clkrs1il46lh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackboardfilms.omtv",
+            "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
           }
         },
         {
