@@ -56,8 +56,8 @@ android {
         applicationId "com.blackboardfilms.omtv"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 24
-        versionName '2.5.3'
+        versionCode 25
+        versionName '2.5.4'
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
