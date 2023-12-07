@@ -2146,19 +2146,77 @@ class HomeState extends State<Home> {
     }
   }
 
+  // Widget setSectionByType(List<list.Result>? sectionList) {
+  //   return ListView.builder(
+  //     itemCount: sectionList?.length ?? 0,
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemBuilder: (BuildContext context, int index) {
+  //       if (sectionList?[index].data != null &&
+  //           (sectionList?[index].data?.length ?? 0) > 0) {
+  //         return Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+  //               child: MyText(
+  //                 color: white,
+  //                 text: sectionList?[index].title.toString() ?? "",
+  //                 textalign: TextAlign.center,
+  //                 fontsizeNormal: 14,
+  //                 fontweight: FontWeight.w600,
+  //                 fontsizeWeb: 16,
+  //                 multilanguage: false,
+  //                 maxline: 1,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 fontstyle: FontStyle.normal,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 15),
+  //             SizedBox(
+  //               width: MediaQuery.of(context).size.width,
+  //               height: getRemainingDataHeight(
+  //                 sectionList?[index].videoType.toString() ?? "",
+  //                 sectionList?[index].screenLayout ?? "",
+  //               ),
+  //               child: setSectionData(sectionList: sectionList, index: index),
+  //             ),
+           
+  //           ],
+  //         );
+  //       } else {
+  //         return const SizedBox.shrink();
+  //       }
+  //     },
+  //   );
+  // }
+
+
   Widget setSectionByType(List<list.Result>? sectionList) {
+    // Check if sectionList is not null
+    if (sectionList == null || sectionList.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Sort the sectionList based on sectionOrder
+    sectionList
+        .sort((a, b) => (a.sectionOrder ?? 0).compareTo(b.sectionOrder ?? 0));
+
     return ListView.builder(
-      itemCount: sectionList?.length ?? 0,
+      itemCount: sectionList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        if (sectionList?[index].data != null &&
-            (sectionList?[index].data?.length ?? 0) > 0) {
+        if (sectionList[index].data != null &&
+            sectionList[index].data!.isNotEmpty) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              Row(
+                children: [
+                 Padding(
                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: MyText(
                   color: white,
@@ -2173,12 +2231,18 @@ class HomeState extends State<Home> {
                   fontstyle: FontStyle.normal,
                 ),
               ),
+           
+             
+           
+               
+                ],
+              ),
               const SizedBox(height: 15),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: getRemainingDataHeight(
-                  sectionList?[index].videoType.toString() ?? "",
-                  sectionList?[index].screenLayout ?? "",
+                  sectionList[index].videoType.toString() ?? "",
+                  sectionList[index].screenLayout ?? "",
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),
@@ -2190,6 +2254,8 @@ class HomeState extends State<Home> {
       },
     );
   }
+
+
 
   Widget setSectionData(
       {required List<list.Result>? sectionList, required int index}) {
