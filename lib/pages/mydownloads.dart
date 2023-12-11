@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dtlive/model/downloadvideomodel.dart';
@@ -561,7 +560,8 @@ class _MyDownloadsState extends State<MyDownloads> {
                       ? InkWell(
                           borderRadius: BorderRadius.circular(5),
                           onTap: () async {
-                            debugPrint("Clicked on position =============> $position");
+                            debugPrint(
+                                "Clicked on position =============> $position");
                             bool isDeleted =
                                 await deleteFromDownloads(position);
                             debugPrint("isDeleted =============> $isDeleted");
@@ -683,7 +683,7 @@ class _MyDownloadsState extends State<MyDownloads> {
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
                       } else if (Platform.isIOS) {
                         Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
                       }
                     },
                     child: _buildDialogItems(
@@ -699,7 +699,7 @@ class _MyDownloadsState extends State<MyDownloads> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: _buildDialogItems(
@@ -716,7 +716,7 @@ class _MyDownloadsState extends State<MyDownloads> {
                       Navigator.pop(context);
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
-                            ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                            ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                             : "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
                       ).then((data) {
                         debugPrint(data);
@@ -737,7 +737,7 @@ class _MyDownloadsState extends State<MyDownloads> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${myDownloadsList?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: _buildDialogItems(

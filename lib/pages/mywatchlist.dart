@@ -906,7 +906,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
                       } else if (Platform.isIOS) {
                         Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
                       }
                     },
                     child: _buildDialogItems(
@@ -922,7 +922,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: _buildDialogItems(
@@ -939,7 +939,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                       Navigator.pop(context);
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
-                            ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                            ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                             : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
                       ).then((data) {
                         debugPrint(data);
@@ -960,7 +960,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: _buildDialogItems(

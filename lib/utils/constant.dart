@@ -6,9 +6,9 @@ class Constant {
   static const String baseurl = 'https://omtv.ottpeople.in/public/api/';
   static const String dynamicBaseUrl = 'https://omtvlive.in/';
 
-  static String appName = "OM TV";
+  static String appName = "OM-TV";
   static String appPackageName = "com.blackboardfilms.omtv";
-  static String appleAppId = "6449380090";
+  static String appleAppId = "1584477559";
   static double curentAppVersion = 25;
 
   /* OneSignal App ID */
@@ -29,7 +29,7 @@ class Constant {
   static String androidAppUrl =
       "https://play.google.com/store/apps/details?id=${Constant.appPackageName}";
   static String iosAppUrl =
-      "https://apps.apple.com/us/app/id${Constant.appleAppId}";
+      "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];

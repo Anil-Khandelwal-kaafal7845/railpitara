@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dtlive/model/downloadvideomodel.dart';
@@ -756,7 +755,7 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
                       } else if (Platform.isIOS) {
                         Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
                       }
                     },
                     child: Container(
@@ -798,7 +797,7 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: Container(
@@ -841,7 +840,7 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                       Navigator.pop(context);
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
-                            ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                            ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                             : "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
                       ).then((data) {
                         debugPrint(data);
@@ -888,7 +887,7 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/us/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                          ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
                           : "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: Container(

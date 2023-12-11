@@ -176,7 +176,8 @@ class HomeState extends State<Home> {
   }
 
   checkForUpdate() async {
-    if (forceUpdateData!.result!.appVersion! > Constant.curentAppVersion) {
+    if (forceUpdateData!.result!.appVersion! > Constant.curentAppVersion &&
+        Platform.isAndroid) {
       showDialog(
         barrierDismissible:
             forceUpdateData!.result!.forceUpdate == 1 ? false : true,
@@ -2182,7 +2183,7 @@ class HomeState extends State<Home> {
   //               ),
   //               child: setSectionData(sectionList: sectionList, index: index),
   //             ),
-           
+
   //           ],
   //         );
   //       } else {
@@ -2191,7 +2192,6 @@ class HomeState extends State<Home> {
   //     },
   //   );
   // }
-
 
   Widget setSectionByType(List<list.Result>? sectionList) {
     // Check if sectionList is not null
@@ -2216,25 +2216,21 @@ class HomeState extends State<Home> {
             children: [
               Row(
                 children: [
-                 Padding(
-                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                child: MyText(
-                  color: white,
-                  text: sectionList?[index].title.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 16,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
-           
-             
-           
-               
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                    child: MyText(
+                      color: white,
+                      text: sectionList?[index].title.toString() ?? "",
+                      textalign: TextAlign.center,
+                      fontsizeNormal: 14,
+                      fontweight: FontWeight.w600,
+                      fontsizeWeb: 16,
+                      multilanguage: false,
+                      maxline: 1,
+                      overflow: TextOverflow.ellipsis,
+                      fontstyle: FontStyle.normal,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 15),
@@ -2254,8 +2250,6 @@ class HomeState extends State<Home> {
       },
     );
   }
-
-
 
   Widget setSectionData(
       {required List<list.Result>? sectionList, required int index}) {
