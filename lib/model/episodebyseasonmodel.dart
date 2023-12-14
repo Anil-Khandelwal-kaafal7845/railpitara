@@ -87,7 +87,7 @@ class Result {
   String? thumbnail;
   String? landscape;
   String? videoUploadType;
-  int? videoType;
+  dynamic? videoType;
   String? videoExtension;
   int? videoDuration;
   int? isPremium;
