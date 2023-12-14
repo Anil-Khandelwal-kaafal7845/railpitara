@@ -45,6 +45,8 @@ class SectionListModel {
       };
 }
 
+
+
 class ContinueWatching {
   int? id;
   int? showId;
@@ -286,6 +288,7 @@ class ContinueWatching {
       };
 }
 
+
 class Result {
   int? id;
   int? isHomeScreen;
@@ -296,6 +299,7 @@ class Result {
   String? videoId;
   String? screenLayout;
   int? status;
+  int? sectionOrder;
   String? createdAt;
   String? updatedAt;
   List<Datum>? data;
@@ -310,6 +314,7 @@ class Result {
     this.videoId,
     this.screenLayout,
     this.status,
+    this.sectionOrder,
     this.createdAt,
     this.updatedAt,
     this.data,
@@ -325,6 +330,7 @@ class Result {
         videoId: json["video_id"],
         screenLayout: json["screen_layout"],
         status: json["status"],
+        sectionOrder: json["section_order"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         data:
@@ -341,6 +347,7 @@ class Result {
         "video_id": videoId,
         "screen_layout": screenLayout,
         "status": status,
+        "section_order":sectionOrder,
         "created_at": createdAt,
         "updated_at": updatedAt,
         "data": data == null
@@ -348,6 +355,8 @@ class Result {
             : List<dynamic>.from(data?.map((x) => x.toJson()) ?? []),
       };
 }
+
+
 
 class Datum {
   int? id;

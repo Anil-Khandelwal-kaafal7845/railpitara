@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,7 +7,6 @@ import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
-import 'package:dtlive/pages/setting.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -36,7 +36,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -66,6 +65,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => HomeState();
 }
 
+ForceUpdatemodel? forceUpdateData;
+
 class HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
@@ -83,7 +84,6 @@ class HomeState extends State<Home> {
   late GeneralProvider generalProvider;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  ForceUpdatemodel? forceUpdateData;
   bool updateLoading = true;
 
   String? currentPage,
@@ -171,11 +171,13 @@ class HomeState extends State<Home> {
         forceUpdateData = value;
         updateLoading = false;
       });
+      log(forceUpdateData!.result!.showPackage.toString() + "rakhsudhufd");
       checkForUpdate();
     });
   }
 
   checkForUpdate() async {
+
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isAndroid) {
       if (forceUpdateData!.result!.appVersion! >
@@ -209,6 +211,7 @@ class HomeState extends State<Home> {
                             child: const Text("Cancel")),
                       ),
                       TextButton(
+
                           onPressed: () {
                             if (Platform.isAndroid || Platform.isIOS) {
                               final appId = Platform.isAndroid
@@ -2207,39 +2210,98 @@ class HomeState extends State<Home> {
     }
   }
 
+  // Widget setSectionByType(List<list.Result>? sectionList) {
+  //   return ListView.builder(
+  //     itemCount: sectionList?.length ?? 0,
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemBuilder: (BuildContext context, int index) {
+  //       if (sectionList?[index].data != null &&
+  //           (sectionList?[index].data?.length ?? 0) > 0) {
+  //         return Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+  //               child: MyText(
+  //                 color: white,
+  //                 text: sectionList?[index].title.toString() ?? "",
+  //                 textalign: TextAlign.center,
+  //                 fontsizeNormal: 14,
+  //                 fontweight: FontWeight.w600,
+  //                 fontsizeWeb: 16,
+  //                 multilanguage: false,
+  //                 maxline: 1,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 fontstyle: FontStyle.normal,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 15),
+  //             SizedBox(
+  //               width: MediaQuery.of(context).size.width,
+  //               height: getRemainingDataHeight(
+  //                 sectionList?[index].videoType.toString() ?? "",
+  //                 sectionList?[index].screenLayout ?? "",
+  //               ),
+  //               child: setSectionData(sectionList: sectionList, index: index),
+  //             ),
+
+  //           ],
+  //         );
+  //       } else {
+  //         return const SizedBox.shrink();
+  //       }
+  //     },
+  //   );
+  // }
+
   Widget setSectionByType(List<list.Result>? sectionList) {
+    // Check if sectionList is not null
+    if (sectionList == null || sectionList.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Sort the sectionList based on sectionOrder
+    sectionList
+        .sort((a, b) => (a.sectionOrder ?? 0).compareTo(b.sectionOrder ?? 0));
+
     return ListView.builder(
-      itemCount: sectionList?.length ?? 0,
+      itemCount: sectionList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        if (sectionList?[index].data != null &&
-            (sectionList?[index].data?.length ?? 0) > 0) {
+        if (sectionList[index].data != null &&
+            sectionList[index].data!.isNotEmpty) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                child: MyText(
-                  color: white,
-                  text: sectionList?[index].title.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 16,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                    child: MyText(
+                      color: white,
+                      text: sectionList?[index].title.toString() ?? "",
+                      textalign: TextAlign.center,
+                      fontsizeNormal: 14,
+                      fontweight: FontWeight.w600,
+                      fontsizeWeb: 16,
+                      multilanguage: false,
+                      maxline: 1,
+                      overflow: TextOverflow.ellipsis,
+                      fontstyle: FontStyle.normal,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 15),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: getRemainingDataHeight(
-                  sectionList?[index].videoType.toString() ?? "",
-                  sectionList?[index].screenLayout ?? "",
+                  sectionList[index].videoType.toString() ?? "",
+                  sectionList[index].screenLayout ?? "",
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),

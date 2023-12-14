@@ -208,7 +208,7 @@ class OTPVerifyState extends State<OTPVerify> {
                       //       context, "info", "otp_not_working", true);
                       //   return;
                       // }
-                      Utils.showProgress(context, prDialog);
+                      // Utils.showProgress(context, prDialog);
                       _checkOTPAndLogin();
                     }
                   },
