@@ -177,122 +177,66 @@ class HomeState extends State<Home> {
   }
 
   checkForUpdate() async {
-
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    if (Platform.isAndroid) {
-      if (forceUpdateData!.result!.appVersion! >
-          Constant.curentAppVersion) {
-        showDialog(
-          barrierDismissible:
-              forceUpdateData!.result!.forceUpdateAndroid == 1 ? false : true,
-          context: context,
-          builder: (context) {
-            return WillPopScope(
-              onWillPop: () async =>
-                  false, // prevent dialog from dismissing on back button press
-              child: AlertDialog(
-                contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-                surfaceTintColor: Theme.of(context).colorScheme.background,
-                title: const Text("New Update Available!!"),
-                content: const Text("A new app update is available"),
-                actions: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Visibility(
-                        visible:
-                            forceUpdateData!.result!.forceUpdateAndroid == 0
-                                ? true
-                                : false,
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Cancel")),
-                      ),
-                      TextButton(
+    log("kkkk ${packageInfo.buildNumber}");
+    log("kkkk ${forceUpdateData!.result!.appVersionIos!}");
 
+    if ((Platform.isAndroid
+            ? forceUpdateData!.result!.appVersion!
+            : forceUpdateData!.result!.appVersionIos!) >
+        num.parse(packageInfo.buildNumber)) {
+      showDialog(
+        barrierDismissible:
+            forceUpdateData!.result!.forceUpdateAndroid == 1 ? false : true,
+        context: context,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async =>
+                false, // prevent dialog from dismissing on back button press
+            child: AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+              surfaceTintColor: Theme.of(context).colorScheme.background,
+              title: const Text("New Update Available!!"),
+              content: const Text("A new app update is available"),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Visibility(
+                      visible: forceUpdateData!.result!.forceUpdateAndroid == 0
+                          ? true
+                          : false,
+                      child: TextButton(
                           onPressed: () {
-                            if (Platform.isAndroid || Platform.isIOS) {
-                              final appId = Platform.isAndroid
-                                  ? Constant.appPackageName
-                                  : Constant.appleAppId;
-                              final url = Uri.parse(
-                                Platform.isAndroid
-                                    ? "market://details?id=$appId"
-                                    : "https://apps.apple.com/app/id$appId",
-                              );
-                              launchUrl(
-                                url,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
+                            Navigator.pop(context);
                           },
-                          child: const Text("UPDATE")),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      }
-    } else {
-      if (forceUpdateData!.result!.appVersionIos! >
-          double.parse(packageInfo.buildNumber)) {
-        showDialog(
-          barrierDismissible:
-              forceUpdateData!.result!.forceUpdateIos == 1 ? false : true,
-          context: context,
-          builder: (context) {
-            return WillPopScope(
-              onWillPop: () async =>
-                  false, // prevent dialog from dismissing on back button press
-              child: AlertDialog(
-                contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-                surfaceTintColor: Theme.of(context).colorScheme.background,
-                title: const Text("New Update Available!!"),
-                content: const Text("A new app update is available"),
-                actions: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Visibility(
-                        visible: forceUpdateData!.result!.forceUpdateIos == 0
-                            ? true
-                            : false,
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Cancel")),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            if (Platform.isAndroid || Platform.isIOS) {
-                              final appId = Platform.isAndroid
-                                  ? Constant.appPackageName
-                                  : Constant.appleAppId;
-                              final url = Uri.parse(
-                                Platform.isAndroid
-                                    ? "market://details?id=$appId"
-                                    : "https://apps.apple.com/app/id$appId",
-                              );
-                              launchUrl(
-                                url,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
-                          },
-                          child: const Text("UPDATE")),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      }
+                          child: const Text("Cancel")),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            final appId = Platform.isAndroid
+                                ? Constant.appPackageName
+                                : Constant.appleAppId;
+                            final url = Uri.parse(
+                              Platform.isAndroid
+                                  ? "market://details?id=$appId"
+                                  : "https://apps.apple.com/app/id$appId",
+                            );
+                            launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        child: const Text("UPDATE")),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -2283,7 +2227,7 @@ class HomeState extends State<Home> {
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                     child: MyText(
                       color: white,
-                      text: sectionList?[index].title.toString() ?? "",
+                      text: sectionList[index].title.toString(),
                       textalign: TextAlign.center,
                       fontsizeNormal: 14,
                       fontweight: FontWeight.w600,
@@ -2300,7 +2244,7 @@ class HomeState extends State<Home> {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: getRemainingDataHeight(
-                  sectionList[index].videoType.toString() ?? "",
+                  sectionList[index].videoType.toString(),
                   sectionList[index].screenLayout ?? "",
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
