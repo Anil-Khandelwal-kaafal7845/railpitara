@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -68,6 +68,7 @@ class Home extends StatefulWidget {
 ForceUpdatemodel? forceUpdateData;
 
 class HomeState extends State<Home> {
+  final JSHelper _jsHelper = JSHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -351,6 +352,16 @@ class HomeState extends State<Home> {
       videoType: videoType,
       typeId: typeId,
     );
+  }
+
+  _redirectToUrl(loadingUrl) async {
+    debugPrint("loadingUrl -----------> $loadingUrl");
+    /*
+      _blank => open new Tab
+      _self => open in current Tab
+    */
+    String dataFromJS = await _jsHelper.callOpenTab(loadingUrl, '_blank');
+    debugPrint("dataFromJS -----------> $dataFromJS");
   }
 
   @override
@@ -776,9 +787,71 @@ class HomeState extends State<Home> {
 
                     /* Pages */
                     _buildPages(),
-
                     SizedBox(
-                      height: 5,
+                      height: 10,
+                    ),
+                    _buildLine(),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _redirectToUrl(Constant.fbLink);
+                            },
+                            borderRadius: BorderRadius.circular(3),
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset('assets/images/fb.png'),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          InkWell(
+                            onTap: () {
+                              _redirectToUrl(Constant.InstaLink);
+                            },
+                            borderRadius: BorderRadius.circular(3),
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset('assets/images/insta.png'),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          InkWell(
+                            onTap: () {
+                              _redirectToUrl(Constant.twitterLink);
+                            },
+                            borderRadius: BorderRadius.circular(3),
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset('assets/images/twt.png'),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          InkWell(
+                            onTap: () {
+                              _redirectToUrl(Constant.youtubeLink);
+                            },
+                            borderRadius: BorderRadius.circular(3),
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset('assets/images/yt.png'),
+                            ),
+                          ),
+                          SizedBox(height:15 ,) ,
+                                    
+                        ],
+                      ),
                     ),
                   ],
                 ),
