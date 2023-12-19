@@ -266,7 +266,7 @@ Future<void> main() async {
     await MobileAds.instance.initialize();
   }
   await Firebase.initializeApp(
-      name: 'omtv-32b09', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'aarya-ott', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

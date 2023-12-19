@@ -3,13 +3,13 @@ import 'package:dtlive/model/subtitlemodel.dart';
 
 class Constant {
   // static const String baseurl = '';
-  static const String baseurl = 'https://omtv.ottpeople.in/public/api/';
-  static const String dynamicBaseUrl = 'https://omtvlive.in/';
+    static const String baseurl =  'https://aaryaconsole.ottpeople.in/public/api/';
+  static const String dynamicBaseUrl = 'aarya.ottpeople.in';
 
-  static String appName = "OM-TV";
-  static String appPackageName = "com.blackboardfilms.omtv";
+  static String appName = "Aaryaa digital";
+  static String appPackageName = "com.ott.aaryaott";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 26;
+  static double curentAppVersion = 1;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";

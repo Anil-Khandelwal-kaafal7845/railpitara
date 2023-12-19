@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,21 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0',
-    appId: '1:151680591442:android:9bf7d041290af0ae08e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
-    appId: '1:151680591442:ios:9988a0ff6b7d58f308e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.appspot.com',
-    androidClientId: '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
-    iosClientId: '151680591442-ifc0k6h6k7btm59kvbdvbag45k0aseds.apps.googleusercontent.com',
-    iosBundleId: 'com.blackboardfilms.omtv',
+    apiKey: 'AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM',
+    appId: '1:153686127657:android:b0c62d454046c550639838',
+    messagingSenderId: '153686127657',
+    projectId: 'aarya-ott',
+    storageBucket: 'aarya-ott.appspot.com',
   );
 }

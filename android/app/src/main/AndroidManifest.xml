@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.blackboardfilms.omtv">
+    package="com.ott.aaryaott">
 
     <uses-feature
         android:name="android.hardware.camera2.full"
@@ -40,7 +40,7 @@
         android:required="false"/>
 
    <application
-        android:label="OM TV"
+        android:label="Aaryaa digital"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:banner="@drawable/banner"
@@ -82,7 +82,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="omtvlive.in"/>
+                <data android:scheme="http" android:host="aarya.ottpeople.in"/>
                 <data android:scheme="https"/>
             </intent-filter>
            
