@@ -3,7 +3,7 @@ import 'package:dtlive/model/subtitlemodel.dart';
 
 class Constant {
   // static const String baseurl = '';
-    static const String baseurl =  'https://aaryaconsole.ottpeople.in/public/api/';
+  static const String baseurl = 'https://aaryaconsole.ottpeople.in/public/api/';
   static const String dynamicBaseUrl = 'aarya.ottpeople.in';
 
   static String appName = "Aaryaa digital";
@@ -30,6 +30,11 @@ class Constant {
       "https://play.google.com/store/apps/details?id=${Constant.appPackageName}";
   static String iosAppUrl =
       "https://apps.apple.com/in/app/id${Constant.appleAppId}";
+
+  static String fbLink = "";
+  static String InstaLink = "";
+  static String youtubeLink = "";
+  static String twitterLink = "";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];
