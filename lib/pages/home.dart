@@ -354,14 +354,22 @@ class HomeState extends State<Home> {
     );
   }
 
-  _redirectToUrl(loadingUrl) async {
-    debugPrint("loadingUrl -----------> $loadingUrl");
-    /*
-      _blank => open new Tab
-      _self => open in current Tab
-    */
-    String dataFromJS = await _jsHelper.callOpenTab(loadingUrl, '_blank');
-    debugPrint("dataFromJS -----------> $dataFromJS");
+  // _redirectToUrl(loadingUrl) async {
+  //   debugPrint("loadingUrl -----------> $loadingUrl");
+  //   /*
+  //     _blank => open new Tab
+  //     _self => open in current Tab
+  //   */
+  //   String dataFromJS = await _jsHelper.callOpenTab(loadingUrl, '_blank');
+  //   debugPrint("dataFromJS -----------> $dataFromJS");
+  // }
+
+  Future<void> _redirectToUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -801,55 +809,34 @@ class HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
+                          socialMediaIcon(
+                            imageUrl: 'assets/images/fb.png',
                             onTap: () {
                               _redirectToUrl(Constant.fbLink);
                             },
-                            borderRadius: BorderRadius.circular(3),
-                            child: Container(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset('assets/images/fb.png'),
-                            ),
                           ),
                           const SizedBox(width: 15),
-                          InkWell(
+                          socialMediaIcon(
+                            imageUrl: 'assets/images/insta.png',
                             onTap: () {
                               _redirectToUrl(Constant.InstaLink);
                             },
-                            borderRadius: BorderRadius.circular(3),
-                            child: Container(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset('assets/images/insta.png'),
-                            ),
                           ),
                           const SizedBox(width: 15),
-                          InkWell(
+                          socialMediaIcon(
+                            imageUrl: 'assets/images/twt.png',
                             onTap: () {
                               _redirectToUrl(Constant.twitterLink);
                             },
-                            borderRadius: BorderRadius.circular(3),
-                            child: Container(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset('assets/images/twt.png'),
-                            ),
                           ),
                           const SizedBox(width: 15),
-                          InkWell(
+                          socialMediaIcon(
+                            imageUrl: 'assets/images/yt.png',
                             onTap: () {
                               _redirectToUrl(Constant.youtubeLink);
                             },
-                            borderRadius: BorderRadius.circular(3),
-                            child: Container(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset('assets/images/yt.png'),
-                            ),
                           ),
-                          SizedBox(height:15 ,) ,
-                                    
+                          SizedBox(height: 15),
                         ],
                       ),
                     ),
@@ -864,6 +851,20 @@ class HomeState extends State<Home> {
         child: (kIsWeb || Constant.isTV)
             ? _webAppBarWithDetails()
             : _mobileAppBarWithDetails(),
+      ),
+    );
+  }
+
+  Widget socialMediaIcon({required String imageUrl, required Function onTap}) {
+    return InkWell(
+      onTap: () async {
+        await onTap();
+      },
+      borderRadius: BorderRadius.circular(3),
+      child: Container(
+        height: 25,
+        width: 25,
+        child: Image.asset(imageUrl),
       ),
     );
   }

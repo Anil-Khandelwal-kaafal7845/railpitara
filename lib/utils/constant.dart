@@ -31,10 +31,12 @@ class Constant {
   static String iosAppUrl =
       "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
-  static String fbLink = "";
-  static String InstaLink = "";
-  static String youtubeLink = "";
-  static String twitterLink = "";
+  static String fbLink =
+      "https://hi-in.facebook.com/people/Aaryaa-Digital-OTT/100071111258219";
+  static String InstaLink = "https://www.instagram.com/aaryaadigital/";
+  static String youtubeLink =
+      "https://youtube.com/@AaryaaDigital?si=-0vOh88za82oB3Gz";
+  static String twitterLink = "https://twitter.com/AaryaaDigital";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];
