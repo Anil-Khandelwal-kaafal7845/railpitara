@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "153686127657-vujhrd83kj3ots5dmceilcei87q24coe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ott.aaryaott",
+            "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
+          }
+        },
+        {
           "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -46,6 +54,42 @@
         "mobilesdk_app_id": "1:153686127657:android:086ebcebb588ab72639838",
         "android_client_info": {
           "package_name": "com.ott.omtvapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "153686127657-4u0ch65p572nt6tpuld0b13o9jdljqj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ott.aaryaott"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153686127657:android:16c39dece43cda55639838",
+        "android_client_info": {
+          "package_name": "com.release.aryanews"
         }
       },
       "oauth_client": [

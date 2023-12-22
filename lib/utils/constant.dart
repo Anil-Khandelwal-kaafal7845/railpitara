@@ -7,9 +7,9 @@ class Constant {
   static const String dynamicBaseUrl = 'aarya.ottpeople.in';
 
   static String appName = "Aaryaa digital";
-  static String appPackageName = "com.ott.aaryaott";
+  static String appPackageName = "com.release.aryanews";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 1;
+  static double curentAppVersion = 6;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
