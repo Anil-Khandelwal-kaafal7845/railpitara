@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
 import 'package:video_player/video_player.dart';
@@ -37,6 +38,7 @@ class PlayerVideo extends StatefulWidget {
 }
 
 class _PlayerVideoState extends State<PlayerVideo> {
+  final _noScreenshot = NoScreenshot.instance;
   late PlayerProvider playerProvider;
   int? playerCPosition, videoDuration;
   ChewieController? _chewieController;
@@ -45,6 +47,8 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void initState() {
+   restrictScreenRecordingandScreenshot();
+
     debugPrint("videoUrl ========> ${widget.videoUrl}");
     debugPrint("vUploadType ========> ${widget.vUploadType}");
     playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -231,6 +235,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void dispose() {
+    allowScreenRecordingandScreenshot();
     if (_chewieController != null) {
       subtitleController?.detach();
       _chewieController?.removeListener(() {});

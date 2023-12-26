@@ -668,6 +668,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_windowmanager:
+    dependency: "direct main"
+    description:
+      name: flutter_windowmanager
+      sha256: b4d0bc06f6777952b729c0cdb7ce9ad1ecabd8b8b1cb0acb57a36621457dab1b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -988,6 +996,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  no_screenshot:
+    dependency: "direct main"
+    description:
+      name: no_screenshot
+      sha256: c8621208e3e01e5b9c6d8f4611241465436618ffd3da8340bd533f8241a33fc5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1+6"
   numeral:
     dependency: "direct main"
     description:
