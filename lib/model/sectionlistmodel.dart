@@ -45,8 +45,6 @@ class SectionListModel {
       };
 }
 
-
-
 class ContinueWatching {
   int? id;
   int? showId;
@@ -288,7 +286,6 @@ class ContinueWatching {
       };
 }
 
-
 class Result {
   int? id;
   int? isHomeScreen;
@@ -302,7 +299,12 @@ class Result {
   int? sectionOrder;
   String? createdAt;
   String? updatedAt;
+  String? nameVisible;
   List<Datum>? data;
+  int? bannerOrder;
+  String? bannerVisible;
+  String? bannerImage;
+  int? bannerId;
 
   Result({
     this.id,
@@ -317,7 +319,12 @@ class Result {
     this.sectionOrder,
     this.createdAt,
     this.updatedAt,
+    this.nameVisible,
     this.data,
+    this.bannerId,
+    this.bannerOrder,
+    this.bannerImage,
+    this.bannerVisible,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -333,8 +340,13 @@ class Result {
         sectionOrder: json["section_order"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        nameVisible: json["name_visible"],
         data:
             List<Datum>.from(json["data"]?.map((x) => Datum.fromJson(x)) ?? []),
+        bannerId: json["banner_id"],
+        bannerImage: json["banner_image"],
+        bannerVisible: json["banner_visible"],
+        bannerOrder: json["banner_order"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -347,16 +359,19 @@ class Result {
         "video_id": videoId,
         "screen_layout": screenLayout,
         "status": status,
-        "section_order":sectionOrder,
+        "section_order": sectionOrder,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "name_visible": nameVisible,
         "data": data == null
             ? []
             : List<dynamic>.from(data?.map((x) => x.toJson()) ?? []),
+        "banner_image": bannerImage,
+        "banner_visible": bannerVisible,
+        "banner_order": bannerOrder,
+        "banner_id": bannerId,
       };
 }
-
-
 
 class Datum {
   int? id;
@@ -370,6 +385,7 @@ class Datum {
   String? languageId;
   String? castId;
   int? typeId;
+  String? fullWidth;
   int? videoType;
   String? thumbnail;
   String? landscape;
@@ -407,6 +423,7 @@ class Datum {
   String? video1080;
   String? videoExtension;
   int? videoDuration;
+  String? nameVisible;
   String? subtitleType;
   String? subtitleLang1;
   String? subtitle1;
@@ -423,6 +440,7 @@ class Datum {
   Datum({
     this.id,
     this.name,
+    this.fullWidth,
     this.image,
     this.status,
     this.createdAt,
@@ -469,6 +487,7 @@ class Datum {
     this.video1080,
     this.videoExtension,
     this.videoDuration,
+    this.nameVisible,
     this.subtitleType,
     this.subtitleLang1,
     this.subtitle1,
@@ -486,6 +505,7 @@ class Datum {
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         name: json["name"],
+        fullWidth: json["full_width"],
         image: json["image"],
         status: json["status"],
         createdAt: json["created_at"],
@@ -532,6 +552,7 @@ class Datum {
         video1080: json["video_1080"],
         videoExtension: json["video_extension"],
         videoDuration: json["video_duration"],
+        nameVisible: json["name_visible"],
         subtitleType: json["subtitle_type"],
         subtitleLang1: json["subtitle_lang_1"],
         subtitle1: json["subtitle_1"],
@@ -550,6 +571,7 @@ class Datum {
         "id": id,
         "name": name,
         "image": image,
+        "full_width": fullWidth,
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,
@@ -595,6 +617,7 @@ class Datum {
         "video_1080": video1080,
         "video_extension": videoExtension,
         "video_duration": videoDuration,
+        "name_visible": nameVisible,
         "subtitle_type": subtitleType,
         "subtitle_lang_1": subtitleLang1,
         "subtitle_1": subtitle1,

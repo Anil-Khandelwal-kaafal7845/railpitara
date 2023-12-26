@@ -32,6 +32,7 @@ class Dimens {
   static double heightLangGen = 120;
 
   static double heightWatchlist = 100;
+   static double upcomingHeight =50;
 
   static double homeBanner = 210;
   static double homeWebBanner = 350;
