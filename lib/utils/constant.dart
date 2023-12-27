@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dtlive/model/qualitymodel.dart';
 import 'package:dtlive/model/subtitlemodel.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
   // static const String baseurl = '';
@@ -60,4 +63,17 @@ class Constant {
   /* Show Ad By Type */
   static String rewardAdType = "rewardAd";
   static String interstialAdType = "interstialAd";
+  
+
+}
+ restrictScreenRecordingandScreenshot() async {
+  if (Platform.isAndroid) {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+}
+
+allowScreenRecordingandScreenshot() async {
+  if (Platform.isAndroid) {
+    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+  }
 }
