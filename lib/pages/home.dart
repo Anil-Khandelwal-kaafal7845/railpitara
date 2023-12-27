@@ -2291,6 +2291,8 @@ class HomeState extends State<Home> {
       itemBuilder: (BuildContext context, int index) {
         if (sectionList[index].data != null &&
             sectionList[index].data!.isNotEmpty) {
+               bool isBannerVisible =
+              (sectionList[index].bannerVisible ?? "0") == "1";
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -2323,6 +2325,26 @@ class HomeState extends State<Home> {
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),
+              SizedBox(height: 15,),
+               if (isBannerVisible)
+                Column(
+                  children: [
+                    Padding(
+                     padding: EdgeInsets.only(left:20 ),
+                      child: SizedBox(
+                        height:
+                          Dimens.upcomingHeight,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.network(
+                            sectionList[index].bannerImage.toString(),
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
             ],
           );
         } else {
