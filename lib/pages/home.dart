@@ -1824,6 +1824,8 @@ class HomeState extends State<Home> {
         alignment: AlignmentDirectional.bottomCenter,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
+         
+         
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: Dimens.homeBanner,
@@ -1876,6 +1878,94 @@ class HomeState extends State<Home> {
                             fit: BoxFit.fill,
                           ),
                         ),
+                    
+
+                      
+                             Visibility(
+                                  visible:
+                                      sectionBannerList?[index].isPremium == 1 && sectionBannerList?[index].isRent == 0,
+                                  child: Positioned(
+                                    top: 7,
+                                    right: 7,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: colorPrimary,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        height: 25,
+                                        width: 80,
+                                        child: Center(
+                                          child: Text(
+                                            "Premium",
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black
+                                        
+                                              
+                                            ),
+                                          ),
+                                        )),
+                                  ))
+                          
+                            , Visibility(
+                                  visible:
+                                        sectionBannerList?[index].isPremium == 0 && sectionBannerList?[index].isRent == 1,
+                                  child: Positioned(
+                                    top: 7,
+                                    right: 7,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: colorPrimary,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        height: 20,
+                                        width: 70,
+                                        child: Center(
+                                          child: Text(
+                                            "Rent",
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black
+                                        
+                                              
+                                            ),
+                                          ),
+                                        )),
+                                  ))
+                          
+
+
+                            , Visibility(
+                                  visible:
+                                        sectionBannerList?[index].isPremium == 1 && sectionBannerList?[index].isRent == 1,
+                                  child: Positioned(
+                                    top: 7,
+                                    right: 7,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: colorPrimary,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        height: 20,
+                                        width: 80,
+                                        child: Center(
+                                          child: Text(
+                                            "Rent / Premium ",
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black
+                                        
+                                              
+                                            ),
+                                          ),
+                                        )),
+                                  ))
+                          
+                    
+                    
                       ],
                     ),
                   ),
@@ -1883,6 +1973,9 @@ class HomeState extends State<Home> {
               },
             ),
           ),
+
+        
+       
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
@@ -2463,21 +2556,106 @@ class HomeState extends State<Home> {
                 sectionDataList?[index].typeId ?? 0,
               );
             },
-            child: Container(
-              width: Dimens.widthLand,
-              height: Dimens.heightLand,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: MyNetworkImage(
-                  imageUrl: sectionDataList?[index].landscape.toString() ?? "",
-                  fit: BoxFit.cover,
-                  imgHeight: MediaQuery.of(context).size.height,
-                  imgWidth: MediaQuery.of(context).size.width,
+            child: Stack(
+
+
+              children: [
+
+                Container(
+                width: Dimens.widthLand,
+                height: Dimens.heightLand,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                child: ClipRRect(
+                  
+                  borderRadius: BorderRadius.circular(4),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: MyNetworkImage(
+                    imageUrl: sectionDataList?[index].landscape.toString() ?? "",
+                    fit: BoxFit.cover,
+                    imgHeight: MediaQuery.of(context).size.height,
+                    imgWidth: MediaQuery.of(context).size.width,
+                  ),
                 ),
               ),
+           
+             
+   Visibility(
+                            visible:  sectionDataList?[index].isPremium == 0 && sectionDataList?[index].isRent == 1,
+                            child: Positioned(
+                              top: 5,
+                              right: 5,
+                              child: Container(
+                                height: 20,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: Text(
+                                    "Rent",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible:  sectionDataList?[index].isPremium == 1 && sectionDataList?[index].isRent == 0,
+                            child: Positioned(
+                              top: 5,
+                              right: 5,
+                              child: Container(
+                                height: 20,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: Text(
+                                    "Premium",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      Visibility(
+                            visible: sectionDataList?[index].isPremium == 1 && sectionDataList?[index].isRent == 1,
+                            child: Positioned(
+                              top: 5,
+                              right: 5,
+                              child: Container(
+                                height: 20,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: Text(
+                                    "Rent / Premium",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      
+
+             
+              ],
+              
+              
+           
             ),
           );
         },

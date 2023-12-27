@@ -44,6 +44,7 @@ class Result {
   String? description;
   int? videoType;
   int? typeId;
+  dynamic?isPremium; 
   String? thumbnail;
   String? landscape;
   String? trailerType;
@@ -71,6 +72,7 @@ class Result {
     this.description,
     this.videoType,
     this.typeId,
+    this.isPremium ,
     this.thumbnail,
     this.landscape,
     this.trailerType,
@@ -99,6 +101,7 @@ class Result {
         description: json["description"],
         videoType: json["video_type"],
         typeId: json["type_id"],
+        isPremium: json["is_premium"],
         thumbnail: json["thumbnail"],
         landscape: json["landscape"],
         trailerType: json["trailer_type"],
@@ -127,6 +130,7 @@ class Result {
         "description": description,
         "video_type": videoType,
         "type_id": typeId,
+        "is_premium":isPremium ,
         "thumbnail": thumbnail,
         "landscape": landscape,
         "trailer_type": trailerType,
