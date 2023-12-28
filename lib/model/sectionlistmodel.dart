@@ -301,10 +301,10 @@ class Result {
   String? updatedAt;
   String? nameVisible;
   List<Datum>? data;
-  int? bannerOrder;
-  String? bannerVisible;
-  String? bannerImage;
-  int? bannerId;
+  dynamic bannerOrder;
+  dynamic bannerVisible;
+  dynamic bannerImage;
+  dynamic bannerId;
 
   Result({
     this.id,
@@ -389,6 +389,8 @@ class Datum {
   int? videoType;
   String? thumbnail;
   String? landscape;
+  String? thumbnail1;
+  String? landscape1;
   String? trailerType;
   String? trailerUrl;
   String? description;
@@ -453,6 +455,8 @@ class Datum {
     this.videoType,
     this.thumbnail,
     this.landscape,
+    this.thumbnail1,
+    this.landscape1,
     this.trailerType,
     this.trailerUrl,
     this.description,
@@ -518,6 +522,8 @@ class Datum {
         videoType: json["video_type"],
         thumbnail: json["thumbnail"],
         landscape: json["landscape"],
+        thumbnail1: json["thumbnail_1"],
+        landscape1: json["landscape_1"],
         trailerType: json["trailer_type"],
         trailerUrl: json["trailer_url"],
         description: json["description"],
@@ -583,6 +589,8 @@ class Datum {
         "video_type": videoType,
         "thumbnail": thumbnail,
         "landscape": landscape,
+         "thumbnail_1": thumbnail1,
+        "landscape_1": landscape1,
         "trailer_type": trailerType,
         "trailer_url": trailerUrl,
         "description": description,

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:dtlive/web_js/js_helper.dart';
+// import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -68,7 +68,7 @@ class Home extends StatefulWidget {
 ForceUpdatemodel? forceUpdateData;
 
 class HomeState extends State<Home> {
-  final JSHelper _jsHelper = JSHelper();
+  // final JSHelper _jsHelper = JSHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -1824,8 +1824,6 @@ class HomeState extends State<Home> {
         alignment: AlignmentDirectional.bottomCenter,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
-         
-         
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: Dimens.homeBanner,
@@ -1878,94 +1876,72 @@ class HomeState extends State<Home> {
                             fit: BoxFit.fill,
                           ),
                         ),
-                    
-
-                      
-                             Visibility(
-                                  visible:
-                                      sectionBannerList?[index].isPremium == 1 && sectionBannerList?[index].isRent == 0,
-                                  child: Positioned(
-                                    top: 7,
-                                    right: 7,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: colorPrimary,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        height: 25,
-                                        width: 80,
-                                        child: Center(
-                                          child: Text(
-                                            "Premium",
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black
-                                        
-                                              
-                                            ),
-                                          ),
-                                        )),
-                                  ))
-                          
-                            , Visibility(
-                                  visible:
-                                        sectionBannerList?[index].isPremium == 0 && sectionBannerList?[index].isRent == 1,
-                                  child: Positioned(
-                                    top: 7,
-                                    right: 7,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: colorPrimary,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        height: 20,
-                                        width: 70,
-                                        child: Center(
-                                          child: Text(
-                                            "Rent",
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black
-                                        
-                                              
-                                            ),
-                                          ),
-                                        )),
-                                  ))
-                          
-
-
-                            , Visibility(
-                                  visible:
-                                        sectionBannerList?[index].isPremium == 1 && sectionBannerList?[index].isRent == 1,
-                                  child: Positioned(
-                                    top: 7,
-                                    right: 7,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: colorPrimary,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        height: 20,
-                                        width: 80,
-                                        child: Center(
-                                          child: Text(
-                                            "Rent / Premium ",
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black
-                                        
-                                              
-                                            ),
-                                          ),
-                                        )),
-                                  ))
-                          
-                    
-                    
+                        Visibility(
+                            visible: sectionBannerList?[index].isPremium == 1 &&
+                                sectionBannerList?[index].isRent == 0,
+                            child: Positioned(
+                              top: 7,
+                              right: 7,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: colorPrimary,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  height: 25,
+                                  width: 80,
+                                  child: Center(
+                                    child: Text(
+                                      "Premium",
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                            )),
+                        Visibility(
+                            visible: sectionBannerList?[index].isPremium == 0 &&
+                                sectionBannerList?[index].isRent == 1,
+                            child: Positioned(
+                              top: 7,
+                              right: 7,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: colorPrimary,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  height: 20,
+                                  width: 70,
+                                  child: Center(
+                                    child: Text(
+                                      "Rent",
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                            )),
+                        Visibility(
+                            visible: sectionBannerList?[index].isPremium == 1 &&
+                                sectionBannerList?[index].isRent == 1,
+                            child: Positioned(
+                              top: 7,
+                              right: 7,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: colorPrimary,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  height: 20,
+                                  width: 80,
+                                  child: Center(
+                                    child: Text(
+                                      "Rent / Premium ",
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                            ))
                       ],
                     ),
                   ),
@@ -1973,9 +1949,6 @@ class HomeState extends State<Home> {
               },
             ),
           ),
-
-        
-       
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
@@ -2384,7 +2357,7 @@ class HomeState extends State<Home> {
       itemBuilder: (BuildContext context, int index) {
         if (sectionList[index].data != null &&
             sectionList[index].data!.isNotEmpty) {
-               bool isBannerVisible =
+          bool isBannerVisible =
               (sectionList[index].bannerVisible ?? "0") == "1";
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -2409,7 +2382,7 @@ class HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 5),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: getRemainingDataHeight(
@@ -2418,24 +2391,22 @@ class HomeState extends State<Home> {
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),
-              SizedBox(height: 15,),
-               if (isBannerVisible)
+              if (isBannerVisible)
                 Column(
                   children: [
+                    SizedBox(
+                      height: 15,
+                    ),
                     Padding(
-                     padding: EdgeInsets.only(left:20 ),
+                      padding: EdgeInsets.only(left: 20),
                       child: SizedBox(
-                        height:
-                          Dimens.upcomingHeight,
+                        height: Dimens.upcomingHeight,
                         width: MediaQuery.of(context).size.width,
                         child: Image.network(
                             sectionList[index].bannerImage.toString(),
                             fit: BoxFit.fill),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    )
                   ],
                 ),
             ],
@@ -2454,6 +2425,12 @@ class HomeState extends State<Home> {
     if ((sectionList?[index].videoType ?? 0) == 1) {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
+            sectionList?[index].upcomingType, sectionList?[index].data);
+      } else if ((sectionList?[index].screenLayout ?? "") == "landscape_1") {
+        return landscapeTwo(
+            sectionList?[index].upcomingType, sectionList?[index].data);
+      } else if ((sectionList?[index].screenLayout ?? "") == "potrait_1") {
+        return portraitTwo(
             sectionList?[index].upcomingType, sectionList?[index].data);
       } else if ((sectionList?[index].screenLayout ?? "") == "potrait") {
         return portrait(
@@ -2506,6 +2483,10 @@ class HomeState extends State<Home> {
     if (videoType == "1" || videoType == "2") {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
+      } else if (layoutType == "landscape_1") {
+        return Dimens.heightLandTwo;
+      } else if (layoutType == "potrait_1") {
+        return Dimens.heightPortTwo;
       } else if (layoutType == "potrait") {
         return Dimens.heightPort;
       } else if (layoutType == "square") {
@@ -2557,105 +2538,224 @@ class HomeState extends State<Home> {
               );
             },
             child: Stack(
-
-
               children: [
-
                 Container(
-                width: Dimens.widthLand,
-                height: Dimens.heightLand,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                child: ClipRRect(
-                  
-                  borderRadius: BorderRadius.circular(4),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: MyNetworkImage(
-                    imageUrl: sectionDataList?[index].landscape.toString() ?? "",
-                    fit: BoxFit.cover,
-                    imgHeight: MediaQuery.of(context).size.height,
-                    imgWidth: MediaQuery.of(context).size.width,
+                  width: Dimens.widthLand,
+                  height: Dimens.heightLand,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: MyNetworkImage(
+                      imageUrl:
+                          sectionDataList?[index].landscape.toString() ?? "",
+                      fit: BoxFit.cover,
+                      imgHeight: MediaQuery.of(context).size.height,
+                      imgWidth: MediaQuery.of(context).size.width,
+                    ),
                   ),
                 ),
-              ),
-           
-             
-   Visibility(
-                            visible:  sectionDataList?[index].isPremium == 0 && sectionDataList?[index].isRent == 1,
-                            child: Positioned(
-                              top: 5,
-                              right: 5,
-                              child: Container(
-                                height: 20,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    color: colorPrimary,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Text(
-                                    "Rent",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible:  sectionDataList?[index].isPremium == 1 && sectionDataList?[index].isRent == 0,
-                            child: Positioned(
-                              top: 5,
-                              right: 5,
-                              child: Container(
-                                height: 20,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: colorPrimary,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Text(
-                                    "Premium",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      Visibility(
-                            visible: sectionDataList?[index].isPremium == 1 && sectionDataList?[index].isRent == 1,
-                            child: Positioned(
-                              top: 5,
-                              right: 5,
-                              child: Container(
-                                height: 20,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                    color: colorPrimary,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Text(
-                                    "Rent / Premium",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      
-
-             
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 0 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 0,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent / Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              
-              
-           
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget landscapeTwo(int? upcomingType, List<Datum>? sectionDataList) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightLand,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            focusColor: white,
+            borderRadius: BorderRadius.circular(6),
+            onTap: () {
+              debugPrint("Clicked on index ==> $index");
+              openDetailPage(
+                (sectionDataList?[index].videoType ?? 0) == 2
+                    ? "showdetail"
+                    : "videodetail",
+                sectionDataList?[index].id ?? 0,
+                upcomingType ?? 0,
+                sectionDataList?[index].videoType ?? 0,
+                sectionDataList?[index].typeId ?? 0,
+              );
+            },
+            child: Stack(
+              children: [
+                Container(
+                  width: Dimens.widthLandTwo,
+                  height: Dimens.heightLandTwo,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: MyNetworkImage(
+                      imageUrl:
+                          sectionDataList?[index].landscape1.toString() ?? "",
+                      fit: BoxFit.cover,
+                      imgHeight: MediaQuery.of(context).size.height,
+                      imgWidth: MediaQuery.of(context).size.width,
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 0 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 0,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent / Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -2701,6 +2801,56 @@ class HomeState extends State<Home> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 child: MyNetworkImage(
                   imageUrl: sectionDataList?[index].thumbnail.toString() ?? "",
+                  fit: BoxFit.cover,
+                  imgHeight: MediaQuery.of(context).size.height,
+                  imgWidth: MediaQuery.of(context).size.width,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget portraitTwo(int? upcomingType, List<Datum>? sectionDataList) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightPortTwo,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            focusColor: white,
+            borderRadius: BorderRadius.circular(4),
+            onTap: () {
+              debugPrint("Clicked on index ==> $index");
+              openDetailPage(
+                (sectionDataList?[index].videoType ?? 0) == 2
+                    ? "showdetail"
+                    : "videodetail",
+                sectionDataList?[index].id ?? 0,
+                upcomingType ?? 0,
+                sectionDataList?[index].videoType ?? 0,
+                sectionDataList?[index].typeId ?? 0,
+              );
+            },
+            child: Container(
+              width: Dimens.widthPortTwo,
+              height: Dimens.heightPortTwo,
+              padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: MyNetworkImage(
+                  imageUrl: sectionDataList?[index].thumbnail1.toString() ?? "",
                   fit: BoxFit.cover,
                   imgHeight: MediaQuery.of(context).size.height,
                   imgWidth: MediaQuery.of(context).size.width,
