@@ -2457,8 +2457,13 @@ class HomeState extends State<Home> {
             sectionList?[index].upcomingType, sectionList?[index].data);
       }
     } else if ((sectionList?[index].videoType ?? 0) == 3) {
-      return languageLayout(
-          sectionList?[index].typeId ?? 0, sectionList?[index].data);
+      if ((sectionList?[index].screenLayout ?? "") == "landscape") {
+        return languageLayoutLand(
+            sectionList?[index].typeId ?? 0, sectionList?[index].data);
+      } else {
+        return languageLayout(
+            sectionList?[index].typeId ?? 0, sectionList?[index].data);
+      }
     } else if ((sectionList?[index].videoType ?? 0) == 4) {
       return genresLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
@@ -2495,7 +2500,11 @@ class HomeState extends State<Home> {
         return Dimens.heightLand;
       }
     } else if (videoType == "3" || videoType == "4") {
-      return Dimens.heightLangGen;
+      if (layoutType == "landscape") {
+        return Dimens.heightLangGenLand;
+      } else {
+        return Dimens.heightLangGen;
+      }
     } else {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
@@ -2508,7 +2517,6 @@ class HomeState extends State<Home> {
       }
     }
   }
-
 
   Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -2557,7 +2565,6 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
-              
                 Visibility(
                   visible: sectionDataList?[index].isPremium == 0 &&
                       sectionDataList?[index].isRent == 1,
@@ -2630,7 +2637,6 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
-            
               ],
             ),
           );
@@ -2680,7 +2686,7 @@ class HomeState extends State<Home> {
                     child: MyNetworkImage(
                       imageUrl:
                           sectionDataList?[index].landscape1.toString() ?? "",
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       imgHeight: MediaQuery.of(context).size.height,
                       imgWidth: MediaQuery.of(context).size.width,
                     ),
@@ -2758,8 +2764,6 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
-             
-             
               ],
             ),
           );
@@ -2782,120 +2786,113 @@ class HomeState extends State<Home> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
-            borderRadius: BorderRadius.circular(4),
-            onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
-            },
-            child:Stack(
-              children: [
-
+              focusColor: white,
+              borderRadius: BorderRadius.circular(4),
+              onTap: () {
+                debugPrint("Clicked on index ==> $index");
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                );
+              },
+              child: Stack(
+                children: [
                   Container(
-              width: Dimens.widthPort,
-              height: Dimens.heightPort,
-              padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-              alignment: Alignment.center,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: MyNetworkImage(
-                  imageUrl: sectionDataList?[index].thumbnail.toString() ?? "",
-                  fit: BoxFit.cover,
-                  imgHeight: MediaQuery.of(context).size.height,
-                  imgWidth: MediaQuery.of(context).size.width,
-                ),
-              ),
-            ),
-         
-
+                    width: Dimens.widthPort,
+                    height: Dimens.heightPort,
+                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: MyNetworkImage(
+                        imageUrl:
+                            sectionDataList?[index].thumbnail.toString() ?? "",
+                        fit: BoxFit.cover,
+                        imgHeight: MediaQuery.of(context).size.height,
+                        imgWidth: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
                   Visibility(
-                  visible: sectionDataList?[index].isPremium == 0 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                    visible: sectionDataList?[index].isPremium == 0 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 0,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 0,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent / Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent / Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-            
-              ],
-            )
-            
-           
-         
-          );
+                ],
+              ));
         },
       ),
     );
@@ -2915,120 +2912,113 @@ class HomeState extends State<Home> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
-            borderRadius: BorderRadius.circular(4),
-            onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
-            },
-            child:Stack(
-              children: [
-
-   Container(
-              width: Dimens.widthPortTwo,
-              height: Dimens.heightPortTwo,
-              padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-              alignment: Alignment.center,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: MyNetworkImage(
-                  imageUrl: sectionDataList?[index].thumbnail1.toString() ?? "",
-                  fit: BoxFit.cover,
-                  imgHeight: MediaQuery.of(context).size.height,
-                  imgWidth: MediaQuery.of(context).size.width,
-                ),
-              ),
-            ),
-         
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 0 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+              focusColor: white,
+              borderRadius: BorderRadius.circular(4),
+              onTap: () {
+                debugPrint("Clicked on index ==> $index");
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                );
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    width: Dimens.widthPortTwo,
+                    height: Dimens.heightPortTwo,
+                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: MyNetworkImage(
+                        imageUrl:
+                            sectionDataList?[index].thumbnail1.toString() ?? "",
+                        fit: BoxFit.cover,
+                        imgHeight: MediaQuery.of(context).size.height,
+                        imgWidth: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 0 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 0,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 0,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent / Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent / Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-             
-         
-              ],
-            )
-            
-          
-         
-          );
+                ],
+              ));
         },
       ),
     );
@@ -3048,127 +3038,214 @@ class HomeState extends State<Home> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
-            borderRadius: BorderRadius.circular(4),
-            onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
-            },
-            child: Stack(
-              children: [
-
+              focusColor: white,
+              borderRadius: BorderRadius.circular(4),
+              onTap: () {
+                debugPrint("Clicked on index ==> $index");
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                );
+              },
+              child: Stack(
+                children: [
                   Container(
-              width: Dimens.widthSquare,
-              height: Dimens.heightSquare,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: MyNetworkImage(
-                  imageUrl: sectionDataList?[index].thumbnail.toString() ?? "",
-                  fit: BoxFit.cover,
-                  imgHeight: MediaQuery.of(context).size.height,
-                  imgWidth: MediaQuery.of(context).size.width,
-                ),
-              ),
-            ),
-             Visibility(
-                  visible: sectionDataList?[index].isPremium == 0 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                    width: Dimens.widthSquare,
+                    height: Dimens.heightSquare,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: MyNetworkImage(
+                        imageUrl:
+                            sectionDataList?[index].thumbnail.toString() ?? "",
+                        fit: BoxFit.cover,
+                        imgHeight: MediaQuery.of(context).size.height,
+                        imgWidth: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 0 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 0,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 0,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
-                    child: Container(
-                      height: 20,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Rent / Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1 &&
+                        sectionDataList?[index].isRent == 1,
+                    child: Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Rent / Premium",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-         
-
-              ],
-            )
-            
-      
-      
-          
-         
-          );
+                ],
+              ));
         },
       ),
     );
   }
 
-
+  Widget languageLayoutLand(int? typeId, List<Datum>? sectionDataList) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightLangGenLand,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics:
+           AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              InkWell(
+                focusColor: white,
+                borderRadius: BorderRadius.circular(4),
+                onTap: () {
+                  debugPrint("Clicked on index ==> $index");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return VideosByID(
+                          sectionDataList?[index].id ?? 0,
+                          typeId ?? 0,
+                          sectionDataList?[index].name ?? "",
+                          "ByLanguage",
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  width: Dimens.widthLangGenLand,
+                  height: Dimens.heightLangGenLand,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  child: Stack(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].image.toString() ?? "",
+                          fit: BoxFit.fill,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        width: MediaQuery.of(context).size.width,
+                        height: Dimens.heightLangGenLand,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              transparentColor,
+                              transparentColor,
+                              appBgColor,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3),
+                child: MyText(
+                  color: white,
+                  text: sectionDataList?[index].name.toString() ?? "",
+                  textalign: TextAlign.center,
+                  fontsizeNormal: 14,
+                  fontweight: FontWeight.w600,
+                  fontsizeWeb: 15,
+                  multilanguage: false,
+                  maxline: 1,
+                  overflow: TextOverflow.ellipsis,
+                  fontstyle: FontStyle.normal,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
   Widget languageLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -3178,7 +3255,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+           AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3275,7 +3352,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3363,7 +3440,6 @@ class HomeState extends State<Home> {
       ),
     );
   }
-
 
   /* ========= Open Player ========= */
   openPlayer(String playType, int index,
@@ -3499,3 +3575,8 @@ class HomeState extends State<Home> {
   }
   /* ========= Open Player ========= */
 }
+
+
+
+
+
