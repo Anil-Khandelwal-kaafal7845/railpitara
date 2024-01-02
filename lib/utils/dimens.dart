@@ -34,6 +34,8 @@ class Dimens {
 
   static double widthLangGen = 120;
   static double heightLangGen = 120;
+    static double widthLangGenLand = 150;
+  static double heightLangGenLand = 100;
 
   static double heightWatchlist = 100;
   static double upcomingHeight = 50;
