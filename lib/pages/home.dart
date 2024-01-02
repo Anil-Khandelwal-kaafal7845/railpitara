@@ -2509,6 +2509,7 @@ class HomeState extends State<Home> {
     }
   }
 
+
   Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -2556,6 +2557,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
+              
                 Visibility(
                   visible: sectionDataList?[index].isPremium == 0 &&
                       sectionDataList?[index].isRent == 1,
@@ -2628,6 +2630,7 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
+            
               ],
             ),
           );
@@ -2755,6 +2758,8 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
+             
+             
               ],
             ),
           );
@@ -2791,7 +2796,10 @@ class HomeState extends State<Home> {
                 sectionDataList?[index].typeId ?? 0,
               );
             },
-            child: Container(
+            child:Stack(
+              children: [
+
+                  Container(
               width: Dimens.widthPort,
               height: Dimens.heightPort,
               padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
@@ -2807,6 +2815,86 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
+         
+
+                  Visibility(
+                  visible: sectionDataList?[index].isPremium == 0 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 0,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent / Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            
+              ],
+            )
+            
+           
+         
           );
         },
       ),
@@ -2841,7 +2929,10 @@ class HomeState extends State<Home> {
                 sectionDataList?[index].typeId ?? 0,
               );
             },
-            child: Container(
+            child:Stack(
+              children: [
+
+   Container(
               width: Dimens.widthPortTwo,
               height: Dimens.heightPortTwo,
               padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
@@ -2857,6 +2948,86 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
+         
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 0 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 0,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent / Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+             
+         
+              ],
+            )
+            
+          
+         
           );
         },
       ),
@@ -2891,7 +3062,10 @@ class HomeState extends State<Home> {
                 sectionDataList?[index].typeId ?? 0,
               );
             },
-            child: Container(
+            child: Stack(
+              children: [
+
+                  Container(
               width: Dimens.widthSquare,
               height: Dimens.heightSquare,
               alignment: Alignment.center,
@@ -2907,11 +3081,94 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
+             Visibility(
+                  visible: sectionDataList?[index].isPremium == 0 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 0,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1 &&
+                      sectionDataList?[index].isRent == 1,
+                  child: Positioned(
+                    top: 5,
+                    right: 5,
+                    child: Container(
+                      height: 20,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Rent / Premium",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+         
+
+              ],
+            )
+            
+      
+      
+          
+         
           );
         },
       ),
     );
   }
+
+
 
   Widget languageLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -3106,6 +3363,7 @@ class HomeState extends State<Home> {
       ),
     );
   }
+
 
   /* ========= Open Player ========= */
   openPlayer(String playType, int index,
