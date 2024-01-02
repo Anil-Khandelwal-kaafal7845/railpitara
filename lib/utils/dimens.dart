@@ -11,8 +11,12 @@ class Dimens {
   static double cardRadius = 4;
   static double widthPort = 100;
   static double heightPort = 150;
+  static double widthPortTwo = 100;
+  static double heightPortTwo = 180;
   static double widthLand = 150;
   static double heightLand = 100;
+  static double widthLandTwo = 120;
+  static double heightLandTwo = 100;
   static double widthSquare = 150;
   static double heightSquare = 150;
 
@@ -32,7 +36,7 @@ class Dimens {
   static double heightLangGen = 120;
 
   static double heightWatchlist = 100;
-   static double upcomingHeight =50;
+  static double upcomingHeight = 50;
 
   static double homeBanner = 210;
   static double homeWebBanner = 350;
