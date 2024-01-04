@@ -7,6 +7,7 @@ import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
+import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -2467,7 +2468,11 @@ class HomeState extends State<Home> {
     } else if ((sectionList?[index].videoType ?? 0) == 4) {
       return genresLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
-    } else {
+    } 
+     else if ((sectionList?[index].videoType ?? 0) == 6) {
+      return browseByArtistLayout(
+          sectionList?[index].typeId ?? 0, sectionList?[index].data);
+    }else {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
             sectionList?[index].upcomingType, sectionList?[index].data);
@@ -3374,6 +3379,104 @@ class HomeState extends State<Home> {
                           typeId ?? 0,
                           sectionDataList?[index].name ?? "",
                           "ByCategory",
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  width: Dimens.widthLangGen,
+                  height: Dimens.heightLangGen,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  child: Stack(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].image.toString() ?? "",
+                          fit: BoxFit.fill,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        width: MediaQuery.of(context).size.width,
+                        height: Dimens.heightLangGen,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              transparentColor,
+                              transparentColor,
+                              appBgColor,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3),
+                child: MyText(
+                  color: white,
+                  text: sectionDataList?[index].name.toString() ?? "",
+                  textalign: TextAlign.center,
+                  fontsizeNormal: 14,
+                  fontweight: FontWeight.w600,
+                  fontsizeWeb: 15,
+                  multilanguage: false,
+                  maxline: 1,
+                  overflow: TextOverflow.ellipsis,
+                  fontstyle: FontStyle.normal,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+
+  Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightLangGen,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics:
+          AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              InkWell(
+                focusColor: white,
+                borderRadius: BorderRadius.circular(4),
+                onTap: () {
+                  debugPrint("Clicked on index ==> $index");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return VideosByArtist(
+                          sectionDataList?[index].id ?? 0,
+                          typeId ?? 0,
+                          sectionDataList?[index].name ?? "",
+                          "ByArtist",
                         );
                       },
                     ),
