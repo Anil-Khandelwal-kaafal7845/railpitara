@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dtlive/model/avatarmodel.dart';
+import 'package:dtlive/model/browsebyartistmodel.dart';
 import 'package:dtlive/model/castdetailmodel.dart';
 import 'package:dtlive/model/couponmodel.dart';
 import 'package:dtlive/model/force_update_model.dart';
@@ -662,6 +663,33 @@ class ApiService {
     );
     videoByIdModel = VideoByIdModel.fromJson(response.data);
     return videoByIdModel;
+  }
+
+    // ignore: body_might_complete_normally_nullable
+  Future<VideoByartist?> videoByArtistApi(
+      BuildContext context, castId, typeId) async {
+    try {
+      Response response = await dio.post(
+          "https://aaryaconsole.ottpeople.in/public/api/video_by_artist",
+          options: optHeaders,
+          data: {
+            'user_id': Constant.userID,
+            'cast_id': castId,
+            'type_id': typeId,
+          });
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        VideoByartist subscribeData = VideoByartist.fromJson(response.data);
+        return subscribeData;
+      } else {
+        Fluttertoast.showToast(msg: "Server Error");
+      }
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      debugPrint("SOME ISSUES IN artist API");
+      throw (e.toString());
+    }
   }
 
   // get_package API
