@@ -9,13 +9,13 @@ class Dimens {
   static double homeTabHeight = 55;
 
   static double cardRadius = 4;
-  static double widthPort = 100;
-  static double heightPort = 150;
+  static double widthPort = 190;
+  static double heightPort = 240;
   static double widthPortTwo = 100;
-  static double heightPortTwo = 180;
-  static double widthLand = 150;
+  static double heightPortTwo = 140;
+  static double widthLand = 170;
   static double heightLand = 100;
-  static double widthLandTwo = 120;
+  static double widthLandTwo = 190;
   static double heightLandTwo = 100;
   static double widthSquare = 150;
   static double heightSquare = 150;
@@ -34,11 +34,13 @@ class Dimens {
 
   static double widthLangGen = 120;
   static double heightLangGen = 120;
+  static double widthArtist = 100;
+  static double heightArtist = 100;
     static double widthLangGenLand = 150;
   static double heightLangGenLand = 100;
 
   static double heightWatchlist = 100;
-  static double upcomingHeight = 50;
+  static double upcomingHeight = 70;
 
   static double homeBanner = 210;
   static double homeWebBanner = 350;

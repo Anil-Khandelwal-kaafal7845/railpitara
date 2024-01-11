@@ -1742,9 +1742,9 @@ class HomeState extends State<Home> {
               ),
 
               /* AdMob Banner */
-              const SizedBox(height: 12.5),
+              
               Utils.showBannerAd(context),
-              const SizedBox(height: 12.5),
+              const SizedBox(height: 5.5),
 
               /* Continue Watching & Remaining Sections */
               Consumer<SectionDataProvider>(
@@ -1755,10 +1755,10 @@ class HomeState extends State<Home> {
                     if (sectionDataProvider.sectionListModel.status == 200) {
                       return Column(
                         children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          /* Continue Watching */
+                          // // SizedBox(
+                          // //   height: 5,
+                          // // ),
+                          // /* Continue Watching */
                           (sectionDataProvider
                                       .sectionListModel.continueWatching !=
                                   null)
@@ -1950,6 +1950,8 @@ class HomeState extends State<Home> {
               },
             ),
           ),
+              const SizedBox(height: 5.5),
+          
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
@@ -2510,7 +2512,14 @@ class HomeState extends State<Home> {
       } else {
         return Dimens.heightLangGen;
       }
-    } else {
+    } 
+    else if (videoType == "6") {
+      if (layoutType == "landscape") {
+        return Dimens.heightArtist;
+      } else {
+        return Dimens.heightArtist;
+      }
+    }else {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
       } else if (layoutType == "potrait") {
@@ -3230,21 +3239,7 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: MyText(
-                  color: white,
-                  text: sectionDataList?[index].name.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 15,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
+             
             ],
           );
         },
@@ -3327,21 +3322,7 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: MyText(
-                  color: white,
-                  text: sectionDataList?[index].name.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 15,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
+               
             ],
           );
         },
@@ -3450,7 +3431,7 @@ class HomeState extends State<Home> {
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: Dimens.heightLangGen,
+      height: Dimens.heightArtist,
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
@@ -3483,8 +3464,8 @@ class HomeState extends State<Home> {
                   );
                 },
                 child: Container(
-                  width: Dimens.widthLangGen,
-                  height: Dimens.heightLangGen,
+                  width: Dimens.widthArtist,
+                  height: Dimens.heightArtist,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
                   child: Stack(
@@ -3504,7 +3485,7 @@ class HomeState extends State<Home> {
                       Container(
                         padding: const EdgeInsets.all(0),
                         width: MediaQuery.of(context).size.width,
-                        height: Dimens.heightLangGen,
+                        height: Dimens.heightArtist,
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
@@ -3528,7 +3509,7 @@ class HomeState extends State<Home> {
                   color: white,
                   text: sectionDataList?[index].name.toString() ?? "",
                   textalign: TextAlign.center,
-                  fontsizeNormal: 14,
+                  fontsizeNormal: 12,
                   fontweight: FontWeight.w600,
                   fontsizeWeb: 15,
                   multilanguage: false,
