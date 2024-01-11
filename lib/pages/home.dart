@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/morescreen.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
@@ -1742,7 +1744,7 @@ class HomeState extends State<Home> {
               ),
 
               /* AdMob Banner */
-              
+
               Utils.showBannerAd(context),
               const SizedBox(height: 5.5),
 
@@ -1950,8 +1952,7 @@ class HomeState extends State<Home> {
               },
             ),
           ),
-              const SizedBox(height: 5.5),
-          
+          const SizedBox(height: 5.5),
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
@@ -2362,11 +2363,14 @@ class HomeState extends State<Home> {
             sectionList[index].data!.isNotEmpty) {
           bool isBannerVisible =
               (sectionList[index].bannerVisible ?? "0") == "1";
+               bool isGenreOrLanguage =
+          sectionList[index].videoType == 3 || sectionList[index].videoType == 4 || sectionList[index].videoType == 6;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -2381,6 +2385,32 @@ class HomeState extends State<Home> {
                       maxline: 1,
                       overflow: TextOverflow.ellipsis,
                       fontstyle: FontStyle.normal,
+                    ),
+                  ),
+                  if(!isGenreOrLanguage)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                       return   MoreScreen(sectionList[index].title.toString(),
+                              sectionList[index].data);
+                        },
+                      ));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
+                      child: MyText(
+                        color: Colors.red,
+                        text: "More",
+                        textalign: TextAlign.center,
+                        fontsizeNormal: 10,
+                        fontweight: FontWeight.w600,
+                        fontsizeWeb: 16,
+                        multilanguage: false,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        fontstyle: FontStyle.normal,
+                      ),
                     ),
                   ),
                 ],
@@ -2470,11 +2500,10 @@ class HomeState extends State<Home> {
     } else if ((sectionList?[index].videoType ?? 0) == 4) {
       return genresLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
-    } 
-     else if ((sectionList?[index].videoType ?? 0) == 6) {
+    } else if ((sectionList?[index].videoType ?? 0) == 6) {
       return browseByArtistLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
-    }else {
+    } else {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
             sectionList?[index].upcomingType, sectionList?[index].data);
@@ -2512,14 +2541,13 @@ class HomeState extends State<Home> {
       } else {
         return Dimens.heightLangGen;
       }
-    } 
-    else if (videoType == "6") {
+    } else if (videoType == "6") {
       if (layoutType == "landscape") {
         return Dimens.heightArtist;
       } else {
         return Dimens.heightArtist;
       }
-    }else {
+    } else {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
       } else if (layoutType == "potrait") {
@@ -2539,8 +2567,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 8),
@@ -3171,8 +3198,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-           AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3239,7 +3265,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-             
             ],
           );
         },
@@ -3254,8 +3279,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-           AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3322,7 +3346,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-               
             ],
           );
         },
@@ -3337,8 +3360,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-          AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3427,7 +3449,6 @@ class HomeState extends State<Home> {
     );
   }
 
-
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -3435,8 +3456,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-          AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3659,8 +3679,3 @@ class HomeState extends State<Home> {
   }
   /* ========= Open Player ========= */
 }
-
-
-
-
-
