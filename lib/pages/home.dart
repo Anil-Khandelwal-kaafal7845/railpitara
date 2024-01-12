@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
@@ -38,6 +39,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -175,15 +177,12 @@ class HomeState extends State<Home> {
         forceUpdateData = value;
         updateLoading = false;
       });
-      log(forceUpdateData!.result!.showPackage.toString() + "rakhsudhufd");
       checkForUpdate();
     });
   }
 
   checkForUpdate() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    log("kkkk ${packageInfo.buildNumber}");
-    log("kkkk ${forceUpdateData!.result!.appVersionIos!}");
 
     if ((Platform.isAndroid
             ? forceUpdateData!.result!.appVersion!
@@ -2363,8 +2362,9 @@ class HomeState extends State<Home> {
             sectionList[index].data!.isNotEmpty) {
           bool isBannerVisible =
               (sectionList[index].bannerVisible ?? "0") == "1";
-               bool isGenreOrLanguage =
-          sectionList[index].videoType == 3 || sectionList[index].videoType == 4 || sectionList[index].videoType == 6;
+          bool isGenreOrLanguage = sectionList[index].videoType == 3 ||
+              sectionList[index].videoType == 4 ||
+              sectionList[index].videoType == 6;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -2387,32 +2387,33 @@ class HomeState extends State<Home> {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
-                  if(!isGenreOrLanguage)
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                       return   MoreScreen(sectionList[index].title.toString(),
-                              sectionList[index].data);
-                        },
-                      ));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
-                      child: MyText(
-                        color: Colors.red,
-                        text: "More",
-                        textalign: TextAlign.center,
-                        fontsizeNormal: 10,
-                        fontweight: FontWeight.w600,
-                        fontsizeWeb: 16,
-                        multilanguage: false,
-                        maxline: 1,
-                        overflow: TextOverflow.ellipsis,
-                        fontstyle: FontStyle.normal,
+                  if (!isGenreOrLanguage)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return MoreScreen(
+                                sectionList[index].title.toString(),
+                                sectionList[index].data);
+                          },
+                        ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
+                        child: MyText(
+                          color: Colors.red,
+                          text: "More",
+                          textalign: TextAlign.center,
+                          fontsizeNormal: 10,
+                          fontweight: FontWeight.w600,
+                          fontsizeWeb: 16,
+                          multilanguage: false,
+                          maxline: 1,
+                          overflow: TextOverflow.ellipsis,
+                          fontstyle: FontStyle.normal,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(height: 5),
@@ -2822,8 +2823,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -2948,8 +2948,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -3073,8 +3072,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3448,6 +3446,124 @@ class HomeState extends State<Home> {
       ),
     );
   }
+
+  // Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
+  //   getAdaptiveTextSize(BuildContext context, dynamic value) {
+  //     if (kIsWeb || Constant.isTV) {
+  //       return (value / 650) *
+  //           min(MediaQuery.of(context).size.height,
+  //               MediaQuery.of(context).size.width);
+  //     } else {
+  //       return (value / 720 * MediaQuery.of(context).size.height);
+  //     }
+  //   }
+
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: Dimens.heightTopTen,
+  //     child: ListView.separated(
+  //       itemCount: sectionDataList?.length ?? 0,
+  //       shrinkWrap: true,
+  //       physics: AlwaysScrollableScrollPhysics(),
+  //       padding: const EdgeInsets.only(left: 20, right: 20),
+  //       scrollDirection: Axis.horizontal,
+  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return Stack(
+  //           alignment: AlignmentDirectional.bottomStart,
+  //           children: [
+  //             InkWell(
+  //                 focusColor: white,
+  //                 borderRadius: BorderRadius.circular(4),
+  //                 onTap: () {
+  //                   debugPrint("Clicked on index ==> $index");
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) {
+  //                         return VideosByID(
+  //                           sectionDataList?[index].id ?? 0,
+  //                           typeId ?? 0,
+  //                           sectionDataList?[index].name ?? "",
+  //                           "ByCategory",
+  //                         );
+  //                       },
+  //                     ),
+  //                   );
+  //                 },
+  //                 child: Container(
+  //                   width: Dimens.widthTopTen,
+  //                   height: Dimens.heightTopTen,
+  //                   alignment: Alignment.center,
+  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                   child: Stack(
+  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                     children: [                
+  //                       Container(
+  //                         width: 120,
+  //                         child: ClipRRect(
+  //                           borderRadius: BorderRadius.circular(4),
+  //                           clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                           child: MyNetworkImage(
+  //                             imageUrl:
+  //                                 sectionDataList?[index].image.toString() ??
+  //                                     "",
+  //                             fit: BoxFit.fill,
+  //                             imgHeight: MediaQuery.of(context).size.height,
+  //                             imgWidth: MediaQuery.of(context).size.width,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Container(
+  //                         padding: const EdgeInsets.all(0),
+  //                         width: MediaQuery.of(context).size.width,
+  //                         height: Dimens.heightTopTen,
+  //                         alignment: Alignment.center,
+  //                         decoration: const BoxDecoration(
+  //                           gradient: LinearGradient(
+  //                             begin: Alignment.center,
+  //                             end: Alignment.bottomCenter,
+  //                             colors: [
+  //                               transparentColor,
+  //                               transparentColor,
+  //                               appBgColor,
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                              Positioned(
+  //                       // Adjust this value to position the number text
+  //                         // bottom: -8,
+  //                         child: RichText(
+  //                             text: TextSpan(children: <TextSpan>[
+  //                           TextSpan(
+  //                             text: '${index + 1} ',
+  //                             style: GoogleFonts.outfit(
+  //                               fontSize: getAdaptiveTextSize(
+  //                                 context,
+  //                                 80,
+  //                               ),
+  //                               fontStyle: FontStyle.normal,
+  //                               color: colorGraidentLeft,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ])),
+  //                       ),
+                     
+                      
+  //                     ],
+  //                   ),
+  //                 )),
+  //                   SizedBox(
+  //                         height: 10,
+  //                       ),
+  //           ],
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(

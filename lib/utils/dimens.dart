@@ -34,13 +34,17 @@ class Dimens {
 
   static double widthLangGen = 120;
   static double heightLangGen = 120;
+  static double heightTopTen = 140;
+  static double widthTopTen = 140;
+
+
   static double widthArtist = 100;
-  static double heightArtist = 100;
+  static double heightArtist = 105;
     static double widthLangGenLand = 150;
   static double heightLangGenLand = 100;
 
   static double heightWatchlist = 100;
-  static double upcomingHeight = 70;
+  static double upcomingHeight =80 ;
 
   static double homeBanner = 210;
   static double homeWebBanner = 350;

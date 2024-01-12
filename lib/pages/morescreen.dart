@@ -46,7 +46,7 @@ class MoreScreenState extends State<MoreScreen> {
                   child: Column(
                     children: [
                 Container(
-                                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                                    padding: const EdgeInsets.fromLTRB(20, 6, 0, 20),
                                     child: ResponsiveGridList(
                                       minItemWidth: Dimens.widthLand,
                                       verticalGridSpacing: 8,
