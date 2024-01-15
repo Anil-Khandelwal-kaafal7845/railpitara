@@ -193,7 +193,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
         padding: const EdgeInsets.only(left: 4.0, right: 8.0),
         margin: const EdgeInsets.only(right: 6.0),
         child: Icon(
-          Icons.more_vert,
+          CupertinoIcons.ellipsis_vertical,
           color: iconColor,
           size: 18,
         ),
@@ -405,7 +405,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
                   right: buttonPadding,
                 ),
                 child: Icon(
-                  _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
+                  _latestValue.volume > 0 ?CupertinoIcons.volume_up : CupertinoIcons.speaker_slash,
                   color: iconColor,
                   size: 16,
                 ),
@@ -482,7 +482,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
           right: 6.0,
         ),
         child: Icon(
-          Icons.subtitles,
+          CupertinoIcons.square_arrow_up_fill,
           color: _subtitleOn ? iconColor : Colors.grey[700],
           size: 16.0,
         ),
@@ -581,7 +581,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
             ..rotateX(math.pi)
             ..rotateZ(math.pi * 0.8),
           child: Icon(
-            Icons.speed,
+            CupertinoIcons.speedometer,
             color: iconColor,
             size: 18.0,
           ),
