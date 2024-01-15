@@ -3351,116 +3351,10 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: Dimens.heightLangGen,
-      child: ListView.separated(
-        itemCount: sectionDataList?.length ?? 0,
-        shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
-        itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            alignment: AlignmentDirectional.bottomStart,
-            children: [
-              InkWell(
-                focusColor: white,
-                borderRadius: BorderRadius.circular(4),
-                onTap: () {
-                  debugPrint("Clicked on index ==> $index");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return VideosByID(
-                          sectionDataList?[index].id ?? 0,
-                          typeId ?? 0,
-                          sectionDataList?[index].name ?? "",
-                          "ByCategory",
-                        );
-                      },
-                    ),
-                  );
-                },
-                child: Container(
-                  width: Dimens.widthLangGen,
-                  height: Dimens.heightLangGen,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                  child: Stack(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: MyNetworkImage(
-                          imageUrl:
-                              sectionDataList?[index].image.toString() ?? "",
-                          fit: BoxFit.fill,
-                          imgHeight: MediaQuery.of(context).size.height,
-                          imgWidth: MediaQuery.of(context).size.width,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        width: MediaQuery.of(context).size.width,
-                        height: Dimens.heightLangGen,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.center,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              transparentColor,
-                              transparentColor,
-                              appBgColor,
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: MyText(
-                  color: white,
-                  text: sectionDataList?[index].name.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 15,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
   // Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
-  //   getAdaptiveTextSize(BuildContext context, dynamic value) {
-  //     if (kIsWeb || Constant.isTV) {
-  //       return (value / 650) *
-  //           min(MediaQuery.of(context).size.height,
-  //               MediaQuery.of(context).size.width);
-  //     } else {
-  //       return (value / 720 * MediaQuery.of(context).size.height);
-  //     }
-  //   }
-
   //   return SizedBox(
   //     width: MediaQuery.of(context).size.width,
-  //     height: Dimens.heightTopTen,
+  //     height: Dimens.heightLangGen,
   //     child: ListView.separated(
   //       itemCount: sectionDataList?.length ?? 0,
   //       shrinkWrap: true,
@@ -3473,97 +3367,190 @@ class HomeState extends State<Home> {
   //           alignment: AlignmentDirectional.bottomStart,
   //           children: [
   //             InkWell(
-  //                 focusColor: white,
-  //                 borderRadius: BorderRadius.circular(4),
-  //                 onTap: () {
-  //                   debugPrint("Clicked on index ==> $index");
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) {
-  //                         return VideosByID(
-  //                           sectionDataList?[index].id ?? 0,
-  //                           typeId ?? 0,
-  //                           sectionDataList?[index].name ?? "",
-  //                           "ByCategory",
-  //                         );
-  //                       },
-  //                     ),
-  //                   );
-  //                 },
-  //                 child: Container(
-  //                   width: Dimens.widthTopTen,
-  //                   height: Dimens.heightTopTen,
-  //                   alignment: Alignment.center,
-  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-  //                   child: Stack(
-  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                     children: [                
-  //                       Container(
-  //                         width: 120,
-  //                         child: ClipRRect(
-  //                           borderRadius: BorderRadius.circular(4),
-  //                           clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                           child: MyNetworkImage(
-  //                             imageUrl:
-  //                                 sectionDataList?[index].image.toString() ??
-  //                                     "",
-  //                             fit: BoxFit.fill,
-  //                             imgHeight: MediaQuery.of(context).size.height,
-  //                             imgWidth: MediaQuery.of(context).size.width,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       Container(
-  //                         padding: const EdgeInsets.all(0),
-  //                         width: MediaQuery.of(context).size.width,
-  //                         height: Dimens.heightTopTen,
-  //                         alignment: Alignment.center,
-  //                         decoration: const BoxDecoration(
-  //                           gradient: LinearGradient(
-  //                             begin: Alignment.center,
-  //                             end: Alignment.bottomCenter,
-  //                             colors: [
-  //                               transparentColor,
-  //                               transparentColor,
-  //                               appBgColor,
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       ),
-  //                              Positioned(
-  //                       // Adjust this value to position the number text
-  //                         // bottom: -8,
-  //                         child: RichText(
-  //                             text: TextSpan(children: <TextSpan>[
-  //                           TextSpan(
-  //                             text: '${index + 1} ',
-  //                             style: GoogleFonts.outfit(
-  //                               fontSize: getAdaptiveTextSize(
-  //                                 context,
-  //                                 80,
-  //                               ),
-  //                               fontStyle: FontStyle.normal,
-  //                               color: colorGraidentLeft,
-  //                               fontWeight: FontWeight.w600,
-  //                             ),
-  //                           ),
-  //                         ])),
-  //                       ),
-                     
-                      
-  //                     ],
+  //               focusColor: white,
+  //               borderRadius: BorderRadius.circular(4),
+  //               onTap: () {
+  //                 debugPrint("Clicked on index ==> $index");
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) {
+  //                       return VideosByID(
+  //                         sectionDataList?[index].id ?? 0,
+  //                         typeId ?? 0,
+  //                         sectionDataList?[index].name ?? "",
+  //                         "ByCategory",
+  //                       );
+  //                     },
   //                   ),
-  //                 )),
-  //                   SizedBox(
-  //                         height: 10,
+  //                 );
+  //               },
+  //               child: Container(
+  //                 width: Dimens.widthLangGen,
+  //                 height: Dimens.heightLangGen,
+  //                 alignment: Alignment.center,
+  //                 padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                 child: Stack(
+  //                   clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                   children: [
+  //                     ClipRRect(
+  //                       borderRadius: BorderRadius.circular(4),
+  //                       clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                       child: MyNetworkImage(
+  //                         imageUrl:
+  //                             sectionDataList?[index].image.toString() ?? "",
+  //                         fit: BoxFit.fill,
+  //                         imgHeight: MediaQuery.of(context).size.height,
+  //                         imgWidth: MediaQuery.of(context).size.width,
   //                       ),
+  //                     ),
+  //                     Container(
+  //                       padding: const EdgeInsets.all(0),
+  //                       width: MediaQuery.of(context).size.width,
+  //                       height: Dimens.heightLangGen,
+  //                       alignment: Alignment.center,
+  //                       decoration: const BoxDecoration(
+  //                         gradient: LinearGradient(
+  //                           begin: Alignment.center,
+  //                           end: Alignment.bottomCenter,
+  //                           colors: [
+  //                             transparentColor,
+  //                             transparentColor,
+  //                             appBgColor,
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.all(3),
+  //               child: MyText(
+  //                 color: white,
+  //                 text: sectionDataList?[index].name.toString() ?? "",
+  //                 textalign: TextAlign.center,
+  //                 fontsizeNormal: 14,
+  //                 fontweight: FontWeight.w600,
+  //                 fontsizeWeb: 15,
+  //                 multilanguage: false,
+  //                 maxline: 1,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 fontstyle: FontStyle.normal,
+  //               ),
+  //             ),
   //           ],
   //         );
   //       },
   //     ),
   //   );
   // }
+
+  Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
+    getAdaptiveTextSize(BuildContext context, dynamic value) {
+      if (kIsWeb || Constant.isTV) {
+        return (value / 650) *
+            min(MediaQuery.of(context).size.height,
+                MediaQuery.of(context).size.width);
+      } else {
+        return (value / 720 * MediaQuery.of(context).size.height);
+      }
+    }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightTopTen,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return
+              Stack(
+                children: [
+                  InkWell(
+                      focusColor: white,
+                      borderRadius: BorderRadius.circular(4),
+                      onTap: () {
+                        debugPrint("Clicked on index ==> $index");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return VideosByID(
+                                sectionDataList?[index].id ?? 0,
+                                typeId ?? 0,
+                                sectionDataList?[index].name ?? "",
+                                "ByCategory",
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: Dimens.widthTopTen,
+                        height: Dimens.heightTopTen,
+                      
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                        child: 
+                        
+                        Stack(
+                          children: [                    
+                          
+                            Container(
+                              width: 100,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: MyNetworkImage(
+                                  imageUrl: sectionDataList?[index]
+                                          .image
+                                          .toString() ??
+                                      "",
+                                  fit: BoxFit.fill,
+                                  imgHeight:
+                                      MediaQuery.of(context).size.height,
+                                  imgWidth:
+                                      MediaQuery.of(context).size.width,
+                                ),
+                              ),
+                            ),
+                            
+                          ],
+                        ),
+                      )),
+                       Positioned(
+                  left: -10, 
+                  bottom: -8, 
+                  child: RichText(
+                    text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                        text: '${index + 1} ',
+                        style: GoogleFonts.outfit(
+                          fontSize: getAdaptiveTextSize(
+                            context,
+                            60,
+                          ),
+                          fontStyle: FontStyle.normal,
+                          color: colorGraidentLeft,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ]),
+                  ),
+                         )
+                      
+                ],
+              );
+        
+        },
+      ),
+    );
+  }
 
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(

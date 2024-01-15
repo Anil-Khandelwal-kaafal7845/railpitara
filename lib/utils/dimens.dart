@@ -34,8 +34,8 @@ class Dimens {
 
   static double widthLangGen = 120;
   static double heightLangGen = 120;
-  static double heightTopTen = 140;
-  static double widthTopTen = 140;
+  static double heightTopTen = 120;
+  static double widthTopTen = 150;
 
 
   static double widthArtist = 100;
