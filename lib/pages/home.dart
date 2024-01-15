@@ -3457,6 +3457,7 @@ class HomeState extends State<Home> {
         return (value / 720 * MediaQuery.of(context).size.height);
       }
     }
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: Dimens.heightTopTen,
@@ -3468,64 +3469,58 @@ class HomeState extends State<Home> {
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 2),
         itemBuilder: (BuildContext context, int index) {
-          return
-              Stack(
-                children: [
-                  InkWell(
-                      focusColor: white,
-                      borderRadius: BorderRadius.circular(4),
-                      onTap: () {
-                        debugPrint("Clicked on index ==> $index");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return VideosByID(
-                                sectionDataList?[index].id ?? 0,
-                                typeId ?? 0,
-                                sectionDataList?[index].name ?? "",
-                                "ByCategory",
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: Dimens.widthTopTen,
-                        height: Dimens.heightTopTen,
-                      
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                        child: 
-                        
-                        Stack(
-                          children: [                    
-                          
-                            Container(
-                              width: 100,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                child: MyNetworkImage(
-                                  imageUrl: sectionDataList?[index]
-                                          .image
-                                          .toString() ??
+          return Stack(
+            children: [
+              InkWell(
+                  focusColor: white,
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {
+                    debugPrint("Clicked on index ==> $index");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return VideosByID(
+                            sectionDataList?[index].id ?? 0,
+                            typeId ?? 0,
+                            sectionDataList?[index].name ?? "",
+                            "ByCategory",
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: Dimens.widthTopTen,
+                    height: Dimens.heightTopTen,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 100,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: MyNetworkImage(
+                              imageUrl:
+                                  sectionDataList?[index].image.toString() ??
                                       "",
-                                  fit: BoxFit.fill,
-                                  imgHeight:
-                                      MediaQuery.of(context).size.height,
-                                  imgWidth:
-                                      MediaQuery.of(context).size.width,
-                                ),
-                              ),
+                              fit: BoxFit.fill,
+                              imgHeight: MediaQuery.of(context).size.height,
+                              imgWidth: MediaQuery.of(context).size.width,
                             ),
-                            
-                          ],
+                          ),
                         ),
-                      )),
-                       Positioned(
-                  left: -10, 
-                  bottom: -8, 
+                      ],
+                    ),
+                  )),
+
+                  
+              Positioned(
+                left: 0,
+                bottom: -15,
+                child: Container(
                   child: RichText(
                     text: TextSpan(children: <TextSpan>[
                       TextSpan(
@@ -3542,11 +3537,10 @@ class HomeState extends State<Home> {
                       ),
                     ]),
                   ),
-                         )
-                      
-                ],
-              );
-        
+                ),
+              )
+            ],
+          );
         },
       ),
     );
