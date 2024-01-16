@@ -2456,6 +2456,10 @@ class HomeState extends State<Home> {
       {required List<list.Result>? sectionList, required int index}) {
     /* video_type =>  1-video,  2-show,  3-language,  4-category */
     /* screen_layout =>  landscape, potrait, square */
+    if ((sectionList?[index].isTop10 == 1)) {
+      return topTenLayout(
+          sectionList?[index].upcomingType, sectionList?[index].data);
+    }
     if ((sectionList?[index].videoType ?? 0) == 1) {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
@@ -3351,103 +3355,103 @@ class HomeState extends State<Home> {
     );
   }
 
-  // Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width,
-  //     height: Dimens.heightLangGen,
-  //     child: ListView.separated(
-  //       itemCount: sectionDataList?.length ?? 0,
-  //       shrinkWrap: true,
-  //       physics: AlwaysScrollableScrollPhysics(),
-  //       padding: const EdgeInsets.only(left: 20, right: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
-  //       itemBuilder: (BuildContext context, int index) {
-  //         return Stack(
-  //           alignment: AlignmentDirectional.bottomStart,
-  //           children: [
-  //             InkWell(
-  //               focusColor: white,
-  //               borderRadius: BorderRadius.circular(4),
-  //               onTap: () {
-  //                 debugPrint("Clicked on index ==> $index");
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) {
-  //                       return VideosByID(
-  //                         sectionDataList?[index].id ?? 0,
-  //                         typeId ?? 0,
-  //                         sectionDataList?[index].name ?? "",
-  //                         "ByCategory",
-  //                       );
-  //                     },
-  //                   ),
-  //                 );
-  //               },
-  //               child: Container(
-  //                 width: Dimens.widthLangGen,
-  //                 height: Dimens.heightLangGen,
-  //                 alignment: Alignment.center,
-  //                 padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-  //                 child: Stack(
-  //                   clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                   children: [
-  //                     ClipRRect(
-  //                       borderRadius: BorderRadius.circular(4),
-  //                       clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                       child: MyNetworkImage(
-  //                         imageUrl:
-  //                             sectionDataList?[index].image.toString() ?? "",
-  //                         fit: BoxFit.fill,
-  //                         imgHeight: MediaQuery.of(context).size.height,
-  //                         imgWidth: MediaQuery.of(context).size.width,
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       padding: const EdgeInsets.all(0),
-  //                       width: MediaQuery.of(context).size.width,
-  //                       height: Dimens.heightLangGen,
-  //                       alignment: Alignment.center,
-  //                       decoration: const BoxDecoration(
-  //                         gradient: LinearGradient(
-  //                           begin: Alignment.center,
-  //                           end: Alignment.bottomCenter,
-  //                           colors: [
-  //                             transparentColor,
-  //                             transparentColor,
-  //                             appBgColor,
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.all(3),
-  //               child: MyText(
-  //                 color: white,
-  //                 text: sectionDataList?[index].name.toString() ?? "",
-  //                 textalign: TextAlign.center,
-  //                 fontsizeNormal: 14,
-  //                 fontweight: FontWeight.w600,
-  //                 fontsizeWeb: 15,
-  //                 multilanguage: false,
-  //                 maxline: 1,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 fontstyle: FontStyle.normal,
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget genresLayout(int? typeId, List<Datum>? sectionDataList) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightLangGen,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              InkWell(
+                focusColor: white,
+                borderRadius: BorderRadius.circular(4),
+                onTap: () {
+                  debugPrint("Clicked on index ==> $index");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return VideosByID(
+                          sectionDataList?[index].id ?? 0,
+                          typeId ?? 0,
+                          sectionDataList?[index].name ?? "",
+                          "ByCategory",
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  width: Dimens.widthLangGen,
+                  height: Dimens.heightLangGen,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  child: Stack(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].image.toString() ?? "",
+                          fit: BoxFit.fill,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        width: MediaQuery.of(context).size.width,
+                        height: Dimens.heightLangGen,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              transparentColor,
+                              transparentColor,
+                              appBgColor,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3),
+                child: MyText(
+                  color: white,
+                  text: sectionDataList?[index].name.toString() ?? "",
+                  textalign: TextAlign.center,
+                  fontsizeNormal: 14,
+                  fontweight: FontWeight.w600,
+                  fontsizeWeb: 15,
+                  multilanguage: false,
+                  maxline: 1,
+                  overflow: TextOverflow.ellipsis,
+                  fontstyle: FontStyle.normal,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget topTenLayout(int? typeId, List<Datum>? sectionDataList) {
     getAdaptiveTextSize(BuildContext context, dynamic value) {
       if (kIsWeb || Constant.isTV) {
         return (value / 650) *
@@ -3504,7 +3508,7 @@ class HomeState extends State<Home> {
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             child: MyNetworkImage(
                               imageUrl:
-                                  sectionDataList?[index].image.toString() ??
+                                  sectionDataList?[index].landscape.toString() ??
                                       "",
                               fit: BoxFit.fill,
                               imgHeight: MediaQuery.of(context).size.height,
@@ -3515,8 +3519,6 @@ class HomeState extends State<Home> {
                       ],
                     ),
                   )),
-
-                  
               Positioned(
                 left: 0,
                 bottom: -15,

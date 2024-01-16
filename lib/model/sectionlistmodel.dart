@@ -305,7 +305,7 @@ class Result {
   dynamic bannerVisible;
   dynamic bannerImage;
   dynamic bannerId;
-
+   int? isTop10;
   Result({
     this.id,
     this.isHomeScreen,
@@ -325,6 +325,7 @@ class Result {
     this.bannerOrder,
     this.bannerImage,
     this.bannerVisible,
+    this.isTop10
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -347,6 +348,7 @@ class Result {
         bannerImage: json["banner_image"],
         bannerVisible: json["banner_visible"],
         bannerOrder: json["banner_order"],
+             isTop10: json["is_top_10"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -370,6 +372,7 @@ class Result {
         "banner_visible": bannerVisible,
         "banner_order": bannerOrder,
         "banner_id": bannerId,
+         "is_top_10": isTop10
       };
 }
 
