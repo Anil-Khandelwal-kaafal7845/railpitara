@@ -3471,7 +3471,7 @@ class HomeState extends State<Home> {
         physics: AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 2),
+        separatorBuilder: (context, index) => const SizedBox(width: 1),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
@@ -3494,34 +3494,37 @@ class HomeState extends State<Home> {
                       ),
                     );
                   },
-                  child: Container(
-                    width: Dimens.widthTopTen,
-                    height: Dimens.heightTopTen,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 100,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: MyNetworkImage(
-                              imageUrl:
-                                  sectionDataList?[index].landscape.toString() ??
-                                      "",
-                              fit: BoxFit.fill,
-                              imgHeight: MediaQuery.of(context).size.height,
-                              imgWidth: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 18),
+                    child: Container(
+                      width: Dimens.widthTopTen,
+                      height: Dimens.heightTopTen,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 170,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              child: MyNetworkImage(
+                                imageUrl:
+                                    sectionDataList?[index].landscape.toString() ??
+                                        "",
+                                fit: BoxFit.fill,
+                                imgHeight: MediaQuery.of(context).size.height,
+                                imgWidth: MediaQuery.of(context).size.width,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )),
               Positioned(
                 left: 0,
-                bottom: -15,
+                bottom: -18,
                 child: Container(
                   child: RichText(
                     text: TextSpan(children: <TextSpan>[
