@@ -3504,14 +3504,15 @@ class HomeState extends State<Home> {
                       child: Stack(
                         children: [
                           Container(
-                            width: 170,
+                            width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               child: MyNetworkImage(
-                                imageUrl:
-                                    sectionDataList?[index].landscape.toString() ??
-                                        "",
+                                imageUrl: sectionDataList?[index]
+                                        .thumbnail1
+                                        .toString() ??
+                                    "",
                                 fit: BoxFit.fill,
                                 imgHeight: MediaQuery.of(context).size.height,
                                 imgWidth: MediaQuery.of(context).size.width,
@@ -3555,6 +3556,7 @@ class HomeState extends State<Home> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: Dimens.heightArtist,
+    
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
@@ -3563,8 +3565,8 @@ class HomeState extends State<Home> {
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            alignment: AlignmentDirectional.bottomStart,
+          return Column(
+            // alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
                 focusColor: white,
@@ -3587,7 +3589,7 @@ class HomeState extends State<Home> {
                 },
                 child: Container(
                   width: Dimens.widthArtist,
-                  height: Dimens.heightArtist,
+                  height: 100,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
                   child: Stack(
@@ -3607,7 +3609,7 @@ class HomeState extends State<Home> {
                       Container(
                         padding: const EdgeInsets.all(0),
                         width: MediaQuery.of(context).size.width,
-                        height: Dimens.heightArtist,
+                        height: 100,
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
@@ -3631,7 +3633,7 @@ class HomeState extends State<Home> {
                   color: white,
                   text: sectionDataList?[index].name.toString() ?? "",
                   textalign: TextAlign.center,
-                  fontsizeNormal: 12,
+                  fontsizeNormal: 10,
                   fontweight: FontWeight.w600,
                   fontsizeWeb: 15,
                   multilanguage: false,
