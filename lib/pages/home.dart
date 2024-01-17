@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
@@ -18,7 +16,6 @@ import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/commonappbar.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
-
 import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectiontypemodel.dart' as type;
 import 'package:dtlive/model/sectionlistmodel.dart' as list;
@@ -413,7 +410,7 @@ class HomeState extends State<Home> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Find()),
+                MaterialPageRoute(builder: (context) => const Find()),
               );
             },
             child: Padding(
@@ -441,13 +438,13 @@ class HomeState extends State<Home> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              Container(
+              SizedBox(
                 height: 180,
                 child: DrawerHeader(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: appBgColor,
                   ),
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: 50,
                     child: MyImage(
@@ -797,11 +794,11 @@ class HomeState extends State<Home> {
 
                     /* Pages */
                     _buildPages(),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     _buildLine(),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
 
@@ -838,7 +835,7 @@ class HomeState extends State<Home> {
                               _redirectToUrl(Constant.youtubeLink);
                             },
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                         ],
                       ),
                     ),
@@ -863,7 +860,7 @@ class HomeState extends State<Home> {
         await onTap();
       },
       borderRadius: BorderRadius.circular(3),
-      child: Container(
+      child: SizedBox(
         height: 25,
         width: 25,
         child: Image.asset(imageUrl),
@@ -875,7 +872,7 @@ class HomeState extends State<Home> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 0.5,
-      margin: EdgeInsets.only(top: 4, bottom: 4),
+      margin: const EdgeInsets.only(top: 4, bottom: 4),
       color: otherColor,
     );
   }
@@ -1544,7 +1541,7 @@ class HomeState extends State<Home> {
                   onTap: () async {
                     await getTabData(0, homeProvider.sectionTypeModel.result);
                   },
-                  child: Stack(
+                  child: const Stack(
                     children: [],
                   ),
                 ),
@@ -1890,7 +1887,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 25,
                                   width: 80,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Premium",
                                       style: TextStyle(
@@ -1912,7 +1909,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 20,
                                   width: 70,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Rent",
                                       style: TextStyle(
@@ -1934,7 +1931,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 20,
                                   width: 80,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Rent / Premium ",
                                       style: TextStyle(
@@ -2428,11 +2425,11 @@ class HomeState extends State<Home> {
               if (isBannerVisible)
                 Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: SizedBox(
                         height: Dimens.upcomingHeight,
                         width: MediaQuery.of(context).size.width,
@@ -2572,7 +2569,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 8),
@@ -2623,7 +2620,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent",
                           style: TextStyle(
@@ -2647,7 +2644,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Premium",
                           style: TextStyle(
@@ -2671,7 +2668,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent / Premium",
                           style: TextStyle(
@@ -2750,7 +2747,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent",
                           style: TextStyle(
@@ -2774,7 +2771,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Premium",
                           style: TextStyle(
@@ -2798,7 +2795,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent / Premium",
                           style: TextStyle(
@@ -2827,7 +2824,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -2876,7 +2873,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -2900,7 +2897,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -2924,7 +2921,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -2952,7 +2949,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -3001,7 +2998,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -3025,7 +3022,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -3049,7 +3046,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -3076,7 +3073,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3126,7 +3123,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -3150,7 +3147,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -3174,7 +3171,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -3200,7 +3197,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3281,7 +3278,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3362,7 +3359,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3451,7 +3448,7 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget topTenLayout(int? typeId, List<Datum>? sectionDataList) {
+  Widget topTenLayout(int? upcomingType, List<Datum>? sectionDataList) {
     getAdaptiveTextSize(BuildContext context, dynamic value) {
       if (kIsWeb || Constant.isTV) {
         return (value / 650) *
@@ -3461,14 +3458,13 @@ class HomeState extends State<Home> {
         return (value / 720 * MediaQuery.of(context).size.height);
       }
     }
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: Dimens.heightTopTen,
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 1),
@@ -3480,22 +3476,18 @@ class HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
                     debugPrint("Clicked on index ==> $index");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return VideosByID(
-                            sectionDataList?[index].id ?? 0,
-                            typeId ?? 0,
-                            sectionDataList?[index].name ?? "",
-                            "ByCategory",
-                          );
-                        },
-                      ),
+                    openDetailPage(
+                      (sectionDataList?[index].videoType ?? 0) == 2
+                          ? "showdetail"
+                          : "videodetail",
+                      sectionDataList?[index].id ?? 0,
+                      upcomingType ?? 0,
+                      sectionDataList?[index].videoType ?? 0,
+                      sectionDataList?[index].typeId ?? 0,
                     );
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(left: 18),
+                    padding: const EdgeInsets.only(left: 18),
                     child: Container(
                       width: Dimens.widthTopTen,
                       height: Dimens.heightTopTen,
@@ -3503,7 +3495,7 @@ class HomeState extends State<Home> {
                       padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
                       child: Stack(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(4),
@@ -3556,11 +3548,10 @@ class HomeState extends State<Home> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: Dimens.heightArtist,
-    
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
