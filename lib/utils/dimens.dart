@@ -32,7 +32,7 @@ class Dimens {
   static double widthCastWeb = 160;
   static double heightCastWeb = 220;
 
-  static double widthLangGen = 120;
+  static double widthLangGen = 100;
   static double heightLangGen = 120;
   static double heightTopTen = 140;
   static double widthTopTen = 100;

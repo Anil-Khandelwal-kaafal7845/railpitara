@@ -2522,7 +2522,10 @@ class HomeState extends State<Home> {
     }
   }
 
-  double getRemainingDataHeight(String? videoType, String? layoutType) {
+  double getRemainingDataHeight(
+    String? videoType,
+    String? layoutType,
+  ) {
     if (videoType == "1" || videoType == "2") {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
@@ -3458,7 +3461,8 @@ class HomeState extends State<Home> {
         return (value / 720 * MediaQuery.of(context).size.height);
       }
     }
-    return SizedBox(
+
+    return Container(
       width: MediaQuery.of(context).size.width,
       height: Dimens.heightTopTen,
       child: ListView.separated(
