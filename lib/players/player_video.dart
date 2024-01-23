@@ -146,7 +146,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
       autoPlay: true,
       autoInitialize: true,
       looping: false,
-      fullScreenByDefault: true,
+      fullScreenByDefault: false,
       allowFullScreen: true,
       hideControlsTimer: const Duration(seconds: 1),
       showControls: true,
@@ -158,7 +158,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
           if (!kIsWeb && Constant.subtitleUrls.isNotEmpty)
             OptionItem(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 subtitleDialog();
               },
               iconData: Icons.subtitles,
@@ -167,7 +167,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
           if (Constant.resolutionsUrls.isNotEmpty)
             OptionItem(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 qualityDialog();
               },
               iconData: Icons.video_collection_rounded,
@@ -407,6 +407,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
                     updateSubtitleUrl(subtitleUrl: option.subtitleUrl);
                     if (!mounted) return;
                     Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: Text(
                     option.subtitleLang,
@@ -467,6 +468,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
                       qualityUrl: option.qualityUrl,
                     );
                     if (!mounted) return;
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child: Text(

@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/morescreen.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
@@ -15,7 +16,6 @@ import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/commonappbar.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
-
 import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectiontypemodel.dart' as type;
 import 'package:dtlive/model/sectionlistmodel.dart' as list;
@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -173,15 +174,12 @@ class HomeState extends State<Home> {
         forceUpdateData = value;
         updateLoading = false;
       });
-      log(forceUpdateData!.result!.showPackage.toString() + "rakhsudhufd");
       checkForUpdate();
     });
   }
 
   checkForUpdate() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    log("kkkk ${packageInfo.buildNumber}");
-    log("kkkk ${forceUpdateData!.result!.appVersionIos!}");
 
     if ((Platform.isAndroid
             ? forceUpdateData!.result!.appVersion!
@@ -412,7 +410,7 @@ class HomeState extends State<Home> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Find()),
+                MaterialPageRoute(builder: (context) => const Find()),
               );
             },
             child: Padding(
@@ -440,13 +438,13 @@ class HomeState extends State<Home> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              Container(
+              SizedBox(
                 height: 180,
                 child: DrawerHeader(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: appBgColor,
                   ),
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: 50,
                     child: MyImage(
@@ -796,11 +794,11 @@ class HomeState extends State<Home> {
 
                     /* Pages */
                     _buildPages(),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     _buildLine(),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
 
@@ -837,7 +835,7 @@ class HomeState extends State<Home> {
                               _redirectToUrl(Constant.youtubeLink);
                             },
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                         ],
                       ),
                     ),
@@ -862,7 +860,7 @@ class HomeState extends State<Home> {
         await onTap();
       },
       borderRadius: BorderRadius.circular(3),
-      child: Container(
+      child: SizedBox(
         height: 25,
         width: 25,
         child: Image.asset(imageUrl),
@@ -874,7 +872,7 @@ class HomeState extends State<Home> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 0.5,
-      margin: EdgeInsets.only(top: 4, bottom: 4),
+      margin: const EdgeInsets.only(top: 4, bottom: 4),
       color: otherColor,
     );
   }
@@ -1543,7 +1541,7 @@ class HomeState extends State<Home> {
                   onTap: () async {
                     await getTabData(0, homeProvider.sectionTypeModel.result);
                   },
-                  child: Stack(
+                  child: const Stack(
                     children: [],
                   ),
                 ),
@@ -1742,9 +1740,9 @@ class HomeState extends State<Home> {
               ),
 
               /* AdMob Banner */
-              const SizedBox(height: 12.5),
+
               Utils.showBannerAd(context),
-              const SizedBox(height: 12.5),
+              const SizedBox(height: 5.5),
 
               /* Continue Watching & Remaining Sections */
               Consumer<SectionDataProvider>(
@@ -1755,10 +1753,10 @@ class HomeState extends State<Home> {
                     if (sectionDataProvider.sectionListModel.status == 200) {
                       return Column(
                         children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          /* Continue Watching */
+                          // // SizedBox(
+                          // //   height: 5,
+                          // // ),
+                          // /* Continue Watching */
                           (sectionDataProvider
                                       .sectionListModel.continueWatching !=
                                   null)
@@ -1889,7 +1887,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 25,
                                   width: 80,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Premium",
                                       style: TextStyle(
@@ -1911,7 +1909,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 20,
                                   width: 70,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Rent",
                                       style: TextStyle(
@@ -1933,7 +1931,7 @@ class HomeState extends State<Home> {
                                       borderRadius: BorderRadius.circular(10)),
                                   height: 20,
                                   width: 80,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Rent / Premium ",
                                       style: TextStyle(
@@ -1950,6 +1948,7 @@ class HomeState extends State<Home> {
               },
             ),
           ),
+          const SizedBox(height: 5.5),
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
@@ -2360,11 +2359,15 @@ class HomeState extends State<Home> {
             sectionList[index].data!.isNotEmpty) {
           bool isBannerVisible =
               (sectionList[index].bannerVisible ?? "0") == "1";
+          bool isGenreOrLanguage = sectionList[index].videoType == 3 ||
+              sectionList[index].videoType == 4 ||
+              sectionList[index].videoType == 6;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -2381,6 +2384,33 @@ class HomeState extends State<Home> {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
+                  if (!isGenreOrLanguage)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return MoreScreen(
+                                sectionList[index].title.toString(),
+                                sectionList[index].data);
+                          },
+                        ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
+                        child: MyText(
+                          color: Colors.red,
+                          text: "More",
+                          textalign: TextAlign.center,
+                          fontsizeNormal: 10,
+                          fontweight: FontWeight.w600,
+                          fontsizeWeb: 16,
+                          multilanguage: false,
+                          maxline: 1,
+                          overflow: TextOverflow.ellipsis,
+                          fontstyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
                 ],
               ),
               const SizedBox(height: 5),
@@ -2395,11 +2425,11 @@ class HomeState extends State<Home> {
               if (isBannerVisible)
                 Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: SizedBox(
                         height: Dimens.upcomingHeight,
                         width: MediaQuery.of(context).size.width,
@@ -2423,6 +2453,10 @@ class HomeState extends State<Home> {
       {required List<list.Result>? sectionList, required int index}) {
     /* video_type =>  1-video,  2-show,  3-language,  4-category */
     /* screen_layout =>  landscape, potrait, square */
+    if ((sectionList?[index].isTop10 == 1)) {
+      return topTenLayout(
+          sectionList?[index].upcomingType, sectionList?[index].data);
+    }
     if ((sectionList?[index].videoType ?? 0) == 1) {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
@@ -2468,11 +2502,10 @@ class HomeState extends State<Home> {
     } else if ((sectionList?[index].videoType ?? 0) == 4) {
       return genresLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
-    } 
-     else if ((sectionList?[index].videoType ?? 0) == 6) {
+    } else if ((sectionList?[index].videoType ?? 0) == 6) {
       return browseByArtistLayout(
           sectionList?[index].typeId ?? 0, sectionList?[index].data);
-    }else {
+    } else {
       if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
             sectionList?[index].upcomingType, sectionList?[index].data);
@@ -2489,7 +2522,10 @@ class HomeState extends State<Home> {
     }
   }
 
-  double getRemainingDataHeight(String? videoType, String? layoutType) {
+  double getRemainingDataHeight(
+    String? videoType,
+    String? layoutType,
+  ) {
     if (videoType == "1" || videoType == "2") {
       if (layoutType == "landscape") {
         return Dimens.heightLand;
@@ -2509,6 +2545,12 @@ class HomeState extends State<Home> {
         return Dimens.heightLangGenLand;
       } else {
         return Dimens.heightLangGen;
+      }
+    } else if (videoType == "6") {
+      if (layoutType == "landscape") {
+        return Dimens.heightArtist;
+      } else {
+        return Dimens.heightArtist;
       }
     } else {
       if (layoutType == "landscape") {
@@ -2530,8 +2572,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 8),
@@ -2582,7 +2623,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent",
                           style: TextStyle(
@@ -2606,7 +2647,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Premium",
                           style: TextStyle(
@@ -2630,7 +2671,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent / Premium",
                           style: TextStyle(
@@ -2709,7 +2750,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent",
                           style: TextStyle(
@@ -2733,7 +2774,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Premium",
                           style: TextStyle(
@@ -2757,7 +2798,7 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Rent / Premium",
                           style: TextStyle(
@@ -2786,8 +2827,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -2836,7 +2876,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -2860,7 +2900,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -2884,7 +2924,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -2912,8 +2952,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -2962,7 +3001,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -2986,7 +3025,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -3010,7 +3049,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -3037,8 +3076,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3088,7 +3126,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent",
                             style: TextStyle(
@@ -3112,7 +3150,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Premium",
                             style: TextStyle(
@@ -3136,7 +3174,7 @@ class HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: colorPrimary,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Rent / Premium",
                             style: TextStyle(
@@ -3162,8 +3200,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-           AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3230,21 +3267,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: MyText(
-                  color: white,
-                  text: sectionDataList?[index].name.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 15,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
             ],
           );
         },
@@ -3259,8 +3281,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-           AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3327,21 +3348,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: MyText(
-                  color: white,
-                  text: sectionDataList?[index].name.toString() ?? "",
-                  textalign: TextAlign.center,
-                  fontsizeNormal: 14,
-                  fontweight: FontWeight.w600,
-                  fontsizeWeb: 15,
-                  multilanguage: false,
-                  maxline: 1,
-                  overflow: TextOverflow.ellipsis,
-                  fontstyle: FontStyle.normal,
-                ),
-              ),
             ],
           );
         },
@@ -3356,8 +3362,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-          AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3446,22 +3451,117 @@ class HomeState extends State<Home> {
     );
   }
 
+  Widget topTenLayout(int? upcomingType, List<Datum>? sectionDataList) {
+    getAdaptiveTextSize(BuildContext context, dynamic value) {
+      if (kIsWeb || Constant.isTV) {
+        return (value / 650) *
+            min(MediaQuery.of(context).size.height,
+                MediaQuery.of(context).size.width);
+      } else {
+        return (value / 720 * MediaQuery.of(context).size.height);
+      }
+    }
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.heightTopTen,
+      child: ListView.separated(
+        itemCount: sectionDataList?.length ?? 0,
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 1),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            children: [
+              InkWell(
+                  focusColor: white,
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {
+                    debugPrint("Clicked on index ==> $index");
+                    openDetailPage(
+                      (sectionDataList?[index].videoType ?? 0) == 2
+                          ? "showdetail"
+                          : "videodetail",
+                      sectionDataList?[index].id ?? 0,
+                      upcomingType ?? 0,
+                      sectionDataList?[index].videoType ?? 0,
+                      sectionDataList?[index].typeId ?? 0,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Container(
+                      width: Dimens.widthTopTen,
+                      height: Dimens.heightTopTen,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              child: MyNetworkImage(
+                                imageUrl: sectionDataList?[index]
+                                        .thumbnail1
+                                        .toString() ??
+                                    "",
+                                fit: BoxFit.fill,
+                                imgHeight: MediaQuery.of(context).size.height,
+                                imgWidth: MediaQuery.of(context).size.width,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+              Positioned(
+                left: 0,
+                bottom: -18,
+                child: Container(
+                  child: RichText(
+                    text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                        text: '${index + 1} ',
+                        style: GoogleFonts.outfit(
+                          fontSize: getAdaptiveTextSize(
+                            context,
+                            60,
+                          ),
+                          fontStyle: FontStyle.normal,
+                          color: colorGraidentLeft,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
 
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: Dimens.heightLangGen,
+      height: Dimens.heightArtist,
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-          AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            alignment: AlignmentDirectional.bottomStart,
+          return Column(
+            // alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
                 focusColor: white,
@@ -3483,8 +3583,8 @@ class HomeState extends State<Home> {
                   );
                 },
                 child: Container(
-                  width: Dimens.widthLangGen,
-                  height: Dimens.heightLangGen,
+                  width: Dimens.widthArtist,
+                  height: 100,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
                   child: Stack(
@@ -3504,7 +3604,7 @@ class HomeState extends State<Home> {
                       Container(
                         padding: const EdgeInsets.all(0),
                         width: MediaQuery.of(context).size.width,
-                        height: Dimens.heightLangGen,
+                        height: 100,
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
@@ -3528,7 +3628,7 @@ class HomeState extends State<Home> {
                   color: white,
                   text: sectionDataList?[index].name.toString() ?? "",
                   textalign: TextAlign.center,
-                  fontsizeNormal: 14,
+                  fontsizeNormal: 10,
                   fontweight: FontWeight.w600,
                   fontsizeWeb: 15,
                   multilanguage: false,
@@ -3678,8 +3778,3 @@ class HomeState extends State<Home> {
   }
   /* ========= Open Player ========= */
 }
-
-
-
-
-

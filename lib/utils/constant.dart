@@ -7,7 +7,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 class Constant {
   // static const String baseurl = '';
   static const String baseurl = 'https://aaryaconsole.ottpeople.in/public/api/';
-  static const String dynamicBaseUrl = 'play.aaryaadigital.com';
+  static const String dynamicBaseUrl = 'https://play.aaryaadigital.com/';
 
   static String appName = "Aaryaa digital";
   static String appPackageName = "com.release.aryanews";
@@ -63,10 +63,9 @@ class Constant {
   /* Show Ad By Type */
   static String rewardAdType = "rewardAd";
   static String interstialAdType = "interstialAd";
-  
-
 }
- restrictScreenRecordingandScreenshot() async {
+
+restrictScreenRecordingandScreenshot() async {
   if (Platform.isAndroid) {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
