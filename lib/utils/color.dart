@@ -9,7 +9,7 @@ const subscriblue = Color(0xff03084C);
 const subscrimain = Color(0xffFDAF5A);
 const subscridark = Color(0xffD57648);
 const subscrigreen = Color(0xff06802F);
-
+const topTen =Color(0xfffe9eced);
 
 const colorGraidentLeft = Color(0xffF9D1A0);
 const colorGraidentRight = Color(0xffFFFFFF);

@@ -302,6 +302,7 @@ class Result {
   String? nameVisible;
   List<Datum>? data;
   dynamic bannerOrder;
+   String? bannerBacklink;
   dynamic bannerVisible;
   dynamic bannerImage;
   dynamic bannerId;
@@ -323,6 +324,7 @@ class Result {
     this.data,
     this.bannerId,
     this.bannerOrder,
+      this.bannerBacklink,
     this.bannerImage,
     this.bannerVisible,
     this.isTop10
@@ -348,6 +350,7 @@ class Result {
         bannerImage: json["banner_image"],
         bannerVisible: json["banner_visible"],
         bannerOrder: json["banner_order"],
+          bannerBacklink: json["banner_backlink"],
              isTop10: json["is_top_10"],
       );
 
@@ -371,6 +374,7 @@ class Result {
         "banner_image": bannerImage,
         "banner_visible": bannerVisible,
         "banner_order": bannerOrder,
+        "banner_backlink": bannerBacklink,
         "banner_id": bannerId,
          "is_top_10": isTop10
       };
