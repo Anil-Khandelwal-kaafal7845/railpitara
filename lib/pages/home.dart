@@ -2428,11 +2428,14 @@ class HomeState extends State<Home> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: SizedBox(
-                        height: Dimens.upcomingHeight,
-                        width: MediaQuery.of(context).size.width,
+                    SizedBox(
+                      height: Dimens.upcomingHeight,
+                      width: MediaQuery.of(context).size.width,
+                      child: GestureDetector(
+                        onTap: () {
+                            sectionList[index].bannerBacklink.toString()=="" || sectionList[index].bannerBacklink ==null? "":
+                          launchUrl(Uri.parse(sectionList[index].bannerBacklink.toString()));
+                        },
                         child: Image.network(
                             sectionList[index].bannerImage.toString(),
                             fit: BoxFit.fill),
@@ -2575,7 +2578,7 @@ class HomeState extends State<Home> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             focusColor: white,
@@ -2702,7 +2705,7 @@ class HomeState extends State<Home> {
             const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             focusColor: white,
@@ -3533,7 +3536,7 @@ class HomeState extends State<Home> {
                             60,
                           ),
                           fontStyle: FontStyle.normal,
-                          color: colorGraidentLeft,
+                          color: topTen,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
