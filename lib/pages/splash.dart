@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
-import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/utils/sharedpre.dart';
@@ -15,11 +12,11 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class Splash extends StatefulWidget {
-  bool isDynamicLink;
-  int? videoId;
-  int? upcomingType;
-  int? videoType;
-  int? typeId;
+  final bool isDynamicLink;
+  final int? videoId;
+  final int? upcomingType;
+  final int? videoType;
+  final int? typeId;
 
   Splash(
       {Key? key,
