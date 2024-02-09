@@ -33,7 +33,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-
 class API {
   final Dio _dio = Dio();
   API() {
@@ -220,7 +219,7 @@ class ApiService {
       }
     } catch (e) {
       // Handle DioException or other exceptions here
-      print("Error: $e");
+      debugPrint("Error: $e");
       return false; // Authentication failed due to an error
     }
   }
@@ -665,7 +664,7 @@ class ApiService {
     return videoByIdModel;
   }
 
-    // ignore: body_might_complete_normally_nullable
+  // ignore: body_might_complete_normally_nullable
   Future<VideoByartist?> videoByArtistApi(
       BuildContext context, castId, typeId) async {
     try {

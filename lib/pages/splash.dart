@@ -89,8 +89,8 @@ class SplashState extends State<Splash> {
             .transparent, // Set to transparent if your video has a transparent background
         child: _initialized
             ? AspectRatio(
-aspectRatio: MediaQuery.of(context).size.width/
-        MediaQuery.of(context).size.height,
+                aspectRatio: MediaQuery.of(context).size.width /
+                    MediaQuery.of(context).size.height,
                 // aspectRatio: _controller.value.aspectRatio,
 
                 child: VideoPlayer(_controller),
@@ -124,7 +124,7 @@ aspectRatio: MediaQuery.of(context).size.width/
       );
     } else {
       if (widget.isDynamicLink) {
-        log("DYNAMIC LINK");
+        // log("DYNAMIC LINK");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
