@@ -107,10 +107,10 @@ class _CommonAppBarState extends State<CommonAppBar> {
     await setSelectedTab(position);
     await sectionDataProvider.setLoading(true);
     await sectionDataProvider.getSectionBanner(
-        position == 0 ? "0" : (sectionTypeList?[position - 1].id),
+        position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
         position == 0 ? "1" : "2");
     await sectionDataProvider.getSectionList(
-        position == 0 ? "0" : (sectionTypeList?[position - 1].id),
+        position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
         position == 0 ? "1" : "2");
   }
 
