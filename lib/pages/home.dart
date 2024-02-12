@@ -32,16 +32,12 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -49,10 +45,8 @@ import 'package:provider/provider.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../model/force_update_model.dart';
 import '../webservice/apiservices.dart';
-
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
 import '../subscription/subscriptionhistory.dart';
