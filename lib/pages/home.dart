@@ -445,14 +445,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
     Padding(
         padding: const EdgeInsets.only(right: 15),
       child: PopupMenuButton<type.Result>(
-      child: Image.asset(
-                  "assets/images/ic_language.png",
-                  width: 20,
-                  height: 20,
-                  color: white,
-                ),
-    
-      offset: Offset(0, 70),
+      offset: const Offset(0, 70),
       color: Colors.black54,
       itemBuilder: (context) {
       List<bool> tempSelectedLanguages = List.generate(
@@ -462,7 +455,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
       return [
         PopupMenuItem(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.4, // Adjust width here
+            width: MediaQuery.of(context).size.width * 0.55, // Adjust width here
             child: StatefulBuilder(
               builder: (context, setState) {
                 return Column(
@@ -527,6 +520,12 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
         ),
       ];
       },
+      child: Image.asset(
+                  "assets/images/ic_language.png",
+                  width: 20,
+                  height: 20,
+                  color: white,
+                ),
     ),
     )
 
