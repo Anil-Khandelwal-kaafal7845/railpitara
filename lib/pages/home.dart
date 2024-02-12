@@ -10,6 +10,7 @@ import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
+import 'package:dtlive/provider/findprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/adhelper.dart';
@@ -33,12 +34,10 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -46,10 +45,8 @@ import 'package:provider/provider.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../model/force_update_model.dart';
 import '../webservice/apiservices.dart';
-
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
 import '../subscription/subscriptionhistory.dart';
@@ -80,6 +77,8 @@ class HomeState extends State<Home> {
   late ListObserverController observerController;
   late HomeProvider homeProvider;
   int? videoId, videoType, typeId;
+    late FindProvider findProvider = FindProvider();
+      List<String> selectedLanguageIds = ["0"];
 
 //drawer
   bool? isSwitched;
@@ -88,6 +87,8 @@ class HomeState extends State<Home> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool updateLoading = true;
+  List<String> languages = []; // Example list of languages
+  List<bool> selectedLanguages = [];
 
   String? currentPage,
       langCatName,
@@ -156,6 +157,7 @@ class HomeState extends State<Home> {
     sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      findProvider = Provider.of<FindProvider>(context, listen: false);
     observerController =
         ListObserverController(controller: tabScrollController);
     currentPage = widget.pageName ?? "";
@@ -285,7 +287,7 @@ class HomeState extends State<Home> {
   _getData() async {
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
-
+findProvider = Provider.of<FindProvider>(context, listen: false);
     if (!homeProvider.loading) {
       if (homeProvider.sectionTypeModel.status == 200 &&
           homeProvider.sectionTypeModel.result != null) {
@@ -303,6 +305,22 @@ class HomeState extends State<Home> {
       setState(() {});
     });
     Utils.getCurrencySymbol();
+     if (!mounted) return;
+    findProvider.getLanguage().then((_) {
+      // Populate languages list
+      languages = findProvider.langaugeModel.result!
+          .map((language) => language.name!)
+          .toList();
+
+      // Initialize selectedIndex list with false values
+      selectedLanguages = List.filled(languages.length, false);
+
+      // Print data for verification
+      print("Number of languages: ${languages.length}");
+      print("Language name at index 1: ${languages[1]}");
+      print(
+          "Language id at index 1: ${findProvider.langaugeModel.result![1].id}");
+    });
   }
 
   Future<void> setSelectedTab(int tabPos) async {
@@ -330,7 +348,8 @@ class HomeState extends State<Home> {
         position == 0 ? "1" : "2");
     await sectionDataProvider.getSectionList(
         position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
-        position == 0 ? "1" : "2");
+        position == 0 ? "1" : "2",
+     selectedLanguageIds.join(','));
   }
 
   openDetailPage(String pageName, int videoId, int upcomingType, int videoType,
@@ -423,6 +442,93 @@ class HomeState extends State<Home> {
               ),
             ),
           ),
+    Padding(
+        padding: const EdgeInsets.only(right: 15),
+      child: PopupMenuButton<type.Result>(
+      offset: const Offset(0, 70),
+      color: Colors.black54,
+      itemBuilder: (context) {
+      List<bool> tempSelectedLanguages = List.generate(
+        findProvider.langaugeModel.result!.length,
+        (index) => selectedLanguages[index],
+      );
+      return [
+        PopupMenuItem(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.55, // Adjust width here
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    for (int i = 0;
+                        i < findProvider.langaugeModel.result!.length;
+                        i++)
+                      Theme(
+                        data: ThemeData(
+                          unselectedWidgetColor: Colors.white,
+                        ),
+                        child: CheckboxListTile(
+                          title: Text(
+                            findProvider.langaugeModel.result![i].name!,
+                            style: const TextStyle(color: Colors.white,fontSize: 15),
+                          ),
+                          value: tempSelectedLanguages[i],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              tempSelectedLanguages[i] = value!;
+                            });
+                          },
+                          autofocus: true,
+                          activeColor: primaryDark,
+                        ),
+                      ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedLanguages = List.from(tempSelectedLanguages);
+                        });
+                        selectedLanguageIds.clear();
+                        for (int i = 0;
+                            i < tempSelectedLanguages.length;
+                            i++) {
+                          if (tempSelectedLanguages[i]) {
+                            selectedLanguageIds.add(
+                              findProvider.langaugeModel.result![i].id.toString(),
+                            );
+                          }
+                        }
+                        getTabData(
+                          homeProvider.selectedIndex,
+                          homeProvider.sectionTypeModel.result,
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ];
+      },
+      child: Image.asset(
+                  "assets/images/ic_language.png",
+                  width: 20,
+                  height: 20,
+                  color: white,
+                ),
+    ),
+    )
+
         ],
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
@@ -1342,7 +1448,7 @@ class HomeState extends State<Home> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1");
+                            sectionDataProvider.getSectionList("0", "1","0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();
@@ -1459,7 +1565,7 @@ class HomeState extends State<Home> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1");
+                            sectionDataProvider.getSectionList("0", "1","0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();

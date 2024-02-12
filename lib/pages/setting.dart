@@ -935,7 +935,7 @@ class SettingState extends State<Setting> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1");
+                            sectionDataProvider.getSectionList("0", "1","0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();
@@ -1052,7 +1052,7 @@ class SettingState extends State<Setting> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1");
+                            sectionDataProvider.getSectionList("0", "1","0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();

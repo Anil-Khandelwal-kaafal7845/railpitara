@@ -425,7 +425,7 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
 
         await homeProvider.homeNotifyProvider();
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1");
+        await sectionDataProvider.getSectionList("0", "1","0");
       } else {
         // Hide Progress Dialog
         if (!mounted) return;

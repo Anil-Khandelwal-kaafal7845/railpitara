@@ -459,7 +459,7 @@ class OTPVerifyState extends State<OTPVerify> {
 
         await homeProvider.setLoading(true);
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1");
+        await sectionDataProvider.getSectionList("0", "1","0");
 
         await prDialog.hide();
         if (!mounted) return;
