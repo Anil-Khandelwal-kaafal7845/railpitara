@@ -29,11 +29,11 @@ class SectionByTypeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getSectionList(typeId, isHomePage) async {
+  Future<void> getSectionList(typeId, isHomePage,languageId) async {
     debugPrint("getSectionList typeId :==> $typeId");
     debugPrint("getSectionList isHomePage :==> $isHomePage");
     loadingSection = true;
-    sectionListModel = await ApiService().sectionList(typeId, isHomePage);
+    sectionListModel = await ApiService().sectionList(typeId, isHomePage,languageId);
     debugPrint("section_list status :==> ${sectionListModel.status}");
     debugPrint("section_list message :==> ${sectionListModel.message}");
     loadingSection = false;

@@ -632,7 +632,7 @@ class LoginSocialState extends State<LoginSocial> {
 
         await homeProvider.setSelectedTab(0);
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1");
+        await sectionDataProvider.getSectionList("0", "1","0");
 
         // Hide Progress Dialog
         await prDialog.hide();

@@ -50,7 +50,7 @@ class SectionByTypeState extends State<SectionByType> {
     await sectionByTypeProvider.getSectionBanner(
         widget.typeId.toString(), widget.isHomePage.toString());
     await sectionByTypeProvider.getSectionList(
-        widget.typeId.toString(), widget.isHomePage.toString());
+        widget.typeId.toString(), widget.isHomePage.toString(),"0");
   }
 
   @override

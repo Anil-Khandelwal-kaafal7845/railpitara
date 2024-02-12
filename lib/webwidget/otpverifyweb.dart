@@ -377,7 +377,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
 
         await homeProvider.homeNotifyProvider();
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1");
+        await sectionDataProvider.getSectionList("0", "1","0");
       } else {
         if (!mounted) return;
         Utils.showSnackbar(

@@ -111,7 +111,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
         position == 0 ? "1" : "2");
     await sectionDataProvider.getSectionList(
         position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
-        position == 0 ? "1" : "2");
+        position == 0 ? "1" : "2","0");
   }
 
   @override
@@ -761,7 +761,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                           await Utils.setUserId(null);
                           await sectionDataProvider.clearProvider();
                           sectionDataProvider.getSectionBanner("0", "1");
-                          sectionDataProvider.getSectionList("0", "1");
+                          sectionDataProvider.getSectionList("0", "1","0");
                           await homeProvider.homeNotifyProvider();
                           if (!mounted) return;
                           Navigator.pop(context);

@@ -372,7 +372,7 @@ class ApiService {
   }
 
   // section_list API
-  Future<SectionListModel> sectionList(typeId, isHomePage) async {
+  Future<SectionListModel> sectionList(typeId, isHomePage,languageId) async {
     SectionListModel sectionListModel;
     String sectionList = "section_list";
     Response response = await dio.post(
@@ -382,6 +382,7 @@ class ApiService {
         'user_id': Constant.userID,
         'type_id': typeId,
         'is_home_page': isHomePage,
+                'language_id':languageId
       },
     );
     sectionListModel = SectionListModel.fromJson(response.data);

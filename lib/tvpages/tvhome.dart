@@ -141,7 +141,7 @@ class TVHomeState extends State<TVHome> {
         position == 0 ? "1" : "2");
     await sectionDataProvider.getSectionList(
         position == 0 ? "0" : (sectionTypeList?[position - 1].id),
-        position == 0 ? "1" : "2");
+        position == 0 ? "1" : "2","0");
   }
 
   openDetailPage(String pageName, int videoId, int upcomingType, int videoType,
@@ -1903,7 +1903,7 @@ class TVHomeState extends State<TVHome> {
                             await Utils.setUserId(null);
                             await sectionDataProvider.clearProvider();
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1");
+                            sectionDataProvider.getSectionList("0", "1","");
                             await homeProvider.homeNotifyProvider();
                             if (!mounted) return;
                             Navigator.pop(context);
