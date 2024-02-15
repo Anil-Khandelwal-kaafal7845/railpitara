@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:no_screenshot/no_screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
@@ -47,8 +48,9 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void initState() {
-   restrictScreenRecordingandScreenshot();
-
+    restrictScreenRecordingandScreenshot();
+    // Keep the screen on.
+    KeepScreenOn.turnOn();
     debugPrint("videoUrl ========> ${widget.videoUrl}");
     debugPrint("vUploadType ========> ${widget.vUploadType}");
     playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -236,6 +238,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
   @override
   void dispose() {
     allowScreenRecordingandScreenshot();
+    KeepScreenOn.turnOff();
     if (_chewieController != null) {
       subtitleController?.detach();
       _chewieController?.removeListener(() {});
