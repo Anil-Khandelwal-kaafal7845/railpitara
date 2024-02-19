@@ -415,7 +415,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     return WillPopScope(
       onWillPop:()async{
       Navigator.pop(context); 
-    return true;
+    return false;
       } ,
       child: Scaffold(
         key: widget.key,
