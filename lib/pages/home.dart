@@ -77,8 +77,8 @@ class HomeState extends State<Home> {
   late ListObserverController observerController;
   late HomeProvider homeProvider;
   int? videoId, videoType, typeId;
-    late FindProvider findProvider = FindProvider();
-      List<String> selectedLanguageIds = ["0"];
+  late FindProvider findProvider = FindProvider();
+  List<String> selectedLanguageIds = ["0"];
 
 //drawer
   bool? isSwitched;
@@ -157,7 +157,7 @@ class HomeState extends State<Home> {
     sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      findProvider = Provider.of<FindProvider>(context, listen: false);
+    findProvider = Provider.of<FindProvider>(context, listen: false);
     observerController =
         ListObserverController(controller: tabScrollController);
     currentPage = widget.pageName ?? "";
@@ -287,7 +287,7 @@ class HomeState extends State<Home> {
   _getData() async {
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
-findProvider = Provider.of<FindProvider>(context, listen: false);
+    findProvider = Provider.of<FindProvider>(context, listen: false);
     if (!homeProvider.loading) {
       if (homeProvider.sectionTypeModel.status == 200 &&
           homeProvider.sectionTypeModel.result != null) {
@@ -305,7 +305,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
       setState(() {});
     });
     Utils.getCurrencySymbol();
-     if (!mounted) return;
+    if (!mounted) return;
     findProvider.getLanguage().then((_) {
       // Populate languages list
       languages = findProvider.langaugeModel.result!
@@ -349,7 +349,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
     await sectionDataProvider.getSectionList(
         position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
         position == 0 ? "1" : "2",
-     selectedLanguageIds.join(','));
+        selectedLanguageIds.join(','));
   }
 
   openDetailPage(String pageName, int videoId, int upcomingType, int videoType,
@@ -442,93 +442,97 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
               ),
             ),
           ),
-    Padding(
-        padding: const EdgeInsets.only(right: 15),
-      child: PopupMenuButton<type.Result>(
-      offset: const Offset(0, 70),
-      color: Colors.black54,
-      itemBuilder: (context) {
-      List<bool> tempSelectedLanguages = List.generate(
-        findProvider.langaugeModel.result!.length,
-        (index) => selectedLanguages[index],
-      );
-      return [
-        PopupMenuItem(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.55, // Adjust width here
-            child: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for (int i = 0;
-                        i < findProvider.langaugeModel.result!.length;
-                        i++)
-                      Theme(
-                        data: ThemeData(
-                          unselectedWidgetColor: Colors.white,
-                        ),
-                        child: CheckboxListTile(
-                          title: Text(
-                            findProvider.langaugeModel.result![i].name!,
-                            style: const TextStyle(color: Colors.white,fontSize: 15),
-                          ),
-                          value: tempSelectedLanguages[i],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              tempSelectedLanguages[i] = value!;
-                            });
-                          },
-                          autofocus: true,
-                          activeColor: primaryDark,
-                        ),
-                      ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: primaryDark,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          selectedLanguages = List.from(tempSelectedLanguages);
-                        });
-                        selectedLanguageIds.clear();
-                        for (int i = 0;
-                            i < tempSelectedLanguages.length;
-                            i++) {
-                          if (tempSelectedLanguages[i]) {
-                            selectedLanguageIds.add(
-                              findProvider.langaugeModel.result![i].id.toString(),
-                            );
-                          }
-                        }
-                        getTabData(
-                          homeProvider.selectedIndex,
-                          homeProvider.sectionTypeModel.result,
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: PopupMenuButton<type.Result>(
+              offset: const Offset(0, 70),
+              color: Colors.black54,
+              itemBuilder: (context) {
+                List<bool> tempSelectedLanguages = List.generate(
+                  findProvider.langaugeModel.result!.length,
+                  (index) => selectedLanguages[index],
+                );
+                return [
+                  PopupMenuItem(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width *
+                          0.55, // Adjust width here
+                      child: StatefulBuilder(
+                        builder: (context, setState) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              for (int i = 0;
+                                  i < findProvider.langaugeModel.result!.length;
+                                  i++)
+                                Theme(
+                                  data: ThemeData(
+                                    unselectedWidgetColor: Colors.white,
+                                  ),
+                                  child: CheckboxListTile(
+                                    title: Text(
+                                      findProvider
+                                          .langaugeModel.result![i].name!,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 15),
+                                    ),
+                                    value: tempSelectedLanguages[i],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        tempSelectedLanguages[i] = value!;
+                                      });
+                                    },
+                                    autofocus: true,
+                                    activeColor: primaryDark,
+                                  ),
+                                ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: primaryDark,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedLanguages =
+                                        List.from(tempSelectedLanguages);
+                                  });
+                                  selectedLanguageIds.clear();
+                                  for (int i = 0;
+                                      i < tempSelectedLanguages.length;
+                                      i++) {
+                                    if (tempSelectedLanguages[i]) {
+                                      selectedLanguageIds.add(
+                                        findProvider.langaugeModel.result![i].id
+                                            .toString(),
+                                      );
+                                    }
+                                  }
+                                  getTabData(
+                                    homeProvider.selectedIndex,
+                                    homeProvider.sectionTypeModel.result,
+                                  );
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Submit',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
-                  ],
-                );
+                  ),
+                ];
               },
+              child: Image.asset(
+                "assets/images/ic_language.png",
+                width: 20,
+                height: 20,
+                color: white,
+              ),
             ),
-          ),
-        ),
-      ];
-      },
-      child: Image.asset(
-                  "assets/images/ic_language.png",
-                  width: 20,
-                  height: 20,
-                  color: white,
-                ),
-    ),
-    )
-
+          )
         ],
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
@@ -591,32 +595,32 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                     // _buildLine(),
                     // _buildLine(16.0, 16.0),
 
-                    /* Active TV */
-                    _buildSettingButton(
-                      title: 'activetv',
-                      // subTitle: 'activetv_desc',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const ActiveTV(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                    // _buildLine(),
+                    // /* Active TV */
+                    // _buildSettingButton(
+                    //   title: 'activetv',
+                    //   // subTitle: 'activetv_desc',
+                    //   titleMultilang: true,
+                    //   subTitleMultilang: true,
+                    //   onClick: () {
+                    //     AdHelper.showFullscreenAd(
+                    //         context, Constant.rewardAdType, () async {
+                    //       if (Constant.userID != null) {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const ActiveTV(),
+                    //           ),
+                    //         );
+                    //       } else {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const LoginSocial(),
+                    //           ),
+                    //         );
+                    //       }
+                    //     });
+                    //   },
+                    // ),
+                    // // _buildLine(),
 
                     /* Watchlist */
                     _buildSettingButton(
@@ -726,33 +730,33 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                     ),
                     // _buildLine(),
 
-                    /* Transactions */
-                    _buildSettingButton(
-                      title: 'transactions',
-                      // subTitle: 'transactions_notes',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const SubscriptionHistory(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                    // _buildLine(),
+                    // /* Transactions */
+                    // _buildSettingButton(
+                    //   title: 'transactions',
+                    //   // subTitle: 'transactions_notes',
+                    //   titleMultilang: true,
+                    //   subTitleMultilang: true,
+                    //   onClick: () {
+                    //     AdHelper.showFullscreenAd(
+                    //         context, Constant.rewardAdType, () async {
+                    //       if (Constant.userID != null) {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const SubscriptionHistory(),
+                    //           ),
+                    //         );
+                    //       } else {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const LoginSocial(),
+                    //           ),
+                    //         );
+                    //       }
+                    //     });
+                    //   },
+                    // ),
+                    // // _buildLine(),
 
                     /* MaltiLanguage */
                     _buildSettingButton(
@@ -766,63 +770,63 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                     ),
                     // _buildLine(),
 
-                    /* Push Notification enable/disable */
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: _buildSettingButton(
-                            title: 'notification',
-                            // subTitle: 'recivepushnotification',
-                            titleMultilang: true,
-                            subTitleMultilang: true,
-                            onClick: () {
-                              toggleSwitch(!(isSwitched ?? false));
-                            },
-                          ),
-                        ),
-                        Switch(
-                          activeColor: primaryDark,
-                          activeTrackColor: primaryLight,
-                          inactiveTrackColor: gray,
-                          value: isSwitched ?? true,
-                          onChanged: toggleSwitch,
-                        ),
-                      ],
-                    ),
-                    // _buildLine(),
+                    // /* Push Notification enable/disable */
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Expanded(
+                    //       child: _buildSettingButton(
+                    //         title: 'notification',
+                    //         // subTitle: 'recivepushnotification',
+                    //         titleMultilang: true,
+                    //         subTitleMultilang: true,
+                    //         onClick: () {
+                    //           toggleSwitch(!(isSwitched ?? false));
+                    //         },
+                    //       ),
+                    //     ),
+                    //     Switch(
+                    //       activeColor: primaryDark,
+                    //       activeTrackColor: primaryLight,
+                    //       inactiveTrackColor: gray,
+                    //       value: isSwitched ?? true,
+                    //       onChanged: toggleSwitch,
+                    //     ),
+                    //   ],
+                    // ),
+                    // // _buildLine(),
 
-                    /* Clear Cache */
-                    if (!Platform.isIOS)
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: _buildSettingButton(
-                              title: 'clearcatch',
-                              // subTitle: 'clearlocallycatch',
-                              titleMultilang: true,
-                              subTitleMultilang: true,
-                              onClick: () async {
-                                if (!(kIsWeb) || !(Constant.isTV)) {
-                                  Utils.deleteCacheDir();
-                                }
-                                if (!mounted) return;
-                                Utils.showSnackbar(
-                                    context, "success", "cacheclearmsg", true);
-                              },
-                            ),
-                          ),
-                          MyImage(
-                            width: 28,
-                            height: 28,
-                            imagePath: "ic_clear.png",
-                            color: colorPrimary,
-                          ),
-                        ],
-                      ),
-                    if (!Platform.isIOS)
-                      //  _buildLine(),
+                    // /* Clear Cache */
+                    // if (!Platform.isIOS)
+                    //   Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Expanded(
+                    //         child: _buildSettingButton(
+                    //           title: 'clearcatch',
+                    //           // subTitle: 'clearlocallycatch',
+                    //           titleMultilang: true,
+                    //           subTitleMultilang: true,
+                    //           onClick: () async {
+                    //             if (!(kIsWeb) || !(Constant.isTV)) {
+                    //               Utils.deleteCacheDir();
+                    //             }
+                    //             if (!mounted) return;
+                    //             Utils.showSnackbar(
+                    //                 context, "success", "cacheclearmsg", true);
+                    //           },
+                    //         ),
+                    //       ),
+                    //       MyImage(
+                    //         width: 28,
+                    //         height: 28,
+                    //         imagePath: "ic_clear.png",
+                    //         color: colorPrimary,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // if (!Platform.isIOS)
+                    //   //  _buildLine(),
 
                       /* SignIn / SignOut */
                       _buildSettingButton(
@@ -849,57 +853,58 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                       ),
                     // _buildLine(),
 
-                    /* Rate App */
-                    _buildSettingButton(
-                      title: 'rateus',
-                      // subTitle: 'rateourapp',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () async {
-                        debugPrint("Clicked on rateApp");
-                        await Utils.redirectToStore();
-                      },
-                    ),
-                    // _buildLine(),
 
-                    /* Share App */
-                    _buildSettingButton(
-                      title: 'shareapp',
-                      // subTitle: 'sharewithfriends',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () async {
-                        await Utils.shareApp(Platform.isIOS
-                            ? Constant.iosAppShareUrlDesc
-                            : Constant.androidAppShareUrlDesc);
-                      },
-                    ),
-                    // _buildLine(),
+                    // /* Rate App */
+                    // _buildSettingButton(
+                    //   title: 'rateus',
+                    //   // subTitle: 'rateourapp',
+                    //   titleMultilang: true,
+                    //   subTitleMultilang: true,
+                    //   onClick: () async {
+                    //     debugPrint("Clicked on rateApp");
+                    //     await Utils.redirectToStore();
+                    //   },
+                    // ),
+                    // // _buildLine(),
 
-                    /* Delete Account */
-                    if (Constant.userID != null)
-                      _buildSettingButton(
-                        title: 'delete_account',
-                        // subTitle: 'delete_account_desc',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () async {
-                          if (Constant.userID != null) {
-                            deleteConfirmDialog();
-                          } else {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    if (Constant.userID != null) _buildLine(),
+                    // /* Share App */
+                    // _buildSettingButton(
+                    //   title: 'shareapp',
+                    //   // subTitle: 'sharewithfriends',
+                    //   titleMultilang: true,
+                    //   subTitleMultilang: true,
+                    //   onClick: () async {
+                    //     await Utils.shareApp(Platform.isIOS
+                    //         ? Constant.iosAppShareUrlDesc
+                    //         : Constant.androidAppShareUrlDesc);
+                    //   },
+                    // ),
+                    // // _buildLine(),
 
-                    /* Pages */
-                    _buildPages(),
+                    // /* Delete Account */
+                    // if (Constant.userID != null)
+                    //   _buildSettingButton(
+                    //     title: 'delete_account',
+                    //     // subTitle: 'delete_account_desc',
+                    //     titleMultilang: true,
+                    //     subTitleMultilang: true,
+                    //     onClick: () async {
+                    //       if (Constant.userID != null) {
+                    //         deleteConfirmDialog();
+                    //       } else {
+                    //         await Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const LoginSocial(),
+                    //           ),
+                    //         );
+                    //         setState(() {});
+                    //       }
+                    //     },
+                    //   ),
+                    // if (Constant.userID != null) _buildLine(),
+
+                    // /* Pages */
+                    // _buildPages(),
                     const SizedBox(
                       height: 10,
                     ),
@@ -1448,7 +1453,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1","0");
+                            sectionDataProvider.getSectionList("0", "1", "0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();
@@ -1565,7 +1570,7 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1","0");
+                            sectionDataProvider.getSectionList("0", "1", "0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();
@@ -2539,8 +2544,12 @@ findProvider = Provider.of<FindProvider>(context, listen: false);
                       width: MediaQuery.of(context).size.width,
                       child: GestureDetector(
                         onTap: () {
-                            sectionList[index].bannerBacklink.toString()=="" || sectionList[index].bannerBacklink ==null? "":
-                          launchUrl(Uri.parse(sectionList[index].bannerBacklink.toString()));
+                          sectionList[index].bannerBacklink.toString() == "" ||
+                                  sectionList[index].bannerBacklink == null
+                              ? ""
+                              : launchUrl(Uri.parse(sectionList[index]
+                                  .bannerBacklink
+                                  .toString()));
                         },
                         child: Image.network(
                             sectionList[index].bannerImage.toString(),

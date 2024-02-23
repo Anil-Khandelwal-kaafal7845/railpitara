@@ -148,7 +148,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
       autoPlay: true,
       autoInitialize: true,
       looping: false,
-      fullScreenByDefault: false,
+      fullScreenByDefault: true,
       allowFullScreen: true,
       hideControlsTimer: const Duration(seconds: 1),
       showControls: true,

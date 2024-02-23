@@ -131,32 +131,32 @@ class SettingState extends State<Setting> {
                 ),
                 _buildLine(16.0, 16.0),
 
-                /* Active TV */
-                _buildSettingButton(
-                  title: 'activetv',
-                  subTitle: 'activetv_desc',
-                  titleMultilang: true,
-                  subTitleMultilang: true,
-                  onClick: () {
-                    AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                        () async {
-                      if (Constant.userID != null) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const ActiveTV(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                      }
-                    });
-                  },
-                ),
-                _buildLine(16.0, 16.0),
+                // /* Active TV */
+                // _buildSettingButton(
+                //   title: 'activetv',
+                //   subTitle: 'activetv_desc',
+                //   titleMultilang: true,
+                //   subTitleMultilang: true,
+                //   onClick: () {
+                //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                //         () async {
+                //       if (Constant.userID != null) {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const ActiveTV(),
+                //           ),
+                //         );
+                //       } else {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const LoginSocial(),
+                //           ),
+                //         );
+                //       }
+                //     });
+                //   },
+                // ),
+                // _buildLine(16.0, 16.0),
 
                 /* Watchlist */
                 _buildSettingButton(
@@ -276,37 +276,37 @@ class SettingState extends State<Setting> {
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-                /* Transactions */
-                Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
-                  child: _buildSettingButton(
-                    title: 'transactions',
-                    subTitle: 'transactions_notes',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () {
-                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                          () async {
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const SubscriptionHistory(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                      });
-                    },
-                  ),
-                ),
-                Visibility(
-                    visible: forceUpdateData!.result!.showPackage == 1,
-                    child: _buildLine(16.0, 16.0)),
+                // /* Transactions */
+                // Visibility(
+                //   visible: forceUpdateData!.result!.showPackage == 1,
+                //   child: _buildSettingButton(
+                //     title: 'transactions',
+                //     subTitle: 'transactions_notes',
+                //     titleMultilang: true,
+                //     subTitleMultilang: true,
+                //     onClick: () {
+                //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                //           () async {
+                //         if (Constant.userID != null) {
+                //           Navigator.of(context).push(
+                //             MaterialPageRoute(
+                //               builder: (context) => const SubscriptionHistory(),
+                //             ),
+                //           );
+                //         } else {
+                //           Navigator.of(context).push(
+                //             MaterialPageRoute(
+                //               builder: (context) => const LoginSocial(),
+                //             ),
+                //           );
+                //         }
+                //       });
+                //     },
+                //   ),
+                // ),
+                // Visibility(
+                //     visible: forceUpdateData!.result!.showPackage == 1,
+                //     child: _buildLine(16.0, 16.0)),
 
                 /* MaltiLanguage */
                 _buildSettingButton(
@@ -320,62 +320,62 @@ class SettingState extends State<Setting> {
                 ),
                 _buildLine(16.0, 16.0),
 
-                /* Push Notification enable/disable */
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: _buildSettingButton(
-                        title: 'notification',
-                        subTitle: 'recivepushnotification',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () {
-                          toggleSwitch(!(isSwitched ?? false));
-                        },
-                      ),
-                    ),
-                    Switch(
-                      activeColor: primaryDark,
-                      activeTrackColor: primaryLight,
-                      inactiveTrackColor: gray,
-                      value: isSwitched ?? true,
-                      onChanged: toggleSwitch,
-                    ),
-                  ],
-                ),
-                _buildLine(16.0, 16.0),
+                // /* Push Notification enable/disable */
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Expanded(
+                //       child: _buildSettingButton(
+                //         title: 'notification',
+                //         subTitle: 'recivepushnotification',
+                //         titleMultilang: true,
+                //         subTitleMultilang: true,
+                //         onClick: () {
+                //           toggleSwitch(!(isSwitched ?? false));
+                //         },
+                //       ),
+                //     ),
+                //     Switch(
+                //       activeColor: primaryDark,
+                //       activeTrackColor: primaryLight,
+                //       inactiveTrackColor: gray,
+                //       value: isSwitched ?? true,
+                //       onChanged: toggleSwitch,
+                //     ),
+                //   ],
+                // ),
+                // _buildLine(16.0, 16.0),
 
-                /* Clear Cache */
-                if (!Platform.isIOS)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: _buildSettingButton(
-                          title: 'clearcatch',
-                          subTitle: 'clearlocallycatch',
-                          titleMultilang: true,
-                          subTitleMultilang: true,
-                          onClick: () async {
-                            if (!(kIsWeb) || !(Constant.isTV)) {
-                              Utils.deleteCacheDir();
-                            }
-                            if (!mounted) return;
-                            Utils.showSnackbar(
-                                context, "success", "cacheclearmsg", true);
-                          },
-                        ),
-                      ),
-                      MyImage(
-                        width: 28,
-                        height: 28,
-                        imagePath: "ic_clear.png",
-                        color: colorPrimary,
-                      ),
-                    ],
-                  ),
-                if (!Platform.isIOS) _buildLine(16.0, 16.0),
+                // /* Clear Cache */
+                // if (!Platform.isIOS)
+                //   Row(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       Expanded(
+                //         child: _buildSettingButton(
+                //           title: 'clearcatch',
+                //           subTitle: 'clearlocallycatch',
+                //           titleMultilang: true,
+                //           subTitleMultilang: true,
+                //           onClick: () async {
+                //             if (!(kIsWeb) || !(Constant.isTV)) {
+                //               Utils.deleteCacheDir();
+                //             }
+                //             if (!mounted) return;
+                //             Utils.showSnackbar(
+                //                 context, "success", "cacheclearmsg", true);
+                //           },
+                //         ),
+                //       ),
+                //       MyImage(
+                //         width: 28,
+                //         height: 28,
+                //         imagePath: "ic_clear.png",
+                //         color: colorPrimary,
+                //       ),
+                //     ],
+                //   ),
+                // if (!Platform.isIOS) _buildLine(16.0, 16.0),
 
                 /* SignIn / SignOut */
                 _buildSettingButton(
@@ -402,18 +402,18 @@ class SettingState extends State<Setting> {
                 ),
                 _buildLine(16.0, 16.0),
 
-                /* Rate App */
-                _buildSettingButton(
-                  title: 'rateus',
-                  subTitle: 'rateourapp',
-                  titleMultilang: true,
-                  subTitleMultilang: true,
-                  onClick: () async {
-                    debugPrint("Clicked on rateApp");
-                    await Utils.redirectToStore();
-                  },
-                ),
-                _buildLine(16.0, 16.0),
+                // /* Rate App */
+                // _buildSettingButton(
+                //   title: 'rateus',
+                //   subTitle: 'rateourapp',
+                //   titleMultilang: true,
+                //   subTitleMultilang: true,
+                //   onClick: () async {
+                //     debugPrint("Clicked on rateApp");
+                //     await Utils.redirectToStore();
+                //   },
+                // ),
+                // _buildLine(16.0, 16.0),
 
                 /* Share App */
                 _buildSettingButton(
@@ -429,27 +429,28 @@ class SettingState extends State<Setting> {
                 ),
                 _buildLine(16.0, 16.0),
 
-                /* Delete Account */
-                if (Constant.userID != null)
-                  _buildSettingButton(
-                    title: 'delete_account',
-                    subTitle: 'delete_account_desc',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () async {
-                      if (Constant.userID != null) {
-                        deleteConfirmDialog();
-                      } else {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                        setState(() {});
-                      }
-                    },
-                  ),
-                if (Constant.userID != null) _buildLine(16.0, 16.0),
+                // /* Delete Account */
+                // if (Constant.userID != null)
+                //   _buildSettingButton(
+                //     title: 'delete_account',
+                //     subTitle: 'delete_account_desc',
+                //     titleMultilang: true,
+                //     subTitleMultilang: true,
+                //     onClick: () async {
+                //       if (Constant.userID != null) {
+                //         deleteConfirmDialog();
+                //       } else {
+                //         await Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const LoginSocial(),
+                //           ),
+                //         );
+                //         setState(() {});
+                //       }
+                //     },
+                //   ),
+              
+              //  if (Constant.userID != null) _buildLine(16.0, 16.0),
 
                 /* Pages */
                 _buildPages(),
