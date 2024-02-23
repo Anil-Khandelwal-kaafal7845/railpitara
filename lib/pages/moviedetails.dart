@@ -413,10 +413,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       }
     }
     return WillPopScope(
-      onWillPop:()async{
-      Navigator.pop(context); 
-    return false;
-      } ,
+      onWillPop: () async {
+        Navigator.pop(context);
+        return false;
+      },
       child: Scaffold(
         key: widget.key,
         backgroundColor: appBgColor,
@@ -763,7 +763,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           constraints: const BoxConstraints(minHeight: 0),
                           margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               /* Rent Button */
                               _buildRentBtn(),
@@ -796,18 +797,41 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       );
                                     } else {
                                       /* Trailer */
-                                      return InkWell(
+                                      return videoDetailsProvider
+                                                      .sectionDetailModel
+                                                      .result
+                                                      ?.trailerUrl ==
+                                                  "" ||
+                                              videoDetailsProvider
+                                                      .sectionDetailModel
+                                                      .result
+                                                      ?.trailerUrl ==
+                                                  null
+                                          ? InkWell(
                                         borderRadius: BorderRadius.circular(5),
                                         focusColor: gray.withOpacity(0.5),
-                                        onTap: () {
-                                          openPlayer("Trailer");
+                                        onTap: () async {
+                                          openPlayer("startOver");
                                         },
                                         child: _buildFeatureBtn(
-                                          icon: 'ic_borderplay.png',
-                                          title: 'trailer',
+                                          icon: 'ic_restart.png',
+                                          title: 'startover',
                                           multilanguage: true,
                                         ),
-                                      );
+                                      )
+                                          : InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              focusColor: gray.withOpacity(0.5),
+                                              onTap: () {
+                                                openPlayer("Trailer");
+                                              },
+                                              child: _buildFeatureBtn(
+                                                icon: 'ic_borderplay.png',
+                                                title: 'trailer',
+                                                multilanguage: true,
+                                              ),
+                                            );
                                     }
                                   },
                                 ),

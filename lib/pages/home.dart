@@ -828,31 +828,30 @@ class HomeState extends State<Home> {
                     // if (!Platform.isIOS)
                     //   //  _buildLine(),
 
-                      /* SignIn / SignOut */
-                      _buildSettingButton(
-                        title: Constant.userID == null
-                            ? youAreNotSignIn
-                            : (userType == "3" && (userName ?? "").isEmpty)
-                                ? ("$signedInAs ${userMobileNo ?? ""}")
-                                : ("$signedInAs ${userName ?? ""}"),
-                        // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                        titleMultilang: false,
-                        subTitleMultilang: true,
-                        onClick: () async {
-                          if (Constant.userID != null) {
-                            logoutConfirmDialog();
-                          } else {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                            setState(() {});
-                          }
-                        },
-                      ),
+                    /* SignIn / SignOut */
+                    _buildSettingButton(
+                      title: Constant.userID == null
+                          ? youAreNotSignIn
+                          : (userType == "3" && (userName ?? "").isEmpty)
+                              ? ("$signedInAs ${userMobileNo ?? ""}")
+                              : ("$signedInAs ${userName ?? ""}"),
+                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                      titleMultilang: false,
+                      subTitleMultilang: true,
+                      onClick: () async {
+                        if (Constant.userID != null) {
+                          logoutConfirmDialog();
+                        } else {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                          setState(() {});
+                        }
+                      },
+                    ),
                     // _buildLine(),
-
 
                     // /* Rate App */
                     // _buildSettingButton(
@@ -1743,12 +1742,7 @@ class HomeState extends State<Home> {
                     children: [
                       Container(
                         constraints: const BoxConstraints(maxHeight: 35),
-                        // decoration: Utils.setBackground(
-                        //   homeProvider.selectedIndex == index
-                        //       ? white
-                        //       : transparentColor,
-                        //   20,
-                        // ),
+                        
                         alignment: Alignment.center,
                         padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                         child: MyText(
@@ -1773,20 +1767,7 @@ class HomeState extends State<Home> {
                           fontstyle: FontStyle.normal,
                         ),
                       ),
-                      // homeProvider.selectedIndex == index
-                      //     ? Positioned(
-                      //         bottom:
-                      //             -0, // Adjust the value to control the position from the right edge.
-                      //         child: Center(
-                      //           child: Container(
-                      //             margin: EdgeInsets.only(left: 10),
-                      //             height: 1,
-                      //             width: 50,
-                      //             color: colorPrimary,
-                      //           ),
-                      //         )
-                      //       )
-                      //     : SizedBox(),
+                    
                     ],
                   ));
             },
