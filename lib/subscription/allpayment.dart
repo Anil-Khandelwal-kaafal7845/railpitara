@@ -409,7 +409,7 @@ class AllPaymentState extends State<AllPayment>
                               children: <TextSpan>[
                                 TextSpan(
                                   text:
-                                      "${Constant.currencySymbol}${paymentProvider.finalAmount ?? ""}",
+                                      "${Constant.currencySymbol} ${paymentProvider.finalAmount ?? ""}",
                                   style: GoogleFonts.montserrat(
                                     textStyle: const TextStyle(
                                       color: black,
@@ -426,7 +426,6 @@ class AllPaymentState extends State<AllPayment>
                         },
                       ),
                     ),
-                
                   ],
                 ),
               ),

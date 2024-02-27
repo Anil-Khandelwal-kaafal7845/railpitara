@@ -6,7 +6,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
   // static const String baseurl = '';
-  static const String baseurl = 'https://aaryaconsole.ottpeople.in/public/api/';
+  static const String baseurl = 'https://admin.aaryaadigital.com/api/';
   static const String dynamicBaseUrl = 'https://play.aaryaadigital.com/';
 
   static String appName = "Aaryaa digital";

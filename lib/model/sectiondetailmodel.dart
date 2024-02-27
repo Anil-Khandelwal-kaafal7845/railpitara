@@ -180,6 +180,7 @@ class Result {
     this.description,
     this.videoDuration,
     this.videoSize,
+    this.isLive,
     this.view,
     this.imdbRating,
     this.download,
@@ -239,6 +240,7 @@ class Result {
   String? videoExtension;
   int? videoDuration;
   int? videoSize;
+  int?isLive;
   int? download;
   int? view;
   dynamic imdbRating;
@@ -300,6 +302,7 @@ class Result {
         description: json["description"],
         videoDuration: json["video_duration"],
         videoSize: json["video_size"],
+        isLive: json["is_live_url"],
         view: json["view"],
         imdbRating: json["imdb_rating"],
         download: json["download"],
@@ -360,6 +363,7 @@ class Result {
         "is_premium": isPremium,
         "video_duration": videoDuration,
         "video_size": videoSize,
+        "is_live_url":isLive ,
         "view": view,
         "imdb_rating": imdbRating,
         "status": status,

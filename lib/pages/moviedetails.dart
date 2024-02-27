@@ -797,41 +797,103 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       );
                                     } else {
                                       /* Trailer */
-                                      return videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.trailerUrl ==
-                                                  "" ||
-                                              videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.trailerUrl ==
-                                                  null
-                                          ? InkWell(
-                                        borderRadius: BorderRadius.circular(5),
-                                        focusColor: gray.withOpacity(0.5),
-                                        onTap: () async {
-                                          openPlayer("startOver");
-                                        },
-                                        child: _buildFeatureBtn(
-                                          icon: 'ic_restart.png',
-                                          title: 'startover',
-                                          multilanguage: true,
-                                        ),
-                                      )
-                                          : InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              focusColor: gray.withOpacity(0.5),
-                                              onTap: () {
-                                                openPlayer("Trailer");
-                                              },
-                                              child: _buildFeatureBtn(
-                                                icon: 'ic_borderplay.png',
-                                                title: 'trailer',
-                                                multilanguage: true,
-                                              ),
-                                            );
+
+                                      if (videoDetailsProvider
+                                              .sectionDetailModel
+                                              .result
+                                              ?.isLive ==
+                                          1) {
+                                        // If it's a live URL, don't show the trailer button
+                                        return InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          focusColor: gray.withOpacity(0.5),
+                                          onTap: () async {
+                                            openPlayer("startOver");
+                                          },
+                                          child: _buildFeatureBtn(
+                                            icon: 'ic_restart.png',
+                                            title: 'startover',
+                                            multilanguage: true,
+                                          ),
+                                        );
+                                      } else {
+                                        // If it's not a live URL, show the trailer button
+                                        return (videoDetailsProvider
+                                                        .sectionDetailModel
+                                                        .result
+                                                        ?.trailerUrl ==
+                                                    "" ||
+                                                videoDetailsProvider
+                                                        .sectionDetailModel
+                                                        .result
+                                                        ?.trailerUrl ==
+                                                    null)
+                                            ? InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                focusColor:
+                                                    gray.withOpacity(0.5),
+                                                onTap: () async {
+                                                  openPlayer("startOver");
+                                                },
+                                                child: _buildFeatureBtn(
+                                                  icon: 'ic_restart.png',
+                                                  title: 'startover',
+                                                  multilanguage: true,
+                                                ),
+                                              )
+                                            : InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                focusColor:
+                                                    gray.withOpacity(0.5),
+                                                onTap: () {
+                                                  openPlayer("Trailer");
+                                                },
+                                                child: _buildFeatureBtn(
+                                                  icon: 'ic_borderplay.png',
+                                                  title: 'trailer',
+                                                  multilanguage: true,
+                                                ),
+                                              );
+                                      }
+
+                                      // videoDetailsProvider
+                                      //                 .sectionDetailModel
+                                      //                 .result
+                                      //                 ?.trailerUrl ==
+                                      //             "" ||
+                                      //         videoDetailsProvider
+                                      //                 .sectionDetailModel
+                                      //                 .result
+                                      //                 ?.trailerUrl ==
+                                      //             null
+                                      //     ? InkWell(
+                                      //   borderRadius: BorderRadius.circular(5),
+                                      //   focusColor: gray.withOpacity(0.5),
+                                      //   onTap: () async {
+                                      //     openPlayer("startOver");
+                                      //   },
+                                      //   child: _buildFeatureBtn(
+                                      //     icon: 'ic_restart.png',
+                                      //     title: 'startover',
+                                      //     multilanguage: true,
+                                      //   ),
+                                      // )
+                                      //     : InkWell(
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(5),
+                                      //         focusColor: gray.withOpacity(0.5),
+                                      //         onTap: () {
+                                      //           openPlayer("Trailer");
+                                      //         },
+                                      //         child: _buildFeatureBtn(
+                                      //           icon: 'ic_borderplay.png',
+                                      //           title: 'trailer',
+                                      //           multilanguage: true,
+                                      //         ),
+                                      //       );
                                     }
                                   },
                                 ),
