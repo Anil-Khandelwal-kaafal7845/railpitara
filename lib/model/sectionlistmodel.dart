@@ -303,6 +303,7 @@ class Result {
   List<Datum>? data;
   dynamic bannerOrder;
    String? bannerBacklink;
+   int?bannerLinkType;
   dynamic bannerVisible;
   dynamic bannerImage;
   dynamic bannerId;
@@ -317,6 +318,7 @@ class Result {
     this.videoId,
     this.screenLayout,
     this.status,
+    this.bannerLinkType ,
     this.sectionOrder,
     this.createdAt,
     this.updatedAt,
@@ -343,6 +345,7 @@ class Result {
         sectionOrder: json["section_order"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        bannerLinkType: json["banner_link_type"],
         nameVisible: json["name_visible"],
         data:
             List<Datum>.from(json["data"]?.map((x) => Datum.fromJson(x)) ?? []),
@@ -363,6 +366,7 @@ class Result {
         "title": title,
         "video_id": videoId,
         "screen_layout": screenLayout,
+        "banner_link_type":bannerLinkType ,
         "status": status,
         "section_order": sectionOrder,
         "created_at": createdAt,

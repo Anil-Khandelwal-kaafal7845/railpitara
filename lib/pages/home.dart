@@ -10,6 +10,7 @@ import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
+import 'package:dtlive/players/player_video.dart';
 import 'package:dtlive/provider/findprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -1742,7 +1743,6 @@ class HomeState extends State<Home> {
                     children: [
                       Container(
                         constraints: const BoxConstraints(maxHeight: 35),
-                        
                         alignment: Alignment.center,
                         padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                         child: MyText(
@@ -1767,7 +1767,6 @@ class HomeState extends State<Home> {
                           fontstyle: FontStyle.normal,
                         ),
                       ),
-                    
                     ],
                   ));
             },
@@ -2524,13 +2523,47 @@ class HomeState extends State<Home> {
                       height: Dimens.upcomingHeight,
                       width: MediaQuery.of(context).size.width,
                       child: GestureDetector(
+                        // onTap: () {
+                        //   sectionList[index].bannerBacklink.toString() == "" ||
+                        //           sectionList[index].bannerBacklink == null
+                        //       ? ""
+                        //       : launchUrl(Uri.parse(sectionList[index]
+                        //           .bannerBacklink
+                        //           .toString()));
+                        // },
+
                         onTap: () {
-                          sectionList[index].bannerBacklink.toString() == "" ||
-                                  sectionList[index].bannerBacklink == null
-                              ? ""
-                              : launchUrl(Uri.parse(sectionList[index]
+                          if (sectionList[index].bannerLinkType == 0) {
+                            // Handle onTap for bannerLinkType = 0
+                            if (sectionList[index].bannerBacklink != null &&
+                                sectionList[index]
+                                    .bannerBacklink
+                                    .toString()
+                                    .isNotEmpty) {
+                              launchUrl(Uri.parse(sectionList[index]
                                   .bannerBacklink
                                   .toString()));
+                            }
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PlayerVideo(
+                                      '',
+                                      0,
+                                      0,
+                                      typeId,
+                                      0,
+                                      sectionList[index]
+                                          .bannerBacklink
+                                          .toString(),
+                                      0,
+                                      "",
+                                      "")),
+                            );
+                            // Handle onTap for other bannerLinkType values
+                            // Add your code here for the alternate behavior
+                          }
                         },
                         child: Image.network(
                             sectionList[index].bannerImage.toString(),
