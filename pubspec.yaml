@@ -131,6 +131,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   firebase_analytics: ^10.5.1
   keep_screen_on: ^3.0.0
+  floating: ^2.0.1
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'

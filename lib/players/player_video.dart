@@ -7,13 +7,14 @@ import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/mytext.dart';
+import 'package:floating/floating.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
-import 'package:no_screenshot/no_screenshot.dart';
+// import 'package:no_screenshot/no_screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
 import 'package:video_player/video_player.dart';
@@ -38,16 +39,24 @@ class PlayerVideo extends StatefulWidget {
   State<PlayerVideo> createState() => _PlayerVideoState();
 }
 
-class _PlayerVideoState extends State<PlayerVideo> {
-  final _noScreenshot = NoScreenshot.instance;
+class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
+  // final _noScreenshot = NoScreenshot.instance;
   late PlayerProvider playerProvider;
   int? playerCPosition, videoDuration;
   ChewieController? _chewieController;
   late VideoPlayerController _videoPlayerController;
   SubtitleController? subtitleController;
 
+  late Floating pip; // Initializing a variable to handle PiP functionalities
+  bool isPipAvailable = false; // Variable to track PiP availability status
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(
+        this); // Registering this class as an observer for app lifecycle changes
+    pip =
+        Floating(); // Instantiating the "Floating" instance to manage PiP functionality
+    _checkPiPAvailability();
     restrictScreenRecordingandScreenshot();
     // Keep the screen on.
     KeepScreenOn.turnOn();
@@ -58,6 +67,27 @@ class _PlayerVideoState extends State<PlayerVideo> {
       _playerInit();
     });
     super.initState();
+  }
+
+  // Method to verify the availability of PiP feature asynchronously
+  _checkPiPAvailability() async {
+    isPipAvailable = await pip
+        .isPipAvailable; // Checking if PiP mode is available on the device
+    setState(
+        () {}); // Triggering a UI update based on the PiP availability status
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // log(" CYCLEC${state.name}");
+    // log(" CYCLEC${state}");
+    // Listening to app lifecycle changes to detect when the app enters the hidden state (minimized)
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      // Triggering PiP mode with a landscape aspect ratio when the app is minimized
+      pip.enable(aspectRatio: const Rational.landscape());
+    }
   }
 
   _playerInit() async {
@@ -237,6 +267,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     allowScreenRecordingandScreenshot();
     KeepScreenOn.turnOff();
     if (_chewieController != null) {
@@ -304,33 +335,107 @@ class _PlayerVideoState extends State<PlayerVideo> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onBackPressed,
-      child: Scaffold(
-        backgroundColor: black,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Center(
-                child: _buildPage(),
-              ),
-              if (!kIsWeb)
-                Positioned(
-                  top: 15,
-                  left: 15,
-                  child: SafeArea(
-                    child: InkWell(
-                      onTap: onBackPressed,
-                      focusColor: gray.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(20),
-                      child: Utils.buildBackBtnDesign(context),
+        onWillPop: onBackPressed,
+        child:
+
+            //  Scaffold(
+            //   backgroundColor: black,
+            //   body: SafeArea(
+            //     child: Stack(
+            //       children: [
+            //         Center(
+            //           child: _buildPage(),
+            //         ),
+            //         if (!kIsWeb)
+            //           Positioned(
+            //             top: 15,
+            //             left: 15,
+            //             child: SafeArea(
+            //               child: InkWell(
+            //                 onTap: onBackPressed,
+            //                 focusColor: gray.withOpacity(0.5),
+            //                 borderRadius: BorderRadius.circular(20),
+            //                 child: Utils.buildBackBtnDesign(context),
+            //               ),
+            //             ),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            PiPSwitcher(
+                // Widget displayed when PiP is disabled or app is in foreground state
+                childWhenDisabled:
+
+                    // Scaffold(
+                    //   body: Column(
+                    //     children: [
+                    //       TestPip(videoUrl: videoUrl),
+                    //       Expanded(
+                    //         child: Center(
+                    //           child: ElevatedButton(
+                    //             onPressed: () {
+                    //               // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
+                    //               if (isPipAvailable) {
+                    //                 pip.enable(
+                    //                     aspectRatio: const Rational
+                    //                         .landscape()); // Enabling PiP with a landscape aspect ratio
+                    //               }
+                    //             },
+                    //             child: Text(
+                    //                 isPipAvailable ? 'Enable PIP' : 'PIP not available'),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    Scaffold(
+                  // floatingActionButton: FloatingActionButton(
+                  //   onPressed: () {
+                  //     // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
+                  //     if (isPipAvailable) {
+                  //       pip.enable(
+                  //           aspectRatio: const Rational
+                  //               .landscape()); // Enabling PiP with a landscape aspect ratio
+                  //     }
+                  //   },
+                  // ),
+                  backgroundColor: black,
+                  body: SafeArea(
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: _buildPage(),
+                        ),
+                        if (!kIsWeb)
+                          Positioned(
+                            top: 15,
+                            left: 15,
+                            child: SafeArea(
+                              child: InkWell(
+                                onTap: onBackPressed,
+                                focusColor: gray.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(20),
+                                child: Utils.buildBackBtnDesign(context),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
-            ],
-          ),
-        ),
-      ),
-    );
+                // Widget displayed when PiP window is enabled or app is in background state
+                childWhenEnabled: SafeArea(
+                  child: InkWell(
+                    onTap: onBackPressed,
+                    focusColor: gray.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Utils.buildBackBtnDesign(context),
+                  ),
+                )));
   }
 
   Widget _buildPage() {

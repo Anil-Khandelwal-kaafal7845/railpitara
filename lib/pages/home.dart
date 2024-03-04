@@ -7,10 +7,10 @@ import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
+import 'package:dtlive/players/player_video.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
-import 'package:dtlive/players/player_video.dart';
 import 'package:dtlive/provider/findprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -50,10 +50,8 @@ import '../model/force_update_model.dart';
 import '../webservice/apiservices.dart';
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
-import '../subscription/subscriptionhistory.dart';
 import '../utils/strings.dart';
 import 'aboutprivacyterms.dart';
-import 'activetv.dart';
 import 'mydownloads.dart';
 import 'mywatchlist.dart';
 
@@ -317,9 +315,9 @@ class HomeState extends State<Home> {
       selectedLanguages = List.filled(languages.length, false);
 
       // Print data for verification
-      print("Number of languages: ${languages.length}");
-      print("Language name at index 1: ${languages[1]}");
-      print(
+      debugPrint("Number of languages: ${languages.length}");
+      debugPrint("Language name at index 1: ${languages[1]}");
+      debugPrint(
           "Language id at index 1: ${findProvider.langaugeModel.result![1].id}");
     });
   }
@@ -409,6 +407,16 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Navigator.of(context)
+      //     //     .push(MaterialPageRoute(builder: (context) => PIPExampleApp()));
+      //     Navigator.of(context).push(MaterialPageRoute(
+      //         builder: (context) => TestPlayerWeb(
+      //             loadURL:
+      //                 "https://iframe.mediadelivery.net/embed/135513/fe5da825-ffd0-4ba4-85b5-893c4001d059?autoplay=true&loop=false&muted=false&preload=true&responsive=true")));
+      //   },
+      // ),
       key: _scaffoldKey,
       backgroundColor: appBgColor,
       appBar: AppBar(
