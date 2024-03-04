@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
-import 'package:no_screenshot/no_screenshot.dart';
+// import 'package:no_screenshot/no_screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
 import 'package:video_player/video_player.dart';
@@ -39,8 +39,8 @@ class PlayerVideo extends StatefulWidget {
   State<PlayerVideo> createState() => _PlayerVideoState();
 }
 
-class _PlayerVideoState extends State<PlayerVideo> {
-  final _noScreenshot = NoScreenshot.instance;
+class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
+  // final _noScreenshot = NoScreenshot.instance;
   late PlayerProvider playerProvider;
   int? playerCPosition, videoDuration;
   ChewieController? _chewieController;
@@ -52,6 +52,11 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(
+        this); // Registering this class as an observer for app lifecycle changes
+    pip =
+        Floating(); // Instantiating the "Floating" instance to manage PiP functionality
+    _checkPiPAvailability();
     restrictScreenRecordingandScreenshot();
     // Keep the screen on.
     KeepScreenOn.turnOn();
@@ -70,6 +75,19 @@ class _PlayerVideoState extends State<PlayerVideo> {
         .isPipAvailable; // Checking if PiP mode is available on the device
     setState(
         () {}); // Triggering a UI update based on the PiP availability status
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // log(" CYCLEC${state.name}");
+    // log(" CYCLEC${state}");
+    // Listening to app lifecycle changes to detect when the app enters the hidden state (minimized)
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      // Triggering PiP mode with a landscape aspect ratio when the app is minimized
+      pip.enable(aspectRatio: const Rational.landscape());
+    }
   }
 
   _playerInit() async {
@@ -249,6 +267,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     allowScreenRecordingandScreenshot();
     KeepScreenOn.turnOff();
     if (_chewieController != null) {
@@ -374,16 +393,16 @@ class _PlayerVideoState extends State<PlayerVideo> {
                     // ),
 
                     Scaffold(
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
-                      if (isPipAvailable) {
-                        pip.enable(
-                            aspectRatio: const Rational
-                                .landscape()); // Enabling PiP with a landscape aspect ratio
-                      }
-                    },
-                  ),
+                  // floatingActionButton: FloatingActionButton(
+                  //   onPressed: () {
+                  //     // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
+                  //     if (isPipAvailable) {
+                  //       pip.enable(
+                  //           aspectRatio: const Rational
+                  //               .landscape()); // Enabling PiP with a landscape aspect ratio
+                  //     }
+                  //   },
+                  // ),
                   backgroundColor: black,
                   body: SafeArea(
                     child: Stack(

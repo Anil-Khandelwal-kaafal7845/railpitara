@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dtlive/pages/aboutprivacyterms.dart';
-import 'package:dtlive/pages/activetv.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/mydownloads.dart';
@@ -13,7 +12,6 @@ import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/profileprovider.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
-import 'package:dtlive/subscription/subscriptionhistory.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
@@ -21,7 +19,6 @@ import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
-import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -449,8 +446,8 @@ class SettingState extends State<Setting> {
                 //       }
                 //     },
                 //   ),
-              
-              //  if (Constant.userID != null) _buildLine(16.0, 16.0),
+
+                //  if (Constant.userID != null) _buildLine(16.0, 16.0),
 
                 /* Pages */
                 _buildPages(),
@@ -936,7 +933,7 @@ class SettingState extends State<Setting> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1","0");
+                            sectionDataProvider.getSectionList("0", "1", "0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();
@@ -1053,7 +1050,7 @@ class SettingState extends State<Setting> {
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
-                            sectionDataProvider.getSectionList("0", "1","0");
+                            sectionDataProvider.getSectionList("0", "1", "0");
                             if (!mounted) return;
                             Utils.loadAds(context);
                             getUserData();

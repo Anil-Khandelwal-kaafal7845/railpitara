@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:dtlive/main.dart';
-import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/provider/videodownloadprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';

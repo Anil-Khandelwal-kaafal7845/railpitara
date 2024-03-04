@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/sharedpre.dart';
@@ -65,8 +65,8 @@ class _TestPlayerWebState extends State<TestPlayerWeb>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    log(" CYCLEC${state.name}");
-    log(" CYCLEC${state}");
+    // log(" CYCLEC${state.name}");
+    // log(" CYCLEC${state}");
     // Listening to app lifecycle changes to detect when the app enters the hidden state (minimized)
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive ||
