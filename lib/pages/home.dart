@@ -1975,97 +1975,95 @@ class HomeState extends State<Home> {
                             fit: BoxFit.fill,
                           ),
                         ),
-                      Visibility(
-                  visible: sectionBannerList?[index].isRent == 1 &&
-                      sectionBannerList?[index].isPremium == 0,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
+                        Visibility(
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 0,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/rupee.png',
+                                      height: 13,
+                                      width: 13,
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
+                        Visibility(
+                          visible: sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 13,
+                                      width: 13,
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/rupee.png',
-                              height: 13,
-                              width: 13,
-                            ),
-                          ],
-                        )),
-                  ),
-                ),
-                Visibility(
-                  visible: sectionBannerList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
+                        Visibility(
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 13,
+                                      width: 13,
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
-                            ),
-                          ],
-                        )),
-                  ),
-                ),
-                Visibility(
-                  visible: sectionBannerList?[index].isRent == 1 &&
-                      sectionBannerList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
-                            ),
-                          ],
-                        )),
-                  ),
-                ),
-             
-                     
                       ],
                     ),
                   ),
@@ -2746,18 +2744,59 @@ class HomeState extends State<Home> {
           return InkWell(
             focusColor: white,
             borderRadius: BorderRadius.circular(6),
+
             onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
             },
+
+            // onTap: () {
+            //   debugPrint("Clicked on index ==> $index");
+            //   openDetailPage(
+            //     (sectionDataList?[index].videoType ?? 0) == 2
+            //         ? "showdetail"
+            //         : "videodetail",
+            //     sectionDataList?[index].id ?? 0,
+            //     upcomingType ?? 0,
+            //     sectionDataList?[index].videoType ?? 0,
+            //     sectionDataList?[index].typeId ?? 0,
+            //   );
+            // },
+
             child: Stack(
               alignment: Alignment.topRight,
               children: [
@@ -2867,7 +2906,6 @@ class HomeState extends State<Home> {
                         )),
                   ),
                 ),
-             
               ],
             ),
           );
@@ -2892,17 +2930,43 @@ class HomeState extends State<Home> {
           return InkWell(
             focusColor: white,
             borderRadius: BorderRadius.circular(6),
-            onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
+             onTap: () {
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
             },
             child: Stack(
               alignment: Alignment.topRight,
@@ -3037,17 +3101,43 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3180,17 +3270,43 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3323,17 +3439,43 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3736,17 +3878,43 @@ class HomeState extends State<Home> {
                   focusColor: white,
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
-                    debugPrint("Clicked on index ==> $index");
-                    openDetailPage(
-                      (sectionDataList?[index].videoType ?? 0) == 2
-                          ? "showdetail"
-                          : "videodetail",
-                      sectionDataList?[index].id ?? 0,
-                      upcomingType ?? 0,
-                      sectionDataList?[index].videoType ?? 0,
-                      sectionDataList?[index].typeId ?? 0,
-                    );
-                  },
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 18),
                     child: Container(
