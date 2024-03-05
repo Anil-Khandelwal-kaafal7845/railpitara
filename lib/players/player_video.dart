@@ -410,31 +410,28 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
                         Center(
                           child: _buildPage(),
                         ),
-                        if (!kIsWeb)
-                          Positioned(
-                            top: 15,
-                            left: 15,
-                            child: SafeArea(
-                              child: InkWell(
-                                onTap: onBackPressed,
-                                focusColor: gray.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20),
-                                child: Utils.buildBackBtnDesign(context),
-                              ),
-                            ),
-                          ),
+                        // if (!kIsWeb)
+                        //   Positioned(
+                        //     top: 15,
+                        //     left: 15,
+                        //     child: SafeArea(
+                        //       child: Utils.buildBackBtnDesign(context),
+                        //     ),
+                        //   ),
                       ],
                     ),
                   ),
                 ),
                 // Widget displayed when PiP window is enabled or app is in background state
                 childWhenEnabled: SafeArea(
-                  child: InkWell(
-                    onTap: onBackPressed,
-                    focusColor: gray.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(20),
-                    child: Utils.buildBackBtnDesign(context),
-                  ),
+                  child: Expanded(child: _buildPage()),
+
+                  // InkWell(
+                  //   onTap: onBackPressed,
+                  //   focusColor: gray.withOpacity(0.5),
+                  //   borderRadius: BorderRadius.circular(20),
+                  //   child: Utils.buildBackBtnDesign(context),
+                  // ),
                 )));
   }
 
