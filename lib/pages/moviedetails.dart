@@ -1026,6 +1026,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           const SizedBox(height: 18),
                           Row(
                             children: [
+                              MyText(
+                                color: otherColor,
+                                text:
+                                    "${videoDetailsProvider.sectionDetailModel.result?.ageRestriction ?? ""}",
+                                textalign: TextAlign.start,
+                                fontsizeNormal: 14,
+                                fontsizeWeb: 16,
+                                fontweight: FontWeight.w600,
+                                multilanguage: false,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                              const SizedBox(width: 8),
                               MyImage(
                                 width: 50,
                                 height: 23,

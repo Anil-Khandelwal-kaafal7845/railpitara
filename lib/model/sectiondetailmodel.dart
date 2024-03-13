@@ -234,7 +234,7 @@ class Result {
   String? trailerType;
   String? trailerUrl;
   String? releaseYear;
-  String? ageRestriction;
+  dynamic? ageRestriction;
   String? maxVideoQuality;
   String? releaseTag;
   String? videoExtension;

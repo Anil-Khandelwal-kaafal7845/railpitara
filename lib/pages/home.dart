@@ -1950,16 +1950,43 @@ class HomeState extends State<Home> {
                   focusColor: white,
                   borderRadius: BorderRadius.circular(0),
                   onTap: () {
-                    debugPrint("Clicked on index ==> $index");
-                    openDetailPage(
-                      (sectionBannerList?[index].videoType ?? 0) == 2
-                          ? "showdetail"
-                          : "videodetail",
-                      sectionBannerList?[index].id ?? 0,
-                      sectionBannerList?[index].upcomingType ?? 0,
-                      sectionBannerList?[index].videoType ?? 0,
-                      sectionBannerList?[index].typeId ?? 0,
-                    );
+                    debugPrint("Clicked userid ==> ${Constant.userID}");
+                    debugPrint(
+                        "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
+                    if (sectionBannerList?[index].isLiveUrl == 1) {
+                      if (Constant.userID == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginSocial()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayerVideo(
+                                  '',
+                                  0,
+                                  0,
+                                  typeId,
+                                  0,
+                                  sectionBannerList?[index].videoUrl,
+                                  0,
+                                  "",
+                                  "")),
+                        );
+                      }
+                    } else {
+                      openDetailPage(
+                        (sectionBannerList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionBannerList?[index].id ?? 0,
+                        sectionBannerList?[index].upcomingType ?? 0,
+                        sectionBannerList?[index].videoType ?? 0,
+                        sectionBannerList?[index].typeId ?? 0,
+                      );
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -2417,52 +2444,6 @@ class HomeState extends State<Home> {
     }
   }
 
-  // Widget setSectionByType(List<list.Result>? sectionList) {
-  //   return ListView.builder(
-  //     itemCount: sectionList?.length ?? 0,
-  //     shrinkWrap: true,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     itemBuilder: (BuildContext context, int index) {
-  //       if (sectionList?[index].data != null &&
-  //           (sectionList?[index].data?.length ?? 0) > 0) {
-  //         return Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Padding(
-  //               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-  //               child: MyText(
-  //                 color: white,
-  //                 text: sectionList?[index].title.toString() ?? "",
-  //                 textalign: TextAlign.center,
-  //                 fontsizeNormal: 14,
-  //                 fontweight: FontWeight.w600,
-  //                 fontsizeWeb: 16,
-  //                 multilanguage: false,
-  //                 maxline: 1,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 fontstyle: FontStyle.normal,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 15),
-  //             SizedBox(
-  //               width: MediaQuery.of(context).size.width,
-  //               height: getRemainingDataHeight(
-  //                 sectionList?[index].videoType.toString() ?? "",
-  //                 sectionList?[index].screenLayout ?? "",
-  //               ),
-  //               child: setSectionData(sectionList: sectionList, index: index),
-  //             ),
-
-  //           ],
-  //         );
-  //       } else {
-  //         return const SizedBox.shrink();
-  //       }
-  //     },
-  //   );
-  // }
-
   Widget setSectionByType(List<list.Result>? sectionList) {
     // Check if sectionList is not null
     if (sectionList == null || sectionList.isEmpty) {
@@ -2555,15 +2536,6 @@ class HomeState extends State<Home> {
                       height: Dimens.upcomingHeight,
                       width: MediaQuery.of(context).size.width,
                       child: GestureDetector(
-                        // onTap: () {
-                        //   sectionList[index].bannerBacklink.toString() == "" ||
-                        //           sectionList[index].bannerBacklink == null
-                        //       ? ""
-                        //       : launchUrl(Uri.parse(sectionList[index]
-                        //           .bannerBacklink
-                        //           .toString()));
-                        // },
-
                         onTap: () {
                           if (sectionList[index].bannerLinkType == 0) {
                             // Handle onTap for bannerLinkType = 0
@@ -2577,24 +2549,32 @@ class HomeState extends State<Home> {
                                   .toString()));
                             }
                           } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PlayerVideo(
-                                      '',
-                                      0,
-                                      0,
-                                      typeId,
-                                      0,
-                                      sectionList[index]
-                                          .bannerBacklink
-                                          .toString(),
-                                      0,
-                                      "",
-                                      "")),
-                            );
-                            // Handle onTap for other bannerLinkType values
-                            // Add your code here for the alternate behavior
+                            // Handle onTap for bannerLinkType = 1
+                            if (Constant.userID == null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginSocial()),
+                              );
+                              // Utils.buildWebAlertDialog(context, "login", "");
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PlayerVideo(
+                                        '',
+                                        0,
+                                        0,
+                                        typeId,
+                                        0,
+                                        sectionList[index]
+                                            .bannerBacklink
+                                            .toString(),
+                                        0,
+                                        "",
+                                        "")),
+                              );
+                            }
                           }
                         },
                         child: Image.network(
@@ -2749,52 +2729,70 @@ class HomeState extends State<Home> {
               debugPrint("Clicked userid ==> ${Constant.userID}");
               debugPrint(
                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
-
-                // Utils.buildWebAlertDialog(context, "login", "");
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                            sectionDataList?[index].video320, 0, "", "")),
+                  );
+                }
               } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
-                      );
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                );
               }
             },
 
             // onTap: () {
-            //   debugPrint("Clicked on index ==> $index");
-            //   openDetailPage(
-            //     (sectionDataList?[index].videoType ?? 0) == 2
-            //         ? "showdetail"
-            //         : "videodetail",
-            //     sectionDataList?[index].id ?? 0,
-            //     upcomingType ?? 0,
-            //     sectionDataList?[index].videoType ?? 0,
-            //     sectionDataList?[index].typeId ?? 0,
-            //   );
+            //   debugPrint("Clicked userid ==> ${Constant.userID}");
+            //   debugPrint(
+            //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+            //   if (Constant.userID == null) {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => LoginSocial()),
+            //     );
+
+            //     // Utils.buildWebAlertDialog(context, "login", "");
+            //   } else {
+            //     sectionDataList?[index].isLiveUrl == 1
+            //         ? Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //                 builder: (context) => PlayerVideo(
+            //                     '',
+            //                     0,
+            //                     0,
+            //                     typeId,
+            //                     0,
+            //                     sectionDataList?[index].video320,
+            //                     0,
+            //                     "",
+            //                     "")),
+            //           )
+            //         : openDetailPage(
+            //             (sectionDataList?[index].videoType ?? 0) == 2
+            //                 ? "showdetail"
+            //                 : "videodetail",
+            //             sectionDataList?[index].id ?? 0,
+            //             upcomingType ?? 0,
+            //             sectionDataList?[index].videoType ?? 0,
+            //             sectionDataList?[index].typeId ?? 0,
+            //           );
+            //   }
             // },
 
             child: Stack(
@@ -2930,44 +2928,74 @@ class HomeState extends State<Home> {
           return InkWell(
             focusColor: white,
             borderRadius: BorderRadius.circular(6),
-             onTap: () {
+            onTap: () {
               debugPrint("Clicked userid ==> ${Constant.userID}");
               debugPrint(
                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
-
-                // Utils.buildWebAlertDialog(context, "login", "");
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                            sectionDataList?[index].video320, 0, "", "")),
+                  );
+                }
               } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
-                      );
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                );
               }
             },
+            // onTap: () {
+            //   debugPrint("Clicked userid ==> ${Constant.userID}");
+            //   debugPrint(
+            //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+            //   if (Constant.userID == null) {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => LoginSocial()),
+            //     );
+
+            //     // Utils.buildWebAlertDialog(context, "login", "");
+            //   } else {
+            //     sectionDataList?[index].isLiveUrl == 1
+            //         ? Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //                 builder: (context) => PlayerVideo(
+            //                     '',
+            //                     0,
+            //                     0,
+            //                     typeId,
+            //                     0,
+            //                     sectionDataList?[index].video320,
+            //                     0,
+            //                     "",
+            //                     "")),
+            //           )
+            //         : openDetailPage(
+            //             (sectionDataList?[index].videoType ?? 0) == 2
+            //                 ? "showdetail"
+            //                 : "videodetail",
+            //             sectionDataList?[index].id ?? 0,
+            //             upcomingType ?? 0,
+            //             sectionDataList?[index].videoType ?? 0,
+            //             sectionDataList?[index].typeId ?? 0,
+            //           );
+            //   }
+            // },
             child: Stack(
               alignment: Alignment.topRight,
               children: [
@@ -3100,44 +3128,74 @@ class HomeState extends State<Home> {
           return InkWell(
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
-              onTap: () {
-              debugPrint("Clicked userid ==> ${Constant.userID}");
-              debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
+              // onTap: () {
+              //   debugPrint("Clicked userid ==> ${Constant.userID}");
+              //   debugPrint(
+              //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              //   if (Constant.userID == null) {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //     );
 
-                // Utils.buildWebAlertDialog(context, "login", "");
-              } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
-                      );
-              }
-            },
+              //     // Utils.buildWebAlertDialog(context, "login", "");
+              //   } else {
+              //     sectionDataList?[index].isLiveUrl == 1
+              //         ? Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => PlayerVideo(
+              //                     '',
+              //                     0,
+              //                     0,
+              //                     typeId,
+              //                     0,
+              //                     sectionDataList?[index].video320,
+              //                     0,
+              //                     "",
+              //                     "")),
+              //           )
+              //         : openDetailPage(
+              //             (sectionDataList?[index].videoType ?? 0) == 2
+              //                 ? "showdetail"
+              //                 : "videodetail",
+              //             sectionDataList?[index].id ?? 0,
+              //             upcomingType ?? 0,
+              //             sectionDataList?[index].videoType ?? 0,
+              //             sectionDataList?[index].typeId ?? 0,
+              //           );
+              //   }
+              // },
+              onTap: () {
+                debugPrint("Clicked userid ==> ${Constant.userID}");
+                debugPrint(
+                    "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                if (sectionDataList?[index].isLiveUrl == 1) {
+                  if (Constant.userID == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                              sectionDataList?[index].video320, 0, "", "")),
+                    );
+                  }
+                } else {
+                  openDetailPage(
+                    (sectionDataList?[index].videoType ?? 0) == 2
+                        ? "showdetail"
+                        : "videodetail",
+                    sectionDataList?[index].id ?? 0,
+                    upcomingType ?? 0,
+                    sectionDataList?[index].videoType ?? 0,
+                    sectionDataList?[index].typeId ?? 0,
+                  );
+                }
+              },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3270,43 +3328,73 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-              debugPrint("Clicked userid ==> ${Constant.userID}");
-              debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
+                debugPrint("Clicked userid ==> ${Constant.userID}");
+                debugPrint(
+                    "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                if (sectionDataList?[index].isLiveUrl == 1) {
+                  if (Constant.userID == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                              sectionDataList?[index].video320, 0, "", "")),
+                    );
+                  }
+                } else {
+                  openDetailPage(
+                    (sectionDataList?[index].videoType ?? 0) == 2
+                        ? "showdetail"
+                        : "videodetail",
+                    sectionDataList?[index].id ?? 0,
+                    upcomingType ?? 0,
+                    sectionDataList?[index].videoType ?? 0,
+                    sectionDataList?[index].typeId ?? 0,
+                  );
+                }
+              },
+              // onTap: () {
+              //   debugPrint("Clicked userid ==> ${Constant.userID}");
+              //   debugPrint(
+              //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              //   if (Constant.userID == null) {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //     );
 
-                // Utils.buildWebAlertDialog(context, "login", "");
-              } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
-                      );
-              }
-            },
+              //     // Utils.buildWebAlertDialog(context, "login", "");
+              //   } else {
+              //     sectionDataList?[index].isLiveUrl == 1
+              //         ? Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => PlayerVideo(
+              //                     '',
+              //                     0,
+              //                     0,
+              //                     typeId,
+              //                     0,
+              //                     sectionDataList?[index].video320,
+              //                     0,
+              //                     "",
+              //                     "")),
+              //           )
+              //         : openDetailPage(
+              //             (sectionDataList?[index].videoType ?? 0) == 2
+              //                 ? "showdetail"
+              //                 : "videodetail",
+              //             sectionDataList?[index].id ?? 0,
+              //             upcomingType ?? 0,
+              //             sectionDataList?[index].videoType ?? 0,
+              //             sectionDataList?[index].typeId ?? 0,
+              //           );
+              //   }
+              // },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3439,43 +3527,73 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-              debugPrint("Clicked userid ==> ${Constant.userID}");
-              debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
+                debugPrint("Clicked userid ==> ${Constant.userID}");
+                debugPrint(
+                    "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                if (sectionDataList?[index].isLiveUrl == 1) {
+                  if (Constant.userID == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                              sectionDataList?[index].video320, 0, "", "")),
+                    );
+                  }
+                } else {
+                  openDetailPage(
+                    (sectionDataList?[index].videoType ?? 0) == 2
+                        ? "showdetail"
+                        : "videodetail",
+                    sectionDataList?[index].id ?? 0,
+                    upcomingType ?? 0,
+                    sectionDataList?[index].videoType ?? 0,
+                    sectionDataList?[index].typeId ?? 0,
+                  );
+                }
+              },
+              // onTap: () {
+              //   debugPrint("Clicked userid ==> ${Constant.userID}");
+              //   debugPrint(
+              //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              //   if (Constant.userID == null) {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //     );
 
-                // Utils.buildWebAlertDialog(context, "login", "");
-              } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
-                      );
-              }
-            },
+              //     // Utils.buildWebAlertDialog(context, "login", "");
+              //   } else {
+              //     sectionDataList?[index].isLiveUrl == 1
+              //         ? Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => PlayerVideo(
+              //                     '',
+              //                     0,
+              //                     0,
+              //                     typeId,
+              //                     0,
+              //                     sectionDataList?[index].video320,
+              //                     0,
+              //                     "",
+              //                     "")),
+              //           )
+              //         : openDetailPage(
+              //             (sectionDataList?[index].videoType ?? 0) == 2
+              //                 ? "showdetail"
+              //                 : "videodetail",
+              //             sectionDataList?[index].id ?? 0,
+              //             upcomingType ?? 0,
+              //             sectionDataList?[index].videoType ?? 0,
+              //             sectionDataList?[index].typeId ?? 0,
+              //           );
+              //   }
+              // },
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
@@ -3496,7 +3614,6 @@ class HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                 
                   Visibility(
                     visible: sectionDataList?[index].isRent == 1 &&
                         sectionDataList?[index].isPremium == 0,
@@ -3586,7 +3703,6 @@ class HomeState extends State<Home> {
                           )),
                     ),
                   ),
-                
                 ],
               ));
         },
@@ -3880,33 +3996,34 @@ class HomeState extends State<Home> {
                   focusColor: white,
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
-              debugPrint("Clicked userid ==> ${Constant.userID}");
-              debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              if (Constant.userID == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginSocial()),
-                );
-
-                // Utils.buildWebAlertDialog(context, "login", "");
-              } else {
-                sectionDataList?[index].isLiveUrl == 1
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo(
-                                '',
-                                0,
-                                0,
-                                typeId,
-                                0,
-                                sectionDataList?[index].video320,
-                                0,
-                                "",
-                                "")),
-                      )
-                    : openDetailPage(
+                    debugPrint("Clicked userid ==> ${Constant.userID}");
+                    debugPrint(
+                        "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                    if (sectionDataList?[index].isLiveUrl == 1) {
+                      if (Constant.userID == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginSocial()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayerVideo(
+                                  '',
+                                  0,
+                                  0,
+                                  typeId,
+                                  0,
+                                  sectionDataList?[index].video320,
+                                  0,
+                                  "",
+                                  "")),
+                        );
+                      }
+                    } else {
+                      openDetailPage(
                         (sectionDataList?[index].videoType ?? 0) == 2
                             ? "showdetail"
                             : "videodetail",
@@ -3915,8 +4032,8 @@ class HomeState extends State<Home> {
                         sectionDataList?[index].videoType ?? 0,
                         sectionDataList?[index].typeId ?? 0,
                       );
-              }
-            },
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 18),
                     child: Container(
@@ -3924,7 +4041,8 @@ class HomeState extends State<Home> {
                       height: Dimens.heightTopTen,
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                      child: Stack(  alignment: Alignment.topRight,
+                      child: Stack(
+                        alignment: Alignment.topRight,
                         children: [
                           Container(
                             width: 100,
@@ -3942,97 +4060,95 @@ class HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                         Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 0,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
+                          Visibility(
+                            visible: sectionDataList?[index].isRent == 1 &&
+                                sectionDataList?[index].isPremium == 0,
+                            child: FittedBox(
+                              child: Container(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 15,
+                                    minWidth: 30,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(3),
+                                        topRight: Radius.circular(4),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/rupee.png',
+                                        height: 13,
+                                        width: 13,
+                                      ),
+                                    ],
+                                  )),
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
+                          Visibility(
+                            visible: sectionDataList?[index].isPremium == 1,
+                            child: FittedBox(
+                              child: Container(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 15,
+                                    minWidth: 30,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(3),
+                                        topRight: Radius.circular(4),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/crown.png',
+                                        height: 15,
+                                        width: 15,
+                                      ),
+                                    ],
+                                  )),
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/rupee.png',
-                                height: 13,
-                                width: 13,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
+                          Visibility(
+                            visible: sectionDataList?[index].isRent == 1 &&
+                                sectionDataList?[index].isPremium == 1,
+                            child: FittedBox(
+                              child: Container(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 15,
+                                    minWidth: 30,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    color: colorPrimary,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(3),
+                                        topRight: Radius.circular(4),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/crown.png',
+                                        height: 15,
+                                        width: 15,
+                                      ),
+                                    ],
+                                  )),
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                
-                        
                         ],
                       ),
                     ),
