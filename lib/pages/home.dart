@@ -1965,7 +1965,8 @@ class HomeState extends State<Home> {
                     padding: const EdgeInsets.only(
                         top: 2, bottom: 2, left: 10, right: 10),
                     child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
+                      alignment: Alignment.topRight,
+                      // alignment: AlignmentDirectional.bottomCenter,
                       children: [
                         SizedBox(
                           height: Dimens.homeBanner,
@@ -1975,71 +1976,94 @@ class HomeState extends State<Home> {
                           ),
                         ),
                         Visibility(
-                            visible: sectionBannerList?[index].isPremium == 1 &&
-                                sectionBannerList?[index].isRent == 0,
-                            child: Positioned(
-                              top: 7,
-                              right: 7,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: colorPrimary,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  height: 25,
-                                  width: 80,
-                                  child: const Center(
-                                    child: Text(
-                                      "Premium",
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 0,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/rupee.png',
+                                      height: 13,
+                                      width: 13,
                                     ),
-                                  )),
-                            )),
+                                  ],
+                                )),
+                          ),
+                        ),
                         Visibility(
-                            visible: sectionBannerList?[index].isPremium == 0 &&
-                                sectionBannerList?[index].isRent == 1,
-                            child: Positioned(
-                              top: 7,
-                              right: 7,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: colorPrimary,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  height: 20,
-                                  width: 70,
-                                  child: const Center(
-                                    child: Text(
-                                      "Rent",
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
+                          visible: sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 13,
+                                      width: 13,
                                     ),
-                                  )),
-                            )),
+                                  ],
+                                )),
+                          ),
+                        ),
                         Visibility(
-                            visible: sectionBannerList?[index].isPremium == 1 &&
-                                sectionBannerList?[index].isRent == 1,
-                            child: Positioned(
-                              top: 7,
-                              right: 7,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: colorPrimary,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  height: 20,
-                                  width: 80,
-                                  child: const Center(
-                                    child: Text(
-                                      "Rent / Premium ",
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 13,
+                                      width: 13,
                                     ),
-                                  )),
-                            ))
+                                  ],
+                                )),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -2720,19 +2744,61 @@ class HomeState extends State<Home> {
           return InkWell(
             focusColor: white,
             borderRadius: BorderRadius.circular(6),
+
             onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
             },
+
+            // onTap: () {
+            //   debugPrint("Clicked on index ==> $index");
+            //   openDetailPage(
+            //     (sectionDataList?[index].videoType ?? 0) == 2
+            //         ? "showdetail"
+            //         : "videodetail",
+            //     sectionDataList?[index].id ?? 0,
+            //     upcomingType ?? 0,
+            //     sectionDataList?[index].videoType ?? 0,
+            //     sectionDataList?[index].typeId ?? 0,
+            //   );
+            // },
+
             child: Stack(
+              alignment: Alignment.topRight,
               children: [
                 Container(
                   width: Dimens.widthLand,
@@ -2752,75 +2818,92 @@ class HomeState extends State<Home> {
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 0 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Rent",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/rupee.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 0,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Rent / Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
               ],
@@ -2847,19 +2930,46 @@ class HomeState extends State<Home> {
           return InkWell(
             focusColor: white,
             borderRadius: BorderRadius.circular(6),
-            onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              openDetailPage(
-                (sectionDataList?[index].videoType ?? 0) == 2
-                    ? "showdetail"
-                    : "videodetail",
-                sectionDataList?[index].id ?? 0,
-                upcomingType ?? 0,
-                sectionDataList?[index].videoType ?? 0,
-                sectionDataList?[index].typeId ?? 0,
-              );
+             onTap: () {
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
             },
             child: Stack(
+              alignment: Alignment.topRight,
               children: [
                 Container(
                   width: Dimens.widthLandTwo,
@@ -2879,75 +2989,92 @@ class HomeState extends State<Home> {
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 0 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Rent",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/rupee.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 0,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
                 Visibility(
-                  visible: sectionDataList?[index].isPremium == 1 &&
-                      sectionDataList?[index].isRent == 1,
-                  child: Positioned(
-                    top: 5,
-                    right: 5,
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: FittedBox(
                     child: Container(
-                      height: 20,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Rent / Premium",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 8),
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
                         ),
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
                   ),
                 ),
               ],
@@ -2974,18 +3101,45 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
+                alignment: Alignment.topRight,
                 children: [
                   Container(
                     width: Dimens.widthPort,
@@ -3005,75 +3159,92 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 0 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 0,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/rupee.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 0,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 70,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent / Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ],
@@ -3099,18 +3270,45 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
+                alignment: Alignment.topRight,
                 children: [
                   Container(
                     width: Dimens.widthPortTwo,
@@ -3130,75 +3328,92 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 0 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 0,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/rupee.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 0,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 70,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent / Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ],
@@ -3224,18 +3439,45 @@ class HomeState extends State<Home> {
               focusColor: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
-                debugPrint("Clicked on index ==> $index");
-                openDetailPage(
-                  (sectionDataList?[index].videoType ?? 0) == 2
-                      ? "showdetail"
-                      : "videodetail",
-                  sectionDataList?[index].id ?? 0,
-                  upcomingType ?? 0,
-                  sectionDataList?[index].videoType ?? 0,
-                  sectionDataList?[index].typeId ?? 0,
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
                 );
-              },
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
               child: Stack(
+                alignment: Alignment.topRight,
                 children: [
                   Container(
                     width: Dimens.widthSquare,
@@ -3255,75 +3497,92 @@ class HomeState extends State<Home> {
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 0 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 0,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/rupee.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 0,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                   Visibility(
-                    visible: sectionDataList?[index].isPremium == 1 &&
-                        sectionDataList?[index].isRent == 1,
-                    child: Positioned(
-                      top: 5,
-                      right: 5,
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
                       child: Container(
-                        height: 20,
-                        width: 70,
-                        decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Rent / Premium",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
                           ),
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ],
@@ -3619,17 +3878,43 @@ class HomeState extends State<Home> {
                   focusColor: white,
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
-                    debugPrint("Clicked on index ==> $index");
-                    openDetailPage(
-                      (sectionDataList?[index].videoType ?? 0) == 2
-                          ? "showdetail"
-                          : "videodetail",
-                      sectionDataList?[index].id ?? 0,
-                      upcomingType ?? 0,
-                      sectionDataList?[index].videoType ?? 0,
-                      sectionDataList?[index].typeId ?? 0,
-                    );
-                  },
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (Constant.userID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginSocial()),
+                );
+
+                // Utils.buildWebAlertDialog(context, "login", "");
+              } else {
+                sectionDataList?[index].isLiveUrl == 1
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo(
+                                '',
+                                0,
+                                0,
+                                typeId,
+                                0,
+                                sectionDataList?[index].video320,
+                                0,
+                                "",
+                                "")),
+                      )
+                    : openDetailPage(
+                        (sectionDataList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionDataList?[index].id ?? 0,
+                        upcomingType ?? 0,
+                        sectionDataList?[index].videoType ?? 0,
+                        sectionDataList?[index].typeId ?? 0,
+                      );
+              }
+            },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 18),
                     child: Container(

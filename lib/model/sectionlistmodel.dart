@@ -389,6 +389,7 @@ class Datum {
   String? name;
   String? image;
   int? status;
+  int?isLiveUrl;
   String? createdAt;
   String? updatedAt;
   int? channelId;
@@ -456,6 +457,7 @@ class Datum {
     this.fullWidth,
     this.image,
     this.status,
+    this.isLiveUrl ,
     this.createdAt,
     this.updatedAt,
     this.channelId,
@@ -523,6 +525,7 @@ class Datum {
         fullWidth: json["full_width"],
         image: json["image"],
         status: json["status"],
+        isLiveUrl: json["is_live_url"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         channelId: json["channel_id"],
@@ -589,6 +592,7 @@ class Datum {
         "name": name,
         "image": image,
         "full_width": fullWidth,
+        "is_live_url":isLiveUrl,
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,

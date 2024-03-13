@@ -82,11 +82,12 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
     // log(" CYCLEC${state.name}");
     // log(" CYCLEC${state}");
     // Listening to app lifecycle changes to detect when the app enters the hidden state (minimized)
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.hidden) {
+    if (state == AppLifecycleState.inactive) {
       // Triggering PiP mode with a landscape aspect ratio when the app is minimized
       pip.enable(aspectRatio: const Rational.landscape());
+    } else if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      SystemNavigator.pop();
     }
   }
 
@@ -281,6 +282,7 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     playerProvider.clearProvider();
+    pip.dispose();
     super.dispose();
   }
 
@@ -365,6 +367,7 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
             // ),
 
             PiPSwitcher(
+
                 // Widget displayed when PiP is disabled or app is in foreground state
                 childWhenDisabled:
 
@@ -410,32 +413,33 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
                         Center(
                           child: _buildPage(),
                         ),
-                        if (!kIsWeb)
-                          Positioned(
-                            top: 15,
-                            left: 15,
-                            child: SafeArea(
-                              child: InkWell(
-                                onTap: onBackPressed,
-                                focusColor: gray.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20),
-                                child: Utils.buildBackBtnDesign(context),
-                              ),
-                            ),
-                          ),
+                        // if (!kIsWeb)
+                        //   Positioned(
+                        //     top: 15,
+                        //     left: 15,
+                        //     child: SafeArea(
+                        //       child: Utils.buildBackBtnDesign(context),
+                        //     ),
+                        //   ),
                       ],
                     ),
                   ),
                 ),
                 // Widget displayed when PiP window is enabled or app is in background state
-                childWhenEnabled: SafeArea(
-                  child: InkWell(
-                    onTap: onBackPressed,
-                    focusColor: gray.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(20),
-                    child: Utils.buildBackBtnDesign(context),
-                  ),
-                )));
+                childWhenEnabled: Scaffold(
+                  body: Center(child: _buildPage()),
+                )
+                // SafeArea(
+                //   child: Expanded(child: _buildPage()),
+
+                // InkWell(
+                //   onTap: onBackPressed,
+                //   focusColor: gray.withOpacity(0.5),
+                //   borderRadius: BorderRadius.circular(20),
+                //   child: Utils.buildBackBtnDesign(context),
+                // ),
+                // )
+                ));
   }
 
   Widget _buildPage() {
