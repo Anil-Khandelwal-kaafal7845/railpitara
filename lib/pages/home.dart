@@ -2027,8 +2027,8 @@ class HomeState extends State<Home> {
                                   children: [
                                     Image.asset(
                                       'assets/images/crown.png',
-                                      height: 13,
-                                      width: 13,
+                                      height: 15,
+                                      width: 15,
                                     ),
                                   ],
                                 )),
@@ -2057,8 +2057,8 @@ class HomeState extends State<Home> {
                                   children: [
                                     Image.asset(
                                       'assets/images/crown.png',
-                                      height: 13,
-                                      width: 13,
+                                      height: 15,
+                                      width: 15,
                                     ),
                                   ],
                                 )),
@@ -2869,8 +2869,8 @@ class HomeState extends State<Home> {
                           children: [
                             Image.asset(
                               'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
+                              height: 15,
+                              width: 15,
                             ),
                           ],
                         )),
@@ -2899,8 +2899,8 @@ class HomeState extends State<Home> {
                           children: [
                             Image.asset(
                               'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
+                              height: 15,
+                              width: 15,
                             ),
                           ],
                         )),
@@ -3040,8 +3040,8 @@ class HomeState extends State<Home> {
                           children: [
                             Image.asset(
                               'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
+                              height: 15,
+                              width: 15,
                             ),
                           ],
                         )),
@@ -3070,8 +3070,8 @@ class HomeState extends State<Home> {
                           children: [
                             Image.asset(
                               'assets/images/crown.png',
-                              height: 13,
-                              width: 13,
+                              height: 15,
+                              width: 15,
                             ),
                           ],
                         )),
@@ -3210,8 +3210,8 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
@@ -3240,8 +3240,8 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
@@ -3379,8 +3379,8 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
@@ -3409,8 +3409,8 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
@@ -3496,6 +3496,7 @@ class HomeState extends State<Home> {
                       ),
                     ),
                   ),
+                 
                   Visibility(
                     visible: sectionDataList?[index].isRent == 1 &&
                         sectionDataList?[index].isPremium == 0,
@@ -3548,8 +3549,8 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
@@ -3578,13 +3579,14 @@ class HomeState extends State<Home> {
                             children: [
                               Image.asset(
                                 'assets/images/crown.png',
-                                height: 13,
-                                width: 13,
+                                height: 15,
+                                width: 15,
                               ),
                             ],
                           )),
                     ),
                   ),
+                
                 ],
               ));
         },
@@ -3922,9 +3924,9 @@ class HomeState extends State<Home> {
                       height: Dimens.heightTopTen,
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                      child: Stack(
+                      child: Stack(  alignment: Alignment.topRight,
                         children: [
-                          SizedBox(
+                          Container(
                             width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(4),
@@ -3940,6 +3942,97 @@ class HomeState extends State<Home> {
                               ),
                             ),
                           ),
+                         Visibility(
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 0,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/rupee.png',
+                                height: 13,
+                                width: 13,
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 15,
+                                width: 15,
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: sectionDataList?[index].isRent == 1 &&
+                        sectionDataList?[index].isPremium == 1,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(3),
+                                topRight: Radius.circular(4),
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/crown.png',
+                                height: 15,
+                                width: 15,
+                              ),
+                            ],
+                          )),
+                    ),
+                  ),
+                
+                        
                         ],
                       ),
                     ),
