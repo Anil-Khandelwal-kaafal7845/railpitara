@@ -1976,6 +1976,14 @@ class HomeState extends State<Home> {
                                   "")),
                         );
                       }
+                    } else if (sectionBannerList?[index].bannerBacklink !=
+                            null &&
+                        sectionBannerList![index]
+                            .bannerBacklink
+                            .toString()
+                            .isNotEmpty) {
+                      launchUrl(Uri.parse(
+                          sectionBannerList[index].bannerBacklink.toString()));
                     } else {
                       openDetailPage(
                         (sectionBannerList?[index].videoType ?? 0) == 2
