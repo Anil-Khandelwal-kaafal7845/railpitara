@@ -46,13 +46,16 @@ class Result {
   int? typeId;
   dynamic isPremium;
   String? thumbnail;
+  String? bannerBacklink;
   String? landscape;
+  dynamic? videoUrl;
   String? trailerType;
   int? stopTime;
   int? isDownloaded;
   int? isBookmark;
   int? rentBuy;
   int? isRent;
+  dynamic? isLiveUrl;
   int? rentPrice;
   int? isBuy;
   String? categoryName;
@@ -72,8 +75,11 @@ class Result {
     this.description,
     this.videoType,
     this.typeId,
+    this.bannerBacklink ,
+    this.videoUrl,
     this.isPremium,
     this.thumbnail,
+    this.isLiveUrl,
     this.landscape,
     this.trailerType,
     this.stopTime,
@@ -101,8 +107,11 @@ class Result {
         description: json["description"],
         videoType: json["video_type"],
         typeId: json["type_id"],
+        bannerBacklink: json["banner_backlink"],
         isPremium: json["is_premium"],
+        videoUrl: json["video_320"],
         thumbnail: json["thumbnail"],
+        isLiveUrl: json["is_live_url"],
         landscape: json["landscape"],
         trailerType: json["trailer_type"],
         stopTime: json["stop_time"],
@@ -129,9 +138,12 @@ class Result {
         "category_id": categoryId,
         "description": description,
         "video_type": videoType,
+        "banner_backlink":bannerBacklink ,
         "type_id": typeId,
+        "is_live_url": isLiveUrl,
         "is_premium": isPremium,
         "thumbnail": thumbnail,
+        "video_320": videoUrl,
         "landscape": landscape,
         "trailer_type": trailerType,
         "stop_time": stopTime,
