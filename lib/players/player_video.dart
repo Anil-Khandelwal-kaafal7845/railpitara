@@ -46,9 +46,16 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
   ChewieController? _chewieController;
   late VideoPlayerController _videoPlayerController;
   SubtitleController? subtitleController;
+  bool isInPiPMode = false;
 
   late Floating pip; // Initializing a variable to handle PiP functionalities
   bool isPipAvailable = false; // Variable to track PiP availability status
+
+  void _updatePiPMode(bool isPiPMode) {
+    setState(() {
+      isInPiPMode = isPiPMode;
+    });
+  }
 
   @override
   void initState() {
@@ -333,114 +340,94 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
       });
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: onBackPressed,
-        child:
-
-            //  Scaffold(
-            //   backgroundColor: black,
-            //   body: SafeArea(
-            //     child: Stack(
-            //       children: [
-            //         Center(
-            //           child: _buildPage(),
-            //         ),
-            //         if (!kIsWeb)
-            //           Positioned(
-            //             top: 15,
-            //             left: 15,
-            //             child: SafeArea(
-            //               child: InkWell(
-            //                 onTap: onBackPressed,
-            //                 focusColor: gray.withOpacity(0.5),
-            //                 borderRadius: BorderRadius.circular(20),
-            //                 child: Utils.buildBackBtnDesign(context),
-            //               ),
-            //             ),
-            //           ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-
-            PiPSwitcher(
-
-                // Widget displayed when PiP is disabled or app is in foreground state
-                childWhenDisabled:
-
-                    // Scaffold(
-                    //   body: Column(
-                    //     children: [
-                    //       TestPip(videoUrl: videoUrl),
-                    //       Expanded(
-                    //         child: Center(
-                    //           child: ElevatedButton(
-                    //             onPressed: () {
-                    //               // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
-                    //               if (isPipAvailable) {
-                    //                 pip.enable(
-                    //                     aspectRatio: const Rational
-                    //                         .landscape()); // Enabling PiP with a landscape aspect ratio
-                    //               }
-                    //             },
-                    //             child: Text(
-                    //                 isPipAvailable ? 'Enable PIP' : 'PIP not available'),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    Scaffold(
-                  // floatingActionButton: FloatingActionButton(
-                  //   onPressed: () {
-                  //     // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
-                  //     if (isPipAvailable) {
-                  //       pip.enable(
-                  //           aspectRatio: const Rational
-                  //               .landscape()); // Enabling PiP with a landscape aspect ratio
-                  //     }
-                  //   },
-                  // ),
-                  backgroundColor: black,
-                  body: SafeArea(
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: _buildPage(),
-                        ),
-                        // if (!kIsWeb)
-                        //   Positioned(
-                        //     top: 15,
-                        //     left: 15,
-                        //     child: SafeArea(
-                        //       child: Utils.buildBackBtnDesign(context),
-                        //     ),
-                        //   ),
-                      ],
+@override
+Widget build(BuildContext context) {
+  return WillPopScope(
+    onWillPop: onBackPressed,
+    child: PiPSwitcher(
+      // Widget displayed when PiP is disabled or app is in foreground state
+      childWhenDisabled: Scaffold(
+        backgroundColor: black,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Show back button only when not in PiP mode
+              if (!isInPiPMode && !kIsWeb)
+                Positioned(
+                  top: 15,
+                  left: 15,
+                  child: SafeArea(
+                    child: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: onBackPressed,
+                      child: Icon(
+                        CupertinoIcons.back,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
-                // Widget displayed when PiP window is enabled or app is in background state
-                childWhenEnabled: Scaffold(
-                  body: Center(child: _buildPage()),
-                )
-                // SafeArea(
-                //   child: Expanded(child: _buildPage()),
+              Center(
+                child: _buildPage(),
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Widget displayed when PiP window is enabled or app is in background state
+      childWhenEnabled: Scaffold(
+        body: Center(
+          child: Stack(
+            children: [
+              // Show back button only when not in PiP mode
+              if (!isInPiPMode && !kIsWeb)
+                Positioned(
+                  top: 15,
+                  left: 15,
+                  child: SafeArea(
+                    child: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: onBackPressed,
+                      child: Icon(
+                        CupertinoIcons.back,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              _buildPage(),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
-                // InkWell(
-                //   onTap: onBackPressed,
-                //   focusColor: gray.withOpacity(0.5),
-                //   borderRadius: BorderRadius.circular(20),
-                //   child: Utils.buildBackBtnDesign(context),
-                // ),
-                // )
-                ));
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return WillPopScope(
+  //       onWillPop: onBackPressed,
+  //       child: PiPSwitcher(
+
+  //           // Widget displayed when PiP is disabled or app is in foreground state
+  //           childWhenDisabled: Scaffold(
+  //             backgroundColor: black,
+  //             body: SafeArea(
+  //               child: Stack(
+  //                 children: [
+  //                   Center(
+  //                     child: _buildPage(),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           childWhenEnabled: Scaffold(
+  //             body: Center(child: _buildPage()),
+  //           )));
+  // }
 
   Widget _buildPage() {
     if (_chewieController != null &&
