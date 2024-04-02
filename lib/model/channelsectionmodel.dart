@@ -230,6 +230,7 @@ class Datum {
     this.isDownloaded,
     this.isBookmark,
     this.rentBuy,
+    this.isLiveUrl ,
     this.isRent,
     this.rentPrice,
     this.isBuy,
@@ -272,6 +273,7 @@ class Datum {
   int? download;
   int? status;
   String? isTitle;
+  int? isLiveUrl;
   String? video320;
   String? video480;
   String? video720;
@@ -306,6 +308,7 @@ class Datum {
         castId: json["cast_id"],
         channelId: json["channel_id"],
         directorId: json["director_id"],
+        isLiveUrl: json["is_live_url"],
         starringId: json["starring_id"],
         supportingCastId: json["supporting_cast_id"],
         networks: json["networks"],
@@ -368,6 +371,7 @@ class Datum {
         "channel_id": channelId,
         "director_id": directorId,
         "starring_id": starringId,
+        "is_live_url":isLiveUrl,
         "supporting_cast_id": supportingCastId,
         "networks": networks,
         "maturity_rating": maturityRating,

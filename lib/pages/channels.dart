@@ -192,11 +192,25 @@ class ChannelsState extends State<Channels> {
                   focusColor: white,
                   borderRadius: BorderRadius.circular(0),
                   onTap: () async {
-                    debugPrint("Clicked on index ==> $index");
-                    AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                        () {
-                      openPlayer(sectionBannerList, index);
-                    });
+                    if (Constant.userID == null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginSocial()),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerVideo('', 0, 0, 0, 0,
+                                sectionBannerList?[index].link, 0, "", "")),
+                      );
+                    }
+                    // debugPrint("Clicked on index ==> $index");
+                    // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    //     () {
+
+                    //   openPlayer(sectionBannerList, index);
+                    // });
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
@@ -519,15 +533,52 @@ class ChannelsState extends State<Channels> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              Utils.openDetails(
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-                context: context,
-              );
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerVideo(
+                            '',
+                            0,
+                            0,
+                            sectionDataList?[index].typeId ?? 0,
+                            0,
+                            sectionDataList?[index].video320,
+                            0,
+                            "",
+                            "")),
+                  );
+                }
+              } else {
+                Utils.openDetails(
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                  context: context,
+                );
+              }
             },
+
+            // onTap: () {
+            //   debugPrint("Clicked on index ==> $index");
+            //   Utils.openDetails(
+            //     videoId: sectionDataList?[index].id ?? 0,
+            //     upcomingType: 0,
+            //     videoType: sectionDataList?[index].videoType ?? 0,
+            //     typeId: sectionDataList?[index].typeId ?? 0,
+            //     context: context,
+            //   );
+            // },
             focusColor: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
@@ -570,15 +621,51 @@ class ChannelsState extends State<Channels> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              Utils.openDetails(
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-                context: context,
-              );
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerVideo(
+                            '',
+                            0,
+                            0,
+                            sectionDataList?[index].typeId ?? 0,
+                            0,
+                            sectionDataList?[index].video320,
+                            0,
+                            "",
+                            "")),
+                  );
+                }
+              } else {
+                Utils.openDetails(
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                  context: context,
+                );
+              }
             },
+            // onTap: () {
+            //   debugPrint("Clicked on index ==> $index");
+            //   Utils.openDetails(
+            //     videoId: sectionDataList?[index].id ?? 0,
+            //     upcomingType: 0,
+            //     videoType: sectionDataList?[index].videoType ?? 0,
+            //     typeId: sectionDataList?[index].typeId ?? 0,
+            //     context: context,
+            //   );
+            // },
             focusColor: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
@@ -620,15 +707,51 @@ class ChannelsState extends State<Channels> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              debugPrint("Clicked on index ==> $index");
-              Utils.openDetails(
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-                context: context,
-              );
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerVideo(
+                            '',
+                            0,
+                            0,
+                            sectionDataList?[index].typeId ?? 0,
+                            0,
+                            sectionDataList?[index].video320,
+                            0,
+                            "",
+                            "")),
+                  );
+                }
+              } else {
+                Utils.openDetails(
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                  context: context,
+                );
+              }
             },
+            // onTap: () {
+            //   debugPrint("Clicked on index ==> $index");
+            //   Utils.openDetails(
+            //     videoId: sectionDataList?[index].id ?? 0,
+            //     upcomingType: 0,
+            //     videoType: sectionDataList?[index].videoType ?? 0,
+            //     typeId: sectionDataList?[index].typeId ?? 0,
+            //     context: context,
+            //   );
+            // },
             focusColor: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
