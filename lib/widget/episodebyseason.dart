@@ -89,46 +89,47 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
               children: [
                 Container(
                   color: lightBlack,
-                  child: ScrollOnExpand(
-                    scrollOnExpand: true,
-                    scrollOnCollapse: false,
-                    child: ExpandablePanel(
-                      theme: const ExpandableThemeData(
-                        headerAlignment: ExpandablePanelHeaderAlignment.center,
-                        tapBodyToCollapse: true,
-                        tapBodyToExpand: true,
-                      ),
-                      collapsed: Container(
-                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                        constraints: const BoxConstraints(minHeight: 60),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    constraints: const BoxConstraints(minHeight: 60),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
                           children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                  borderRadius: BorderRadius.circular(16),
-                                  focusColor: white.withOpacity(0.5),
-                                  onTap: () async {
-                                    debugPrint("===> index $index");
-                                    openPlayer(
-                                        "Show",
-                                        index,
-                                        episodeProvider
-                                            .episodeBySeasonModel.result);
-                                  },
-                                  child: Container(
-                                    width: 32,
-                                    height: 32,
-                                    alignment: Alignment.centerLeft,
-                                    padding: const EdgeInsets.all(2.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              focusColor: white.withOpacity(0.5),
+                              onTap: () async {
+                                debugPrint("===> index $index");
+                                openPlayer(
+                                  "Show",
+                                  index,
+                                  episodeProvider.episodeBySeasonModel.result,
+                                );
+                              },
+                              child: Container(
+                                width: 160,
+                                height: 100,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.all(2.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    MyNetworkImage(
+                                      fit: BoxFit.fill,
+                                      imageUrl: (episodeProvider
+                                              .episodeBySeasonModel
+                                              .result?[index]
+                                              .landscape ??
+                                          ""),
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
+                                    Center(
                                       child: MyImage(
                                         fit: BoxFit.cover,
                                         height: 32,
@@ -136,208 +137,251 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                                         imagePath: "play.png",
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                (episodeProvider.episodeBySeasonModel
-                                                .result?[index].videoDuration !=
-                                            null &&
-                                        (episodeProvider.episodeBySeasonModel
-                                                    .result?[index].stopTime ??
-                                                0) >
-                                            0)
-                                    ? Container(
-                                        height: 2,
-                                        width: 32,
-                                        margin: const EdgeInsets.only(top: 8),
-                                        child: LinearPercentIndicator(
-                                          padding: const EdgeInsets.all(0),
-                                          barRadius: const Radius.circular(2),
-                                          lineHeight: 2,
-                                          percent: Utils.getPercentage(
-                                              episodeProvider
-                                                      .episodeBySeasonModel
-                                                      .result?[index]
-                                                      .videoDuration ??
-                                                  0,
-                                              episodeProvider
-                                                      .episodeBySeasonModel
-                                                      .result?[index]
-                                                      .stopTime ??
-                                                  0),
-                                          backgroundColor: secProgressColor,
-                                          progressColor: colorPrimary,
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ],
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  MyText(
-                                    color: white,
-                                    text: episodeProvider.episodeBySeasonModel
-                                            .result?[index].name ??
-                                        "-",
-                                    textalign: TextAlign.start,
-                                    fontstyle: FontStyle.normal,
-                                    fontsizeNormal: 14,
-                                    fontsizeWeb: 14,
-                                    maxline: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontweight: FontWeight.w600,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  MyText(
-                                    color: whiteLight,
-                                    text: episodeProvider.episodeBySeasonModel
-                                            .result?[index].description ??
-                                        "",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 12,
-                                    fontsizeWeb: 12,
-                                    multilanguage: false,
-                                    fontweight: FontWeight.w400,
-                                    maxline: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  MyText(
-                                    color: colorPrimary,
-                                    text: ((episodeProvider
-                                                    .episodeBySeasonModel
-                                                    .result?[index]
-                                                    .videoDuration ??
-                                                0) >
-                                            0)
-                                        ? Utils.convertToColonText(
-                                            episodeProvider
-                                                    .episodeBySeasonModel
-                                                    .result?[index]
-                                                    .videoDuration ??
-                                                0)
-                                        : "-",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 11,
-                                    fontsizeWeb: 12,
-                                    fontweight: FontWeight.w600,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      expanded: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          MyNetworkImage(
-                            fit: BoxFit.cover,
-                            imgHeight: Dimens.epiPoster,
-                            imgWidth: MediaQuery.of(context).size.width,
-                            imageUrl: (episodeProvider.episodeBySeasonModel
-                                    .result?[index].landscape ??
-                                ""),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 8),
-                            child: MyText(
-                              color: white,
-                              text: episodeProvider.episodeBySeasonModel
-                                      .result?[index].name ??
-                                  "",
-                              textalign: TextAlign.start,
-                              fontstyle: FontStyle.normal,
-                              fontsizeNormal: 14,
-                              fontsizeWeb: 14,
-                              maxline: 2,
-                              overflow: TextOverflow.ellipsis,
-                              fontweight: FontWeight.w600,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                            child: MyText(
-                              color: whiteLight,
-                              text: episodeProvider.episodeBySeasonModel
-                                      .result?[index].description ??
-                                  "",
-                              textalign: TextAlign.start,
-                              fontstyle: FontStyle.normal,
-                              fontsizeNormal: 12,
-                              fontsizeWeb: 12,
-                              maxline: 5,
-                              overflow: TextOverflow.ellipsis,
-                              fontweight: FontWeight.w500,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                MyText(
-                                  color: otherColor,
-                                  text: ((episodeProvider
+
+                            // InkWell(
+                            //   borderRadius: BorderRadius.circular(16),
+                            //   focusColor: white.withOpacity(0.5),
+                            //   onTap: () async {
+                            //     debugPrint("===> index $index");
+                            //     openPlayer(
+                            //         "Show",
+                            //         index,
+                            //         episodeProvider
+                            //             .episodeBySeasonModel.result);
+                            //   },
+                            //   child: Container(
+                            //     width: 32,
+                            //     height: 32,
+                            //     alignment: Alignment.centerLeft,
+                            //     padding: const EdgeInsets.all(2.0),
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(4),
+                            //     ),
+                            //     child: ClipRRect(
+                            //       borderRadius: BorderRadius.circular(4),
+                            //       child: MyImage(
+                            //         fit: BoxFit.cover,
+                            //         height: 32,
+                            //         width: 32,
+                            //         imagePath: "play.png",
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+
+                            (episodeProvider.episodeBySeasonModel.result?[index]
+                                            .videoDuration !=
+                                        null &&
+                                    (episodeProvider.episodeBySeasonModel
+                                                .result?[index].stopTime ??
+                                            0) >
+                                        0)
+                                ? Container(
+                                    height: 2,
+                                    width: 32,
+                                    margin: const EdgeInsets.only(top: 8),
+                                    child: LinearPercentIndicator(
+                                      padding: const EdgeInsets.all(0),
+                                      barRadius: const Radius.circular(2),
+                                      lineHeight: 2,
+                                      percent: Utils.getPercentage(
+                                          episodeProvider
                                                   .episodeBySeasonModel
                                                   .result?[index]
                                                   .videoDuration ??
-                                              0) >
-                                          0)
-                                      ? Utils.convertTimeToText(episodeProvider
-                                              .episodeBySeasonModel
-                                              .result?[index]
-                                              .videoDuration ??
-                                          0)
-                                      : "-",
-                                  textalign: TextAlign.start,
-                                  fontsizeNormal: 12,
-                                  fontsizeWeb: 14,
-                                  fontweight: FontWeight.w600,
-                                  maxline: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                if ((episodeProvider.episodeBySeasonModel
-                                            .result?[index].isPremium ??
-                                        0) ==
-                                    1)
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 10),
-                                    child: MyText(
-                                      color: colorPrimary,
-                                      text: "primetag",
-                                      textalign: TextAlign.start,
-                                      fontsizeNormal: 12,
-                                      fontsizeWeb: 14,
-                                      multilanguage: true,
-                                      fontweight: FontWeight.w600,
-                                      maxline: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      fontstyle: FontStyle.normal,
+                                              0,
+                                          episodeProvider.episodeBySeasonModel
+                                                  .result?[index].stopTime ??
+                                              0),
+                                      backgroundColor: secProgressColor,
+                                      progressColor: colorPrimary,
                                     ),
-                                  ),
-                              ],
-                            ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              MyText(
+                                color: white,
+                                text: episodeProvider.episodeBySeasonModel
+                                        .result?[index].name ??
+                                    "-",
+                                textalign: TextAlign.start,
+                                fontstyle: FontStyle.normal,
+                                fontsizeNormal: 14,
+                                fontsizeWeb: 14,
+                                maxline: 2,
+                                overflow: TextOverflow.ellipsis,
+                                fontweight: FontWeight.w600,
+                              ),
+                              const SizedBox(height: 5),
+                              MyText(
+                                color: whiteLight,
+                                text: episodeProvider.episodeBySeasonModel
+                                        .result?[index].description ??
+                                    "",
+                                textalign: TextAlign.start,
+                                fontsizeNormal: 12,
+                                fontsizeWeb: 12,
+                                multilanguage: false,
+                                fontweight: FontWeight.w400,
+                                maxline: 2,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                              const SizedBox(height: 5),
+                              MyText(
+                                color: colorPrimary,
+                                text: ((episodeProvider.episodeBySeasonModel
+                                                .result?[index].videoDuration ??
+                                            0) >
+                                        0)
+                                    ? Utils.convertToColonText(episodeProvider
+                                            .episodeBySeasonModel
+                                            .result?[index]
+                                            .videoDuration ??
+                                        0)
+                                    : "-",
+                                textalign: TextAlign.start,
+                                fontsizeNormal: 11,
+                                fontsizeWeb: 12,
+                                fontweight: FontWeight.w600,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      builder: (_, collapsed, expanded) {
-                        return Expandable(
-                          collapsed: collapsed,
-                          expanded: expanded,
-                          theme: const ExpandableThemeData(crossFadePoint: 0),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
+
+                  // ScrollOnExpand(
+                  //   scrollOnExpand: true,
+                  //   scrollOnCollapse: false,
+                  //   child:
+
+                  //   ExpandablePanel(
+                  //     theme: const ExpandableThemeData(
+                  //       headerAlignment: ExpandablePanelHeaderAlignment.center,
+                  //       tapBodyToCollapse: true,
+                  //       tapBodyToExpand: true,
+                  //     ),
+                  //     collapsed:
+
+                  //     // expanded: Column(
+                  //     //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //     //   children: <Widget>[
+                  //     //     MyNetworkImage(
+                  //     //       fit: BoxFit.cover,
+                  //     //       imgHeight: Dimens.epiPoster,
+                  //     //       imgWidth: MediaQuery.of(context).size.width,
+                  //     //       imageUrl: (episodeProvider.episodeBySeasonModel
+                  //     //               .result?[index].landscape ??
+                  //     //           ""),
+                  //     //     ),
+                  //     //     Container(
+                  //     //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 8),
+                  //     //       child: MyText(
+                  //     //         color: white,
+                  //     //         text: episodeProvider.episodeBySeasonModel
+                  //     //                 .result?[index].name ??
+                  //     //             "",
+                  //     //         textalign: TextAlign.start,
+                  //     //         fontstyle: FontStyle.normal,
+                  //     //         fontsizeNormal: 14,
+                  //     //         fontsizeWeb: 14,
+                  //     //         maxline: 2,
+                  //     //         overflow: TextOverflow.ellipsis,
+                  //     //         fontweight: FontWeight.w600,
+                  //     //       ),
+                  //     //     ),
+                  //     //     Container(
+                  //     //       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  //     //       child: MyText(
+                  //     //         color: whiteLight,
+                  //     //         text: episodeProvider.episodeBySeasonModel
+                  //     //                 .result?[index].description ??
+                  //     //             "",
+                  //     //         textalign: TextAlign.start,
+                  //     //         fontstyle: FontStyle.normal,
+                  //     //         fontsizeNormal: 12,
+                  //     //         fontsizeWeb: 12,
+                  //     //         maxline: 5,
+                  //     //         overflow: TextOverflow.ellipsis,
+                  //     //         fontweight: FontWeight.w500,
+                  //     //       ),
+                  //     //     ),
+                  //     //     Container(
+                  //     //       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  //     //       child: Row(
+                  //     //         mainAxisSize: MainAxisSize.max,
+                  //     //         children: [
+                  //     //           MyText(
+                  //     //             color: otherColor,
+                  //     //             text: ((episodeProvider
+                  //     //                             .episodeBySeasonModel
+                  //     //                             .result?[index]
+                  //     //                             .videoDuration ??
+                  //     //                         0) >
+                  //     //                     0)
+                  //     //                 ? Utils.convertTimeToText(episodeProvider
+                  //     //                         .episodeBySeasonModel
+                  //     //                         .result?[index]
+                  //     //                         .videoDuration ??
+                  //     //                     0)
+                  //     //                 : "-",
+                  //     //             textalign: TextAlign.start,
+                  //     //             fontsizeNormal: 12,
+                  //     //             fontsizeWeb: 14,
+                  //     //             fontweight: FontWeight.w600,
+                  //     //             maxline: 1,
+                  //     //             overflow: TextOverflow.ellipsis,
+                  //     //             fontstyle: FontStyle.normal,
+                  //     //           ),
+                  //     //           if ((episodeProvider.episodeBySeasonModel
+                  //     //                       .result?[index].isPremium ??
+                  //     //                   0) ==
+                  //     //               1)
+                  //     //             Container(
+                  //     //               margin: const EdgeInsets.only(left: 10),
+                  //     //               child: MyText(
+                  //     //                 color: colorPrimary,
+                  //     //                 text: "primetag",
+                  //     //                 textalign: TextAlign.start,
+                  //     //                 fontsizeNormal: 12,
+                  //     //                 fontsizeWeb: 14,
+                  //     //                 multilanguage: true,
+                  //     //                 fontweight: FontWeight.w600,
+                  //     //                 maxline: 1,
+                  //     //                 overflow: TextOverflow.ellipsis,
+                  //     //                 fontstyle: FontStyle.normal,
+                  //     //               ),
+                  //     //             ),
+                  //     //         ],
+                  //     //       ),
+                  //     //     ),
+                  //     //   ],
+                  //     // ),
+                  //     // builder: (_, collapsed, expanded) {
+                  //     //   return Expandable(
+                  //     //     collapsed: collapsed,
+                  //     //     expanded: expanded,
+                  //     //     theme: const ExpandableThemeData(crossFadePoint: 0),
+                  //     //   );
+                  //     // },
+                  //   ),
+                  // ),
                 ),
               ],
             ),
