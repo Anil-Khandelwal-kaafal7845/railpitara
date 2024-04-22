@@ -678,23 +678,80 @@ class BottombarState extends State<Bottombar> {
       ),
     );
   }
-
-  Future<bool> onBackPressed() async {
-    if (selectedIndex == 0) {
-      DateTime now = DateTime.now();
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-        currentBackPressTime = now;
-        Utils.showSnackbar(context, "", "exit_warning", true);
-        return Future.value(false);
-      }
-      SystemNavigator.pop();
-      return Future.value(true);
+Future<bool> onBackPressed() async {
+  if (selectedIndex == 0) {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      // Show bottom sheet instead of snackbar
+      return await _showExitBottomSheet();
     } else {
-      _onItemTapped(0);
-      return Future.value(false);
+      SystemNavigator.pop();
+      return true; // Allow the back operation
     }
+  } else {
+    _onItemTapped(0);
+    return false; // Do not allow the back operation
   }
+}
+Future<bool> _showExitBottomSheet() async {
+  bool? result = await showModalBottomSheet<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.black, // Set background color to black
+          // borderRadius: BorderRadius.circular(15),
+        ),
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+               SizedBox(height: 15),
+
+            Text(
+              'Are you sure you want to exit Aaryaa?',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white), // Set text color to white
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, false); // Close bottom sheet and indicate not to exit app
+              },
+              style: ElevatedButton.styleFrom(
+                primary: colorPrimary, // Set button color to primaryDark
+                onPrimary: Colors.white, // Set text color to white
+                minimumSize: Size(double.infinity, 50), // Set button width to full width
+              ),
+              child: Text('No' ,style: TextStyle(fontSize: 18),),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, true); // Close bottom sheet and indicate to exit app
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent, // Set button color to transparent
+                onPrimary: Colors.white, // Set text color to white
+                side: BorderSide(color: Colors.white), // Set border color to white
+                minimumSize: Size(double.infinity, 50), // Set button width to full width
+              ),
+              child: Text('Yes' ,style: TextStyle(fontSize: 18)),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      );
+    },
+  );
+
+  return result ?? false; // Return false if result is null
+}
+
+
+
 }
 
 
