@@ -12,7 +12,7 @@ class Constant {
   static String appName = "Aaryaa digital";
   static String appPackageName = "com.release.aryanews";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 12;
+  static double curentAppVersion = 13;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
