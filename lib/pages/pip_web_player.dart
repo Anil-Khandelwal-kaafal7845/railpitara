@@ -40,6 +40,8 @@ class _TestPlayerWebState extends State<TestPlayerWeb>
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+    //ENABLE THE FULLSCREEN MODE
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     debugPrint("loadURL ========> ${widget.loadURL}");
     pullToRefreshController = (kIsWeb) ||
             ![TargetPlatform.iOS, TargetPlatform.android]
@@ -92,6 +94,9 @@ class _TestPlayerWebState extends State<TestPlayerWeb>
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    //DISABLE THE FULLSCREEN MODE
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
 

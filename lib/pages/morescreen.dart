@@ -1,5 +1,5 @@
 import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/players/player_video.dart';
+import 'package:dtlive/pages/pip_web_player.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/utils.dart';
@@ -57,43 +57,67 @@ class MoreScreenState extends State<MoreScreen> {
                             (position) {
                               return InkWell(
                                 borderRadius: BorderRadius.circular(4),
-                                 onTap: () {
-                debugPrint("Clicked userid ==> ${Constant.userID}");
-                debugPrint(
-                    "Clicked on link is  ==> ${widget.sectionDataList?[position].video320.toString()}");
-                if (widget.sectionDataList?[position].isLiveUrl == 1) {
-                  if (Constant.userID == null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PlayerVideo('', 0, 0, 0, 0,
-                              widget.sectionDataList?[position].video320, 0, "", "")),
-                    );
-                  }
-                } else {
-               Utils.openDetails(
-                                    context: context,
-                                    videoId:
-                                        widget.sectionDataList![position].id!,
-                                    upcomingType: 0,
-                                    videoType: widget.sectionDataList![position]
-                                            .videoType ??
-                                        0,
-                                    typeId: widget.sectionDataList![position]
-                                            .typeId ??
-                                        0,
-                                  );
-                }
-              },
+                                onTap: () {
+                                  debugPrint(
+                                      "Clicked userid ==> ${Constant.userID}");
+                                  debugPrint(
+                                      "Clicked on link is  ==> ${widget.sectionDataList?[position].video320.toString()}");
+                                  if (widget.sectionDataList?[position]
+                                          .isLiveUrl ==
+                                      1) {
+                                    if (Constant.userID == null) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginSocial()),
+                                      );
+                                    } else {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => PlayerVideo(
+                                      //           '',
+                                      //           0,
+                                      //           0,
+                                      //           0,
+                                      //           0,
+                                      //           widget
+                                      //               .sectionDataList?[position]
+                                      //               .video320,
+                                      //           0,
+                                      //           "",
+                                      //           "")),
+                                      // );
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TestPlayerWeb(
+                                                      loadURL: widget
+                                                          .sectionDataList![
+                                                              position]
+                                                          .video320!)));
+                                    }
+                                  } else {
+                                    Utils.openDetails(
+                                      context: context,
+                                      videoId:
+                                          widget.sectionDataList![position].id!,
+                                      upcomingType: 0,
+                                      videoType: widget
+                                              .sectionDataList![position]
+                                              .videoType ??
+                                          0,
+                                      typeId: widget.sectionDataList![position]
+                                              .typeId ??
+                                          0,
+                                    );
+                                  }
+                                },
                                 // onTap: () {
                                 //   debugPrint(
                                 //       "Clicked on position ==> $position");
-                                      
+
                                 //   // Utils.openDetails(
                                 //   //   context: context,
                                 //   //   videoId:

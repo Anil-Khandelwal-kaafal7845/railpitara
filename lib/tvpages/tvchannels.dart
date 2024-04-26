@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/model/channelsectionmodel.dart';
 import 'package:dtlive/model/channelsectionmodel.dart' as list;
@@ -24,6 +23,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../pages/pip_web_player.dart';
 
 class TVChannels extends StatefulWidget {
   const TVChannels({Key? key}) : super(key: key);
@@ -658,17 +659,20 @@ class TVChannelsState extends State<TVChannels> {
                       sectionBannerList?[index].image ?? "",
                     );
                   } else {
-                    return PlayerVideo(
-                      "Channel",
-                      0,
-                      0,
-                      0,
-                      0,
-                      sectionBannerList?[index].link ?? "",
-                      0,
-                      "",
-                      sectionBannerList?[index].image ?? "",
-                    );
+                    // return PlayerVideo(
+                    //   "Channel",
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   sectionBannerList?[index].link ?? "",
+                    //   0,
+                    //   "",
+                    //   sectionBannerList?[index].image ?? "",
+                    // );
+
+                    return TestPlayerWeb(
+                        loadURL: sectionBannerList![index].link!);
                   }
                 },
               ),
@@ -705,17 +709,19 @@ class TVChannelsState extends State<TVChannels> {
                       sectionBannerList?[index].image ?? "",
                     );
                   } else {
-                    return PlayerVideo(
-                      "Channel",
-                      0,
-                      0,
-                      0,
-                      0,
-                      sectionBannerList?[index].link ?? "",
-                      0,
-                      "",
-                      sectionBannerList?[index].image ?? "",
-                    );
+                    // return PlayerVideo(
+                    //   "Channel",
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   sectionBannerList?[index].link ?? "",
+                    //   0,
+                    //   "",
+                    //   sectionBannerList?[index].image ?? "",
+                    // );
+                    return TestPlayerWeb(
+                        loadURL: sectionBannerList![index].link!);
                   }
                 },
               ),

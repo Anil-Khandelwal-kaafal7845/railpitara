@@ -54,6 +54,7 @@ import '../utils/strings.dart';
 import 'aboutprivacyterms.dart';
 import 'mydownloads.dart';
 import 'mywatchlist.dart';
+import 'pip_web_player.dart';
 
 class Home extends StatefulWidget {
   final String? pageName;
@@ -1961,20 +1962,23 @@ class HomeState extends State<Home> {
                               builder: (context) => LoginSocial()),
                         );
                       } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlayerVideo(
-                                  '',
-                                  0,
-                                  0,
-                                  typeId,
-                                  0,
-                                  sectionBannerList?[index].videoUrl,
-                                  0,
-                                  "",
-                                  "")),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => PlayerVideo(
+                        //           '',
+                        //           0,
+                        //           0,
+                        //           typeId,
+                        //           0,
+                        //           sectionBannerList?[index].videoUrl,
+                        //           0,
+                        //           "",
+                        //           "")),
+                        // );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TestPlayerWeb(
+                                loadURL: sectionBannerList?[index].videoUrl!)));
                       }
                     } else if (sectionBannerList?[index].bannerBacklink !=
                             null &&
@@ -2126,7 +2130,6 @@ class HomeState extends State<Home> {
               },
             ),
           ),
-       
         ],
       );
     } else {
@@ -2567,22 +2570,28 @@ class HomeState extends State<Home> {
                               );
                               // Utils.buildWebAlertDialog(context, "login", "");
                             } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PlayerVideo(
-                                        '',
-                                        0,
-                                        0,
-                                        typeId,
-                                        0,
-                                        sectionList[index]
-                                            .bannerBacklink
-                                            .toString(),
-                                        0,
-                                        "",
-                                        "")),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => PlayerVideo(
+                              //           '',
+                              //           0,
+                              //           0,
+                              //           typeId,
+                              //           0,
+                              //           sectionList[index]
+                              //               .bannerBacklink
+                              //               .toString(),
+                              //           0,
+                              //           "",
+                              //           "")),
+                              // );
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => TestPlayerWeb(
+                                      loadURL: sectionList[index]
+                                          .bannerBacklink
+                                          .toString())));
                             }
                           }
                         },
@@ -2745,12 +2754,15 @@ class HomeState extends State<Home> {
                     MaterialPageRoute(builder: (context) => LoginSocial()),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                            sectionDataList?[index].video320, 0, "", "")),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                  //           sectionDataList?[index].video320, 0, "", "")),
+                  // );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                          loadURL: sectionDataList![index].video320!)));
                 }
               } else {
                 openDetailPage(
@@ -2948,12 +2960,15 @@ class HomeState extends State<Home> {
                     MaterialPageRoute(builder: (context) => LoginSocial()),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                            sectionDataList?[index].video320, 0, "", "")),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                  //           sectionDataList?[index].video320, 0, "", "")),
+                  // );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                          loadURL: sectionDataList![index].video320!)));
                 }
               } else {
                 openDetailPage(
@@ -3186,12 +3201,15 @@ class HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => LoginSocial()),
                     );
                   } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                              sectionDataList?[index].video320, 0, "", "")),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                    //           sectionDataList?[index].video320, 0, "", "")),
+                    // );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => TestPlayerWeb(
+                            loadURL: sectionDataList![index].video320!)));
                   }
                 } else {
                   openDetailPage(
@@ -3347,12 +3365,15 @@ class HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => LoginSocial()),
                     );
                   } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                              sectionDataList?[index].video320, 0, "", "")),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                    //           sectionDataList?[index].video320, 0, "", "")),
+                    // );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => TestPlayerWeb(
+                            loadURL: sectionDataList![index].video320!)));
                   }
                 } else {
                   openDetailPage(
@@ -3546,12 +3567,15 @@ class HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => LoginSocial()),
                     );
                   } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                              sectionDataList?[index].video320, 0, "", "")),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+                    //           sectionDataList?[index].video320, 0, "", "")),
+                    // );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => TestPlayerWeb(
+                            loadURL: sectionDataList![index].video320!)));
                   }
                 } else {
                   openDetailPage(
@@ -4016,20 +4040,23 @@ class HomeState extends State<Home> {
                               builder: (context) => LoginSocial()),
                         );
                       } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlayerVideo(
-                                  '',
-                                  0,
-                                  0,
-                                  typeId,
-                                  0,
-                                  sectionDataList?[index].video320,
-                                  0,
-                                  "",
-                                  "")),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => PlayerVideo(
+                        //           '',
+                        //           0,
+                        //           0,
+                        //           typeId,
+                        //           0,
+                        //           sectionDataList?[index].video320,
+                        //           0,
+                        //           "",
+                        //           "")),
+                        // );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TestPlayerWeb(
+                                loadURL: sectionDataList![index].video320!)));
                       }
                     } else {
                       openDetailPage(

@@ -141,20 +141,20 @@ class LoginSocialState extends State<LoginSocial> {
               Row(
                 children: [
                   Text(
-                    "Login with WhatsApp",
+                    "Login with mobile number",
                     style: TextStyle(color: white, fontSize: 21),
                   ),
                   SizedBox(
                     width: 10,
                   ),
-                  SizedBox(
-                      height: 23,
-                      width: 23,
-                      child: Image.asset(
-                        'assets/images/logos_whatsapp-icon.png',
-                        height: 23,
-                        width: 23,
-                      )),
+                  // SizedBox(
+                  //     height: 23,
+                  //     width: 23,
+                  //     child: Image.asset(
+                  //       'assets/images/logos_whatsapp-icon.png',
+                  //       height: 23,
+                  //       width: 23,
+                  //     )),
                 ],
               ),
 
@@ -632,7 +632,7 @@ class LoginSocialState extends State<LoginSocial> {
 
         await homeProvider.setSelectedTab(0);
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1","0");
+        await sectionDataProvider.getSectionList("0", "1", "0");
 
         // Hide Progress Dialog
         await prDialog.hide();

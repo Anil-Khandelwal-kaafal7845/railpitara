@@ -25,6 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'pip_web_player.dart';
+
 class Channels extends StatefulWidget {
   const Channels({Key? key}) : super(key: key);
 
@@ -198,12 +200,16 @@ class ChannelsState extends State<Channels> {
                         MaterialPageRoute(builder: (context) => LoginSocial()),
                       );
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayerVideo('', 0, 0, 0, 0,
-                                sectionBannerList?[index].link, 0, "", "")),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => PlayerVideo('', 0, 0, 0, 0,
+                      //           sectionBannerList?[index].link, 0, "", "")),
+                      // );
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TestPlayerWeb(
+                              loadURL: sectionBannerList![index].link!)));
                     }
                     // debugPrint("Clicked on index ==> $index");
                     // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
@@ -543,20 +549,23 @@ class ChannelsState extends State<Channels> {
                     MaterialPageRoute(builder: (context) => LoginSocial()),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerVideo(
-                            '',
-                            0,
-                            0,
-                            sectionDataList?[index].typeId ?? 0,
-                            0,
-                            sectionDataList?[index].video320,
-                            0,
-                            "",
-                            "")),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PlayerVideo(
+                  //           '',
+                  //           0,
+                  //           0,
+                  //           sectionDataList?[index].typeId ?? 0,
+                  //           0,
+                  //           sectionDataList?[index].video320,
+                  //           0,
+                  //           "",
+                  //           "")),
+                  // );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                          loadURL: sectionDataList![index].video320!)));
                 }
               } else {
                 Utils.openDetails(
@@ -631,20 +640,23 @@ class ChannelsState extends State<Channels> {
                     MaterialPageRoute(builder: (context) => LoginSocial()),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerVideo(
-                            '',
-                            0,
-                            0,
-                            sectionDataList?[index].typeId ?? 0,
-                            0,
-                            sectionDataList?[index].video320,
-                            0,
-                            "",
-                            "")),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PlayerVideo(
+                  //           '',
+                  //           0,
+                  //           0,
+                  //           sectionDataList?[index].typeId ?? 0,
+                  //           0,
+                  //           sectionDataList?[index].video320,
+                  //           0,
+                  //           "",
+                  //           "")),
+                  // );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                          loadURL: sectionDataList![index].video320!)));
                 }
               } else {
                 Utils.openDetails(
@@ -717,20 +729,24 @@ class ChannelsState extends State<Channels> {
                     MaterialPageRoute(builder: (context) => LoginSocial()),
                   );
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerVideo(
-                            '',
-                            0,
-                            0,
-                            sectionDataList?[index].typeId ?? 0,
-                            0,
-                            sectionDataList?[index].video320,
-                            0,
-                            "",
-                            "")),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PlayerVideo(
+                  //           '',
+                  //           0,
+                  //           0,
+                  //           sectionDataList?[index].typeId ?? 0,
+                  //           0,
+                  //           sectionDataList?[index].video320,
+                  //           0,
+                  //           "",
+                  //           "")),
+                  // );
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                          loadURL: sectionDataList![index].video320!)));
                 }
               } else {
                 Utils.openDetails(
@@ -797,17 +813,19 @@ class ChannelsState extends State<Channels> {
                 sectionBannerList?[index].image ?? "",
               );
             } else {
-              return PlayerVideo(
-                "Channel",
-                0,
-                0,
-                0,
-                0,
-                sectionBannerList?[index].link ?? "",
-                0,
-                "",
-                sectionBannerList?[index].image ?? "",
-              );
+              // return PlayerVideo(
+              //   "Channel",
+              //   0,
+              //   0,
+              //   0,
+              //   0,
+              //   sectionBannerList?[index].link ?? "",
+              //   0,
+              //   "",
+              //   sectionBannerList?[index].image ?? "",
+              // );
+
+              TestPlayerWeb(loadURL: sectionBannerList![index].link!);
             }
           } else {
             await Navigator.push(
@@ -841,17 +859,20 @@ class ChannelsState extends State<Channels> {
                       sectionBannerList?[index].image ?? "",
                     );
                   } else {
-                    return PlayerVideo(
-                      "Channel",
-                      0,
-                      0,
-                      0,
-                      0,
-                      sectionBannerList?[index].link ?? "",
-                      0,
-                      "",
-                      sectionBannerList?[index].image ?? "",
-                    );
+                    // return PlayerVideo(
+                    //   "Channel",
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   0,
+                    //   sectionBannerList?[index].link ?? "",
+                    //   0,
+                    //   "",
+                    //   sectionBannerList?[index].image ?? "",
+                    // );
+
+                    return TestPlayerWeb(
+                        loadURL: sectionBannerList![index].link!);
                   }
                 },
               ),
