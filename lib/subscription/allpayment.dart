@@ -25,10 +25,10 @@ import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pay_with_paystack/pay_with_paystack.dart';
+// import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
-import 'package:payu_checkoutpro_flutter/PayUConstantKeys.dart';
-import 'package:payu_checkoutpro_flutter/payu_checkoutpro_flutter.dart';
+// import 'package:payu_checkoutpro_flutter/PayUConstantKeys.dart';
+// import 'package:payu_checkoutpro_flutter/payu_checkoutpro_flutter.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_web/razorpay_web.dart';
@@ -60,7 +60,9 @@ class AllPayment extends StatefulWidget {
 }
 
 class AllPaymentState extends State<AllPayment>
-    implements PayUCheckoutProProtocol {
+// implements PayUCheckoutProProtocol
+
+{
   final couponController = TextEditingController();
   late ProgressDialog prDialog;
   late PaymentProvider paymentProvider;
@@ -80,11 +82,11 @@ class AllPaymentState extends State<AllPayment>
   Map<String, dynamic>? paymentIntent;
 
   /* PayU */
-  late PayUCheckoutProFlutter _payUCheckoutPro;
+  // late PayUCheckoutProFlutter _payUCheckoutPro;
 
   @override
   void initState() {
-    if (!kIsWeb) _payUCheckoutPro = PayUCheckoutProFlutter(this);
+    // if (!kIsWeb) _payUCheckoutPro = PayUCheckoutProFlutter(this);
     prDialog = ProgressDialog(context);
     _getData();
     super.initState();
@@ -268,15 +270,19 @@ class AllPaymentState extends State<AllPayment>
         _initializeRazorpay();
       } else if (pgName == "flutterwave") {
         _flutterwaveInit();
-      } else if (pgName == "payumoney") {
-        _payUInit();
-      } else if (pgName == "paytm") {
+      }
+      // else if (pgName == "payumoney") {
+      //   _payUInit();
+      // }
+      else if (pgName == "paytm") {
         _paytmInit();
       } else if (pgName == "stripe") {
         _stripeInit();
-      } else if (pgName == "paystack") {
-        _paystackInit();
-      } else if (pgName == "instamojo") {
+      }
+      // else if (pgName == "paystack") {
+      //   _paystackInit();
+      // }
+      else if (pgName == "instamojo") {
         _initInstamojo();
       } else if (pgName == "cash") {
         if (!mounted) return;
@@ -1498,184 +1504,185 @@ class AllPaymentState extends State<AllPayment>
   /* ********* Flutterwave END ********* */
 
   /* ********* PayU START ********* */
-  _payUInit() async {
-    debugPrint(
-        "_payUInit isLive ======> ${paymentProvider.paymentOptionModel.result?.payUMoney?.isLive}");
-    /* Check Keys */
-    bool isContinue = checkKeysAndContinue(
-      isLive:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive ?? ""),
-      isBothKeyReq: false,
-      liveKey1:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
-              ""),
-      liveKey2:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
-              ""),
-      testKey1:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
-              ""),
-      testKey2:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
-              ""),
-    );
-    if (!isContinue) return;
-    /* Check Keys */
+  // _payUInit() async {
+  //   debugPrint(
+  //       "_payUInit isLive ======> ${paymentProvider.paymentOptionModel.result?.payUMoney?.isLive}");
+  //   /* Check Keys */
+  //   bool isContinue = checkKeysAndContinue(
+  //     isLive:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive ?? ""),
+  //     isBothKeyReq: false,
+  //     liveKey1:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
+  //             ""),
+  //     liveKey2:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
+  //             ""),
+  //     testKey1:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
+  //             ""),
+  //     testKey2:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
+  //             ""),
+  //   );
+  //   if (!isContinue) return;
+  //   /* Check Keys */
 
-    Map<dynamic, dynamic> additionalParam = {
-      PayUAdditionalParamKeys.udf1: "udf1",
-      PayUAdditionalParamKeys.udf2: "udf2",
-      PayUAdditionalParamKeys.udf3: "udf3",
-      PayUAdditionalParamKeys.udf4: "udf4",
-      PayUAdditionalParamKeys.udf5: "udf5",
-    };
+  //   Map<dynamic, dynamic> additionalParam = {
+  //     PayUAdditionalParamKeys.udf1: "udf1",
+  //     PayUAdditionalParamKeys.udf2: "udf2",
+  //     PayUAdditionalParamKeys.udf3: "udf3",
+  //     PayUAdditionalParamKeys.udf4: "udf4",
+  //     PayUAdditionalParamKeys.udf5: "udf5",
+  //   };
 
-    Map<dynamic, dynamic> payUPaymentParams = {
-      PayUPaymentParamKey.key: (paymentProvider
-                  .paymentOptionModel.result?.payUMoney?.isLive ==
-              "1")
-          ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
-              "")
-          : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
-              ""),
-      PayUPaymentParamKey.transactionId: paymentId ?? "",
-      PayUPaymentParamKey.amount: double.parse(widget.price ?? "0").toString(),
-      PayUPaymentParamKey.productInfo: widget.itemTitle ?? "",
-      PayUPaymentParamKey.firstName: userName ?? "",
-      PayUPaymentParamKey.email: userEmail ?? "",
-      PayUPaymentParamKey.phone: userMobileNo ?? "",
-      PayUPaymentParamKey.ios_surl: "https://payu.herokuapp.com/ios_success",
-      PayUPaymentParamKey.ios_furl: "https://payu.herokuapp.com/ios_failure",
-      PayUPaymentParamKey.android_surl: "https://payu.herokuapp.com/success",
-      PayUPaymentParamKey.android_furl: "https://payu.herokuapp.com/failure",
-      PayUPaymentParamKey.environment:
-          (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1")
-              ? "0"
-              : "1", //0 => Production, 1 => Test
-      PayUPaymentParamKey.additionalParam: additionalParam,
-      PayUPaymentParamKey.userCredential:
-          ('${(paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ?? "")}:${userEmail ?? ""}')
-    };
-    debugPrint("payUPaymentParams ======> ${payUPaymentParams.toString()}");
+  //   Map<dynamic, dynamic> payUPaymentParams = {
+  //     PayUPaymentParamKey.key: (paymentProvider
+  //                 .paymentOptionModel.result?.payUMoney?.isLive ==
+  //             "1")
+  //         ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
+  //             "")
+  //         : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
+  //             ""),
+  //     PayUPaymentParamKey.transactionId: paymentId ?? "",
+  //     PayUPaymentParamKey.amount: double.parse(widget.price ?? "0").toString(),
+  //     PayUPaymentParamKey.productInfo: widget.itemTitle ?? "",
+  //     PayUPaymentParamKey.firstName: userName ?? "",
+  //     PayUPaymentParamKey.email: userEmail ?? "",
+  //     PayUPaymentParamKey.phone: userMobileNo ?? "",
+  //     PayUPaymentParamKey.ios_surl: "https://payu.herokuapp.com/ios_success",
+  //     PayUPaymentParamKey.ios_furl: "https://payu.herokuapp.com/ios_failure",
+  //     PayUPaymentParamKey.android_surl: "https://payu.herokuapp.com/success",
+  //     PayUPaymentParamKey.android_furl: "https://payu.herokuapp.com/failure",
+  //     PayUPaymentParamKey.environment:
+  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1")
+  //             ? "0"
+  //             : "1", //0 => Production, 1 => Test
+  //     PayUPaymentParamKey.additionalParam: additionalParam,
+  //     PayUPaymentParamKey.userCredential:
+  //         ('${(paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ?? "")}:${userEmail ?? ""}')
+  //   };
+  //   debugPrint("payUPaymentParams ======> ${payUPaymentParams.toString()}");
 
-    try {
-      _payUCheckoutPro.openCheckoutScreen(
-        payUPaymentParams: payUPaymentParams,
-        payUCheckoutProConfig: PayUParams.createPayUConfigParams(),
-      );
-    } on Exception catch (e) {
-      debugPrint("_payUInit Exception ======> ${e.toString()}");
-    }
-  }
+  //   try {
+  //     _payUCheckoutPro.openCheckoutScreen(
+  //       payUPaymentParams: payUPaymentParams,
+  //       payUCheckoutProConfig: PayUParams.createPayUConfigParams(),
+  //     );
+  //   } on Exception catch (e) {
+  //     debugPrint("_payUInit Exception ======> ${e.toString()}");
+  //   }
+  // }
 
-  @override
-  generateHash(Map response) {
-    // Pass response param to your backend server
-    // Backend will generate the hash and will callback to
-    Map<dynamic, dynamic> hashResponse = PayUHashService((paymentProvider
-                    .paymentOptionModel.result?.payUMoney?.isLive ==
-                "1")
-            ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
-                "")
-            : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
-                ""))
-        .generateHash(response);
-    debugPrint("hashResponse =====> $hashResponse");
-    _payUCheckoutPro.hashGenerated(hash: hashResponse);
-  }
+  // @override
+  // generateHash(Map response) {
+  //   // Pass response param to your backend server
+  //   // Backend will generate the hash and will callback to
+  //   Map<dynamic, dynamic> hashResponse = PayUHashService((paymentProvider
+  //                   .paymentOptionModel.result?.payUMoney?.isLive ==
+  //               "1")
+  //           ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
+  //               "")
+  //           : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
+  //               ""))
+  //       .generateHash(response);
+  //   debugPrint("hashResponse =====> $hashResponse");
+  //   _payUCheckoutPro.hashGenerated(hash: hashResponse);
+  // }
 
-  @override
-  onError(Map? response) {
-    if (!mounted) return;
-    Utils.showSnackbar(context, "fail", "payment_fail", true);
-  }
+  // @override
+  // onError(Map? response) {
+  //   if (!mounted) return;
+  //   Utils.showSnackbar(context, "fail", "payment_fail", true);
+  // }
 
-  @override
-  onPaymentCancel(Map? response) {
-    if (!mounted) return;
-    Utils.showSnackbar(context, "info", "payment_cancel", true);
-  }
+  // @override
+  // onPaymentCancel(Map? response) {
+  //   if (!mounted) return;
+  //   Utils.showSnackbar(context, "info", "payment_cancel", true);
+  // }
 
-  @override
-  onPaymentFailure(response) {
-    Utils.showSnackbar(context, "fail", "payment_fail", true);
-  }
+  // @override
+  // onPaymentFailure(response) {
+  //   Utils.showSnackbar(context, "fail", "payment_fail", true);
+  // }
 
-  @override
-  onPaymentSuccess(response) {
-    if (!mounted) return;
-    Utils.showSnackbar(context, "success", "payment_success", true);
+  // @override
+  // onPaymentSuccess(response) {
+  //   if (!mounted) return;
+  //   Utils.showSnackbar(context, "success", "payment_success", true);
 
-    if (widget.payType == "Package") {
-      addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency);
-    } else if (widget.payType == "Rent") {
-      addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-          widget.typeId, widget.videoType);
-    }
-  }
+  //   if (widget.payType == "Package") {
+  //     addTransaction(widget.itemId, widget.itemTitle,
+  //         paymentProvider.finalAmount, paymentId, widget.currency);
+  //   } else if (widget.payType == "Rent") {
+  //     addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+  //         widget.typeId, widget.videoType);
+  //   }
+  // }
   /* ********* PayU END ********* */
 
   /* ********* Paystack START ********* */
-  _paystackInit() async {
-    /* Check Keys */
-    bool isContinue = checkKeysAndContinue(
-      isLive:
-          (paymentProvider.paymentOptionModel.result?.paystack?.isLive ?? ""),
-      isBothKeyReq: false,
-      liveKey1:
-          (paymentProvider.paymentOptionModel.result?.paystack?.liveKey1 ?? ""),
-      liveKey2:
-          (paymentProvider.paymentOptionModel.result?.paystack?.liveKey2 ?? ""),
-      testKey1:
-          (paymentProvider.paymentOptionModel.result?.paystack?.testKey1 ?? ""),
-      testKey2:
-          (paymentProvider.paymentOptionModel.result?.paystack?.testKey2 ?? ""),
-    );
-    if (!isContinue) return;
-    /* Check Keys */
+  // _paystackInit() async {
+  //   /* Check Keys */
+  //   bool isContinue = checkKeysAndContinue(
+  //     isLive:
+  //         (paymentProvider.paymentOptionModel.result?.paystack?.isLive ?? ""),
+  //     isBothKeyReq: false,
+  //     liveKey1:
+  //         (paymentProvider.paymentOptionModel.result?.paystack?.liveKey1 ?? ""),
+  //     liveKey2:
+  //         (paymentProvider.paymentOptionModel.result?.paystack?.liveKey2 ?? ""),
+  //     testKey1:
+  //         (paymentProvider.paymentOptionModel.result?.paystack?.testKey1 ?? ""),
+  //     testKey2:
+  //         (paymentProvider.paymentOptionModel.result?.paystack?.testKey2 ?? ""),
+  //   );
+  //   if (!isContinue) return;
+  //   /* Check Keys */
 
-    debugPrint("_paystackInit price ========> ${widget.price}");
-    debugPrint("_paystackInit currency =====> ${Constant.currency}");
-    PayWithPayStack().now(
-      context: context,
-      customerEmail: userEmail ?? "",
-      reference: DateTime.now().microsecondsSinceEpoch.toString(),
-      currency: Constant.currency,
-      amount: (int.parse(widget.price ?? "0") * 100).toString(),
-      secretKey: (paymentProvider.paymentOptionModel.result?.paystack?.isLive ==
-              "1")
-          ? (paymentProvider.paymentOptionModel.result?.paystack?.liveKey1 ??
-              "")
-          : (paymentProvider.paymentOptionModel.result?.paystack?.testKey1 ??
-              ""),
-      transactionCompleted: () async {
-        debugPrint("Transaction Successful");
-        debugPrint("paymentId ========> $paymentId");
+  //   debugPrint("_paystackInit price ========> ${widget.price}");
+  //   debugPrint("_paystackInit currency =====> ${Constant.currency}");
+  //   PayWithPayStack().now(
+  //     context: context,
+  //     customerEmail: userEmail ?? "",
+  //     reference: DateTime.now().microsecondsSinceEpoch.toString(),
+  //     currency: Constant.currency,
+  //     amount: (int.parse(widget.price ?? "0") * 100).toString(),
+  //     secretKey: (paymentProvider.paymentOptionModel.result?.paystack?.isLive ==
+  //             "1")
+  //         ? (paymentProvider.paymentOptionModel.result?.paystack?.liveKey1 ??
+  //             "")
+  //         : (paymentProvider.paymentOptionModel.result?.paystack?.testKey1 ??
+  //             ""),
+  //     transactionCompleted: () async {
+  //       debugPrint("Transaction Successful");
+  //       debugPrint("paymentId ========> $paymentId");
 
-        if (!mounted) return;
-        Utils.showSnackbar(context, "success", "payment_success", true);
+  //       if (!mounted) return;
+  //       Utils.showSnackbar(context, "success", "payment_success", true);
 
-        if (widget.payType == "Package") {
-          await addTransaction(widget.itemId, widget.itemTitle,
-              paymentProvider.finalAmount, paymentId, widget.currency);
-        } else if (widget.payType == "Rent") {
-          await addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-              widget.typeId, widget.videoType);
-        }
-        if (paymentProvider.successModel.status == 200) {
-          if (!mounted) return;
-          Navigator.pop(context, true);
-        }
-      },
-      transactionNotCompleted: () {
-        debugPrint("Transaction Not Successful!");
-        if (!mounted) return;
-        Utils.showSnackbar(context, "fail", "payment_fail", true);
-      },
-      callbackUrl: 'https://dtlive.divinetechs.in/',
-    );
-  }
+  //       if (widget.payType == "Package") {
+  //         await addTransaction(widget.itemId, widget.itemTitle,
+  //             paymentProvider.finalAmount, paymentId, widget.currency);
+  //       } else if (widget.payType == "Rent") {
+  //         await addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+  //             widget.typeId, widget.videoType);
+  //       }
+  //       if (paymentProvider.successModel.status == 200) {
+  //         if (!mounted) return;
+  //         Navigator.pop(context, true);
+  //       }
+  //     },
+  //     transactionNotCompleted: () {
+  //       debugPrint("Transaction Not Successful!");
+  //       if (!mounted) return;
+  //       Utils.showSnackbar(context, "fail", "payment_fail", true);
+  //     },
+  //     callbackUrl: 'https://dtlive.divinetechs.in/',
+  //   );
+  // }
+
   /* ********* Paystack END ********* */
 
   /* ********* Instamojo START ********* */
