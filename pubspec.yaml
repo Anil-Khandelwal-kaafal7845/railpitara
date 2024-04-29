@@ -130,8 +130,9 @@ dependencies:
   no_screenshot: ^0.0.1+6
   flutter_windowmanager: ^0.2.0
   firebase_analytics: ^10.5.1
-  keep_screen_on: ^3.0.0
+  # keep_screen_on: ^3.0.0
   floating: ^2.0.1
+  # wakelock: ^0.6.2
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'

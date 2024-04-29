@@ -258,6 +258,7 @@ import 'package:no_screenshot/no_screenshot.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:wakelock/wakelock.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -356,7 +357,7 @@ class _MyAppState extends State<MyApp> {
   final _noScreenshot = NoScreenshot.instance;
   @override
   void initState() {
-     _noScreenshot.screenshotOff();
+    _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
     if (!kIsWeb) _getDeviceInfo();
     super.initState();
@@ -364,6 +365,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
     final router = GoRouter(
       routes: [
         GoRoute(

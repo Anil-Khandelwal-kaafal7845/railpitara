@@ -43,6 +43,7 @@
         android:label="Aaryaa digital"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:keepScreenOn="true"
         android:banner="@drawable/banner"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"

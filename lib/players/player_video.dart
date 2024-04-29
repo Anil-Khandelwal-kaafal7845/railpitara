@@ -13,7 +13,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:keep_screen_on/keep_screen_on.dart';
 // import 'package:no_screenshot/no_screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
@@ -66,7 +65,6 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
     _checkPiPAvailability();
     restrictScreenRecordingandScreenshot();
     // Keep the screen on.
-    KeepScreenOn.turnOn();
     debugPrint("videoUrl ========> ${widget.videoUrl}");
     debugPrint("vUploadType ========> ${widget.vUploadType}");
     playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -277,7 +275,7 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     allowScreenRecordingandScreenshot();
-    KeepScreenOn.turnOff();
+    // KeepScreenOn.turnOff();
     if (_chewieController != null) {
       subtitleController?.detach();
       _chewieController?.removeListener(() {});
@@ -340,70 +338,71 @@ class _PlayerVideoState extends State<PlayerVideo> with WidgetsBindingObserver {
       });
     }
   }
-@override
-Widget build(BuildContext context) {
-  return WillPopScope(
-    onWillPop: onBackPressed,
-    child: PiPSwitcher(
-      // Widget displayed when PiP is disabled or app is in foreground state
-      childWhenDisabled: Scaffold(
-        backgroundColor: black,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              // Show back button only when not in PiP mode
-              if (!isInPiPMode && !kIsWeb)
-                Positioned(
-                  top: 15,
-                  left: 15,
-                  child: SafeArea(
-                    child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: onBackPressed,
-                      child: Icon(
-                        CupertinoIcons.back,
-                        color: Colors.white,
-                        size: 30,
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: onBackPressed,
+      child: PiPSwitcher(
+        // Widget displayed when PiP is disabled or app is in foreground state
+        childWhenDisabled: Scaffold(
+          backgroundColor: black,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                // Show back button only when not in PiP mode
+                if (!isInPiPMode && !kIsWeb)
+                  Positioned(
+                    top: 15,
+                    left: 15,
+                    child: SafeArea(
+                      child: CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: onBackPressed,
+                        child: Icon(
+                          CupertinoIcons.back,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),
+                Center(
+                  child: _buildPage(),
                 ),
-              Center(
-                child: _buildPage(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      // Widget displayed when PiP window is enabled or app is in background state
-      childWhenEnabled: Scaffold(
-        body: Center(
-          child: Stack(
-            children: [
-              // Show back button only when not in PiP mode
-              if (!isInPiPMode && !kIsWeb)
-                Positioned(
-                  top: 15,
-                  left: 15,
-                  child: SafeArea(
-                    child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: onBackPressed,
-                      child: Icon(
-                        CupertinoIcons.back,
-                        color: Colors.white,
+        // Widget displayed when PiP window is enabled or app is in background state
+        childWhenEnabled: Scaffold(
+          body: Center(
+            child: Stack(
+              children: [
+                // Show back button only when not in PiP mode
+                if (!isInPiPMode && !kIsWeb)
+                  Positioned(
+                    top: 15,
+                    left: 15,
+                    child: SafeArea(
+                      child: CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: onBackPressed,
+                        child: Icon(
+                          CupertinoIcons.back,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              _buildPage(),
-            ],
+                _buildPage(),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   // @override
   // Widget build(BuildContext context) {
