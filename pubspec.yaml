@@ -62,11 +62,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   crypto: ^3.0.3
   google_sign_in: ^6.1.5
-  firebase_core: ^2.15.1
-  firebase_auth: ^4.9.0
-  firebase_auth_platform_interface: ^6.18.0
   onesignal_flutter: ^5.0.0
-  firebase_messaging: ^14.6.7
   google_mobile_ads: ^3.0.0
   # Firebase - OneSignal
   intl_phone_field: ^3.2.0
@@ -129,10 +125,20 @@ dependencies:
   package_info_plus: ^3.1.2
   no_screenshot: ^0.0.1+6
   flutter_windowmanager: ^0.2.0
-  firebase_analytics: ^10.5.1
   # keep_screen_on: ^3.0.0
   floating: ^2.0.1
+  # firebase_core: ^1.19.0
   # wakelock: ^0.6.2
+  #test
+  firebase_analytics: ^10.5.1
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
+  firebase_auth_platform_interface: ^6.18.0
+  firebase_messaging: ^14.6.7
+  #test
+
+
+
 
 dependency_overrides:
   webview_flutter_wkwebview: '3.5.0'
