@@ -49,7 +49,7 @@ dependencies:
   # Payment Gateways
   razorpay_web: ^1.3.5
   paytm_allinonesdk: ^1.2.1
-  flutter_stripe: ^9.2.2
+  # flutter_stripe: ^9.2.2
   flutter_dotenv: ^5.1.0
   http_auth: ^1.0.2
   flutter_paypal: ^0.2.0
@@ -127,7 +127,6 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   # keep_screen_on: ^3.0.0
   floating: ^2.0.1
-  # firebase_core: ^1.19.0
   # wakelock: ^0.6.2
   #test
   firebase_analytics: ^10.5.1

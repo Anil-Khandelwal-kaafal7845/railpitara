@@ -21,7 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
-import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
+// import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
@@ -276,9 +276,10 @@ class AllPaymentState extends State<AllPayment>
       // }
       else if (pgName == "paytm") {
         _paytmInit();
-      } else if (pgName == "stripe") {
-        _stripeInit();
       }
+      // else if (pgName == "stripe") {
+      //   _stripeInit();
+      // }
       // else if (pgName == "paystack") {
       //   _paystackInit();
       // }
@@ -1333,106 +1334,107 @@ class AllPaymentState extends State<AllPayment>
   /* ********* Paypal END ********* */
 
   /* ********* Stripe START ********* */
-  Future<void> _stripeInit() async {
-    if (paymentProvider.paymentOptionModel.result?.stripe != null) {
-      stripe.Stripe.publishableKey = (paymentProvider
-                  .paymentOptionModel.result?.stripe?.isLive ==
-              "1")
-          ? (paymentProvider.paymentOptionModel.result?.stripe?.liveKey1 ?? "")
-          : (paymentProvider.paymentOptionModel.result?.stripe?.testKey1 ?? "");
-      try {
-        //STEP 1: Create Payment Intent
-        paymentIntent = await createPaymentIntent(
-            paymentProvider.finalAmount ?? "", Constant.currency);
+  // Future<void> _stripeInit() async {
+  //   if (paymentProvider.paymentOptionModel.result?.stripe != null) {
+  //     stripe.Stripe.publishableKey = (paymentProvider
+  //                 .paymentOptionModel.result?.stripe?.isLive ==
+  //             "1")
+  //         ? (paymentProvider.paymentOptionModel.result?.stripe?.liveKey1 ?? "")
+  //         : (paymentProvider.paymentOptionModel.result?.stripe?.testKey1 ?? "");
+  //     try {
+  //       //STEP 1: Create Payment Intent
+  //       paymentIntent = await createPaymentIntent(
+  //           paymentProvider.finalAmount ?? "", Constant.currency);
 
-        //STEP 2: Initialize Payment Sheet
-        await stripe.Stripe.instance
-            .initPaymentSheet(
-                paymentSheetParameters: stripe.SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntent?['client_secret'],
-              style: ThemeMode.light,
-              merchantDisplayName: Constant.appName,
-            ))
-            .then((value) {});
+  //       //STEP 2: Initialize Payment Sheet
+  //       await stripe.Stripe.instance
+  //           .initPaymentSheet(
+  //               paymentSheetParameters: stripe.SetupPaymentSheetParameters(
+  //             paymentIntentClientSecret: paymentIntent?['client_secret'],
+  //             style: ThemeMode.light,
+  //             merchantDisplayName: Constant.appName,
+  //           ))
+  //           .then((value) {});
 
-        //STEP 3: Display Payment sheet
-        displayPaymentSheet();
-      } catch (err) {
-        throw Exception(err);
-      }
-    } else {
-      Utils.showSnackbar(context, "", "payment_not_processed", true);
-    }
-  }
+  //       //STEP 3: Display Payment sheet
+  //       displayPaymentSheet();
+  //     } catch (err) {
+  //       throw Exception(err);
+  //     }
+  //   } else {
+  //     Utils.showSnackbar(context, "", "payment_not_processed", true);
+  //   }
+  // }
 
-  createPaymentIntent(String amount, String currency) async {
-    try {
-      //Request body
-      Map<String, dynamic> body = {
-        'amount': calculateAmount(amount),
-        'currency': currency,
-        'description': widget.itemTitle,
-      };
+  // createPaymentIntent(String amount, String currency) async {
+  //   try {
+  //     //Request body
+  //     Map<String, dynamic> body = {
+  //       'amount': calculateAmount(amount),
+  //       'currency': currency,
+  //       'description': widget.itemTitle,
+  //     };
 
-      //Make post request to Stripe
-      var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/payment_intents'),
-        headers: {
-          'Authorization':
-              'Bearer ${(paymentProvider.paymentOptionModel.result?.stripe?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.stripe?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.stripe?.testKey2 ?? "")}',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: body,
-      );
-      return json.decode(response.body);
-    } catch (err) {
-      throw Exception(err.toString());
-    }
-  }
+  //     //Make post request to Stripe
+  //     var response = await http.post(
+  //       Uri.parse('https://api.stripe.com/v1/payment_intents'),
+  //       headers: {
+  //         'Authorization':
+  //             'Bearer ${(paymentProvider.paymentOptionModel.result?.stripe?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.stripe?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.stripe?.testKey2 ?? "")}',
+  //         'Content-Type': 'application/x-www-form-urlencoded'
+  //       },
+  //       body: body,
+  //     );
+  //     return json.decode(response.body);
+  //   } catch (err) {
+  //     throw Exception(err.toString());
+  //   }
+  // }
 
-  calculateAmount(String amount) {
-    final calculatedAmout = (int.parse(amount)) * 100;
-    return calculatedAmout.toString();
-  }
+  // calculateAmount(String amount) {
+  //   final calculatedAmout = (int.parse(amount)) * 100;
+  //   return calculatedAmout.toString();
+  // }
 
-  displayPaymentSheet() async {
-    try {
-      await stripe.Stripe.instance.presentPaymentSheet().then((value) {
-        Utils.showSnackbar(context, "success", "payment_success", true);
-        if (widget.payType == "Package") {
-          addTransaction(widget.itemId, widget.itemTitle,
-              paymentProvider.finalAmount, paymentId, widget.currency);
-        } else if (widget.payType == "Rent") {
-          addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-              widget.typeId, widget.videoType);
-        }
+  // displayPaymentSheet() async {
+  //   try {
+  //     await stripe.Stripe.instance.presentPaymentSheet().then((value) {
+  //       Utils.showSnackbar(context, "success", "payment_success", true);
+  //       if (widget.payType == "Package") {
+  //         addTransaction(widget.itemId, widget.itemTitle,
+  //             paymentProvider.finalAmount, paymentId, widget.currency);
+  //       } else if (widget.payType == "Rent") {
+  //         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+  //             widget.typeId, widget.videoType);
+  //       }
 
-        paymentIntent = null;
-      }).onError((error, stackTrace) {
-        throw Exception(error);
-      });
-    } on stripe.StripeException catch (e) {
-      debugPrint('Error is:---> $e');
-      const AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.cancel,
-                  color: Colors.red,
-                ),
-                Text("Payment Failed"),
-              ],
-            ),
-          ],
-        ),
-      );
-    } catch (e) {
-      debugPrint('$e');
-    }
-  }
+  //       paymentIntent = null;
+  //     }).onError((error, stackTrace) {
+  //       throw Exception(error);
+  //     });
+  //   } on stripe.StripeException catch (e) {
+  //     debugPrint('Error is:---> $e');
+  //     const AlertDialog(
+  //       content: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Icon(
+  //                 Icons.cancel,
+  //                 color: Colors.red,
+  //               ),
+  //               Text("Payment Failed"),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     debugPrint('$e');
+  //   }
+  // }
+
   /* ********* Stripe END ********* */
 
   /* ********* Flutterwave START ********* */
