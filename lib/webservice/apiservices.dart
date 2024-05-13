@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dtlive/model/auditionmodel.dart';
 import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/browsebyartistmodel.dart';
 import 'package:dtlive/model/castdetailmodel.dart';
@@ -865,6 +866,22 @@ class ApiService {
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
+
+   
+    Future<AuditionModel> auditionDetaiApi(
+  email) async {
+    AuditionModel auditonData;
+    Response response = await dio.post(
+      'https://admin.aaryaadigital.com/api/get-audition-user-data',
+      options: optHeaders,
+      data: {
+       "email":email
+      },
+    );
+    auditonData = AuditionModel.fromJson(response.data);
+    return auditonData;
+  }
+
 
   // subscription_list API
   Future<HistoryModel> subscriptionList() async {

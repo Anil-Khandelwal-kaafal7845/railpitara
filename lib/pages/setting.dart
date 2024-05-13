@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dtlive/pages/aboutprivacyterms.dart';
+import 'package:dtlive/pages/emailscrren.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/mydownloads.dart';
@@ -460,56 +461,109 @@ class SettingState extends State<Setting> {
   }
 
   Widget _buildPages() {
-    if (generalProvider.loading) {
-      return const SizedBox.shrink();
-    } else {
-      if (generalProvider.pagesModel.status == 200 &&
-          generalProvider.pagesModel.result != null) {
-        return AlignedGridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 1,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          itemCount: (generalProvider.pagesModel.result?.length ?? 0),
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int position) {
-            return Column(
-              children: [
-                _buildSettingButton(
-                  title:
-                      generalProvider.pagesModel.result?[position].pageName ??
-                          '',
-                  subTitle: generalProvider
-                          .pagesModel.result?[position].pageSubtitle ??
-                      '',
-                  titleMultilang: false,
-                  subTitleMultilang: false,
-                  onClick: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AboutPrivacyTerms(
-                          appBarTitle: generalProvider
-                                  .pagesModel.result?[position].pageName ??
-                              '',
-                          loadURL: generalProvider
-                                  .pagesModel.result?[position].url ??
-                              '',
-                        ),
+  if (generalProvider.loading) {
+    return const SizedBox.shrink();
+  } else {
+    if (generalProvider.pagesModel.status == 200 &&
+        generalProvider.pagesModel.result != null) {
+      return AlignedGridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 1,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        itemCount: (generalProvider.pagesModel.result?.length ?? 0),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int position) {
+          return Column(
+            children: [
+              _buildSettingButton(
+                title: generalProvider.pagesModel.result?[position].pageName ?? '',
+                subTitle: generalProvider.pagesModel.result?[position].pageSubtitle ?? '',
+                titleMultilang: false,
+                subTitleMultilang: false,
+                onClick: () {
+                  // Check if the tapped item is "Audition Form"
+                  if (generalProvider.pagesModel.result?[position].pageName == "Audition Form") {
+                    // Navigate to AnilAuditionScreen
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EmailScreenAudition(),
+                    ));
+                  } else {
+                    // For other items, navigate to AboutPrivacyTerms
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AboutPrivacyTerms(
+                        appBarTitle: generalProvider.pagesModel.result?[position].pageName ?? '',
+                        loadURL: generalProvider.pagesModel.result?[position].url ?? '',
                       ),
+                    )
                     );
-                  },
-                ),
-                _buildLine(16.0, 0.0),
-              ],
-            );
-          },
-        );
-      } else {
-        return const SizedBox.shrink();
-      }
+                  }
+                },
+              ),
+              _buildLine(16.0, 0.0),
+            ],
+          );
+        },
+      );
+    } else {
+      return const SizedBox.shrink();
     }
   }
+}
+
+
+  // Widget _buildPages() {
+  //   if (generalProvider.loading) {
+  //     return const SizedBox.shrink();
+  //   } else {
+  //     if (generalProvider.pagesModel.status == 200 &&
+  //         generalProvider.pagesModel.result != null) {
+  //       return AlignedGridView.count(
+  //         shrinkWrap: true,
+  //         crossAxisCount: 1,
+  //         crossAxisSpacing: 16,
+  //         mainAxisSpacing: 16,
+  //         itemCount: (generalProvider.pagesModel.result?.length ?? 0),
+  //         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         itemBuilder: (BuildContext context, int position) {
+  //           return Column(
+  //             children: [
+  //               _buildSettingButton(
+  //                 title:
+  //                     generalProvider.pagesModel.result?[position].pageName ??
+  //                         '',
+  //                 subTitle: generalProvider
+  //                         .pagesModel.result?[position].pageSubtitle ??
+  //                     '',
+  //                 titleMultilang: false,
+  //                 subTitleMultilang: false,
+  //                 onClick: () {
+  //                   Navigator.of(context).push(
+  //                     MaterialPageRoute(
+  //                       builder: (context) => AboutPrivacyTerms(
+  //                         appBarTitle: generalProvider
+  //                                 .pagesModel.result?[position].pageName ??
+  //                             '',
+  //                         loadURL: generalProvider
+  //                                 .pagesModel.result?[position].url ??
+  //                             '',
+  //                       ),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //               _buildLine(16.0, 0.0),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     } else {
+  //       return const SizedBox.shrink();
+  //     }
+  //   }
+  // }
 
   Widget _buildSettingButton({
     required String title,
