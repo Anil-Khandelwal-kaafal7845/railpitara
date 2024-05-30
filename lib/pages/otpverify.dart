@@ -22,7 +22,10 @@ import '../webservice/apiservices.dart';
 
 class OTPVerify extends StatefulWidget {
   final String mobileNumber;
-  const OTPVerify(this.mobileNumber, {Key? key}) : super(key: key);
+  final String type;
+  final String email;
+
+  const OTPVerify(this.mobileNumber ,this.type,this.email , {Key? key}) : super(key: key);
 
   @override
   State<OTPVerify> createState() => OTPVerifyState();
@@ -46,6 +49,7 @@ class OTPVerifyState extends State<OTPVerify> {
 
   @override
   void initState() {
+    print("EMNAIL AA GYI ---${widget.email}");
     super.initState();
     // _getDeviceToken();
     startResendTimer();
@@ -68,12 +72,11 @@ class OTPVerifyState extends State<OTPVerify> {
 
 
   _sendWhatsappOTP() async {
-    await ApiService().loginWithWhatsapp(widget.mobileNumber);
+    await ApiService().loginWithWhatsapp(widget.mobileNumber ,widget.type ,widget.email);
   }
 
   // _getDeviceToken() async {
   //   try {
-  //     if (Platform.isAndroid) {
   //       strDeviceType = "1";
   //       strDeviceToken = await FirebaseMessaging.instance.getToken();
   //     } else {
@@ -153,9 +156,10 @@ class OTPVerifyState extends State<OTPVerify> {
                   multilanguage: true,
                   fontstyle: FontStyle.normal,
                 ),
+
                 MyText(
                   color: otherColor,
-                  text: widget.mobileNumber,
+                  text: widget.mobileNumber.isNotEmpty ? widget.mobileNumber : widget.email,
                   fontsizeNormal: 15,
                   fontweight: FontWeight.w500,
                   maxline: 3,
@@ -164,6 +168,7 @@ class OTPVerifyState extends State<OTPVerify> {
                   multilanguage: false,
                   fontstyle: FontStyle.normal,
                 ),
+               
                 const SizedBox(height: 40),
 
                 /* Enter Received OTP */
@@ -380,10 +385,10 @@ class OTPVerifyState extends State<OTPVerify> {
     //     "phoneAuthCredential.verificationId =====> ${phoneAuthCredential.verificationId}");
 
     await ApiService()
-        .verifyLoginWithWhatsapp(widget.mobileNumber, pinPutController.text)
+        .verifyLoginWithWhatsapp(widget.mobileNumber, pinPutController.text ,widget.email)
         .then((value) async {
       if (value) {
-        _login(widget.mobileNumber.toString());
+        _login(widget.mobileNumber.toString() ,widget.email.toString());
       } else {
         await prDialog.hide();
         if (!mounted) return;
@@ -424,8 +429,10 @@ class OTPVerifyState extends State<OTPVerify> {
     // }
   }
 
-  _login(String mobile) async {
+
+  _login(String mobile ,String email) async {
     debugPrint("click on Submit mobile => $mobile");
+    debugPrint("click on Submit mobile => $email");
     var generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     if (!prDialog.isShowing()) {
       Utils.showProgress(context, prDialog);
@@ -433,7 +440,7 @@ class OTPVerifyState extends State<OTPVerify> {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     final sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
-    await generalProvider.loginWithOTP(mobile);
+    await generalProvider.loginWithOTP(mobile ,email);
 
     if (!generalProvider.loading) {
       if (generalProvider.loginOTPModel.status == 200) {
@@ -477,4 +484,6 @@ class OTPVerifyState extends State<OTPVerify> {
       }
     }
   }
+
+
 }

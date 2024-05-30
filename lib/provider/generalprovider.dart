@@ -20,6 +20,12 @@ class GeneralProvider extends ChangeNotifier {
 
   bool loading = false;
   String? appDescription;
+   String? isEmail;
+   String? isGoogleLogin;
+   String? isFbLogin;
+   String ? isMobileLogin;
+   
+
 
   SharedPre sharedPre = SharedPre();
 
@@ -39,6 +45,18 @@ class GeneralProvider extends ChangeNotifier {
         }
 
         appDescription = await sharedPre.read("app_desripation") ?? "";
+
+         isEmail = await sharedPre.read("is_email") ?? "0"; // Read the is_email value here
+        isGoogleLogin = await sharedPre.read("is_google") ?? "0";  
+        isFbLogin = await sharedPre.read("is_facebook") ?? "0";  
+        isMobileLogin = await sharedPre.read("is_mobile") ?? "0";
+      
+      
+      debugPrint("isEmail ===========> $isEmail");
+      debugPrint("isGoogleLogin ===========> $isGoogleLogin");
+      debugPrint("isFbLogin ===========> $isFbLogin");
+      debugPrint("isMobileLogin ===========> $isMobileLogin");
+
         debugPrint("appDescription ===========> $appDescription");
         /* Get Ads Init */
         if (context.mounted && !kIsWeb) {
@@ -81,16 +99,18 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loginWithOTP(mobile) async {
+  Future<void> loginWithOTP(mobile ,email) async {
     debugPrint("getLoginOTP mobile :==> $mobile");
+     debugPrint("getLoginOTP email :==> $email");
 
     loading = true;
-    loginOTPModel = await ApiService().loginWithOTP(mobile);
+    loginOTPModel = await ApiService().loginWithOTP(mobile ,email);
     debugPrint("login status :==> ${loginOTPModel.status}");
     debugPrint("login message :==> ${loginOTPModel.message}");
     loading = false;
     notifyListeners();
   }
+
 
   Future<void> loginWithTV(strOTP) async {
     debugPrint("loginWithTV strOTP :==> $strOTP");

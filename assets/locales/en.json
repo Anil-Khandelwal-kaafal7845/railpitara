@@ -93,6 +93,8 @@
     "login_with_mobile_note": "Enter your mobile number to login",
     "or": "Or",
     "loginwithgoogle": "Login with Google",
+    "loginwithemail":"Login with Email",
+    "loginwithphone":"Login with Phone Number",
     "loginwithfacebook": "Login with Facebook",
     "loginwithapple": "Login with Apple",
     "forgotpassword": "Forgot Password?",
