@@ -7,7 +7,6 @@ import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
-import 'package:dtlive/players/player_video.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';

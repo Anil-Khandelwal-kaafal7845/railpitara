@@ -1,9 +1,9 @@
 
 import 'package:dtlive/model/auditionmodel.dart';
 import 'package:dtlive/pages/aboutprivacyterms.dart';
+import 'package:dtlive/pages/auditiondetail.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/utils.dart';
-import 'package:dtlive/webservice/apiservices.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,12 +109,19 @@ class _EmailScreenAuditionState extends State<EmailScreenAudition> {
                             debugPrint('Form validation failed');
                             return;
                           }
-                          ApiService().auditionDetaiApi(emailController.text).then((value) {
-                            setState(() {
-                              auditionData = value;
-                            });
-                            _showAuditionDetailsDialog();
-                          });
+                           Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AuditionDetailsScreen(
+                          email: emailController.text,
+                        ),
+                      )
+                      );
+
+                          // ApiService().auditionDetaiApi(emailController.text).then((value) {
+                          //   setState(() {
+                          //     auditionData = value;
+                          //   });
+                          //   _showAuditionDetailsDialog();
+                          // });
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -148,9 +155,9 @@ class _EmailScreenAuditionState extends State<EmailScreenAudition> {
                           child: Text(
                             'Click here to fill out the audition form',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: Colors.white,
                               decoration: TextDecoration.underline,
-                              fontSize: 14
+                              fontSize: 16
                             ),
                           ),
                         ),
