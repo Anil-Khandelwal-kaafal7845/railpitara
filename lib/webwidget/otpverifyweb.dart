@@ -4,6 +4,7 @@ import 'package:dtlive/provider/sectiondataprovider.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/sharedpre.dart';
+import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';
@@ -346,7 +347,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
 
     final generalProvider =
         Provider.of<GeneralProvider>(context, listen: false);
-    await generalProvider.loginWithOTP(mobile);
+    // await generalProvider.loginWithOTP(mobile ,email);
 
     if (!generalProvider.loading) {
       if (generalProvider.loginOTPModel.status == 200) {
@@ -377,7 +378,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
 
         await homeProvider.homeNotifyProvider();
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1","0");
+        await sectionDataProvider.getSectionList("0", "1" ,"0");
       } else {
         if (!mounted) return;
         Utils.showSnackbar(

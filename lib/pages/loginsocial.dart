@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:dtlive/pages/bottombar.dart';
+import 'package:dtlive/pages/loginemail.dart';
 import 'package:dtlive/pages/otpverify.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -16,7 +17,9 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -116,6 +119,7 @@ class LoginSocialState extends State<LoginSocial> {
 
   @override
   Widget build(BuildContext context) {
+    print("EMAIL KYA H ---${generalProvider.isEmail}");
     return Scaffold(
       backgroundColor: appBgColor,
       body: SingleChildScrollView(
@@ -138,195 +142,193 @@ class LoginSocialState extends State<LoginSocial> {
                 ),
               ),
               const SizedBox(height: 25),
-              Row(
-                children: [
-                  Text(
-                    "Login with mobile number",
-                    style: TextStyle(color: white, fontSize: 21),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  // SizedBox(
-                  //     height: 23,
-                  //     width: 23,
-                  //     child: Image.asset(
-                  //       'assets/images/logos_whatsapp-icon.png',
-                  //       height: 23,
-                  //       width: 23,
-                  //     )),
-                ],
-              ),
+              generalProvider.isMobileLogin == "1"
+                  ? Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Login with mobile number",
+                                style: TextStyle(color: white, fontSize: 21),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              // SizedBox(
+                              //     height: 23,
+                              //     width: 23,
+                              //     child: Image.asset(
+                              //       'assets/images/logos_whatsapp-icon.png',
+                              //       height: 23,
+                              //       width: 23,
+                              //     )),
+                            ],
+                          ),
+                          const SizedBox(height: 7),
+                          MyText(
+                            color: otherColor,
+                            text: "login_with_mobile_note",
+                            fontsizeNormal: 14,
+                            fontsizeWeb: 15,
+                            multilanguage: true,
+                            fontweight: FontWeight.w500,
+                            maxline: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textalign: TextAlign.center,
+                            fontstyle: FontStyle.normal,
+                          ),
+                          const SizedBox(height: 30),
 
-              // MyText(
-              //   color: white,
-              //   text: "welcomeback",
-              //   fontsizeNormal: 20,
-              //   fontsizeWeb: 25,
-              //   multilanguage: true,
-              //   fontweight: FontWeight.bold,
-              //   maxline: 1,
-              //   overflow: TextOverflow.ellipsis,
-              //   textalign: TextAlign.center,
-              //   fontstyle: FontStyle.normal,
-              // ),
-              const SizedBox(height: 7),
-              MyText(
-                color: otherColor,
-                text: "login_with_mobile_note",
-                fontsizeNormal: 14,
-                fontsizeWeb: 15,
-                multilanguage: true,
-                fontweight: FontWeight.w500,
-                maxline: 2,
-                overflow: TextOverflow.ellipsis,
-                textalign: TextAlign.center,
-                fontstyle: FontStyle.normal,
-              ),
-              const SizedBox(height: 30),
+                          /* Enter Mobile Number */
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: colorPrimary,
+                                width: 0.7,
+                              ),
+                              color: edtBG,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: IntlPhoneField(
+                              disableLengthCheck: true,
+                              textAlignVertical: TextAlignVertical.center,
+                              autovalidateMode: AutovalidateMode.disabled,
+                              controller: numberController,
+                              style:
+                                  const TextStyle(fontSize: 16, color: white),
+                              showCountryFlag: false,
+                              showDropdownIcon: false,
+                              initialCountryCode: 'IN',
+                              dropdownTextStyle: GoogleFonts.montserrat(
+                                color: white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                filled: false,
+                                hintStyle: GoogleFonts.montserrat(
+                                  color: otherColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                hintText: enterYourMobileNumber,
+                              ),
+                              onChanged: (phone) {
+                                debugPrint('===> ${phone.completeNumber}');
+                                debugPrint('===> ${numberController.text}');
+                                mobileNumber = phone.completeNumber;
+                                debugPrint('===>mobileNumber $mobileNumber');
+                              },
+                              onCountryChanged: (country) {
+                                debugPrint('===> ${country.name}');
+                                debugPrint('===> ${country.code}');
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 25),
 
-              /* Enter Mobile Number */
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorPrimary,
-                    width: 0.7,
-                  ),
-                  color: edtBG,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                ),
-                child: IntlPhoneField(
-                  disableLengthCheck: true,
-                  textAlignVertical: TextAlignVertical.center,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  controller: numberController,
-                  style: const TextStyle(fontSize: 16, color: white),
-                  showCountryFlag: false,
-                  showDropdownIcon: false,
-                  initialCountryCode: 'IN',
-                  dropdownTextStyle: GoogleFonts.montserrat(
-                    color: white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    filled: false,
-                    hintStyle: GoogleFonts.montserrat(
-                      color: otherColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    hintText: enterYourMobileNumber,
-                  ),
-                  onChanged: (phone) {
-                    debugPrint('===> ${phone.completeNumber}');
-                    debugPrint('===> ${numberController.text}');
-                    mobileNumber = phone.completeNumber;
-                    debugPrint('===>mobileNumber $mobileNumber');
-                  },
-                  onCountryChanged: (country) {
-                    debugPrint('===> ${country.name}');
-                    debugPrint('===> ${country.code}');
-                  },
-                ),
-              ),
-              const SizedBox(height: 25),
+                          /* Login Button */
+                          InkWell(
+                            onTap: () {
+                              debugPrint(
+                                  "Click mobileNumber ==> $mobileNumber");
+                              if (numberController.text.toString().isEmpty) {
+                                Utils.showSnackbar(context, "info",
+                                    "login_with_mobile_note", true);
+                              } else {
+                                debugPrint("mobileNumber ==> $mobileNumber");
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => OTPVerify(
+                                        mobileNumber ?? "", "phone", ""),
+                                  ),
+                                );
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(18),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 52,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    primaryLight,
+                                    primaryDark,
+                                  ],
+                                  begin: FractionalOffset(0.0, 0.0),
+                                  end: FractionalOffset(1.0, 0.0),
+                                  stops: [0.0, 1.0],
+                                  tileMode: TileMode.clamp,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              alignment: Alignment.center,
+                              child: MyText(
+                                color: white,
+                                text: "login",
+                                multilanguage: true,
+                                fontsizeNormal: 17,
+                                fontsizeWeb: 19,
+                                fontweight: FontWeight.w700,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textalign: TextAlign.center,
+                                fontstyle: FontStyle.normal,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          if (strPrivacyAndTNC != null)
+                            Utils.htmlTexts(strPrivacyAndTNC),
+                          const SizedBox(height: 10),
 
-              /* Login Button */
-              InkWell(
-                onTap: () {
-                  debugPrint("Click mobileNumber ==> $mobileNumber");
-                  if (numberController.text.toString().isEmpty) {
-                    Utils.showSnackbar(
-                        context, "info", "login_with_mobile_note", true);
-                  } else {
-                    debugPrint("mobileNumber ==> $mobileNumber");
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => OTPVerify(mobileNumber ?? ""),
+                          /* Or */
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 1,
+                                color: colorAccent,
+                              ),
+                              const SizedBox(width: 15),
+                              MyText(
+                                color: otherColor,
+                                text: "or",
+                                multilanguage: true,
+                                fontsizeNormal: 14,
+                                fontsizeWeb: 16,
+                                fontweight: FontWeight.w500,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textalign: TextAlign.center,
+                                fontstyle: FontStyle.normal,
+                              ),
+                              const SizedBox(width: 15),
+                              Container(
+                                width: 80,
+                                height: 1,
+                                color: colorAccent,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 25),
+                        ],
                       ),
-                    );
-                  }
-                },
-                borderRadius: BorderRadius.circular(18),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        primaryLight,
-                        primaryDark,
-                      ],
-                      begin: FractionalOffset(0.0, 0.0),
-                      end: FractionalOffset(1.0, 0.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  alignment: Alignment.center,
-                  child: MyText(
-                    color: white,
-                    text: "login",
-                    multilanguage: true,
-                    fontsizeNormal: 17,
-                    fontsizeWeb: 19,
-                    fontweight: FontWeight.w700,
-                    maxline: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textalign: TextAlign.center,
-                    fontstyle: FontStyle.normal,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              /* Privacy & TermsCondition link */
-              if (strPrivacyAndTNC != null) Utils.htmlTexts(strPrivacyAndTNC),
-              const SizedBox(height: 10),
-
-              /* Or */
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 1,
-                    color: colorAccent,
-                  ),
-                  const SizedBox(width: 15),
-                  MyText(
-                    color: otherColor,
-                    text: "or",
-                    multilanguage: true,
-                    fontsizeNormal: 14,
-                    fontsizeWeb: 16,
-                    fontweight: FontWeight.w500,
-                    maxline: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textalign: TextAlign.center,
-                    fontstyle: FontStyle.normal,
-                  ),
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 80,
-                    height: 1,
-                    color: colorAccent,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
+                    )
+                  : SizedBox.shrink(),
 
               /* Google Login Button */
-              Container(
+             generalProvider.isGoogleLogin == "1"?   Container(
                 width: MediaQuery.of(context).size.width,
                 height: 52,
                 padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -367,7 +369,64 @@ class LoginSocialState extends State<LoginSocial> {
                     ],
                   ),
                 ),
-              ),
+              ):SizedBox.shrink() ,
+              const SizedBox(height: 5),
+              generalProvider.isEmail == "1"
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginSocialEmail()),
+                          );
+
+                          // _gmailLogin();
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.mail_solid, // Cupertino icon
+                              size: 28, // Adjust the size as needed
+                              color: Colors.red, // Adjust the color as needed
+                            ),
+
+                            // Icon(Icons.email) ,
+                            // MyImage(
+                            //   width: 30,
+                            //   height: 30,
+                            //   imagePath: "ic_google.png",
+                            //   fit: BoxFit.contain,
+                            // ),
+                            const SizedBox(width: 30),
+                            MyText(
+                              color: black,
+                              text: "loginwithemail",
+                              fontsizeNormal: 14,
+                              fontsizeWeb: 16,
+                              multilanguage: true,
+                              fontweight: FontWeight.w600,
+                              maxline: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textalign: TextAlign.center,
+                              fontstyle: FontStyle.normal,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink(),
 
               /* Apple Login Button */
               if (Platform.isIOS)
@@ -415,47 +474,62 @@ class LoginSocialState extends State<LoginSocial> {
                 ),
 
               /* Facebook Login Button */
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: 52,
-              //   padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-              //   decoration: BoxDecoration(
-              //     color: white,
-              //     borderRadius: BorderRadius.circular(26),
-              //   ),
-              //   alignment: Alignment.center,
-              //   child: InkWell(
-              //     onTap: () {
-              //       debugPrint("Clicked on : ====> loginWith Facebook");
-              //       facebookLogin();
-              //     },
-              //     borderRadius: BorderRadius.circular(26),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         MyImage(
-              //           width: 30,
-              //           height: 30,
-              //           imagePath: "ic_facebook.png",
-              //           fit: BoxFit.contain,
-              //         ),
-              //         const SizedBox(width: 30),
-              //         MyText(
-              //           color: black,
-              //           text: "loginwithfacebook",
-              //           fontsizeNormal: 14,
-              //           fontsizeWeb: 16,
-              //           multilanguage: true,
-              //           fontweight: FontWeight.w600,
-              //           maxline: 1,
-              //           overflow: TextOverflow.ellipsis,
-              //           textalign: TextAlign.center,
-              //           fontstyle: FontStyle.normal,
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              generalProvider.isFbLogin == "1"
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                      margin: const EdgeInsets.only(top: 5),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () async {
+                          debugPrint("Clicked on : ====> loginWith Facebook");
+                          final LoginResult result =
+                              await FacebookAuth.instance.login();
+
+                          if (result.status == LoginStatus.success) {
+                            // Get the user data
+                            final userData =
+                                await FacebookAuth.instance.getUserData();
+                            print(userData);
+                          } else {
+                            print(result.status);
+                            print(result.message);
+                          }
+                          // facebookLogin();
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyImage(
+                              width: 30,
+                              height: 30,
+                              imagePath: "ic_facebook.png",
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 30),
+                            MyText(
+                              color: black,
+                              text: "loginwithfacebook",
+                              fontsizeNormal: 14,
+                              fontsizeWeb: 16,
+                              multilanguage: true,
+                              fontweight: FontWeight.w600,
+                              maxline: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textalign: TextAlign.center,
+                              fontstyle: FontStyle.normal,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink()
             ],
           ),
         ),

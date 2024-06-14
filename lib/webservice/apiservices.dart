@@ -161,10 +161,12 @@ class ApiService {
     return loginModel;
   }
 
+ 
   /* type => 3-OTP */
   // login API
-  Future<LoginRegisterModel> loginWithOTP(mobile) async {
+  Future<LoginRegisterModel> loginWithOTP(mobile ,email) async {
     debugPrint("mobile :==> $mobile");
+    debugPrint("mobile :==> $email");
 
     LoginRegisterModel loginModel;
     String doctorLogin = "login";
@@ -174,6 +176,7 @@ class ApiService {
       data: {
         'type': '3',
         'mobile': mobile,
+        'email':email
       },
     );
 
@@ -182,8 +185,11 @@ class ApiService {
   }
 
   // whatsapp login API
-  Future<bool> loginWithWhatsapp(mobile) async {
+  Future<bool> loginWithWhatsapp(mobile ,type ,email) async {
     debugPrint("mobile :==> $mobile");
+     debugPrint("email :==> $email");
+         debugPrint("type :==> $type");
+
 
     String doctorLogin = "sendotp";
     Response response = await dio.post(
@@ -191,6 +197,9 @@ class ApiService {
       options: optHeaders,
       data: {
         'mobile': mobile,
+        'login_type':type,
+        'email': email ,
+        
       },
     );
 
@@ -202,15 +211,16 @@ class ApiService {
   }
 
   // verify whatsapp login API
-  Future<bool> verifyLoginWithWhatsapp(String mobile, String otp) async {
+  Future<bool> verifyLoginWithWhatsapp(String mobile, String otp ,String email) async {
     debugPrint("mobile :==> $mobile");
+     debugPrint("email :==> $email");
 
-    String doctorLogin = "verifyotp?mobile=$mobile&token=$otp";
+    String doctorLogin = "verifyotp?mobile=$mobile&email=$email&token=$otp";
     try {
       Response response = await dio.post(
         '$baseUrl$doctorLogin',
         options: optHeaders,
-        data: {'mobile': mobile, 'token': otp},
+        data: {'mobile': mobile, 'token': otp ,'email':email},
       );
 
       if (response.statusCode == 200) {
@@ -220,10 +230,11 @@ class ApiService {
       }
     } catch (e) {
       // Handle DioException or other exceptions here
-      debugPrint("Error: $e");
+      print("Error: $e");
       return false; // Authentication failed due to an error
     }
   }
+
 
   // forgot_password API
   Future<SuccessModel> forgotPassword(email) async {

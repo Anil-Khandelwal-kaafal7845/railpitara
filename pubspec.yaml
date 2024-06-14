@@ -135,6 +135,7 @@ dependencies:
   firebase_auth_platform_interface: ^6.18.0
   firebase_messaging: ^14.6.7
   email_validator: ^2.1.17
+  flutter_facebook_auth: ^6.0.4
   #test
 
 
