@@ -36,16 +36,16 @@ import 'package:html/parser.dart' show parse;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:screen_protector/screen_protector.dart';
+// import 'package:screen_protector/screen_protector.dart';
 
 class Utils {
   static void enableScreenCapture() async {
-    await ScreenProtector.preventScreenshotOn();
-    if (Platform.isIOS) {
-      await ScreenProtector.protectDataLeakageWithBlur();
-    } else if (Platform.isAndroid) {
-      await ScreenProtector.protectDataLeakageOn();
-    }
+    // await ScreenProtector.preventScreenshotOn();
+    // if (Platform.isIOS) {
+    //   await ScreenProtector.protectDataLeakageWithBlur();
+    // } else if (Platform.isAndroid) {
+    //   await ScreenProtector.protectDataLeakageOn();
+    // }
   }
 
   static Widget showBannerAd(BuildContext context) {
