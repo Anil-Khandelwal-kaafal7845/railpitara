@@ -23,10 +23,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -66,4 +63,16 @@ class DefaultFirebaseOptions {
     projectId: 'aarya-ott',
     storageBucket: 'aarya-ott.appspot.com',
   );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCiSNoc4PrzY4-BtZrBxDn7TZh4reeeK1s',
+    appId: '1:153686127657:ios:1fb613c55475923f639838',
+    messagingSenderId: '153686127657',
+    projectId: 'aarya-ott',
+    storageBucket: 'aarya-ott.appspot.com',
+    androidClientId: '153686127657-8ug5704quscdf0cruuc14v60o6f9h0t9.apps.googleusercontent.com',
+    iosClientId: '153686127657-7qdeje82bgrk96tmj1r31r48ft7cb12t.apps.googleusercontent.com',
+    iosBundleId: 'com.release.aryanews',
+  );
+
 }
