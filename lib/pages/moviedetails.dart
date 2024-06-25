@@ -3653,23 +3653,23 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     ),
                   ),
 
-                  /* Instgram Stories */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
-                    onTap: () {
-                      Navigator.pop(context);
-                      Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                          : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType}\n");
-                      // "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_insta.png",
-                      title: "instagram_stories",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* Instgram Stories */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   focusColor: white,
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     Utils.shareApp(Platform.isIOS
+                  //         ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                  //         : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType}\n");
+                  //     // "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_insta.png",
+                  //     title: "instagram_stories",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
                   /* Copy Link */
                   InkWell(

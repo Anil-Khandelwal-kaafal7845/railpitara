@@ -215,32 +215,32 @@ class SettingState extends State<Setting> {
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-                /* Downloads */
-                _buildSettingButton(
-                  title: 'downloads',
-                  subTitle: 'view_your_downloads',
-                  titleMultilang: true,
-                  subTitleMultilang: true,
-                  onClick: () {
-                    AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                        () async {
-                      if (Constant.userID != null) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const MyDownloads(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                      }
-                    });
-                  },
-                ),
-                _buildLine(16.0, 16.0),
+                // /* Downloads */
+                // _buildSettingButton(
+                //   title: 'downloads',
+                //   subTitle: 'view_your_downloads',
+                //   titleMultilang: true,
+                //   subTitleMultilang: true,
+                //   onClick: () {
+                //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                //         () async {
+                //       if (Constant.userID != null) {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const MyDownloads(),
+                //           ),
+                //         );
+                //       } else {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const LoginSocial(),
+                //           ),
+                //         );
+                //       }
+                //     });
+                //   },
+                // ),
+                // _buildLine(16.0, 16.0),
 
                 /* Subscription */
                 Visibility(
@@ -421,8 +421,8 @@ class SettingState extends State<Setting> {
                   subTitleMultilang: true,
                   onClick: () async {
                     await Utils.shareApp(Platform.isIOS
-                        ? Constant.iosAppShareUrlDesc
-                        : Constant.androidAppShareUrlDesc);
+                        ? Constant.iosAppUrl
+                        : Constant.androidAppUrl);
                   },
                 ),
                 _buildLine(16.0, 16.0),

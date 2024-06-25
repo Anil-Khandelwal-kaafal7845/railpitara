@@ -24,15 +24,11 @@ class Constant {
   static String currencySymbol = "";
   static String currency = "";
 
-  static String androidAppShareUrlDesc =
-      "Let me recommend you this application\n\n$androidAppUrl";
-  static String iosAppShareUrlDesc =
-      "Let me recommend you this application\n\n$iosAppUrl";
 
   static String androidAppUrl =
-      "https://play.google.com/store/apps/details?id=${Constant.appPackageName}";
+      "https://play.google.com/store/apps/details?id=com.release.aryanews&hl=en";
   static String iosAppUrl =
-      "https://apps.apple.com/in/app/id${Constant.appleAppId}";
+      "https://apps.apple.com/in/app/aaryaa-digital/id6502516384";
 
   static String fbLink =
       "https://hi-in.facebook.com/people/Aaryaa-Digital-OTT/100071111258219";

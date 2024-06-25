@@ -546,6 +546,7 @@ class HomeState extends State<Home> {
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
       ),
+      
       drawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor:
@@ -671,33 +672,6 @@ class HomeState extends State<Home> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => const MyPurchaselist(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                    // _buildLine(),
-
-                    /* Downloads */
-                    _buildSettingButton(
-                      title: 'downloads',
-                      // subTitle: 'view_your_downloads',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const MyDownloads(),
                               ),
                             );
                           } else {
