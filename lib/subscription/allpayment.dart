@@ -7,8 +7,6 @@ import 'package:dtlive/provider/profileprovider.dart';
 import 'package:dtlive/provider/showdetailsprovider.dart';
 import 'package:dtlive/provider/videodetailsprovider.dart';
 import 'package:dtlive/subscription/instamojopg.dart';
-import 'package:dtlive/subscription/payuhashservice.dart';
-import 'package:dtlive/subscription/payuparams.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/sharedpre.dart';
@@ -21,11 +19,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 // import 'package:payu_checkoutpro_flutter/PayUConstantKeys.dart';
 // import 'package:payu_checkoutpro_flutter/payu_checkoutpro_flutter.dart';
@@ -61,7 +57,6 @@ class AllPayment extends StatefulWidget {
 
 class AllPaymentState extends State<AllPayment>
 // implements PayUCheckoutProProtocol
-
 {
   final couponController = TextEditingController();
   late ProgressDialog prDialog;
@@ -70,6 +65,7 @@ class AllPaymentState extends State<AllPayment>
   String? userId, userName, userEmail, userMobileNo, paymentId;
   String? strCouponCode = "";
   bool isPaymentDone = false;
+  dynamic orderId;
 
   /* Paytm */
   String paytmResult = "";
@@ -89,6 +85,7 @@ class AllPaymentState extends State<AllPayment>
     // if (!kIsWeb) _payUCheckoutPro = PayUCheckoutProFlutter(this);
     prDialog = ProgressDialog(context);
     _getData();
+
     super.initState();
   }
 
@@ -115,7 +112,11 @@ class AllPaymentState extends State<AllPayment>
     debugPrint('getUserData userName ==> $userName');
     debugPrint('getUserData userEmail ==> $userEmail');
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
-
+    createOrder().then((id) {
+      setState(() {
+        orderId = id;
+      });
+    });
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
@@ -130,8 +131,8 @@ class AllPaymentState extends State<AllPayment>
   }
 
   /* add_transaction API */
-  Future addTransaction(
-      packageId, description, amount, paymentId, currencyCode) async {
+  Future addTransaction(packageId, description, amount, paymentId, currencyCode,
+      orderStatus) async {
     final videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     final showDetailsProvider =
@@ -142,24 +143,29 @@ class AllPaymentState extends State<AllPayment>
         Provider.of<ProfileProvider>(context, listen: false);
 
     Utils.showProgress(context, prDialog);
-    await paymentProvider.addTransaction(
-        packageId, description, amount, paymentId, currencyCode, strCouponCode);
+    await paymentProvider.addTransaction(packageId, description, amount,
+        paymentId, currencyCode, strCouponCode, orderStatus, orderId);
 
     if (!paymentProvider.payLoading) {
       await prDialog.hide();
 
       if (paymentProvider.successModel.status == 200) {
-        isPaymentDone = true;
-        if (!mounted) return;
-        await profileProvider.getProfile(context);
-        await videoDetailsProvider.updatePrimiumPurchase();
-        await showDetailsProvider.updatePrimiumPurchase();
-        await channelSectionProvider.updatePrimiumPurchase();
-        await videoDetailsProvider.updateRentPurchase();
-        await showDetailsProvider.updateRentPurchase();
+        if (orderStatus == "success") {
+          isPaymentDone = true;
+          if (!mounted) return;
+          await profileProvider.getProfile(context);
+          await videoDetailsProvider.updatePrimiumPurchase();
+          await showDetailsProvider.updatePrimiumPurchase();
+          await channelSectionProvider.updatePrimiumPurchase();
+          await videoDetailsProvider.updateRentPurchase();
+          await showDetailsProvider.updateRentPurchase();
 
-        if (!mounted) return;
-        Navigator.pop(context, isPaymentDone);
+          if (!mounted) return;
+          Navigator.pop(context, isPaymentDone);
+        } else {
+          if (!mounted) return;
+          Navigator.pop(context, isPaymentDone);
+        }
       } else {
         isPaymentDone = false;
         if (!mounted) return;
@@ -170,29 +176,35 @@ class AllPaymentState extends State<AllPayment>
   }
 
   /* add_rent_transaction API */
-  Future addRentTransaction(videoId, amount, typeId, videoType) async {
+  Future addRentTransaction(
+      videoId, amount, typeId, videoType, orderStatus) async {
     final videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     final showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
 
     Utils.showProgress(context, prDialog);
-    await paymentProvider.addRentTransaction(
-        videoId, amount, typeId, videoType, strCouponCode);
+    await paymentProvider.addRentTransaction(videoId, amount, typeId, videoType,
+        strCouponCode, orderStatus, orderId);
 
     if (!paymentProvider.payLoading) {
       await prDialog.hide();
 
       if (paymentProvider.successModel.status == 200) {
-        isPaymentDone = true;
-        if (videoType == "1") {
-          await videoDetailsProvider.updateRentPurchase();
-        } else if (videoType == "2") {
-          await showDetailsProvider.updateRentPurchase();
-        }
+        if (orderStatus == "success") {
+          isPaymentDone = true;
+          if (videoType == "1") {
+            await videoDetailsProvider.updateRentPurchase();
+          } else if (videoType == "2") {
+            await showDetailsProvider.updateRentPurchase();
+          }
 
-        if (!mounted) return;
-        Navigator.pop(context, isPaymentDone);
+          if (!mounted) return;
+          Navigator.pop(context, isPaymentDone);
+        } else {
+          if (!mounted) return;
+          Navigator.pop(context, isPaymentDone);
+        }
       } else {
         isPaymentDone = false;
         if (!mounted) return;
@@ -270,20 +282,11 @@ class AllPaymentState extends State<AllPayment>
         _initializeRazorpay();
       } else if (pgName == "flutterwave") {
         _flutterwaveInit();
-      }
-      // else if (pgName == "payumoney") {
-      //   _payUInit();
-      // }
-      else if (pgName == "paytm") {
+      } else if (pgName == "payumoney") {
+        _payUInit();
+      } else if (pgName == "paytm") {
         _paytmInit();
-      }
-      // else if (pgName == "stripe") {
-      //   _stripeInit();
-      // }
-      // else if (pgName == "paystack") {
-      //   _paystackInit();
-      // }
-      else if (pgName == "instamojo") {
+      }else if (pgName == "instamojo") {
         _initInstamojo();
       } else if (pgName == "cash") {
         if (!mounted) return;
@@ -292,10 +295,10 @@ class AllPaymentState extends State<AllPayment>
     } else {
       if (widget.payType == "Package") {
         addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency);
+            paymentProvider.finalAmount, paymentId, widget.currency, "success");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-            widget.typeId, widget.videoType);
+            widget.typeId, widget.videoType, "success");
       }
     }
   }
@@ -1018,7 +1021,42 @@ class AllPaymentState extends State<AllPayment>
   }
 
   /* ********* Razorpay START ********* */
-  void _initializeRazorpay() {
+
+  Future<String> createOrder() async {
+    try {
+      var mapHeader = <String, String>{};
+      mapHeader['Content-Type'] = 'application/json';
+
+      var requestBody = jsonEncode({
+        "amount": (double.parse(paymentProvider.finalAmount ?? "")).toInt(),
+        "currency": "INR",
+        "name": widget.itemTitle,
+        "mobile": userMobileNo,
+        "email": userEmail
+      });
+
+      var response = await http.post(
+        Uri.parse('https://admin.aaryaadigital.com/api/create-order'),
+        headers: mapHeader,
+        body: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        String orderIdd = responseData['result']['id'];
+        print("Order id creation done --->>>>${orderIdd}");
+        return orderIdd;
+      } else {
+        throw Exception(
+            'Failed to create order. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error creating order: $e');
+    }
+  }
+
+
+  void _initializeRazorpay() async {
     if (paymentProvider.paymentOptionModel.result?.razorpay != null) {
       /* Check Keys */
       bool isContinue = checkKeysAndContinue(
@@ -1036,10 +1074,14 @@ class AllPaymentState extends State<AllPayment>
       );
       if (!isContinue) return;
       /* Check Keys */
-
-      Razorpay razorpay = Razorpay();
-      var options = {
-        'key':
+      try {
+        if (orderId == null || orderId.isEmpty || orderId == "") {
+          Utils.showSnackbar(context, "", "order_creation_failed", true);
+          return;
+        } else {
+          Razorpay razorpay = Razorpay();
+          var options = {
+            'key':
             (paymentProvider.paymentOptionModel.result?.razorpay?.isLive == "1")
                 ? (paymentProvider
                         .paymentOptionModel.result?.razorpay?.liveKey1 ??
@@ -1047,25 +1089,30 @@ class AllPaymentState extends State<AllPayment>
                 : (paymentProvider
                         .paymentOptionModel.result?.razorpay?.testKey1 ??
                     ""),
-        'currency': Constant.currency,
-        'amount': (double.parse(paymentProvider.finalAmount ?? "") * 100),
-        'name': widget.itemTitle ?? "",
-        'description': widget.itemTitle ?? "",
-        'retry': {'enabled': true, 'max_count': 1},
-        'send_sms_hash': true,
-        'prefill': {'contact': userMobileNo, 'email': userEmail},
-        'external': {
-          'wallets': ['paytm']
-        }
-      };
-      razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
-      razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);
-      razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWalletSelected);
+            'currency': Constant.currency,
+            'amount': (double.parse(paymentProvider.finalAmount ?? "") * 100),
+            'name': widget.itemTitle ?? "",
+            'order_id': orderId,
+            'description': widget.itemTitle ?? "",
+            'retry': {'enabled': true, 'max_count': 1},
+            'send_sms_hash': true,
+            'prefill': {'contact': userMobileNo, 'email': userEmail},
+            'external': {
+              'wallets': ['paytm']
+            },
+            'autocapture': 1
+          };
+          razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
+          razorpay.on(
+              Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);
+          razorpay.on(
+              Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWalletSelected);
 
-      try {
-        razorpay.open(options);
+          razorpay.open(options);
+        }
       } catch (e) {
-        debugPrint('Razorpay Error :=========> $e');
+        debugPrint('Razorpay Error: $e');
+        Utils.showSnackbar(context, "", "payment_not_processed", true);
       }
     } else {
       Utils.showSnackbar(context, "", "payment_not_processed", true);
@@ -1080,6 +1127,13 @@ class AllPaymentState extends State<AllPayment>
     * 3. Metadata
     * */
     Utils.showSnackbar(context, "fail", "payment_fail", true);
+    if (widget.payType == "Package") {
+      addTransaction(widget.itemId, widget.itemTitle,
+          paymentProvider.finalAmount, paymentId, widget.currency, "failed");
+    } else if (widget.payType == "Rent") {
+      addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+          widget.typeId, widget.videoType, "failed");
+    }
     await paymentProvider.setCurrentPayment("");
   }
 
@@ -1095,15 +1149,22 @@ class AllPaymentState extends State<AllPayment>
     Utils.showSnackbar(context, "success", "payment_success", true);
     if (widget.payType == "Package") {
       addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency);
+          paymentProvider.finalAmount, paymentId, widget.currency, "success");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-          widget.typeId, widget.videoType);
+          widget.typeId, widget.videoType, "success");
     }
   }
 
   void handleExternalWalletSelected(ExternalWalletResponse response) {
     debugPrint("============ External Wallet Selected ============");
+    if (widget.payType == "Package") {
+      addTransaction(widget.itemId, widget.itemTitle,
+          paymentProvider.finalAmount, paymentId, widget.currency, "external");
+    } else if (widget.payType == "Rent") {
+      addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+          widget.typeId, widget.videoType, "external");
+    }
   }
   /* ********* Razorpay END ********* */
 
@@ -1310,10 +1371,11 @@ class AllPaymentState extends State<AllPayment>
                       widget.itemTitle,
                       paymentProvider.finalAmount,
                       params["paymentId"],
-                      widget.currency);
+                      widget.currency,
+                      "success");
                 } else if (widget.payType == "Rent") {
                   addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-                      widget.typeId, widget.videoType);
+                      widget.typeId, widget.videoType, "success");
                 }
               },
               onError: (params) {
@@ -1333,7 +1395,7 @@ class AllPaymentState extends State<AllPayment>
   }
   /* ********* Paypal END ********* */
 
-  /* ********* Stripe START ********* */
+  // /* ********* Stripe START ********* */
   // Future<void> _stripeInit() async {
   //   if (paymentProvider.paymentOptionModel.result?.stripe != null) {
   //     stripe.Stripe.publishableKey = (paymentProvider
@@ -1401,11 +1463,16 @@ class AllPaymentState extends State<AllPayment>
   //     await stripe.Stripe.instance.presentPaymentSheet().then((value) {
   //       Utils.showSnackbar(context, "success", "payment_success", true);
   //       if (widget.payType == "Package") {
-  //         addTransaction(widget.itemId, widget.itemTitle,
-  //             paymentProvider.finalAmount, paymentId, widget.currency);
+  //         addTransaction(
+  //             widget.itemId,
+  //             widget.itemTitle,
+  //             paymentProvider.finalAmount,
+  //             paymentId,
+  //             widget.currency,
+  //             "success");
   //       } else if (widget.payType == "Rent") {
   //         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-  //             widget.typeId, widget.videoType);
+  //             widget.typeId, widget.videoType, "success");
   //       }
 
   //       paymentIntent = null;
@@ -1434,8 +1501,7 @@ class AllPaymentState extends State<AllPayment>
   //     debugPrint('$e');
   //   }
   // }
-
-  /* ********* Stripe END ********* */
+  // /* ********* Stripe END ********* */
 
   /* ********* Flutterwave START ********* */
   _flutterwaveInit() async {
@@ -1490,10 +1556,10 @@ class AllPaymentState extends State<AllPayment>
 
       if (widget.payType == "Package") {
         addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency);
+            paymentProvider.finalAmount, paymentId, widget.currency, "success");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-            widget.typeId, widget.videoType);
+            widget.typeId, widget.videoType, "success");
       }
     } else if (response.status == "cancel" && response.status == "cancelled") {
       if (!mounted) return;
@@ -1506,125 +1572,125 @@ class AllPaymentState extends State<AllPayment>
   /* ********* Flutterwave END ********* */
 
   /* ********* PayU START ********* */
-  // _payUInit() async {
-  //   debugPrint(
-  //       "_payUInit isLive ======> ${paymentProvider.paymentOptionModel.result?.payUMoney?.isLive}");
-  //   /* Check Keys */
-  //   bool isContinue = checkKeysAndContinue(
-  //     isLive:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive ?? ""),
-  //     isBothKeyReq: false,
-  //     liveKey1:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
-  //             ""),
-  //     liveKey2:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
-  //             ""),
-  //     testKey1:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
-  //             ""),
-  //     testKey2:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
-  //             ""),
-  //   );
-  //   if (!isContinue) return;
-  //   /* Check Keys */
+  _payUInit() async {
+    debugPrint(
+        "_payUInit isLive ======> ${paymentProvider.paymentOptionModel.result?.payUMoney?.isLive}");
+    /* Check Keys */
+    bool isContinue = checkKeysAndContinue(
+      isLive:
+          (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive ?? ""),
+      isBothKeyReq: false,
+      liveKey1:
+          (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
+              ""),
+      liveKey2:
+          (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
+              ""),
+      testKey1:
+          (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
+              ""),
+      testKey2:
+          (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
+              ""),
+    );
+    if (!isContinue) return;
+    /* Check Keys */
 
-  //   Map<dynamic, dynamic> additionalParam = {
-  //     PayUAdditionalParamKeys.udf1: "udf1",
-  //     PayUAdditionalParamKeys.udf2: "udf2",
-  //     PayUAdditionalParamKeys.udf3: "udf3",
-  //     PayUAdditionalParamKeys.udf4: "udf4",
-  //     PayUAdditionalParamKeys.udf5: "udf5",
-  //   };
+    Map<dynamic, dynamic> additionalParam = {
+      // PayUAdditionalParamKeys.udf1: "udf1",
+      // PayUAdditionalParamKeys.udf2: "udf2",
+      // PayUAdditionalParamKeys.udf3: "udf3",
+      // PayUAdditionalParamKeys.udf4: "udf4",
+      // PayUAdditionalParamKeys.udf5: "udf5",
+    };
 
-  //   Map<dynamic, dynamic> payUPaymentParams = {
-  //     PayUPaymentParamKey.key: (paymentProvider
-  //                 .paymentOptionModel.result?.payUMoney?.isLive ==
-  //             "1")
-  //         ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
-  //             "")
-  //         : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
-  //             ""),
-  //     PayUPaymentParamKey.transactionId: paymentId ?? "",
-  //     PayUPaymentParamKey.amount: double.parse(widget.price ?? "0").toString(),
-  //     PayUPaymentParamKey.productInfo: widget.itemTitle ?? "",
-  //     PayUPaymentParamKey.firstName: userName ?? "",
-  //     PayUPaymentParamKey.email: userEmail ?? "",
-  //     PayUPaymentParamKey.phone: userMobileNo ?? "",
-  //     PayUPaymentParamKey.ios_surl: "https://payu.herokuapp.com/ios_success",
-  //     PayUPaymentParamKey.ios_furl: "https://payu.herokuapp.com/ios_failure",
-  //     PayUPaymentParamKey.android_surl: "https://payu.herokuapp.com/success",
-  //     PayUPaymentParamKey.android_furl: "https://payu.herokuapp.com/failure",
-  //     PayUPaymentParamKey.environment:
-  //         (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1")
-  //             ? "0"
-  //             : "1", //0 => Production, 1 => Test
-  //     PayUPaymentParamKey.additionalParam: additionalParam,
-  //     PayUPaymentParamKey.userCredential:
-  //         ('${(paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ?? "")}:${userEmail ?? ""}')
-  //   };
-  //   debugPrint("payUPaymentParams ======> ${payUPaymentParams.toString()}");
+    Map<dynamic, dynamic> payUPaymentParams = {
+      // PayUPaymentParamKey.key: (paymentProvider
+      //               .paymentOptionModel.result?.payUMoney?.isLive ==
+      //           "1")
+      //       ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ??
+      //           "")
+      //       : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ??
+      //           ""),
+      //   PayUPaymentParamKey.transactionId: paymentId ?? "",
+      //   PayUPaymentParamKey.amount: double.parse(widget.price ?? "0").toString(),
+      //   PayUPaymentParamKey.productInfo: widget.itemTitle ?? "",
+      //   PayUPaymentParamKey.firstName: userName ?? "",
+      //   PayUPaymentParamKey.email: userEmail ?? "",
+      //   PayUPaymentParamKey.phone: userMobileNo ?? "",
+      //   PayUPaymentParamKey.ios_surl: "https://payu.herokuapp.com/ios_success",
+      //   PayUPaymentParamKey.ios_furl: "https://payu.herokuapp.com/ios_failure",
+      //   PayUPaymentParamKey.android_surl: "https://payu.herokuapp.com/success",
+      //   PayUPaymentParamKey.android_furl: "https://payu.herokuapp.com/failure",
+      //   PayUPaymentParamKey.environment:
+      //       (paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1")
+      //           ? "0"
+      //           : "1", //0 => Production, 1 => Test
+      //   PayUPaymentParamKey.additionalParam: additionalParam,
+      //   PayUPaymentParamKey.userCredential:
+      //       ('${(paymentProvider.paymentOptionModel.result?.payUMoney?.isLive == "1") ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey2 ?? "") : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey2 ?? "")}:${userEmail ?? ""}')
+    };
+    // debugPrint("payUPaymentParams ======> ${payUPaymentParams.toString()}");
 
-  //   try {
-  //     _payUCheckoutPro.openCheckoutScreen(
-  //       payUPaymentParams: payUPaymentParams,
-  //       payUCheckoutProConfig: PayUParams.createPayUConfigParams(),
-  //     );
-  //   } on Exception catch (e) {
-  //     debugPrint("_payUInit Exception ======> ${e.toString()}");
-  //   }
-  // }
+    try {
+      // _payUCheckoutPro.openCheckoutScreen(
+      //   payUPaymentParams: payUPaymentParams,
+      //   payUCheckoutProConfig: PayUParams.createPayUConfigParams(),
+      // );
+    } on Exception catch (e) {
+      debugPrint("_payUInit Exception ======> ${e.toString()}");
+    }
+  }
 
-  // @override
-  // generateHash(Map response) {
-  //   // Pass response param to your backend server
-  //   // Backend will generate the hash and will callback to
-  //   Map<dynamic, dynamic> hashResponse = PayUHashService((paymentProvider
-  //                   .paymentOptionModel.result?.payUMoney?.isLive ==
-  //               "1")
-  //           ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
-  //               "")
-  //           : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
-  //               ""))
-  //       .generateHash(response);
-  //   debugPrint("hashResponse =====> $hashResponse");
-  //   _payUCheckoutPro.hashGenerated(hash: hashResponse);
-  // }
+  @override
+  generateHash(Map response) {
+    // Pass response param to your backend server
+    // Backend will generate the hash and will callback to
+    // Map<dynamic, dynamic> hashResponse = PayUHashService((paymentProvider
+    //                 .paymentOptionModel.result?.payUMoney?.isLive ==
+    //             "1")
+    //         ? (paymentProvider.paymentOptionModel.result?.payUMoney?.liveKey3 ??
+    //             "")
+    //         : (paymentProvider.paymentOptionModel.result?.payUMoney?.testKey3 ??
+    //             ""))
+    //     .generateHash(response);
+    // debugPrint("hashResponse =====> $hashResponse");
+    // _payUCheckoutPro.hashGenerated(hash: hashResponse);
+  }
 
-  // @override
-  // onError(Map? response) {
-  //   if (!mounted) return;
-  //   Utils.showSnackbar(context, "fail", "payment_fail", true);
-  // }
+  @override
+  onError(Map? response) {
+    if (!mounted) return;
+    Utils.showSnackbar(context, "fail", "payment_fail", true);
+  }
 
-  // @override
-  // onPaymentCancel(Map? response) {
-  //   if (!mounted) return;
-  //   Utils.showSnackbar(context, "info", "payment_cancel", true);
-  // }
+  @override
+  onPaymentCancel(Map? response) {
+    if (!mounted) return;
+    Utils.showSnackbar(context, "info", "payment_cancel", true);
+  }
 
-  // @override
-  // onPaymentFailure(response) {
-  //   Utils.showSnackbar(context, "fail", "payment_fail", true);
-  // }
+  @override
+  onPaymentFailure(response) {
+    Utils.showSnackbar(context, "fail", "payment_fail", true);
+  }
 
-  // @override
-  // onPaymentSuccess(response) {
-  //   if (!mounted) return;
-  //   Utils.showSnackbar(context, "success", "payment_success", true);
+  @override
+  onPaymentSuccess(response) {
+    if (!mounted) return;
+    Utils.showSnackbar(context, "success", "payment_success", true);
 
-  //   if (widget.payType == "Package") {
-  //     addTransaction(widget.itemId, widget.itemTitle,
-  //         paymentProvider.finalAmount, paymentId, widget.currency);
-  //   } else if (widget.payType == "Rent") {
-  //     addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-  //         widget.typeId, widget.videoType);
-  //   }
-  // }
+    if (widget.payType == "Package") {
+      addTransaction(widget.itemId, widget.itemTitle,
+          paymentProvider.finalAmount, paymentId, widget.currency, "success");
+    } else if (widget.payType == "Rent") {
+      addRentTransaction(widget.itemId, paymentProvider.finalAmount,
+          widget.typeId, widget.videoType, "success");
+    }
+  }
   /* ********* PayU END ********* */
 
-  /* ********* Paystack START ********* */
+  // /* ********* Paystack START ********* */
   // _paystackInit() async {
   //   /* Check Keys */
   //   bool isContinue = checkKeysAndContinue(
@@ -1665,11 +1731,16 @@ class AllPaymentState extends State<AllPayment>
   //       Utils.showSnackbar(context, "success", "payment_success", true);
 
   //       if (widget.payType == "Package") {
-  //         await addTransaction(widget.itemId, widget.itemTitle,
-  //             paymentProvider.finalAmount, paymentId, widget.currency);
+  //         await addTransaction(
+  //             widget.itemId,
+  //             widget.itemTitle,
+  //             paymentProvider.finalAmount,
+  //             paymentId,
+  //             widget.currency,
+  //             "success");
   //       } else if (widget.payType == "Rent") {
   //         await addRentTransaction(widget.itemId, paymentProvider.finalAmount,
-  //             widget.typeId, widget.videoType);
+  //             widget.typeId, widget.videoType, "success");
   //       }
   //       if (paymentProvider.successModel.status == 200) {
   //         if (!mounted) return;
@@ -1684,8 +1755,7 @@ class AllPaymentState extends State<AllPayment>
   //     callbackUrl: 'https://dtlive.divinetechs.in/',
   //   );
   // }
-
-  /* ********* Paystack END ********* */
+  // /* ********* Paystack END ********* */
 
   /* ********* Instamojo START ********* */
   Future<void> _initInstamojo() async {
@@ -1839,11 +1909,20 @@ class AllPaymentState extends State<AllPayment>
             Utils.showSnackbar(context, "success", "payment_success", true);
 
             if (widget.payType == "Package") {
-              await addTransaction(widget.itemId, widget.itemTitle,
-                  paymentProvider.finalAmount, paymentId, widget.currency);
+              await addTransaction(
+                  widget.itemId,
+                  widget.itemTitle,
+                  paymentProvider.finalAmount,
+                  paymentId,
+                  widget.currency,
+                  "success");
             } else if (widget.payType == "Rent") {
-              await addRentTransaction(widget.itemId,
-                  paymentProvider.finalAmount, widget.typeId, widget.videoType);
+              await addRentTransaction(
+                  widget.itemId,
+                  paymentProvider.finalAmount,
+                  widget.typeId,
+                  widget.videoType,
+                  "success");
             }
             debugPrint("PAYMENT STATUS SUCCESS");
             //payment is successful.

@@ -55,7 +55,7 @@ class SearchState extends State<Search> {
     setState(() {
       _isListening = true;
     });
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds:30), () {
       if (searchController.text.toString().isEmpty) {
         Utils.showSnackbar(context, "info", "speechnotavailable", true);
         _stopListening();
@@ -388,142 +388,127 @@ class SearchState extends State<Search> {
     );
   }
 
-  Widget _buildVideoUI() {
-    if (searchProvider.loading) {
-      return _shimmerSearch();
-    } else {
-      if (searchProvider.searchModel.status == 200) {
-        if (searchProvider.searchModel.video != null) {
-          return Expanded(
-            child: AlignedGridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              itemCount: (searchProvider.searchModel.video?.length ?? 0),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int position) {
-                return Material(
-                  type: MaterialType.transparency,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(4),
-                    onTap: () {
-                      debugPrint("Clicked on position ==> $position");
-                      Utils.openDetails(
-                        context: context,
-                        videoId:
-                            searchProvider.searchModel.video?[position].id ?? 0,
-                        upcomingType: 0,
-                        videoType: searchProvider
-                                .searchModel.video?[position].videoType ??
-                            0,
-                        typeId: searchProvider
-                                .searchModel.video?[position].typeId ??
-                            0,
-                      );
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Dimens.heightLand,
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: MyNetworkImage(
-                          imageUrl: searchProvider
-                                  .searchModel.video?[position].landscape
-                                  .toString() ??
-                              "",
-                          fit: BoxFit.cover,
-                          imgHeight: MediaQuery.of(context).size.height,
-                          imgWidth: MediaQuery.of(context).size.width,
-                        ),
+Widget _buildVideoUI() {
+  if (searchProvider.loading) {
+    return _shimmerSearch();
+  } else {
+    if (searchProvider.searchModel.status == 200) {
+      if (searchProvider.searchModel.video != null && searchProvider.searchModel.video!.isNotEmpty) {
+        return Expanded(
+          child: AlignedGridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            itemCount: searchProvider.searchModel.video?.length ?? 0,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int position) {
+              return Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {
+                    debugPrint("Clicked on position ==> $position");
+                    Utils.openDetails(
+                      context: context,
+                      videoId: searchProvider.searchModel.video?[position].id ?? 0,
+                      upcomingType: 0,
+                      videoType: searchProvider.searchModel.video?[position].videoType ?? 0,
+                      typeId: searchProvider.searchModel.video?[position].typeId ?? 0,
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: Dimens.heightLand,
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: MyNetworkImage(
+                        imageUrl: searchProvider.searchModel.video?[position].landscape.toString() ?? "",
+                        fit: BoxFit.cover,
+                        imgHeight: MediaQuery.of(context).size.height,
+                        imgWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ),
-                );
-              },
-            ),
-          );
-        } else {
-          return const NoData(title: "", subTitle: "");
-        }
+                ),
+              );
+            },
+          ),
+        );
       } else {
-        return const SizedBox.shrink();
+        return const Expanded(
+          child: NoData(title: "", subTitle: ""),
+        );
       }
+    } else {
+      return const SizedBox.shrink();
     }
   }
-
-  Widget _buildShowUI() {
-    if (searchProvider.loading) {
-      return _shimmerSearch();
-    } else {
-      if (searchProvider.searchModel.status == 200) {
-        if (searchProvider.searchModel.tvshow != null) {
-          return Expanded(
-            child: AlignedGridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              itemCount: (searchProvider.searchModel.tvshow?.length ?? 0),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int position) {
-                return Material(
-                  type: MaterialType.transparency,
-                  child: InkWell(
-                    onTap: () {
-                      debugPrint("Clicked on position ==> $position");
-                      Utils.openDetails(
-                        context: context,
-                        videoId:
-                            searchProvider.searchModel.tvshow?[position].id ??
-                                0,
-                        upcomingType: 0,
-                        videoType: searchProvider
-                                .searchModel.tvshow?[position].videoType ??
-                            0,
-                        typeId: searchProvider
-                                .searchModel.tvshow?[position].typeId ??
-                            0,
-                      );
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Dimens.heightLand,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: MyNetworkImage(
-                          imageUrl: searchProvider.searchModel.tvshow
-                                  ?.elementAt(position)
-                                  .landscape
-                                  .toString() ??
-                              "",
-                          fit: BoxFit.cover,
-                          imgHeight: MediaQuery.of(context).size.height,
-                          imgWidth: MediaQuery.of(context).size.width,
-                        ),
+}
+Widget _buildShowUI() {
+  if (searchProvider.loading) {
+    return _shimmerSearch();
+  } else {
+    if (searchProvider.searchModel.status == 200) {
+      if (searchProvider.searchModel.tvshow != null && searchProvider.searchModel.tvshow!.isNotEmpty) {
+        return Expanded(
+          child: AlignedGridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int position) {
+              return Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: () {
+                    debugPrint("Clicked on position ==> $position");
+                    Utils.openDetails(
+                      context: context,
+                      videoId: searchProvider.searchModel.tvshow?[position].id ?? 0,
+                      upcomingType: 0,
+                      videoType: searchProvider.searchModel.tvshow?[position].videoType ?? 0,
+                      typeId: searchProvider.searchModel.tvshow?[position].typeId ?? 0,
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: Dimens.heightLand,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: MyNetworkImage(
+                        imageUrl: searchProvider.searchModel.tvshow?.elementAt(position).landscape.toString() ?? "",
+                        fit: BoxFit.cover,
+                        imgHeight: MediaQuery.of(context).size.height,
+                        imgWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ),
-                );
-              },
-            ),
-          );
-        } else {
-          return const NoData(title: "", subTitle: "");
-        }
+                ),
+              );
+            },
+          ),
+        );
       } else {
-        return const SizedBox.shrink();
+        return const Expanded(
+          child: NoData(title: "", subTitle: ""),
+        );
       }
+    } else {
+      return const SizedBox.shrink();
     }
   }
+}
 
   Widget _shimmerSearch() {
     return Expanded(

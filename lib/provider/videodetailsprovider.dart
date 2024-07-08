@@ -94,13 +94,13 @@ class VideoDetailsProvider extends ChangeNotifier {
 
   updateRentPurchase() {
     if (sectionDetailModel.result != null) {
-      sectionDetailModel.result?.rentBuy == 1;
+      sectionDetailModel.result?.rentBuy = 1;
     }
   }
 
   updatePrimiumPurchase() {
     if (sectionDetailModel.result != null) {
-      sectionDetailModel.result?.isBuy == 1;
+      sectionDetailModel.result?.isBuy = 1;
     }
   }
 

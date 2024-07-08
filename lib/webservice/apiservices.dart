@@ -822,9 +822,10 @@ class ApiService {
     return payTmModel;
   }
 
+ 
   // add_transaction API
   Future<SuccessModel> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode) async {
+      currencyCode, couponCode,orderStatus,orderId) async {
     debugPrint('addTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addTransaction packageId ==>>> $packageId');
     debugPrint('addTransaction description ==>>> $description');
@@ -832,6 +833,10 @@ class ApiService {
     debugPrint('addTransaction paymentId ==>>> $paymentId');
     debugPrint('addTransaction currencyCode ==>>> $currencyCode');
     debugPrint('addTransaction couponCode ==>>> $couponCode');
+    debugPrint('addTransaction order_status ==>>> $orderStatus');
+    debugPrint('addTransaction orderId ==>>> $orderId');
+
+
     SuccessModel successModel;
     String transaction = "add_transaction";
     Response response = await dio.post(
@@ -845,21 +850,27 @@ class ApiService {
         'payment_id': paymentId,
         'currency_code': currencyCode,
         'unique_id': couponCode,
+        'order_status':orderStatus,
+        'order_id':orderId
       },
     );
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
 
+
   // add_rent_transaction API
   Future<SuccessModel> addRentTransaction(
-      videoId, price, typeId, videoType, couponCode) async {
+      videoId, price, typeId, videoType, couponCode,orderStatus,orderId) async {
     debugPrint('addRentTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addRentTransaction video_id ==>>> $videoId');
     debugPrint('addRentTransaction price ==>>> $price');
     debugPrint('addRentTransaction typeId ==>>> $typeId');
     debugPrint('addRentTransaction videoType ==>>> $videoType');
     debugPrint('addTransaction couponCode ==>>> $couponCode');
+    debugPrint('addTransaction order_status ==>>> $orderStatus');
+    debugPrint('addTransaction orderId ==>>> $orderId');
+
     SuccessModel successModel;
     String rentTransaction = "add_rent_transaction";
     Response response = await dio.post(
@@ -872,11 +883,14 @@ class ApiService {
         'type_id': typeId,
         'video_type': videoType,
         'unique_id': couponCode,
+          'order_status':orderStatus,
+        'order_id':orderId
       },
     );
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
+
 
    
     Future<AuditionModel> auditionDetaiApi(

@@ -19,6 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -49,6 +50,8 @@ class LoginSocialState extends State<LoginSocial> {
   File? mProfileImg;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String userEmail = "";
+  final RegExp phoneRegExp = RegExp(r'^[6-9]\d{9}$');
+
 
   @override
   void initState() {
@@ -109,6 +112,23 @@ class LoginSocialState extends State<LoginSocial> {
       if (!mounted) return;
       setState(() {});
     });
+  }
+
+  void validateAndProceed() {
+    if (phoneRegExp.hasMatch(mobileNumber!)) {
+      // Proceed to the OTP screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => OTPVerify(
+                mobileNumber!, "phone", "")), // Make sure OTPVerify is defined
+      );
+    } else {
+      // Show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid Indian mobile number')),
+      );
+    }
   }
 
   @override
@@ -181,7 +201,6 @@ class LoginSocialState extends State<LoginSocial> {
                           ),
                           const SizedBox(height: 30),
 
-                          /* Enter Mobile Number */
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: 50,
@@ -195,65 +214,220 @@ class LoginSocialState extends State<LoginSocial> {
                                 Radius.circular(5),
                               ),
                             ),
-                            child: IntlPhoneField(
-                              disableLengthCheck: true,
-                              textAlignVertical: TextAlignVertical.center,
-                              autovalidateMode: AutovalidateMode.disabled,
-                              controller: numberController,
-                              style:
-                                  const TextStyle(fontSize: 16, color: white),
-                              showCountryFlag: false,
-                              showDropdownIcon: false,
-                              initialCountryCode: 'IN',
-                              dropdownTextStyle: GoogleFonts.montserrat(
-                                color: white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                children: [
+                                  // Country code field
+                                  Container(
+                                    padding: EdgeInsets.only(bottom: 5),
+                                    width:
+                                        45, // Adjust width according to your design
+                                    child: TextField(
+                                      controller: TextEditingController(
+                                          text:
+                                              '+91'), // Set initial value to country code
+                                      enabled:
+                                          false, // Disable editing of country code
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color:
+                                              white), // Change text color to white
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText:
+                                            '+91', // Set the country code here
+                                        hintStyle: TextStyle(
+                                          color: otherColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width:
+                                          3), // Add spacing between country code and phone number
+                                  // Phone number field
+                                  Expanded(
+                                    child: TextField(
+                                      controller: numberController,
+                                      keyboardType: TextInputType.phone,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(
+                                            10), // Limit input to 10 characters
+                                        FilteringTextInputFormatter
+                                            .digitsOnly, // Only allow digits
+                                      ],
+                                      style: TextStyle(
+                                          color:
+                                              white), // Change text color to white
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        filled: false,
+                                        hintStyle: TextStyle(
+                                          color: otherColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        hintText:
+                                            'Enter your mobile number', // Make sure this is defined
+                                      ),
+                                      onChanged: (phone) {
+                                        setState(() {
+                                          mobileNumber = phone;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                filled: false,
-                                hintStyle: GoogleFonts.montserrat(
-                                  color: otherColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                hintText: enterYourMobileNumber,
-                              ),
-                              onChanged: (phone) {
-                                debugPrint('===> ${phone.completeNumber}');
-                                debugPrint('===> ${numberController.text}');
-                                mobileNumber = phone.completeNumber;
-                                debugPrint('===>mobileNumber $mobileNumber');
-                              },
-                              onCountryChanged: (country) {
-                                debugPrint('===> ${country.name}');
-                                debugPrint('===> ${country.code}');
-                              },
                             ),
                           ),
+
+                          // Container(
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 50,
+                          //   decoration: BoxDecoration(
+                          //     border: Border.all(
+                          //       color: colorPrimary,
+                          //       width: 0.7,
+                          //     ),
+                          //     color: edtBG,
+                          //     borderRadius: const BorderRadius.all(
+                          //       Radius.circular(5),
+                          //     ),
+                          //   ),
+                          //   child: Padding(
+                          //     padding:
+                          //         const EdgeInsets.symmetric(horizontal: 8.0),
+                          //     child: Row(
+                          //       children: [
+                          //         // Country code field
+                          //         Container(
+                          //           width:
+                          //               45, // Adjust width according to your design
+                          //           child: TextField(
+                          //             controller: TextEditingController(
+                          //                 text:
+                          //                     '+91'), // Set initial value to country code
+                          //             enabled:
+                          //                 false, // Disable editing of country code
+                          //             textAlignVertical:
+                          //                 TextAlignVertical.center,
+                          //             style: TextStyle(
+                          //                 fontSize: 16,
+                          //                 color:
+                          //                     white), // Change text color to white
+                          //             decoration: InputDecoration(
+                          //               border: InputBorder.none,
+                          //               hintText:
+                          //                   '+91', // Set the country code here
+                          //               hintStyle: TextStyle(
+                          //                 color: otherColor,
+                          //                 fontSize: 14,
+                          //                 fontWeight: FontWeight.w500,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+
+                          //         SizedBox(
+                          //           width: 3,
+                          //         ), // Add spacing between country code and phone number
+                          //         // Phone number field
+                          //         Expanded(
+                          //           child: TextField(
+                          //             controller: numberController,
+                          //             keyboardType: TextInputType.phone,
+                          //             inputFormatters: [
+                          //               LengthLimitingTextInputFormatter(
+                          //                   10), // Limit input to 10 characters
+                          //               FilteringTextInputFormatter
+                          //                   .digitsOnly, // Only allow digits
+                          //             ],
+                          //             style: TextStyle(
+                          //                 color:
+                          //                     white), // Change text color to white
+                          //             decoration: InputDecoration(
+                          //               border: InputBorder.none,
+                          //               filled: false,
+                          //               hintStyle: TextStyle(
+                          //                 color: otherColor,
+                          //                 fontSize: 14,
+                          //                 fontWeight: FontWeight.w500,
+                          //               ),
+                          //               hintText: enterYourMobileNumber,
+                          //             ),
+                          //             onChanged: (phone) {
+                          //               // Update mobileNumber variable when phone number changes
+                          //               mobileNumber = phone;
+                          //             },
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+
                           const SizedBox(height: 25),
 
-                          /* Login Button */
                           InkWell(
                             onTap: () {
                               debugPrint(
                                   "Click mobileNumber ==> $mobileNumber");
-                              if (numberController.text.toString().isEmpty) {
+                              if (numberController.text.trim().isEmpty ||
+                                  numberController.text.length < 10) {
+                                // Show Snackbar if phone number is empty or less than 10 digits
                                 Utils.showSnackbar(context, "info",
                                     "login_with_mobile_note", true);
-                              } else {
-                                debugPrint("mobileNumber ==> $mobileNumber");
+                              } else if (phoneRegExp
+                                  .hasMatch(numberController.text.trim())) {
+                                // Check if the entered phone number is valid
+                                String phoneNumberToSend =
+                                    '+91' + numberController.text.trim();
+                                print(
+                                    "NOW NUMBER WITH IS --${phoneNumberToSend}");
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => OTPVerify(
                                         mobileNumber ?? "", "phone", ""),
                                   ),
                                 );
+                              } else {
+                                // Show an error message if the phone number is invalid
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Please enter a valid Indian mobile number')),
+                                );
                               }
                             },
+                            // onTap: () {
+                            //   debugPrint(
+                            //       "Click mobileNumber ==> $mobileNumber");
+                            //   if (numberController.text.trim().isEmpty ||
+                            //       numberController.text.length < 10) {
+                            //     // Show Snackbar if phone number is empty or less than 10 digits
+                            //     Utils.showSnackbar(context, "info",
+                            //         "login_with_mobile_note", true);
+                            //   } else {
+                            //     debugPrint("mobileNumber ==> $mobileNumber");
+                            //     String phoneNumberToSend =
+                            //         '+91' + numberController.text.trim();
+                            //     print(
+                            //         "NOW NUMBER IWTH (! IS --${phoneNumberToSend})");
+                            //     Navigator.of(context).push(
+                            //       MaterialPageRoute(
+                            //         builder: (context) => OTPVerify(
+                            //             mobileNumber ?? "", "phone", ""),
+                            //       ),
+                            //     );
+                            //   }
+                            // },
                             borderRadius: BorderRadius.circular(18),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
@@ -286,6 +460,58 @@ class LoginSocialState extends State<LoginSocial> {
                               ),
                             ),
                           ),
+
+                          // /* Login Button */
+                          // InkWell(
+                          //   onTap: () {
+                          //     debugPrint(
+                          //         "Click mobileNumber ==> $mobileNumber");
+                          //     if (numberController.text.toString().isEmpty) {
+                          //       Utils.showSnackbar(context, "info",
+                          //           "login_with_mobile_note", true);
+                          //     } else {
+                          //       debugPrint("mobileNumber ==> $mobileNumber");
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //           builder: (context) => OTPVerify(
+                          //               mobileNumber ?? "", "phone", ""),
+                          //         ),
+                          //       );
+                          //     }
+                          //   },
+                          //   borderRadius: BorderRadius.circular(18),
+                          //   child: Container(
+                          //     width: MediaQuery.of(context).size.width,
+                          //     height: 52,
+                          //     decoration: BoxDecoration(
+                          //       gradient: const LinearGradient(
+                          //         colors: [
+                          //           primaryLight,
+                          //           primaryDark,
+                          //         ],
+                          //         begin: FractionalOffset(0.0, 0.0),
+                          //         end: FractionalOffset(1.0, 0.0),
+                          //         stops: [0.0, 1.0],
+                          //         tileMode: TileMode.clamp,
+                          //       ),
+                          //       borderRadius: BorderRadius.circular(30),
+                          //     ),
+                          //     alignment: Alignment.center,
+                          //     child: MyText(
+                          //       color: white,
+                          //       text: "login",
+                          //       multilanguage: true,
+                          //       fontsizeNormal: 17,
+                          //       fontsizeWeb: 19,
+                          //       fontweight: FontWeight.w700,
+                          //       maxline: 1,
+                          //       overflow: TextOverflow.ellipsis,
+                          //       textalign: TextAlign.center,
+                          //       fontstyle: FontStyle.normal,
+                          //     ),
+                          //   ),
+                          // ),
+
                           const SizedBox(height: 10),
                           if (strPrivacyAndTNC != null)
                             Utils.htmlTexts(strPrivacyAndTNC),
@@ -328,48 +554,50 @@ class LoginSocialState extends State<LoginSocial> {
                   : SizedBox.shrink(),
 
               /* Google Login Button */
-             generalProvider.isGoogleLogin == "1"?   Container(
-                width: MediaQuery.of(context).size.width,
-                height: 52,
-                padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                margin: const EdgeInsets.only(bottom: 15),
-                decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                alignment: Alignment.center,
-                child: InkWell(
-                  onTap: () {
-                    debugPrint("Clicked on : ====> loginWith Google");
-                    _gmailLogin();
-                  },
-                  borderRadius: BorderRadius.circular(26),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      MyImage(
-                        width: 30,
-                        height: 30,
-                        imagePath: "ic_google.png",
-                        fit: BoxFit.contain,
+              generalProvider.isGoogleLogin == "1"
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(26),
                       ),
-                      const SizedBox(width: 30),
-                      MyText(
-                        color: black,
-                        text: "loginwithgoogle",
-                        fontsizeNormal: 14,
-                        fontsizeWeb: 16,
-                        multilanguage: true,
-                        fontweight: FontWeight.w600,
-                        maxline: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textalign: TextAlign.center,
-                        fontstyle: FontStyle.normal,
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          debugPrint("Clicked on : ====> loginWith Google");
+                          _gmailLogin();
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyImage(
+                              width: 30,
+                              height: 30,
+                              imagePath: "ic_google.png",
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 30),
+                            MyText(
+                              color: black,
+                              text: "loginwithgoogle",
+                              fontsizeNormal: 14,
+                              fontsizeWeb: 16,
+                              multilanguage: true,
+                              fontweight: FontWeight.w600,
+                              maxline: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textalign: TextAlign.center,
+                              fontstyle: FontStyle.normal,
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ):SizedBox.shrink() ,
+                    )
+                  : SizedBox.shrink(),
               const SizedBox(height: 5),
               generalProvider.isEmail == "1"
                   ? Container(

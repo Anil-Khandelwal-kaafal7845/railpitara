@@ -2459,7 +2459,7 @@ class HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: MyText(
                       color: white,
                       text: sectionList[index].title.toString(),
@@ -2485,7 +2485,7 @@ class HomeState extends State<Home> {
                         ));
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
+                       padding: const EdgeInsets.fromLTRB(20, 10, 15, 10),
                         child: MyText(
                           color: Colors.red,
                           text: "More",
@@ -2517,60 +2517,63 @@ class HomeState extends State<Home> {
                     const SizedBox(
                       height: 15,
                     ),
-                    SizedBox(
-                      height: Dimens.upcomingHeight,
-                      width: MediaQuery.of(context).size.width,
-                      child: GestureDetector(
-                        onTap: () {
-                          if (sectionList[index].bannerLinkType == 0) {
-                            // Handle onTap for bannerLinkType = 0
-                            if (sectionList[index].bannerBacklink != null &&
-                                sectionList[index]
+                    Padding(
+                     padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      child: SizedBox(
+                        height: Dimens.upcomingHeight,
+                        width: MediaQuery.of(context).size.width,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (sectionList[index].bannerLinkType == 0) {
+                              // Handle onTap for bannerLinkType = 0
+                              if (sectionList[index].bannerBacklink != null &&
+                                  sectionList[index]
+                                      .bannerBacklink
+                                      .toString()
+                                      .isNotEmpty) {
+                                launchUrl(Uri.parse(sectionList[index]
                                     .bannerBacklink
-                                    .toString()
-                                    .isNotEmpty) {
-                              launchUrl(Uri.parse(sectionList[index]
-                                  .bannerBacklink
-                                  .toString()));
-                            }
-                          } else {
-                            // Handle onTap for bannerLinkType = 1
-                            if (Constant.userID == null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginSocial()),
-                              );
-                              // Utils.buildWebAlertDialog(context, "login", "");
+                                    .toString()));
+                              }
                             } else {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => PlayerVideo(
-                              //           '',
-                              //           0,
-                              //           0,
-                              //           typeId,
-                              //           0,
-                              //           sectionList[index]
-                              //               .bannerBacklink
-                              //               .toString(),
-                              //           0,
-                              //           "",
-                              //           "")),
-                              // );
-
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => TestPlayerWeb(
-                                      loadURL: sectionList[index]
-                                          .bannerBacklink
-                                          .toString())));
+                              // Handle onTap for bannerLinkType = 1
+                              if (Constant.userID == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginSocial()),
+                                );
+                                // Utils.buildWebAlertDialog(context, "login", "");
+                              } else {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => PlayerVideo(
+                                //           '',
+                                //           0,
+                                //           0,
+                                //           typeId,
+                                //           0,
+                                //           sectionList[index]
+                                //               .bannerBacklink
+                                //               .toString(),
+                                //           0,
+                                //           "",
+                                //           "")),
+                                // );
+                    
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => TestPlayerWeb(
+                                        loadURL: sectionList[index]
+                                            .bannerBacklink
+                                            .toString())));
+                              }
                             }
-                          }
-                        },
-                        child: Image.network(
-                            sectionList[index].bannerImage.toString(),
-                            fit: BoxFit.fill),
+                          },
+                          child: Image.network(
+                              sectionList[index].bannerImage.toString(),
+                              fit: BoxFit.fill),
+                        ),
                       ),
                     ),
                   ],
@@ -2898,6 +2901,7 @@ class HomeState extends State<Home> {
                         )),
                   ),
                 ),
+             
               ],
             ),
           );

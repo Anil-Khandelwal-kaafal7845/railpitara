@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/provider/showdownloadprovider.dart';
+import 'package:dtlive/provider/videodetailsprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
@@ -67,6 +68,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   List<Cast>? directorList;
   late ShowDetailsProvider showDetailsProvider;
   late EpisodeProvider episodeProvider;
+   late VideoDetailsProvider videoDetailsProvider;
 
   @override
   void initState() {
@@ -79,6 +81,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
+            videoDetailsProvider =
+        Provider.of<VideoDetailsProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
     downloadProvider =
         Provider.of<ShowDownloadProvider>(context, listen: false);

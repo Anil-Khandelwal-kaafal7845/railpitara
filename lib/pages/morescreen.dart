@@ -41,6 +41,8 @@ class MoreScreenState extends State<MoreScreen> {
                   child: Column(
                     children: [
                       Container(
+                      width: Dimens.widthLand,
+                                  height: Dimens.heightLand,
                         padding: const EdgeInsets.fromLTRB(20, 6, 0, 20),
                         child: ResponsiveGridList(
                           minItemWidth: Dimens.widthLand,
@@ -55,7 +57,8 @@ class MoreScreenState extends State<MoreScreen> {
                           children: List.generate(
                             (widget.sectionDataList?.length ?? 0),
                             (position) {
-                              return InkWell(
+                              return 
+                              InkWell(
                                 borderRadius: BorderRadius.circular(4),
                                 onTap: () {
                                   debugPrint(
@@ -131,7 +134,13 @@ class MoreScreenState extends State<MoreScreen> {
                                 //   //       0,
                                 //   // );
                                 // },
-                                child: Container(
+                                child:Stack(
+                                  
+                                   alignment: Alignment.topRight,
+
+                                  children: [
+
+                                 Container(
                                   width: Dimens.widthLand,
                                   height: Dimens.heightLand,
                                   alignment: Alignment.center,
@@ -151,7 +160,104 @@ class MoreScreenState extends State<MoreScreen> {
                                     ),
                                   ),
                                 ),
+                             
+
+                                     Visibility(
+                  visible:(widget.sectionDataList![position].isRent == 1 &&
+                                        widget.sectionDataList![position].isPremium == 0) ,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/rupee.png',
+                              height: 13,
+                              width: 13,
+                            ),
+                          ],
+                        )),
+                  ),
+                ),
+                Visibility(
+                  visible:  widget.sectionDataList![position].isPremium == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 15,
+                              width: 15,
+                            ),
+                          ],
+                        )),
+                  ),
+                ),
+                Visibility(
+                  visible:  widget.sectionDataList![position].isRent == 1 &&
+                       widget.sectionDataList![position].isPremium == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/crown.png',
+                              height: 15,
+                              width: 15,
+                            ),
+                          ],
+                        )),
+                  ),
+                ),
+             
+                                  ],
+                                )
+                                ,
+                             
                               );
+                         
                             },
                           ),
                         ),

@@ -79,13 +79,13 @@ class PaymentProvider extends ChangeNotifier {
   }
 
   Future<void> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode) async {
+      currencyCode, couponCode,orderStatus,orderId) async {
     debugPrint("addTransaction userID :==> ${Constant.userID}");
     debugPrint("addTransaction packageId :==> $packageId");
     debugPrint("addTransaction couponCode :==> $couponCode");
     payLoading = true;
     successModel = await ApiService().addTransaction(
-        packageId, description, amount, paymentId, currencyCode, couponCode);
+        packageId, description, amount, paymentId, currencyCode, couponCode,orderStatus,orderId);
     debugPrint("addTransaction status :==> ${successModel.status}");
     debugPrint("addTransaction message :==> ${successModel.message}");
     payLoading = false;
@@ -93,13 +93,13 @@ class PaymentProvider extends ChangeNotifier {
   }
 
   Future<void> addRentTransaction(
-      videoId, amount, typeId, videoType, couponCode) async {
+      videoId, amount, typeId, videoType, couponCode,orderStatus,orderId) async {
     debugPrint("addRentTransaction userID :==> ${Constant.userID}");
     debugPrint("addRentTransaction videoId :==> $videoId");
     debugPrint("addRentTransaction couponCode :==> $couponCode");
     payLoading = true;
     successModel = await ApiService()
-        .addRentTransaction(videoId, amount, typeId, videoType, couponCode);
+        .addRentTransaction(videoId, amount, typeId, videoType, couponCode,orderStatus,orderId);
     debugPrint("addRentTransaction status :==> ${successModel.status}");
     debugPrint("addRentTransaction message :==> ${successModel.message}");
     payLoading = false;
