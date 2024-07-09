@@ -407,16 +407,7 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Navigator.of(context)
-      //     //     .push(MaterialPageRoute(builder: (context) => PIPExampleApp()));
-      //     Navigator.of(context).push(MaterialPageRoute(
-      //         builder: (context) => TestPlayerWeb(
-      //             loadURL:
-      //                 "https://iframe.mediadelivery.net/embed/135513/fe5da825-ffd0-4ba4-85b5-893c4001d059?autoplay=true&loop=false&muted=false&preload=true&responsive=true")));
-      //   },
-      // ),
+      
       key: _scaffoldKey,
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -451,97 +442,187 @@ class HomeState extends State<Home> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: PopupMenuButton<type.Result>(
-              offset: const Offset(0, 70),
-              color: Colors.black54,
-              itemBuilder: (context) {
-                List<bool> tempSelectedLanguages = List.generate(
-                  findProvider.langaugeModel.result!.length,
-                  (index) => selectedLanguages[index],
-                );
-                return [
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width *
-                          0.55, // Adjust width here
-                      child: StatefulBuilder(
-                        builder: (context, setState) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              for (int i = 0;
-                                  i < findProvider.langaugeModel.result!.length;
-                                  i++)
-                                Theme(
-                                  data: ThemeData(
-                                    unselectedWidgetColor: Colors.white,
-                                  ),
-                                  child: CheckboxListTile(
-                                    title: Text(
-                                      findProvider
-                                          .langaugeModel.result![i].name!,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 15),
-                                    ),
-                                    value: tempSelectedLanguages[i],
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        tempSelectedLanguages[i] = value!;
-                                      });
-                                    },
-                                    autofocus: true,
-                                    activeColor: primaryDark,
-                                  ),
-                                ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: primaryDark,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedLanguages =
-                                        List.from(tempSelectedLanguages);
-                                  });
-                                  selectedLanguageIds.clear();
-                                  for (int i = 0;
-                                      i < tempSelectedLanguages.length;
-                                      i++) {
-                                    if (tempSelectedLanguages[i]) {
-                                      selectedLanguageIds.add(
-                                        findProvider.langaugeModel.result![i].id
-                                            .toString(),
-                                      );
-                                    }
-                                  }
-                                  getTabData(
-                                    homeProvider.selectedIndex,
-                                    homeProvider.sectionTypeModel.result,
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'Submit',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+            Padding(
+  padding: const EdgeInsets.only(right: 10),
+  child: PopupMenuButton<type.Result>(
+    offset: const Offset(0, 70),
+    color: Colors.black54,
+    itemBuilder: (context) {
+      List<bool> tempSelectedLanguages = List.generate(
+        findProvider.langaugeModel.result!.length,
+        (index) => selectedLanguages[index],
+      );
+      return [
+        PopupMenuItem(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.33,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (int i = 0; i < findProvider.langaugeModel.result!.length; i++)
+                      Theme(
+                        data: ThemeData(
+                          unselectedWidgetColor: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0), // Reduce padding
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5), // Reduce horizontal padding
+                            dense: true,
+                            title: Text(
+                              findProvider.langaugeModel.result![i].name!,
+                              style: const TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            value: tempSelectedLanguages[i],
+                            onChanged: (bool? value) {
+                              setState(() {
+                                tempSelectedLanguages[i] = value!;
+                              });
+                            },
+                            autofocus: true,
+                            activeColor: primaryDark,
+                          ),
+                        ),
+                      ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedLanguages = List.from(tempSelectedLanguages);
+                        });
+                        selectedLanguageIds.clear();
+                        for (int i = 0; i < tempSelectedLanguages.length; i++) {
+                          if (tempSelectedLanguages[i]) {
+                            selectedLanguageIds.add(
+                              findProvider.langaugeModel.result![i].id.toString(),
+                            );
+                          }
+                        }
+                        getTabData(
+                          homeProvider.selectedIndex,
+                          homeProvider.sectionTypeModel.result,
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ),
-                ];
+                  ],
+                );
               },
-              child: Image.asset(
+            ),
+          ),
+        ),
+      ];
+    },
+    child: Image.asset(
                 "assets/images/ic_language.png",
                 width: 20,
                 height: 20,
                 color: white,
               ),
-            ),
-          )
+   
+  ),
+)
+
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 15),
+          //   child: PopupMenuButton<type.Result>(
+          //     offset: const Offset(0, 70),
+          //     color: Colors.black54,
+          //     itemBuilder: (context) {
+          //       List<bool> tempSelectedLanguages = List.generate(
+          //         findProvider.langaugeModel.result!.length,
+          //         (index) => selectedLanguages[index],
+          //       );
+          //       return [
+          //         PopupMenuItem(
+          //           child: SizedBox(
+          //             width: MediaQuery.of(context).size.width *
+          //                 0.55, // Adjust width here
+          //             child: StatefulBuilder(
+          //               builder: (context, setState) {
+          //                 return Column(
+          //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   children: [
+          //                     for (int i = 0;
+          //                         i < findProvider.langaugeModel.result!.length;
+          //                         i++)
+          //                       Theme(
+          //                         data: ThemeData(
+          //                           unselectedWidgetColor: Colors.white,
+          //                         ),
+          //                         child: CheckboxListTile(
+          //                           title: Text(
+          //                             findProvider
+          //                                 .langaugeModel.result![i].name!,
+          //                             style: const TextStyle(
+          //                                 color: Colors.white, fontSize: 15),
+          //                           ),
+          //                           value: tempSelectedLanguages[i],
+          //                           onChanged: (bool? value) {
+          //                             setState(() {
+          //                               tempSelectedLanguages[i] = value!;
+          //                             });
+          //                           },
+          //                           autofocus: true,
+          //                           activeColor: primaryDark,
+          //                         ),
+          //                       ),
+          //                     ElevatedButton(
+          //                       style: ElevatedButton.styleFrom(
+          //                         primary: primaryDark,
+          //                       ),
+          //                       onPressed: () {
+          //                         setState(() {
+          //                           selectedLanguages =
+          //                               List.from(tempSelectedLanguages);
+          //                         });
+          //                         selectedLanguageIds.clear();
+          //                         for (int i = 0;
+          //                             i < tempSelectedLanguages.length;
+          //                             i++) {
+          //                           if (tempSelectedLanguages[i]) {
+          //                             selectedLanguageIds.add(
+          //                               findProvider.langaugeModel.result![i].id
+          //                                   .toString(),
+          //                             );
+          //                           }
+          //                         }
+          //                         getTabData(
+          //                           homeProvider.selectedIndex,
+          //                           homeProvider.sectionTypeModel.result,
+          //                         );
+          //                         Navigator.pop(context);
+          //                       },
+          //                       child: const Text(
+          //                         'Submit',
+          //                         style: TextStyle(color: Colors.white),
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 );
+          //               },
+          //             ),
+          //           ),
+          //         ),
+          //       ];
+          //     },
+          //     child: Image.asset(
+          //       "assets/images/ic_language.png",
+          //       width: 20,
+          //       height: 20,
+          //       color: white,
+          //     ),
+          //   ),
+          // )
         ],
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
@@ -813,27 +894,60 @@ class HomeState extends State<Home> {
 
                     /* SignIn / SignOut */
                     _buildSettingButton(
-                      title: Constant.userID == null
-                          ? youAreNotSignIn
-                          : (userType == "3" && (userName ?? "").isEmpty)
-                              ? ("$signedInAs ${userMobileNo ?? ""}")
-                              : ("$signedInAs ${userName ?? ""}"),
-                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                      titleMultilang: false,
-                      subTitleMultilang: true,
-                      onClick: () async {
-                        if (Constant.userID != null) {
-                          logoutConfirmDialog();
-                        } else {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                          setState(() {});
-                        }
-                      },
-                    ),
+                title: Constant.userID == null
+                    ? youAreNotSignIn
+                    : (userType == "3" && (userName ?? "").isEmpty)
+                        ? ("$signedInAs ${userMobileNo ?? ""}")
+                        : ("$signedInAs ${userName ?? ""}"),
+                // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                titleMultilang: false,
+                subTitleMultilang: true,
+                onClick: () async {
+                  if (Constant.userID != null) {
+                    final updatedUserName = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileEdit(),
+                      ),
+                    );
+
+                    if (updatedUserName != null && updatedUserName is String) {
+                      setState(() {
+                        userName = updatedUserName;
+                      });
+                    }
+                  } else {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginSocial(),
+                      ),
+                    );
+                    setState(() {});
+                  }
+                },
+              ),
+                    // _buildSettingButton(
+                    //   title: Constant.userID == null
+                    //       ? youAreNotSignIn
+                    //       : (userType == "3" && (userName ?? "").isEmpty)
+                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
+                    //           : ("$signedInAs ${userName ?? ""}"),
+                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                    //   titleMultilang: false,
+                    //   subTitleMultilang: true,
+                    //   onClick: () async {
+                    //     if (Constant.userID != null) {
+                    //       logoutConfirmDialog();
+                    //     } else {
+                    //       await Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const LoginSocial(),
+                    //         ),
+                    //       );
+                    //       setState(() {});
+                    //     }
+                    //   },
+                    // ),
+                 
                     // _buildLine(),
 
                     // /* Rate App */
@@ -939,6 +1053,7 @@ class HomeState extends State<Home> {
           ),
         ),
       ),
+     
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
             ? _webAppBarWithDetails()
@@ -2711,7 +2826,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -2919,7 +3034,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         physics:
             const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3121,7 +3236,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3323,7 +3438,7 @@ class HomeState extends State<Home> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -3527,7 +3642,7 @@ class HomeState extends State<Home> {
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -3728,7 +3843,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3809,7 +3924,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3890,7 +4005,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
@@ -3996,7 +4111,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 1),
         itemBuilder: (BuildContext context, int index) {
@@ -4203,7 +4318,7 @@ class HomeState extends State<Home> {
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {

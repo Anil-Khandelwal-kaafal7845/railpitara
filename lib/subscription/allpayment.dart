@@ -1055,7 +1055,6 @@ class AllPaymentState extends State<AllPayment>
     }
   }
 
-
   void _initializeRazorpay() async {
     if (paymentProvider.paymentOptionModel.result?.razorpay != null) {
       /* Check Keys */

@@ -124,7 +124,8 @@ class _MyWatchlistState extends State<MyWatchlist> {
   Widget _buildWatchlistItem(position) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      constraints: BoxConstraints(minHeight: Dimens.heightWatchlist),
+       height: Dimens.heightWatchlist ,
+      // constraints: BoxConstraints(minHeight: Dimens.heightWatchlist),
       color: lightBlack,
       child: Row(
         children: [
@@ -137,10 +138,12 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
   Widget _buildImage(int position) {
     return Container(
-      constraints: BoxConstraints(
-        minHeight: Dimens.heightWatchlist,
-        maxWidth: MediaQuery.of(context).size.width * 0.44,
-      ),
+      width:MediaQuery.of(context).size.width * 0.44,
+      height: Dimens.heightWatchlist,
+      // constraints: BoxConstraints(
+      //   minHeight: Dimens.heightWatchlist,
+      //   maxWidth: MediaQuery.of(context).size.width * 0.44,
+      // ),
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
         children: [
@@ -330,7 +333,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
               ),
             ),
             Positioned(
-              bottom: 10,
+              top: 7,
               right: 10,
               child: InkWell(
                 onTap: () {
@@ -354,6 +357,8 @@ class _MyWatchlistState extends State<MyWatchlist> {
       ),
     );
   }
+
+
 
   Widget _buildWatchBtnWithProgress(position) {
     return Column(

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dtlive/pages/bottombar.dart';
+import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/profileavatar.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
@@ -163,60 +165,66 @@ class ProfileEditState extends State<ProfileEdit> {
                 ),
               ),
               /* Save */
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () async {
-                      debugPrint(
-                          "nameController Name ==> ${nameController.text.toString()}");
-                      debugPrint(
-                          "pickedImageFile ==> ${pickedImageFile?.path ?? "not picked"}");
-                      if (nameController.text.toString().isEmpty) {
-                        return Utils.showSnackbar(
-                            context, "info", enterName, false);
-                      }
-                      final profileProvider =
-                          Provider.of<ProfileProvider>(context, listen: false);
-                      Utils.showProgress(context, prDialog);
-                      await sharePref.save(
-                          "username", nameController.text.toString());
-                      if (pickedImageFile != null) {
-                        await profileProvider.getImageUpload(pickedImageFile);
-                      }
-                      await profileProvider
-                          .getUpdateProfile(nameController.text.toString());
-                        Navigator.pop(context);
-                      if (!mounted) return;
-                      await profileProvider.getProfile(context);
-                      await prDialog.hide();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      decoration: BoxDecoration(
-                        color: primaryDark,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      alignment: Alignment.center,
-                      child: MyText(
-                        color: white,
-                        text: "save",
-                        multilanguage: true,
-                        textalign: TextAlign.center,
-                        fontsizeNormal: 15,
-                        fontsizeWeb: 15,
-                        fontweight: FontWeight.w600,
-                        maxline: 1,
-                        overflow: TextOverflow.ellipsis,
-                        fontstyle: FontStyle.normal,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            Expanded(
+  child: Align(
+    alignment: Alignment.bottomCenter,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: () async {
+        debugPrint(
+            "nameController Name ==> ${nameController.text.toString()}");
+        debugPrint(
+            "pickedImageFile ==> ${pickedImageFile?.path ?? "not picked"}");
+        if (nameController.text.toString().isEmpty) {
+          return Utils.showSnackbar(
+              context, "info", enterName, false);
+        }
+        final profileProvider =
+            Provider.of<ProfileProvider>(context, listen: false);
+        Utils.showProgress(context, prDialog);
+        await sharePref.save(
+            "username", nameController.text.toString());
+        if (pickedImageFile != null) {
+          await profileProvider.getImageUpload(pickedImageFile);
+        }
+        await profileProvider
+            .getUpdateProfile(nameController.text.toString());
+        if (!mounted) return;
+        await profileProvider.getProfile(context);
+        await prDialog.hide();
+
+        // Navigate to home screen and clear all previous routes
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Bottombar()),
+          (Route<dynamic> route) => false,
+        );
+      },
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        decoration: BoxDecoration(
+          color: primaryDark,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        alignment: Alignment.center,
+        child: MyText(
+          color: white,
+          text: "save",
+          multilanguage: true,
+          textalign: TextAlign.center,
+          fontsizeNormal: 15,
+          fontsizeWeb: 15,
+          fontweight: FontWeight.w600,
+          maxline: 1,
+          overflow: TextOverflow.ellipsis,
+          fontstyle: FontStyle.normal,
+        ),
+      ),
+    ),
+  ),
+),
+
             ],
           ),
         ),
