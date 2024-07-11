@@ -2649,15 +2649,16 @@ class HomeState extends State<Home> {
                   ),
                   if (!isGenreOrLanguage)
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return MoreScreen(
-                                sectionList[index].title.toString(),
-                                sectionList[index].data);
-                          },
-                        ));
-                      },
+                     onTap: () {
+  Navigator.push(context, MaterialPageRoute(
+    builder: (context) {
+      return MoreScreen(
+        sectionList[index].title.toString(),
+        sectionList[index].id.toString(), // Pass the section ID
+      );
+    },
+  ));
+},
                       child: Padding(
                        padding: const EdgeInsets.fromLTRB(20, 10, 15, 10),
                         child: MyText(
