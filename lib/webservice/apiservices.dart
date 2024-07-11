@@ -28,6 +28,7 @@ import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectiontypemodel.dart';
 import 'package:dtlive/model/successmodel.dart';
 import 'package:dtlive/model/videobyidmodel.dart';
+import 'package:dtlive/model/viewallmodel.dart';
 import 'package:dtlive/model/watchlistmodel.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:flutter/material.dart';
@@ -400,6 +401,27 @@ class ApiService {
     sectionListModel = SectionListModel.fromJson(response.data);
     return sectionListModel;
   }
+
+  //viewall api ---
+
+  Future<List<VideoData>> viewAll(String sectionId) async {
+    String viewAllEndpoint = "view-all";
+    Response response = await dio.post(
+      '$baseUrl$viewAllEndpoint',
+      options: optHeaders,
+      data: {
+        'section_id': sectionId,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = response.data['result'][0]['data'];
+      return data.map((json) => VideoData.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
 
   // section_detail API
   Future<SectionDetailModel> sectionDetails(

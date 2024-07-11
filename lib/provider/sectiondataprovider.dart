@@ -1,15 +1,15 @@
-
-
 import 'package:dtlive/model/sectionbannermodel.dart';
 import 'package:dtlive/model/sectionlistmodel.dart';
+import 'package:dtlive/model/viewallmodel.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
 
 class SectionDataProvider extends ChangeNotifier {
   SectionBannerModel sectionBannerModel = SectionBannerModel();
   SectionListModel sectionListModel = SectionListModel();
+  List<VideoData> sectionDataList = [];
 
-  bool loadingBanner = false, loadingSection = false;
+  bool loadingBanner = false, loadingSection = false, loadingViewAll = false;
   int? cBannerIndex = 0, lastTabPosition;
 
   Future<void> getSectionBanner(typeId, isHomePage) async {
@@ -17,8 +17,6 @@ class SectionDataProvider extends ChangeNotifier {
     debugPrint("getSectionBanner isHomePage :==> $isHomePage");
     loadingBanner = true;
     sectionBannerModel = await ApiService().sectionBanner(typeId, isHomePage);
-    // debugPrint("get_banner status :==> ${sectionBannerModel.status}");
-    // debugPrint("get_banner message :==> ${sectionBannerModel.message}");
     loadingBanner = false;
     notifyListeners();
   }
@@ -26,6 +24,7 @@ class SectionDataProvider extends ChangeNotifier {
   setLoading(bool flagLoading) {
     loadingBanner = flagLoading;
     loadingSection = flagLoading;
+    loadingViewAll = flagLoading;
     notifyListeners();
   }
 
@@ -39,14 +38,20 @@ class SectionDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getSectionList(typeId, isHomePage,languageId) async {
+  Future<void> getSectionList(typeId, isHomePage, languageId) async {
     debugPrint("getSectionList typeId :==> $typeId");
     debugPrint("getSectionList isHomePage :==> $isHomePage");
     loadingSection = true;
-    sectionListModel = await ApiService().sectionList(typeId, isHomePage,languageId);
-    // debugPrint("section_list status :==> ${sectionListModel.status}");
-    // debugPrint("section_list message :==> ${sectionListModel.message}");
+    sectionListModel = await ApiService().sectionList(typeId, isHomePage, languageId);
     loadingSection = false;
+    notifyListeners();
+  }
+
+  Future<void> getViewAll(String sectionId) async {
+    debugPrint("getViewAll sectionId :==> $sectionId");
+    loadingViewAll = true;
+    sectionDataList = await ApiService().viewAll(sectionId);
+    loadingViewAll = false;
     notifyListeners();
   }
 
@@ -54,8 +59,10 @@ class SectionDataProvider extends ChangeNotifier {
     debugPrint("<================ clearProvider ================>");
     loadingBanner = false;
     loadingSection = false;
+    loadingViewAll = false;
     sectionBannerModel = SectionBannerModel();
     sectionListModel = SectionListModel();
+    sectionDataList = [];
     cBannerIndex = 0;
     lastTabPosition = 0;
   }
