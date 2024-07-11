@@ -333,7 +333,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
               ),
             ),
             Positioned(
-              top: 7,
+              bottom: 15,
               right: 10,
               child: InkWell(
                 onTap: () {

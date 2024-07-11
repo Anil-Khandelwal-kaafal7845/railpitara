@@ -69,61 +69,63 @@ class ChannelsState extends State<Channels> {
       ),
     );
   }
-
-  Widget _buildChannelPage() {
+Widget _buildChannelPage() {
     if (channelSectionProvider.loading) {
       return SingleChildScrollView(child: channelShimmer());
     } else {
       if (channelSectionProvider.channelSectionModel.status == 200) {
-        return RefreshIndicator(
-          backgroundColor: white,
-          color: complimentryColor,
-          displacement: 80,
-          onRefresh: () async {
-            await Future.delayed(const Duration(milliseconds: 1500))
-                .then((value) {
-              channelSectionProvider.setLoading(true);
-              Future.delayed(Duration.zero).then((value) {
-                if (!mounted) return;
-                setState(() {});
+        if (channelSectionProvider.channelSectionModel.result != null &&
+            channelSectionProvider.channelSectionModel.result!.isNotEmpty) {
+          return RefreshIndicator(
+            backgroundColor: white,
+            color: complimentryColor,
+            displacement: 80,
+            onRefresh: () async {
+              await Future.delayed(const Duration(milliseconds: 1500))
+                  .then((value) {
+                channelSectionProvider.setLoading(true);
+                Future.delayed(Duration.zero).then((value) {
+                  if (!mounted) return;
+                  setState(() {});
+                });
+                _getData();
               });
-              _getData();
-            });
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                /* Banner */
-                (channelSectionProvider.channelSectionModel.liveUrl != null)
-                    ? (((kIsWeb || Constant.isTV) &&
-                            MediaQuery.of(context).size.width > 720)
-                        ? _webChannelBanner(
-                            channelSectionProvider.channelSectionModel.liveUrl)
-                        : _mobileChannelBanner(
-                            channelSectionProvider.channelSectionModel.liveUrl))
-                    : const SizedBox.shrink(),
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  /* Banner */
+                  (channelSectionProvider.channelSectionModel.liveUrl != null)
+                      ? (((kIsWeb || Constant.isTV) &&
+                              MediaQuery.of(context).size.width > 720)
+                          ? _webChannelBanner(
+                              channelSectionProvider.channelSectionModel.liveUrl)
+                          : _mobileChannelBanner(
+                              channelSectionProvider.channelSectionModel.liveUrl))
+                      : const SizedBox.shrink(),
 
-                /* AdMob Banner */
-                const SizedBox(height: 10),
-                Utils.showBannerAd(context),
-                const SizedBox(height: 10),
+                  /* AdMob Banner */
+                  const SizedBox(height: 10),
+                  Utils.showBannerAd(context),
+                  const SizedBox(height: 10),
 
-                /* Remaining Data */
-                (channelSectionProvider.channelSectionModel.result != null)
-                    ? setSectionByType(
-                        channelSectionProvider.channelSectionModel.result)
-                    : const SizedBox.shrink(),
-                const SizedBox(height: 20),
+                  /* Remaining Data */
+                  setSectionByType(
+                      channelSectionProvider.channelSectionModel.result),
+                  const SizedBox(height: 20),
 
-                /* Web Footer */
-                kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
-              ],
+                  /* Web Footer */
+                  kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          return const Center(child: NoData(title: "", subTitle: ""));
+        }
       } else {
-        return const NoData(title: '', subTitle: '');
+        return const Center(child: NoData(title: "", subTitle: ""));
       }
     }
   }

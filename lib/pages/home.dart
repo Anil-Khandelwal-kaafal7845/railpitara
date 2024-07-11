@@ -892,39 +892,66 @@ class HomeState extends State<Home> {
                     // if (!Platform.isIOS)
                     //   //  _buildLine(),
 
-                    /* SignIn / SignOut */
-                    _buildSettingButton(
-                title: Constant.userID == null
-                    ? youAreNotSignIn
-                    : (userType == "3" && (userName ?? "").isEmpty)
-                        ? ("$signedInAs ${userMobileNo ?? ""}")
-                        : ("$signedInAs ${userName ?? ""}"),
-                // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                titleMultilang: false,
-                subTitleMultilang: true,
-                onClick: () async {
-                  if (Constant.userID != null) {
-                    final updatedUserName = await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileEdit(),
-                      ),
-                    );
+              //       /* SignIn / SignOut */
+              //       _buildSettingButton(
+              //   title: Constant.userID == null
+              //       ? youAreNotSignIn
+              //       : (userType == "3" && (userName ?? "").isEmpty)
+              //           ? ("$signedInAs ${userMobileNo ?? ""}")
+              //           : ("$signedInAs ${userName ?? ""}"),
+              //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+              //   titleMultilang: false,
+              //   subTitleMultilang: true,
+              //   onClick: () async {
+              //     if (Constant.userID != null) {
+              //       final updatedUserName = await Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => const ProfileEdit(),
+              //         ),
+              //       );
 
-                    if (updatedUserName != null && updatedUserName is String) {
-                      setState(() {
-                        userName = updatedUserName;
-                      });
+              //       if (updatedUserName != null && updatedUserName is String) {
+              //         setState(() {
+              //           userName = updatedUserName;
+              //         });
+              //       }
+              //     } else {
+              //       await Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => const LoginSocial(),
+              //         ),
+              //       );
+              //       setState(() {});
+              //     }
+              //   },
+              // ),
+
+
+                 /* SignIn / SignOut */
+                _buildSettingButton(
+                  title: Constant.userID == null
+                      ? youAreNotSignIn
+                      : (userType == "3" && (userName ?? "").isEmpty)
+                          ? ("$signedInAs ${userMobileNo ?? ""}")
+                          : ("$signedInAs ${userName ?? ""}"),
+                  // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                  titleMultilang: false,
+                  subTitleMultilang: true,
+                  onClick: () async {
+                    if (Constant.userID != null) {
+                      logoutConfirmDialog();
+                    } else {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginSocial(),
+                        ),
+                      );
+                      setState(() {});
                     }
-                  } else {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginSocial(),
-                      ),
-                    );
-                    setState(() {});
-                  }
-                },
-              ),
+                  },
+                ),
+              
+                   
                     // _buildSettingButton(
                     //   title: Constant.userID == null
                     //       ? youAreNotSignIn
@@ -1152,7 +1179,7 @@ class HomeState extends State<Home> {
         constraints: BoxConstraints(
           minHeight: Dimens.minHeightSettings,
         ),
-        alignment: Alignment.bottomLeft,
+        alignment: Alignment.centerLeft,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1201,9 +1228,9 @@ class HomeState extends State<Home> {
         return StatefulBuilder(
           builder: (BuildContext context, state) {
             return DraggableScrollableSheet(
-              initialChildSize: 0.55,
-              minChildSize: 0.4,
-              maxChildSize: 0.9,
+              initialChildSize: 0.35,
+              minChildSize: 0.20,
+              maxChildSize: 0.70,
               builder: (context, scrollController) {
                 return ClipRRect(
                   borderRadius: const BorderRadius.vertical(
@@ -1265,71 +1292,71 @@ class HomeState extends State<Home> {
                                   },
                                 ),
 
-                                /* Afrikaans */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Afrikaans",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('af');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Afrikaans */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Afrikaans",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('af');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Arabic */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Arabic",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('ar');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Arabic",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('ar');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* German */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "German",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('de');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "German",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('de');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Spanish */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Spanish",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('es');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Spanish",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('es');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* French */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "French",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('fr');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "French",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('fr');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Gujarati */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Gujarati",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('gu');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Gujarati */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Gujarati",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('gu');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Hindi */
                                 const SizedBox(height: 20),
@@ -1342,76 +1369,77 @@ class HomeState extends State<Home> {
                                   },
                                 ),
 
-                                /* Indonesian */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Indonesian",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('id');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Indonesian */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Indonesian",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('id');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Dutch */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Dutch",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('nl');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Dutch */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Dutch",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('nl');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Portuguese (Brazil) */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Portuguese (Brazil)",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('pt');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Portuguese (Brazil) */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Portuguese (Brazil)",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('pt');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Albanian */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Albanian",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('sq');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Albanian",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('sq');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Turkish */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Turkish",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('tr');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Turkish */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Turkish",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('tr');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Vietnamese */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Vietnamese",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('vi');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Vietnamese */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Vietnamese",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('vi');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
                                 const SizedBox(height: 20),
                               ],
                             ),
                           ),
                         ),
+                     
                       ],
                     ),
                   ),
@@ -2191,6 +2219,37 @@ class HomeState extends State<Home> {
                                 )),
                           ),
                         ),
+                    Visibility(
+                    visible: sectionBannerList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                        margin: EdgeInsets.only(right: 8),
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(height: 7 ,width: 7,
+                              margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 12 ,fontWeight: FontWeight.w700),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
                       ],
                     ),
                   ),
@@ -3016,7 +3075,36 @@ class HomeState extends State<Home> {
                         )),
                   ),
                 ),
-             
+              Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(height: 5 ,width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
               ],
             ),
           );
@@ -3191,6 +3279,36 @@ class HomeState extends State<Home> {
                         )),
                   ),
                 ),
+                Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(height: 5 ,width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 1,
@@ -3424,6 +3542,34 @@ class HomeState extends State<Home> {
                           )),
                     ),
                   ),
+               Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30)),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 12),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
                 ],
               ));
         },
@@ -3626,6 +3772,36 @@ class HomeState extends State<Home> {
                           )),
                     ),
                   ),
+                Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(height: 5 ,width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
                 ],
               ));
         },
@@ -3739,6 +3915,36 @@ class HomeState extends State<Home> {
                       ),
                     ),
                   ),
+                   Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(height: 5 ,width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
+                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                            ],
+                          )
+                          ),
+                    ),
+                  ),
+               
                   Visibility(
                     visible: sectionDataList?[index].isRent == 1 &&
                         sectionDataList?[index].isPremium == 0,

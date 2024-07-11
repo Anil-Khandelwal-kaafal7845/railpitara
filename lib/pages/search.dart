@@ -1,5 +1,3 @@
-
-
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
@@ -27,13 +25,13 @@ class Search extends StatefulWidget {
 }
 
 class SearchState extends State<Search> {
-  final searchController = TextEditingController();
+ final searchController = TextEditingController();
   late SearchProvider searchProvider = SearchProvider();
   final SpeechToText _speechToText = SpeechToText();
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
 
-  @override
+@override
   void initState() {
     _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
@@ -42,20 +40,20 @@ class SearchState extends State<Search> {
     super.initState();
   }
 
-  /// This has to happen only once per app
+    /// This has to happen only once per app
   void _initSpeech() async {
     speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
-  /// Each time to start a speech recognition session
+ /// Each time to start a speech recognition session
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
     await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {
       _isListening = true;
     });
-    Future.delayed(const Duration(seconds:30), () {
+    Future.delayed(const Duration(seconds: 40), () {
       if (searchController.text.toString().isEmpty) {
         Utils.showSnackbar(context, "info", "speechnotavailable", true);
         _stopListening();
@@ -67,30 +65,35 @@ class SearchState extends State<Search> {
   /// Note that there are also timeouts that each platform enforces
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
-  void _stopListening() async {
+void _stopListening() async {
     debugPrint("<============== _stopListening ==============>");
     _lastWords = '';
     _isListening = false;
     await _speechToText.stop();
   }
-
   /// This is the callback that the SpeechToText plugin calls when
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     debugPrint("<============== _onSpeechResult ==============>");
-    setState(() async {
-      _lastWords = result.recognizedWords;
-      debugPrint("_lastWords ==============> $_lastWords");
-      if (_lastWords.isNotEmpty && _isListening) {
-        searchController.text = _lastWords.toString();
+
+    // Append the recognized words to the existing words
+    _lastWords += result.recognizedWords;
+
+    if (_lastWords.isNotEmpty && _isListening) {
+      setState(() {
+        searchController.text = _lastWords;
         _isListening = false;
-        await searchProvider.getSearchVideo(_lastWords.toString());
+      });
+
+      // Process the search query
+      searchProvider.getSearchVideo(_lastWords).then((_) {
+        // Reset the _lastWords variable
         _lastWords = '';
-      }
-    });
+      });
+    }
   }
 
-  @override
+ @override
   void dispose() {
     _stopListening();
     searchController.dispose();
@@ -448,7 +451,8 @@ Widget _buildVideoUI() {
     }
   }
 }
-Widget _buildShowUI() {
+ 
+ Widget _buildShowUI() {
   if (searchProvider.loading) {
     return _shimmerSearch();
   } else {

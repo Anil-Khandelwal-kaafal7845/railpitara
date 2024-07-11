@@ -465,105 +465,210 @@ class AllPaymentState extends State<AllPayment>
     );
   }
 
-  Widget _buildCouponBox() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      padding: const EdgeInsets.only(right: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: primaryDark, width: 0.5),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              alignment: Alignment.center,
-              child: TextField(
-                onSubmitted: (value) async {
-                  if (value.isNotEmpty) {
-                    strCouponCode = value.toString();
-                    applyCoupon();
-                  } else {
-                    strCouponCode = "";
-                  }
-                  debugPrint("strCouponCode ===========> $strCouponCode");
-                },
-                onChanged: (value) async {
-                  if (value.isNotEmpty) {
-                    strCouponCode = value.toString();
-                  } else {
-                    strCouponCode = "";
-                  }
-                  debugPrint("strCouponCode ===========> $strCouponCode");
-                },
-                textInputAction: TextInputAction.done,
-                obscureText: false,
-                controller: couponController,
-                keyboardType: TextInputType.text,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: white,
-                  fontSize: 16,
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w600,
-                ),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: transparentColor,
-                  hintStyle: TextStyle(
-                    color: otherColor,
-                    fontSize: 14,
-                    overflow: TextOverflow.ellipsis,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  hintText: couponAddHint,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          InkWell(
-            borderRadius: BorderRadius.circular(5),
-            onTap: () async {
-              debugPrint("Click on Apply!");
-              debugPrint("strCouponCode ===========> $strCouponCode");
-              if (strCouponCode != null && (strCouponCode ?? "").isNotEmpty) {
-                applyCoupon();
-              } else {
-                Utils.showSnackbar(context, "info", emptyCouponMsg, false);
-              }
-            },
-            child: Container(
-              height: 30,
-              constraints: const BoxConstraints(minWidth: 50),
-              padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-              decoration: Utils.setBackground(white, 5),
-              alignment: Alignment.center,
-              child: MyText(
-                color: black,
-                text: "apply",
-                multilanguage: true,
-                fontsizeNormal: 13,
-                fontsizeWeb: 14,
-                maxline: 1,
+
+Widget _buildCouponBox() {
+  return Container(
+    width: MediaQuery.of(context).size.width,
+    height: 50,
+    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+    padding: const EdgeInsets.only(right: 10),
+    decoration: BoxDecoration(
+      border: Border.all(color: primaryDark, width: 0.5),
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            alignment: Alignment.center,
+            child: TextField(
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'\s')), // Disallow spaces
+              ],
+              onSubmitted: (value) async {
+                if (value.isNotEmpty) {
+                  strCouponCode = value.toString();
+                  applyCoupon();
+                } else {
+                  strCouponCode = "";
+                }
+                debugPrint("strCouponCode ===========> $strCouponCode");
+              },
+              onChanged: (value) async {
+                if (value.isNotEmpty) {
+                  strCouponCode = value.toString();
+                } else {
+                  strCouponCode = "";
+                }
+                debugPrint("strCouponCode ===========> $strCouponCode");
+              },
+              textInputAction: TextInputAction.done,
+              obscureText: false,
+              controller: couponController,
+              keyboardType: TextInputType.text,
+              maxLines: 1,
+              style: const TextStyle(
+                color: white,
+                fontSize: 16,
                 overflow: TextOverflow.ellipsis,
-                fontweight: FontWeight.w600,
-                textalign: TextAlign.end,
-                fontstyle: FontStyle.normal,
+                fontWeight: FontWeight.w600,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+                fillColor: transparentColor,
+                hintStyle: TextStyle(
+                  color: otherColor,
+                  fontSize: 14,
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.w500,
+                ),
+                hintText: couponAddHint,
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(width: 10),
+        InkWell(
+          borderRadius: BorderRadius.circular(5),
+          onTap: () async {
+            debugPrint("Click on Apply!");
+            debugPrint("strCouponCode ===========> $strCouponCode");
+            if (strCouponCode != null && (strCouponCode ?? "").isNotEmpty) {
+              applyCoupon();
+            } else {
+              Utils.showSnackbar(context, "info", emptyCouponMsg, false);
+            }
+          },
+          child: Container(
+            height: 30,
+            constraints: const BoxConstraints(minWidth: 50),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+            decoration: Utils.setBackground(white, 5),
+            alignment: Alignment.center,
+            child: MyText(
+              color: black,
+              text: "apply",
+              multilanguage: true,
+              fontsizeNormal: 13,
+              fontsizeWeb: 14,
+              maxline: 1,
+              overflow: TextOverflow.ellipsis,
+              fontweight: FontWeight.w600,
+              textalign: TextAlign.end,
+              fontstyle: FontStyle.normal,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  // Widget _buildCouponBox() {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: 50,
+  //     margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+  //     padding: const EdgeInsets.only(right: 10),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: primaryDark, width: 0.5),
+  //       borderRadius: BorderRadius.circular(5),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         Expanded(
+  //           child: Container(
+  //             width: MediaQuery.of(context).size.width,
+  //             height: MediaQuery.of(context).size.height,
+  //             alignment: Alignment.center,
+  //             child: TextField(
+  //               onSubmitted: (value) async {
+  //                 if (value.isNotEmpty) {
+  //                   strCouponCode = value.toString();
+  //                   applyCoupon();
+  //                 } else {
+  //                   strCouponCode = "";
+  //                 }
+  //                 debugPrint("strCouponCode ===========> $strCouponCode");
+  //               },
+  //               onChanged: (value) async {
+  //                 if (value.isNotEmpty) {
+  //                   strCouponCode = value.toString();
+  //                 } else {
+  //                   strCouponCode = "";
+  //                 }
+  //                 debugPrint("strCouponCode ===========> $strCouponCode");
+  //               },
+  //               textInputAction: TextInputAction.done,
+  //               obscureText: false,
+  //               controller: couponController,
+  //               keyboardType: TextInputType.text,
+  //               maxLines: 1,
+  //               style: const TextStyle(
+  //                 color: white,
+  //                 fontSize: 16,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //               decoration: const InputDecoration(
+  //                 border: InputBorder.none,
+  //                 filled: true,
+  //                 fillColor: transparentColor,
+  //                 hintStyle: TextStyle(
+  //                   color: otherColor,
+  //                   fontSize: 14,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   fontWeight: FontWeight.w500,
+  //                 ),
+  //                 hintText: couponAddHint,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         const SizedBox(width: 10),
+  //         InkWell(
+  //           borderRadius: BorderRadius.circular(5),
+  //           onTap: () async {
+  //             debugPrint("Click on Apply!");
+  //             debugPrint("strCouponCode ===========> $strCouponCode");
+  //             if (strCouponCode != null && (strCouponCode ?? "").isNotEmpty) {
+  //               applyCoupon();
+  //             } else {
+  //               Utils.showSnackbar(context, "info", emptyCouponMsg, false);
+  //             }
+  //           },
+  //           child: Container(
+  //             height: 30,
+  //             constraints: const BoxConstraints(minWidth: 50),
+  //             padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+  //             decoration: Utils.setBackground(white, 5),
+  //             alignment: Alignment.center,
+  //             child: MyText(
+  //               color: black,
+  //               text: "apply",
+  //               multilanguage: true,
+  //               fontsizeNormal: 13,
+  //               fontsizeWeb: 14,
+  //               maxline: 1,
+  //               overflow: TextOverflow.ellipsis,
+  //               fontweight: FontWeight.w600,
+  //               textalign: TextAlign.end,
+  //               fontstyle: FontStyle.normal,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildPayments() {
     return Container(

@@ -398,6 +398,7 @@ class SettingState extends State<Setting> {
                     }
                   },
                 ),
+              
                 _buildLine(16.0, 16.0),
 
                 // /* Rate App */
@@ -626,7 +627,6 @@ class SettingState extends State<Setting> {
       color: otherColor,
     );
   }
-
   _languageChangeDialog() {
     showModalBottomSheet(
       context: context,
@@ -638,9 +638,9 @@ class SettingState extends State<Setting> {
         return StatefulBuilder(
           builder: (BuildContext context, state) {
             return DraggableScrollableSheet(
-              initialChildSize: 0.55,
-              minChildSize: 0.4,
-              maxChildSize: 0.9,
+              initialChildSize: 0.35,
+              minChildSize: 0.20,
+              maxChildSize: 0.70,
               builder: (context, scrollController) {
                 return ClipRRect(
                   borderRadius: const BorderRadius.vertical(
@@ -702,71 +702,71 @@ class SettingState extends State<Setting> {
                                   },
                                 ),
 
-                                /* Afrikaans */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Afrikaans",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('af');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Afrikaans */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Afrikaans",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('af');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Arabic */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Arabic",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('ar');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Arabic",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('ar');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* German */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "German",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('de');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "German",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('de');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Spanish */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Spanish",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('es');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Spanish",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('es');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* French */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "French",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('fr');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "French",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('fr');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Gujarati */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Gujarati",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('gu');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Gujarati */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Gujarati",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('gu');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Hindi */
                                 const SizedBox(height: 20),
@@ -779,76 +779,77 @@ class SettingState extends State<Setting> {
                                   },
                                 ),
 
-                                /* Indonesian */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Indonesian",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('id');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Indonesian */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Indonesian",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('id');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Dutch */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Dutch",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('nl');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Dutch */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Dutch",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('nl');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Portuguese (Brazil) */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Portuguese (Brazil)",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('pt');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Portuguese (Brazil) */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Portuguese (Brazil)",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('pt');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
                                 /* Albanian */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Albanian",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('sq');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Albanian",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('sq');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Turkish */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Turkish",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('tr');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Turkish */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Turkish",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('tr');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
 
-                                /* Vietnamese */
-                                const SizedBox(height: 20),
-                                _buildLanguage(
-                                  langName: "Vietnamese",
-                                  onClick: () {
-                                    state(() {});
-                                    LocaleNotifier.of(context)?.change('vi');
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                // /* Vietnamese */
+                                // const SizedBox(height: 20),
+                                // _buildLanguage(
+                                //   langName: "Vietnamese",
+                                //   onClick: () {
+                                //     state(() {});
+                                //     LocaleNotifier.of(context)?.change('vi');
+                                //     Navigator.pop(context);
+                                //   },
+                                // ),
                                 const SizedBox(height: 20),
                               ],
                             ),
                           ),
                         ),
+                     
                       ],
                     ),
                   ),
