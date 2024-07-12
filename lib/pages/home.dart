@@ -2035,7 +2035,8 @@ class HomeState extends State<Home> {
 
   Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
     if ((sectionBannerList?.length ?? 0) > 0) {
-      return Stack(
+      return
+       Stack(
         alignment: AlignmentDirectional.bottomCenter,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
@@ -2063,9 +2064,10 @@ class HomeState extends State<Home> {
               ),
               itemBuilder:
                   (BuildContext context, int index, int pageViewIndex) {
-                return InkWell(
-                  focusColor: white,
-                  borderRadius: BorderRadius.circular(0),
+                return GestureDetector(
+                   behavior: HitTestBehavior.translucent,
+                  // focusColor: white,
+                  // borderRadius: BorderRadius.circular(0),
                   onTap: () {
                     debugPrint("Clicked userid ==> ${Constant.userID}");
                     debugPrint(
@@ -2279,6 +2281,7 @@ class HomeState extends State<Home> {
           ),
         ],
       );
+   
     } else {
       return const SizedBox.shrink();
     }

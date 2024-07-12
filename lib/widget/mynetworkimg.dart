@@ -113,3 +113,57 @@ class MyNetworkImageTwo extends StatelessWidget {
     );
   }
 }
+
+
+class MyNetworkImageLand extends StatelessWidget {
+  String imageUrl;
+  double? imgHeight, imgWidth;
+  dynamic fit;
+
+  MyNetworkImageLand(
+      {Key? key,
+      required this.imageUrl,
+      required this.fit,
+      this.imgHeight,
+      this.imgWidth})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: imgHeight,
+      width: imgWidth,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: fit,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: fit,
+            ),
+          ),
+        ),
+        placeholder: (context, url) {
+          return MyImage(
+            width: imgWidth,
+            height: imgHeight,
+            imagePath:"no_image_land.png" ,
+               
+            fit: BoxFit.cover,
+          );
+        },
+        errorWidget: (context, url, error) {
+          return MyImage(
+            width: imgWidth,
+            height: imgHeight,
+            imagePath:  "no_image_land.png" ,
+              
+            fit: BoxFit.cover,
+          );
+        },
+      ),
+    );
+  }
+}

@@ -58,7 +58,7 @@ class SectionByTypeState extends State<SectionByType> {
     await sectionByTypeProvider.getSectionBanner(
         widget.typeId.toString(), widget.isHomePage.toString());
     await sectionByTypeProvider.getSectionList(
-        widget.typeId.toString(), widget.isHomePage.toString(),"0");
+        widget.typeId.toString(), widget.isHomePage.toString(), "0");
   }
 
   @override
@@ -264,6 +264,7 @@ class SectionByTypeState extends State<SectionByType> {
       return const SizedBox.shrink();
     }
   }
+
   Widget setSectionByType(List<list.Result>? sectionList) {
     // Check if sectionList is not null
     if (sectionList == null || sectionList.isEmpty) {
@@ -310,16 +311,18 @@ class SectionByTypeState extends State<SectionByType> {
                   ),
                   if (!isGenreOrLanguage)
                     GestureDetector(
-                        onTap: () {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (context) {
-      return MoreScreen(
-        sectionList[index].title.toString(),
-        sectionList[index].id.toString(), // Pass the section ID
-      );
-    },
-  ));
-},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return MoreScreen(
+                              sectionList[index].title.toString(),
+                              sectionList[index]
+                                  .id
+                                  .toString(), // Pass the section ID
+                            );
+                          },
+                        ));
+                      },
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 15, 3, 0),
                         child: MyText(
@@ -353,60 +356,63 @@ class SectionByTypeState extends State<SectionByType> {
                     const SizedBox(
                       height: 15,
                     ),
-                    SizedBox(
-                      height: Dimens.upcomingHeight,
-                      width: MediaQuery.of(context).size.width,
-                      child: GestureDetector(
-                        onTap: () {
-                          if (sectionList[index].bannerLinkType == 0) {
-                            // Handle onTap for bannerLinkType = 0
-                            if (sectionList[index].bannerBacklink != null &&
-                                sectionList[index]
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      child: SizedBox(
+                        height: Dimens.upcomingHeight,
+                        width: MediaQuery.of(context).size.width,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (sectionList[index].bannerLinkType == 0) {
+                              // Handle onTap for bannerLinkType = 0
+                              if (sectionList[index].bannerBacklink != null &&
+                                  sectionList[index]
+                                      .bannerBacklink
+                                      .toString()
+                                      .isNotEmpty) {
+                                launchUrl(Uri.parse(sectionList[index]
                                     .bannerBacklink
-                                    .toString()
-                                    .isNotEmpty) {
-                              launchUrl(Uri.parse(sectionList[index]
-                                  .bannerBacklink
-                                  .toString()));
-                            }
-                          } else {
-                            // Handle onTap for bannerLinkType = 1
-                            if (Constant.userID == null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginSocial()),
-                              );
-                              // Utils.buildWebAlertDialog(context, "login", "");
+                                    .toString()));
+                              }
                             } else {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => PlayerVideo(
-                              //           '',
-                              //           0,
-                              //           0,
-                              //           typeId,
-                              //           0,
-                              //           sectionList[index]
-                              //               .bannerBacklink
-                              //               .toString(),
-                              //           0,
-                              //           "",
-                              //           "")),
-                              // );
+                              // Handle onTap for bannerLinkType = 1
+                              if (Constant.userID == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginSocial()),
+                                );
+                                // Utils.buildWebAlertDialog(context, "login", "");
+                              } else {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => PlayerVideo(
+                                //           '',
+                                //           0,
+                                //           0,
+                                //           typeId,
+                                //           0,
+                                //           sectionList[index]
+                                //               .bannerBacklink
+                                //               .toString(),
+                                //           0,
+                                //           "",
+                                //           "")),
+                                // );
 
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => TestPlayerWeb(
-                                      loadURL: sectionList[index]
-                                          .bannerBacklink
-                                          .toString())));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => TestPlayerWeb(
+                                        loadURL: sectionList[index]
+                                            .bannerBacklink
+                                            .toString())));
+                              }
                             }
-                          }
-                        },
-                        child: Image.network(
-                            sectionList[index].bannerImage.toString(),
-                            fit: BoxFit.fill),
+                          },
+                          child: Image.network(
+                              sectionList[index].bannerImage.toString(),
+                              fit: BoxFit.fill),
+                        ),
                       ),
                     ),
                   ],
@@ -419,7 +425,6 @@ class SectionByTypeState extends State<SectionByType> {
       },
     );
   }
-
 
   Widget setSectionData(
       {required List<list.Result>? sectionList, required int index}) {
@@ -575,13 +580,13 @@ class SectionByTypeState extends State<SectionByType> {
                           loadURL: sectionDataList![index].video320!)));
                 }
               } else {
-                 Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                Utils.openDetails(
+                  context: context,
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: upcomingType ?? 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                );
               }
             },
 
@@ -733,6 +738,46 @@ class SectionByTypeState extends State<SectionByType> {
                         )),
                   ),
                 ),
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        // decoration: const BoxDecoration(
+                        //   color: colorPrimary,
+                        //   borderRadius: BorderRadius.only(
+                        //       topLeft: Radius.circular(3),
+                        //       topRight: Radius.circular(4),
+                        //       bottomLeft: Radius.circular(8),
+                        //       bottomRight: Radius.circular(3)),
+                        // ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 5,
+                              width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                              decoration: BoxDecoration(
+                                color: redColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            Text(
+                              "LIVE",
+                              style: TextStyle(
+                                  color: redColor,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        )),
+                  ),
+                ),
               ],
             ),
           );
@@ -780,12 +825,12 @@ class SectionByTypeState extends State<SectionByType> {
                 }
               } else {
                 Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                  context: context,
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: upcomingType ?? 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                );
               }
             },
             // onTap: () {
@@ -935,6 +980,46 @@ class SectionByTypeState extends State<SectionByType> {
                         )),
                   ),
                 ),
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        // decoration: const BoxDecoration(
+                        //   color: colorPrimary,
+                        //   borderRadius: BorderRadius.only(
+                        //       topLeft: Radius.circular(3),
+                        //       topRight: Radius.circular(4),
+                        //       bottomLeft: Radius.circular(8),
+                        //       bottomRight: Radius.circular(3)),
+                        // ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 5,
+                              width: 5,
+                              margin: EdgeInsets.only(right: 3),
+                              decoration: BoxDecoration(
+                                color: redColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            Text(
+                              "LIVE",
+                              style: TextStyle(
+                                  color: redColor,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        )),
+                  ),
+                ),
               ],
             ),
           );
@@ -1019,12 +1104,12 @@ class SectionByTypeState extends State<SectionByType> {
                   }
                 } else {
                   Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                    context: context,
+                    videoId: sectionDataList?[index].id ?? 0,
+                    upcomingType: upcomingType ?? 0,
+                    videoType: sectionDataList?[index].videoType ?? 0,
+                    typeId: sectionDataList?[index].typeId ?? 0,
+                  );
                 }
               },
               child: Stack(
@@ -1136,6 +1221,46 @@ class SectionByTypeState extends State<SectionByType> {
                           )),
                     ),
                   ),
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 5,
+                                width: 5,
+                                margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              )
+                            ],
+                          )),
+                    ),
+                  ),
                 ],
               ));
         },
@@ -1181,12 +1306,12 @@ class SectionByTypeState extends State<SectionByType> {
                   }
                 } else {
                   Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                    context: context,
+                    videoId: sectionDataList?[index].id ?? 0,
+                    upcomingType: upcomingType ?? 0,
+                    videoType: sectionDataList?[index].videoType ?? 0,
+                    typeId: sectionDataList?[index].typeId ?? 0,
+                  );
                 }
               },
               // onTap: () {
@@ -1336,6 +1461,46 @@ class SectionByTypeState extends State<SectionByType> {
                           )),
                     ),
                   ),
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 5,
+                                width: 5,
+                                margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              )
+                            ],
+                          )),
+                    ),
+                  ),
                 ],
               ));
         },
@@ -1381,12 +1546,12 @@ class SectionByTypeState extends State<SectionByType> {
                   }
                 } else {
                   Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                    context: context,
+                    videoId: sectionDataList?[index].id ?? 0,
+                    upcomingType: upcomingType ?? 0,
+                    videoType: sectionDataList?[index].videoType ?? 0,
+                    typeId: sectionDataList?[index].typeId ?? 0,
+                  );
                 }
               },
               // onTap: () {
@@ -1502,6 +1667,46 @@ class SectionByTypeState extends State<SectionByType> {
                                 height: 15,
                                 width: 15,
                               ),
+                            ],
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
+                    child: FittedBox(
+                      child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 15,
+                            minWidth: 30,
+                          ),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          // decoration: const BoxDecoration(
+                          //   color: colorPrimary,
+                          //   borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(3),
+                          //       topRight: Radius.circular(4),
+                          //       bottomLeft: Radius.circular(8),
+                          //       bottomRight: Radius.circular(3)),
+                          // ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 5,
+                                width: 5,
+                                margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              )
                             ],
                           )),
                     ),
@@ -1860,12 +2065,12 @@ class SectionByTypeState extends State<SectionByType> {
                       }
                     } else {
                       Utils.openDetails(
-                context: context,
-                videoId: sectionDataList?[index].id ?? 0,
-                upcomingType: upcomingType ?? 0,
-                videoType: sectionDataList?[index].videoType ?? 0,
-                typeId: sectionDataList?[index].typeId ?? 0,
-              );
+                        context: context,
+                        videoId: sectionDataList?[index].id ?? 0,
+                        upcomingType: upcomingType ?? 0,
+                        videoType: sectionDataList?[index].videoType ?? 0,
+                        typeId: sectionDataList?[index].typeId ?? 0,
+                      );
                     }
                   },
                   child: Padding(
@@ -2112,7 +2317,6 @@ class SectionByTypeState extends State<SectionByType> {
     );
   }
 
-
   // Widget setSectionData(
   //     {required List<list.Result>? sectionList, required int index}) {
   //   /* video_type =>  1-video,  2-show,  3-language,  4-category */
@@ -2167,7 +2371,6 @@ class SectionByTypeState extends State<SectionByType> {
   //     }
   //   }
   // }
-
 
   // double getRemainingDataHeight(String? videoType, String? layoutType) {
   //   if (videoType == "1" || videoType == "2") {
@@ -2336,6 +2539,4 @@ class SectionByTypeState extends State<SectionByType> {
   //     ),
   //   );
   // }
-
-
 }

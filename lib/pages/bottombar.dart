@@ -14,6 +14,7 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class Bottombar extends StatefulWidget {
   const Bottombar({Key? key}) : super(key: key);
@@ -86,61 +87,59 @@ class BottombarState extends State<Bottombar> {
           ],
         ),
 
-        bottomNavigationBar: BottomBar(
-          height: 60,
-          textStyle: TextStyle(fontWeight: FontWeight.w500),
-          selectedIndex: selectedIndex,
+bottomNavigationBar: SalomonBottomBar(
+
+          currentIndex: selectedIndex,
           onTap: _onItemTapped,
-          items: <BottomBarItem>[
-            BottomBarItem(
+          items:[
+            SalomonBottomBarItem(
               icon: Image.asset(
                 "assets/images/ic_home.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title:Text('Home' ,style: TextStyle(color: colorPrimary),),
-              activeColor: Colors.blue,
-              activeTitleColor: Colors.blue.shade600,
+              title:Text('Home' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+              selectedColor: Color.fromRGBO(33, 150, 243, 1),
+              //activeTitleColor: Colors.blue.shade600,
             ),
-            BottomBarItem(
+            SalomonBottomBarItem(
               icon:Image.asset(
                 "assets/images/ic_channels.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title: Text('Channels' ,style: TextStyle(color: colorPrimary),),
+              title: Text('Channels' ,style: TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),),
              // backgroundColorOpacity: 0.1,
-            activeColor: Colors.blue,
-              activeTitleColor: Colors.blue.shade600,
+            selectedColor: Colors.blue,
+              //activeTitleColor: Colors.blue.shade600,
             ),
-            BottomBarItem(
-              icon:Image.asset(
+           SalomonBottomBarItem(
+              icon: Image.asset(
                 "assets/images/ic_store.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title: Text('Store' ,style: TextStyle(color: colorPrimary),),
-               activeColor: Colors.blue,
-              activeTitleColor: Colors.blue.shade600,
+              title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+              selectedColor: Colors.blue,
+              //activeTitleColor: Colors.blue.shade600,
             ),
-            BottomBarItem(
+            SalomonBottomBarItem(
               icon:Image.asset(
                 "assets/images/ic_stuff.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title: Text('My Stuff' ,style: TextStyle(color: colorPrimary),),
-               activeColor: Colors.blue,
-              activeTitleColor: Colors.blue.shade600,
+              title: Text('My Stuff' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+               selectedColor: Colors.blue,
+              //activeTitleColor: Colors.blue.shade600,
             ),
-           
+
           ],
         ),
-
         // bottomNavigationBar: BottomAppBar(
         //   color: appBgColor,
         //   padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),

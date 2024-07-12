@@ -170,7 +170,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                       0,
                 );
               },
-              child: MyNetworkImage(
+              child: MyNetworkImageLand(
                 imageUrl: (watchlistProvider
                                 .watchlistModel.result?[position].landscape ??
                             "")
