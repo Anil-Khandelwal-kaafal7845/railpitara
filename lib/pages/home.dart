@@ -2118,7 +2118,7 @@ class HomeState extends State<Home> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        top: 2, bottom: 2, left: 10, right: 10),
+                        top: 0, bottom: 0, left: 10, right: 10),
                     child: Stack(
                       alignment: Alignment.topRight,
                       // alignment: AlignmentDirectional.bottomCenter,
@@ -2647,6 +2647,7 @@ class HomeState extends State<Home> {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
+                
                   if (!isGenreOrLanguage)
                     GestureDetector(
                      onTap: () {
@@ -2675,6 +2676,7 @@ class HomeState extends State<Home> {
                         ),
                       ),
                     ),
+               
                 ],
               ),
               const SizedBox(height: 5),
@@ -3108,6 +3110,7 @@ class HomeState extends State<Home> {
                
               ],
             ),
+         
           );
         },
       ),

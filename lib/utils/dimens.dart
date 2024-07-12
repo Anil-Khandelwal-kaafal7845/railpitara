@@ -14,6 +14,7 @@ class Dimens {
   static double widthPortTwo = 100;
   static double heightPortTwo = 140;
   static double widthLand = 170;
+    static double widthLandmore = 185;
   static double heightLand = 100;
   static double widthLandTwo = 190;
   static double heightLandTwo = 100;

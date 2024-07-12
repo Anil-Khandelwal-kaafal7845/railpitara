@@ -6,9 +6,9 @@ import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
-
 import 'package:dtlive/provider/sectiondataprovider.dart';
 
+import '../utils/constant.dart';
 
 class MoreScreen extends StatefulWidget {
   final String appBarTitle;
@@ -34,7 +34,7 @@ class MoreScreenState extends State<MoreScreen> {
       appBar: AppBar(
         shadowColor: appBgColor,
         backgroundColor: appBgColor,
-        title: Center(child: Text("${widget.appBarTitle}")),
+        title: Center(child: Text(widget.appBarTitle)),
         leading: IconButton(
           icon: Icon(CupertinoIcons.back),
           onPressed: () {
@@ -46,7 +46,11 @@ class MoreScreenState extends State<MoreScreen> {
         child: Consumer<SectionDataProvider>(
           builder: (context, sectionDataProvider, child) {
             if (sectionDataProvider.loadingViewAll) {
-              return Center(child: CircularProgressIndicator(color: primaryLight,));
+              return Center(
+                child: CircularProgressIndicator(
+                  color: primaryLight,
+                ),
+              );
             }
 
             final sectionDataList = sectionDataProvider.sectionDataList;
@@ -62,9 +66,9 @@ class MoreScreenState extends State<MoreScreen> {
                       child: Column(
                         children: [
                           Container(
-                            padding: const EdgeInsets.fromLTRB(10, 6, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(5, 6, 20, 5),
                             child: ResponsiveGridList(
-                              minItemWidth: Dimens.widthLand,
+                              minItemWidth: Dimens.widthLandmore,
                               verticalGridSpacing: 8,
                               horizontalGridSpacing: 8,
                               minItemsPerRow: 2,
@@ -80,8 +84,7 @@ class MoreScreenState extends State<MoreScreen> {
                                   return InkWell(
                                     borderRadius: BorderRadius.circular(4),
                                     onTap: () {
-                                      debugPrint(
-                                          "Clicked on position ==> $position");
+                                      debugPrint("Clicked on position ==> $position");
                                       Utils.openDetails(
                                         context: context,
                                         videoId: videoData.id,
@@ -90,24 +93,152 @@ class MoreScreenState extends State<MoreScreen> {
                                         typeId: 4,
                                       );
                                     },
-                                    child: Container(
-                                      width: Dimens.widthLand,
-                                      height: Dimens.heightLand,
-                                      alignment: Alignment.center,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(4),
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        child: MyNetworkImage(
-                                          imageUrl: videoData.landscape,
-                                          fit: BoxFit.cover,
-                                          imgHeight: MediaQuery.of(context)
-                                              .size
-                                              .height,
-                                          imgWidth:
-                                              MediaQuery.of(context).size.width,
+                                    child: Stack(
+                                      alignment: Alignment.topRight,
+                                      children: [
+                                        Container(
+                                          width: Dimens.widthLandmore,
+                                          height: Dimens.heightLand,
+                                          alignment: Alignment.center,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(4),
+                                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                                            child: MyNetworkImage(
+                                              imageUrl: videoData.landscape.toString(),
+                                              fit: BoxFit.cover,
+                                              imgHeight: double.infinity,
+                                              imgWidth: Dimens.widthLandmore,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Visibility(
+                                          visible: videoData.isRent == 1 && videoData.isPremium == 0,
+                                          child: FittedBox(
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 15,
+                                                minWidth: 30,
+                                              ),
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                color: colorPrimary,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(3),
+                                                  topRight: Radius.circular(4),
+                                                  bottomLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(3),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/images/rupee.png',
+                                                    height: 13,
+                                                    width: 13,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: videoData.isPremium == 1,
+                                          child: FittedBox(
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 15,
+                                                minWidth: 30,
+                                              ),
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                color: colorPrimary,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(3),
+                                                  topRight: Radius.circular(4),
+                                                  bottomLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(3),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/images/crown.png',
+                                                    height: 15,
+                                                    width: 15,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: videoData.isRent == 1 && videoData.isPremium == 1,
+                                          child: FittedBox(
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 15,
+                                                minWidth: 30,
+                                              ),
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                color: colorPrimary,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(3),
+                                                  topRight: Radius.circular(4),
+                                                  bottomLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(3),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/images/crown.png',
+                                                    height: 15,
+                                                    width: 15,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // Visibility(
+                                        //   visible: videoData.isLiveUrl == 1,
+                                        //   child: FittedBox(
+                                        //     child: Container(
+                                        //       constraints: const BoxConstraints(
+                                        //         minHeight: 15,
+                                        //         minWidth: 30,
+                                        //       ),
+                                        //       alignment: Alignment.center,
+                                        //       padding: const EdgeInsets.all(5),
+                                        //       child: Row(
+                                        //         children: [
+                                        //           Container(
+                                        //             height: 5,
+                                        //             width: 5,
+                                        //             margin: EdgeInsets.only(right: 3),
+                                        //             decoration: BoxDecoration(
+                                        //               color: redColor,
+                                        //               borderRadius: BorderRadius.circular(30),
+                                        //             ),
+                                        //           ),
+                                        //           Text(
+                                        //             "LIVE",
+                                        //             style: TextStyle(
+                                        //               color: redColor,
+                                        //               fontSize: 10,
+                                        //               fontWeight: FontWeight.w700,
+                                        //             ),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
                                     ),
                                   );
                                 },
