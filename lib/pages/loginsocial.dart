@@ -377,8 +377,10 @@ class LoginSocialState extends State<LoginSocial> {
 
                           InkWell(
                             onTap: () {
+
                               debugPrint(
                                   "Click mobileNumber ==> $mobileNumber");
+                            
                               if (numberController.text.trim().isEmpty ||
                                   numberController.text.length < 10) {
                                 // Show Snackbar if phone number is empty or less than 10 digits
@@ -388,13 +390,13 @@ class LoginSocialState extends State<LoginSocial> {
                                   .hasMatch(numberController.text.trim())) {
                                 // Check if the entered phone number is valid
                                 String phoneNumberToSend =
-                                    '+91' + numberController.text.trim();
+                                    '+91'+numberController.text.trim();
                                 print(
                                     "NOW NUMBER WITH IS --${phoneNumberToSend}");
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => OTPVerify(
-                                        mobileNumber ?? "", "phone", ""),
+                                        phoneNumberToSend ?? "", "phone", ""),
                                   ),
                                 );
                               } else {

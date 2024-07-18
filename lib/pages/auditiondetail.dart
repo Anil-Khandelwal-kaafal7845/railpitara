@@ -4,6 +4,7 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
 class AuditionDetailsScreen extends StatefulWidget {
   final String email;
@@ -44,9 +45,7 @@ class _AuditionDetailsScreenState extends State<AuditionDetailsScreen> {
                     children: [
                       buildHeader(),
                       const SizedBox(height: 16),
-                    
                       buildMainDetails(),
-                   
                       const SizedBox(height: 0),
                       buildExtraDetails(),
                     ],
@@ -68,103 +67,100 @@ class _AuditionDetailsScreenState extends State<AuditionDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Row(
-              
-          children: [
-            Text("Code Number :" ,style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: otherColor,
+              Row(
+                children: [
+                  Text(
+                    "Code Number :",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: otherColor,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "${auditionData!.result!.audditionCodNumber ?? "N/A"}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: white,
+                    ),
+                  )
+                ],
               ),
-            ),
-            SizedBox(width: 8,) ,
-            Text("${auditionData!.result!.audditionCodNumber??"N/A"}",style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: white
-                
-              ),)
-
-            
-          ],
-        ) ,
-
-        Padding(
-  padding: const EdgeInsets.only(top: 10, bottom: 0),
-  child: Row(
-    children: [
-      Text(
-        "Is Shortlisted  :",
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-  color: otherColor,
-        ),
-      ),
-      const SizedBox(width: 8),
-      // Text(
-      //   "${auditionData!.result!.isShortlisted ?? "N/A"}",
-      //   style: const TextStyle(
-      //     fontWeight: FontWeight.w400,
-      //     fontSize: 14,
-      //   ),
-      //   overflow: TextOverflow.ellipsis,
-      // ),
-      // const SizedBox(width: 4),
-      auditionData!.result!.isShortlisted == "yes"
-          ? Icon(CupertinoIcons.check_mark, color: Colors.green, size: 18 ,)
-          : Icon(CupertinoIcons.clear, color: Colors.red, size: 18),
-    ],
-  ),
-) ,
- 
-
-      Padding(
-        padding: const EdgeInsets.only(top: 10 ,bottom: 10),
-        child: Row(
-            children: [
-              Text("Name :" ,style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                color: otherColor,
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Is Shortlisted  :",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: otherColor,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    auditionData!.result!.isShortlisted == "yes"
+                        ? Icon(
+                            CupertinoIcons.check_mark,
+                            color: Colors.green,
+                            size: 18,
+                          )
+                        : Icon(
+                            CupertinoIcons.clear,
+                            color: Colors.red,
+                            size: 18,
+                          ),
+                  ],
                 ),
               ),
-              SizedBox(width: 8,) ,
-              Text("${auditionData!.result!.name??"N/A"}",style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                color: white
-                  
-                ),)
-      
-              
-            ],
-          ),
-      ) ,
-     
-      Row(
-          children: [
-            Text("Email :" ,style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              color: otherColor,
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "Name :",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: otherColor,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "${auditionData!.result!.name ?? "N/A"}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: white,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(width: 8,) ,
-            Text("${auditionData!.result!.email??"N/A"}",style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                  color: white
-                
-                
+              Row(
+                children: [
+                  Text(
+                    "Email :",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: otherColor,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "${auditionData!.result!.email ?? "N/A"}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
               ),
-              overflow: TextOverflow.ellipsis,)
-
-            
-          ],
-        ) ,
-     
-           
             ],
           ),
         ),
@@ -172,35 +168,22 @@ class _AuditionDetailsScreenState extends State<AuditionDetailsScreen> {
     );
   }
 
- 
- Widget buildMainDetails() {
-  return Container(
-    // decoration: BoxDecoration(
-    //   border: Border.all(
-    //     color: Colors.grey, // You can change the border color as needed
-    //     width: 1.0,
-    //   ),
-    //   borderRadius: BorderRadius.circular(8.0), // Optional: to give rounded corners
-    // ),
-    // padding: const EdgeInsets.all(8.0), // Optional: to add padding inside the border
-   // margin: const EdgeInsets.symmetric(vertical: 10.0), // Optional: to add margin outside the border
-    child: Column(
-      children: [
-        buildListTile("Audition City", auditionData!.result!.audditionCity),
-        buildListTile("Audition Center Name", auditionData!.result!.audditionCenterName),
-        buildListTile("Judge Name", auditionData!.result!.judgeName),
-         buildListTile("Director Name", auditionData!.result!.directorName),
-      ],
-    ),
-  );
-}
-
+  Widget buildMainDetails() {
+    return Container(
+      child: Column(
+        children: [
+          buildListTile("Audition City", auditionData!.result!.audditionCity),
+          buildListTile("Audition Center Name", auditionData!.result!.audditionCenterName),
+          buildListTile("Judge Name", auditionData!.result!.judgeName),
+          buildListTile("Director Name", auditionData!.result!.directorName),
+        ],
+      ),
+    );
+  }
 
   Widget buildExtraDetails() {
     return Column(
       children: [
-       
-       
         buildListTile("Profession", auditionData!.result!.profession),
         buildListTile("WhatsApp Number", auditionData!.result!.whatsappNumber),
         buildListTile("Mobile", auditionData!.result!.mobile),
@@ -210,7 +193,7 @@ class _AuditionDetailsScreenState extends State<AuditionDetailsScreen> {
         buildListTile("Father's Name", auditionData!.result!.fathername),
         buildListTile("Mother's Name", auditionData!.result!.mothername),
         buildListTile("Age", auditionData!.result!.age.toString()),
-        buildListTile("Date of Birth", auditionData!.result!.dob.toString()),
+        buildListTile("Date of Birth", formatDate(auditionData!.result!.dob)), // Format the date
         buildListTile("Address", auditionData!.result!.address),
         buildListTile("State", auditionData!.result!.state),
         buildListTile("Audition Song", auditionData!.result!.audditionSong),
@@ -221,67 +204,74 @@ class _AuditionDetailsScreenState extends State<AuditionDetailsScreen> {
       ],
     );
   }
- Widget buildListTile(String title, String? value) {
-    return 
-     Padding(
-        padding: const EdgeInsets.only(top: 10 ,bottom: 10 ,left: 10 ,right: 10),
-        child: Column(
-          children: [
-            Row(
-                children: [
-                  Text("${title} : " ,style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    color: otherColor,
-                    ),
-                  ),
-                  SizedBox(width: 8,) ,
-                  Text("${value}",style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                    color: white
-                      
-                    ),)
-      
-                  
-                ],
-              ),
-         Padding(
-           padding: const EdgeInsets.only(top: 10),
-           child: Divider(height: 0,color: otherColor,),
-         )
-          ],
-        ),
-      );
-     
-  }
 
- Widget buildListTilenormal(String title, String? value) {
-    return 
-     Padding(
-        padding: const EdgeInsets.only(top: 10 ,bottom: 10 ,left: 10 ,right: 10),
-        child: Row(
+  Widget buildListTile(String title, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+      child: Column(
+        children: [
+          Row(
             children: [
-              Text("${title} : " ,style: TextStyle(
+              Text(
+                "${title} : ",
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                color: otherColor,
+                  fontSize: 15,
+                  color: otherColor,
                 ),
               ),
-              SizedBox(width: 8,) ,
-              Text("${value}",style: TextStyle(
+              SizedBox(width: 8),
+              Text(
+                "${value}",
+                style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                color: white
-                  
-                ),)
-      
-              
+                  fontSize: 15,
+                  color: white,
+                ),
+              )
             ],
           ),
-      );
-     
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Divider(
+              height: 0,
+              color: otherColor,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
+  Widget buildListTilenormal(String title, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+      child: Row(
+        children: [
+          Text(
+            "${title} : ",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: otherColor,
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            "${value}",
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
+  String formatDate(DateTime? date) {
+    if (date == null) return "N/A";
+    return DateFormat('yyyy-MM-dd').format(date); // Format as needed
+  }
 }
