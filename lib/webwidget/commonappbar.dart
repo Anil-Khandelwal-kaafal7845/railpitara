@@ -126,7 +126,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const Channels();
+              return const NewLivePlayer();
             },
           ),
         );

@@ -30,7 +30,8 @@ class BottombarState extends State<Bottombar> {
 
   static List<Widget> widgetOptions = <Widget>[
     const Home(pageName: ""),
-    const Channels(),
+    // const Channels(),
+    const NewLivePlayer(),
     const RentStore(),
     const Setting(),
   ];
@@ -261,7 +262,7 @@ Future<bool> _showExitBottomSheet() async {
                SizedBox(height: 15),
 
             Text(
-              'Are you sure you want to exit Aaryaa?',
+              'Are you sure you want to exit ?',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white), // Set text color to white
             ),
             SizedBox(height: 30),

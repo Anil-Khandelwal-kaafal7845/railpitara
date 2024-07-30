@@ -1,48 +1,48 @@
 {
   "project_info": {
-    "project_number": "153686127657",
-    "project_id": "aarya-ott",
-    "storage_bucket": "aarya-ott.appspot.com"
+    "project_number": "663533434843",
+    "project_id": "mitwatv-3c8bf",
+    "storage_bucket": "mitwatv-3c8bf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:153686127657:android:b0c62d454046c550639838",
+        "mobilesdk_app_id": "1:663533434843:android:d1ba5d4f15ff830bfe99fe",
         "android_client_info": {
-          "package_name": "com.ott.aaryaott"
+          "package_name": "com.mitwa.tv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "153686127657-vujhrd83kj3ots5dmceilcei87q24coe.apps.googleusercontent.com",
+          "client_id": "663533434843-485c0gqlg1390dldvbpdfukpm3r1kovk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ott.aaryaott",
+            "package_name": "com.mitwa.tv",
             "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
           }
         },
         {
-          "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+          "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM"
+          "current_key": "AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+              "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "153686127657-4u0ch65p572nt6tpuld0b13o9jdljqj8.apps.googleusercontent.com",
+              "client_id": "663533434843-9bk1ir2hk5p83iilc210uku7rnqsnm4r.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.ott.aaryaott"
+                "bundle_id": "com.FourSidesTV.ott"
               }
             }
           ]
@@ -51,34 +51,58 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:153686127657:android:086ebcebb588ab72639838",
+        "mobilesdk_app_id": "1:663533434843:android:025c021a2250cc0afe99fe",
         "android_client_info": {
-          "package_name": "com.ott.omtvapp"
+          "package_name": "com.release.mitwatv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+          "client_id": "663533434843-62ilj1jgfbsgun6aji3d2mmf8a0eplac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.mitwatv",
+            "certificate_hash": "5951fd36cae506abb6e4e8adfb1cf69e578f6503"
+          }
+        },
+        {
+          "client_id": "663533434843-eui4h53pb38s05nd4gi8b82dmoqlfi4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.mitwatv",
+            "certificate_hash": "4c41d9110a3f06105be8813e0847a2a6310c40ca"
+          }
+        },
+        {
+          "client_id": "663533434843-kug4bjgf1mlg24ecvsogo6k136i38klp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.mitwatv",
+            "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
+          }
+        },
+        {
+          "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM"
+          "current_key": "AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+              "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "153686127657-4u0ch65p572nt6tpuld0b13o9jdljqj8.apps.googleusercontent.com",
+              "client_id": "663533434843-9bk1ir2hk5p83iilc210uku7rnqsnm4r.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.ott.aaryaott"
+                "bundle_id": "com.FourSidesTV.ott"
               }
             }
           ]
@@ -87,34 +111,42 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:153686127657:android:16c39dece43cda55639838",
+        "mobilesdk_app_id": "1:663533434843:android:381c5d9bfabe31a1fe99fe",
         "android_client_info": {
-          "package_name": "com.release.aryanews"
+          "package_name": "com.tv.mitwa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+          "client_id": "663533434843-fu5bbv4q30rti7ib5fq4q2mteijtgeg1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tv.mitwa",
+            "certificate_hash": "95930a9a4ad9cb3860d618a8e1b75acd0c58b069"
+          }
+        },
+        {
+          "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM"
+          "current_key": "AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "153686127657-a2qj7ac0dsd5okkc7v4po2bln8r41a56.apps.googleusercontent.com",
+              "client_id": "663533434843-09tdkbbinmoki4np1eqi4b4v2k5q4mpl.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "153686127657-4u0ch65p572nt6tpuld0b13o9jdljqj8.apps.googleusercontent.com",
+              "client_id": "663533434843-9bk1ir2hk5p83iilc210uku7rnqsnm4r.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.ott.aaryaott"
+                "bundle_id": "com.FourSidesTV.ott"
               }
             }
           ]

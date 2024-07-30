@@ -62204,7 +62204,7 @@ $1(a){var s,r=null,q="https://play.aaryaadigital.com/",p=A.a([$.bte()],t.tc),o=A
 o=o.Pb(new A.B8(r,r,new A.db(!0,t.Ow),r,r,r,new A.db(B.h,n),new A.db(B.mH,n),r,r,r,r))
 n=$.Zd.bE()
 s=!($.jg().j(0)===q||$.jg().j(0)===q||$.jg().j(0)==="https://aarya-ott.web.app"||$.jg().j(0)==="https://aarya-ott.web.app/"||$.jg().j(0)==="https://play.aaryaadigital.com/#/"||$.jg().j(0)==="http://play.aaryaadigital.com/"||$.jg().j(0)==="https://aarya.ottpeople.in/"||$.jg().j(0)==="https://aarya.ottpeople.in"||$.jg().j(0)==="https://aarya.ottpeople.in/#/"||$.jg().j(0)==="http://aarya.ottpeople.in/")?new A.Bu(!0,A.cr(A.cy($.jg().j(0),0,r).gmt()[1],r),A.cr(A.cy($.jg().j(0),0,r).gmt()[2],r),A.cr(A.cy($.jg().j(0),0,r).gmt()[3],r),A.cr(A.cy($.jg().j(0),0,r).gmt()[4],r),r):B.arb
-return A.biY(new A.b1d(),!1,s,a,new A.b1e(),B.a4P,this.a.d,p,B.rq.aAI(A.cN([B.bZ,B.be,B.cq,B.d5,B.bT],t.B)),n,o,"Aaryaa digital")},
+return A.biY(new A.b1d(),!1,s,a,new A.b1e(),B.a4P,this.a.d,p,B.rq.aAI(A.cN([B.bZ,B.be,B.cq,B.d5,B.bT],t.B)),n,o,"Mahua Play")},
 $S:631}
 A.b1e.prototype={
 $2(a,b){return a},
@@ -64942,7 +64942,7 @@ return A.d(o.Gg(j,$.qw),$async$yf)
 case 9:j=o.CW=b
 m=$.aje()
 s=10
-return A.d(m.He(new A.a7U(j==null?null:J.an(j,"client_secret"),"Aaryaa digital",B.awK)).au(0,new A.akl(),t.P),$async$yf)
+return A.d(m.He(new A.a7U(j==null?null:J.an(j,"client_secret"),"Mahua Play",B.awK)).au(0,new A.akl(),t.P),$async$yf)
 case 10:o.Gs()
 q=1
 s=8
@@ -72296,11 +72296,11 @@ return A.l(null,r)}})
 return A.m($async$xu,r)},
 G(a){return new A.aZ(B.Yq,A.o(a,null,t.l).w.a.a<800?this.ahM():this.aig(),null)},
 aig(){var s=this,r=null,q=t.p
-return A.aH(A.a([A.b1(A.at(A.a([A.r(B.a1,new A.bz(r,r,"appicon.png",r,B.aZ,r),B.c,r,r,r,r,80,r,r,r,r,150),B.d7,A.c1(new A.aYr(),t.AF)],q),B.R,B.m,B.j,B.t),2),B.Mi,A.b1(s.Vv(),1),B.Mi,A.b1(A.at(A.a([s.VB(),B.ac,A.a3(B.h,13,13,B.k,B.L,1,!1,B.l,"Aaryaa digital Available On",B.E),B.d7,A.aH(A.a([A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,r,"playstore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYs(s),r,r,r,r),B.M,A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,B.h,"applestore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYt(s),r,r,r,r)],q),B.R,B.m,B.j,r),new A.ac(r,10,r,r),A.aH(A.a([s.Cz("assets/images/fb.png",new A.aYu(s)),B.bz,s.Cz("assets/images/insta.png",new A.aYv(s)),B.bz,s.Cz("assets/images/twt.png",new A.aYw(s)),B.bz,s.Cz("assets/images/yt.png",new A.aYx(s)),new A.ac(r,15,r,r)],q),B.R,B.m,B.j,r)],q),B.R,B.m,B.j,B.t),1)],q),B.R,B.a6,B.j,r)},
+return A.aH(A.a([A.b1(A.at(A.a([A.r(B.a1,new A.bz(r,r,"appicon.png",r,B.aZ,r),B.c,r,r,r,r,80,r,r,r,r,150),B.d7,A.c1(new A.aYr(),t.AF)],q),B.R,B.m,B.j,B.t),2),B.Mi,A.b1(s.Vv(),1),B.Mi,A.b1(A.at(A.a([s.VB(),B.ac,A.a3(B.h,13,13,B.k,B.L,1,!1,B.l,"Mahua Play Available On",B.E),B.d7,A.aH(A.a([A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,r,"playstore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYs(s),r,r,r,r),B.M,A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,B.h,"applestore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYt(s),r,r,r,r)],q),B.R,B.m,B.j,r),new A.ac(r,10,r,r),A.aH(A.a([s.Cz("assets/images/fb.png",new A.aYu(s)),B.bz,s.Cz("assets/images/insta.png",new A.aYv(s)),B.bz,s.Cz("assets/images/twt.png",new A.aYw(s)),B.bz,s.Cz("assets/images/yt.png",new A.aYx(s)),new A.ac(r,15,r,r)],q),B.R,B.m,B.j,r)],q),B.R,B.m,B.j,B.t),1)],q),B.R,B.a6,B.j,r)},
 Cz(a,b){var s=null
 return A.au(!1,A.N(3),!0,A.r(s,A.vs(a,s,s,s,s,s,s,s),B.c,s,s,s,s,25,s,s,s,s,25),s,!0,s,s,s,s,s,s,s,s,s,new A.aYC(b),s,s,s,s)},
 ahM(){var s=this,r=null,q=t.p
-return A.at(A.a([A.r(B.a1,new A.bz(r,r,"appicon.png",r,B.aZ,r),B.c,r,r,r,r,35,r,r,r,r,90),B.d7,A.c1(new A.aYm(),t.AF),B.f2,s.Vv(),B.f2,s.VB(),B.ac,A.a3(B.h,13,13,B.k,B.L,1,!1,B.l,"Aaryaa digital Available On",B.E),B.d7,A.aH(A.a([A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,r,"playstore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYn(s),r,r,r,r),B.M,A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,B.h,"applestore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYo(s),r,r,r,r)],q),B.R,B.m,B.j,r)],q),B.R,B.m,B.j,B.t)},
+return A.at(A.a([A.r(B.a1,new A.bz(r,r,"appicon.png",r,B.aZ,r),B.c,r,r,r,r,35,r,r,r,r,90),B.d7,A.c1(new A.aYm(),t.AF),B.f2,s.Vv(),B.f2,s.VB(),B.ac,A.a3(B.h,13,13,B.k,B.L,1,!1,B.l,"Mahua Play Available On",B.E),B.d7,A.aH(A.a([A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,r,"playstore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYn(s),r,r,r,r),B.M,A.au(!1,A.N(3),!0,A.axG(B.G,B.B,3,25,B.h,"applestore.png",25,!0),r,!0,r,r,r,r,r,r,r,r,r,new A.aYo(s),r,r,r,r)],q),B.R,B.m,B.j,r)],q),B.R,B.m,B.j,B.t)},
 Vv(){var s=this.f
 s===$&&A.b()
 if(s.r)return B.z

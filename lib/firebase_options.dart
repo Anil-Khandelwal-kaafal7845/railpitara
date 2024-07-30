@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,33 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBV_a5ahfm0MCphqDquM92yN-_17Bm0rGE',
-    appId: '1:153686127657:web:1400ca225b016e4d639838',
-    messagingSenderId: '153686127657',
-    projectId: 'aarya-ott',
-    authDomain: 'aarya-ott.firebaseapp.com',
-    storageBucket: 'aarya-ott.appspot.com',
-    measurementId: 'G-Z3YKE7VKK0',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBakP7vQRBVxeRfGuZLgjBAtVWDx_odcNM',
-    appId: '1:153686127657:android:16c39dece43cda55639838',
-    messagingSenderId: '153686127657',
-    projectId: 'aarya-ott',
-    storageBucket: 'aarya-ott.appspot.com',
+    apiKey: 'AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw',
+    appId: '1:663533434843:android:025c021a2250cc0afe99fe',
+    messagingSenderId: '663533434843',
+    projectId: 'mitwatv-3c8bf',
+    storageBucket: 'mitwatv-3c8bf.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCiSNoc4PrzY4-BtZrBxDn7TZh4reeeK1s',
-    appId: '1:153686127657:ios:1fb613c55475923f639838',
-    messagingSenderId: '153686127657',
-    projectId: 'aarya-ott',
-    storageBucket: 'aarya-ott.appspot.com',
-    androidClientId: '153686127657-8ug5704quscdf0cruuc14v60o6f9h0t9.apps.googleusercontent.com',
-    iosClientId: '153686127657-7qdeje82bgrk96tmj1r31r48ft7cb12t.apps.googleusercontent.com',
-    iosBundleId: 'com.release.aryanews',
+    apiKey: 'AIzaSyBeHiYJJtmhC-s7OO5zAAcRoQXh7EvCkN4',
+    appId: '1:663533434843:ios:b1b508bc0128fb79fe99fe',
+    messagingSenderId: '663533434843',
+    projectId: 'mitwatv-3c8bf',
+    storageBucket: 'mitwatv-3c8bf.appspot.com',
+    androidClientId: '663533434843-485c0gqlg1390dldvbpdfukpm3r1kovk.apps.googleusercontent.com',
+    iosClientId: '663533434843-h0h2d56jv7c9ptbhk13gpnhiubc5ubde.apps.googleusercontent.com',
+    iosBundleId: 'com.release.mitwatv',
   );
-
 }

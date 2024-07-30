@@ -6,13 +6,13 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
   // static const String baseurl = '';
-  static const String baseurl = 'https://admin.aaryaadigital.com/api/';
-  static const String dynamicBaseUrl = 'https://play.aaryaadigital.com/';
+ static const String baseurl = 'https://backend.mahuaplay.com/api/';
+  static const String dynamicBaseUrl = 'https://mahuaplay.com/';
 
-  static String appName = "Aaryaa digital";
-  static String appPackageName = "com.release.aryanews";
+  static String appName = "Mahua Play";
+  static String appPackageName = "com.release.mitwatv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 22;
+  static double curentAppVersion = 70;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -26,7 +26,7 @@ class Constant {
 
 
   static String androidAppUrl =
-      "https://play.google.com/store/apps/details?id=com.release.aryanews&hl=en";
+      "https://play.google.com/store/apps/details?id=com.release.mitwatv&hl=en";
   static String iosAppUrl =
       "https://apps.apple.com/in/app/aaryaa-digital/id6502516384";
 

@@ -2664,9 +2664,9 @@ class HomeState extends State<Home> {
   ));
 },
                       child: Padding(
-                       padding: const EdgeInsets.fromLTRB(20, 10, 15, 10),
+                       padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                         child: MyText(
-                          color: Colors.red,
+                          color: colorPrimary,
                           text: "More",
                           textalign: TextAlign.center,
                           fontsizeNormal: 10,
