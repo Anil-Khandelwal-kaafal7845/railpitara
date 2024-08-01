@@ -56,8 +56,8 @@ android {
         applicationId "com.release.mitwatv"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 70
-         versionName '2.6.2'
+        versionCode 71
+         versionName '2.6.3'
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
@@ -108,9 +108,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.android.support:multidex:2.0.1'
-    //Gradle for PayU PG
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
-
 }
