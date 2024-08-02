@@ -12,7 +12,7 @@ class Constant {
   static String appName = "Mahua Play";
   static String appPackageName = "com.release.mitwatv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 71;
+  static double curentAppVersion = 73;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
