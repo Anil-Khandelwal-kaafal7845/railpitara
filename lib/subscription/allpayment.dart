@@ -112,11 +112,7 @@ class AllPaymentState extends State<AllPayment>
     debugPrint('getUserData userName ==> $userName');
     debugPrint('getUserData userEmail ==> $userEmail');
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
-    createOrder().then((id) {
-      setState(() {
-        orderId = id;
-      });
-    });
+    
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
@@ -790,8 +786,20 @@ Widget _buildCouponBox() {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () async {
-                            await paymentProvider.setCurrentPayment("razorpay");
-                            openPayment(pgName: "razorpay");
+                            try {
+                              var id = await createOrder();
+                              print(
+                                  "ORDER CREATION DONE IN ON TAP BUTTON ____>>>>>>>");
+                              setState(() {
+                                orderId = id;
+                              });
+                              await paymentProvider
+                                  .setCurrentPayment("razorpay");
+                              openPayment(pgName: "razorpay");
+                            } catch (e) {
+                              print("Error creating order: $e");
+                           
+                            }
                           },
                           child: _buildPGButton(
                               "pg_razorpay.png", "Razorpay", 35, 130),
@@ -800,6 +808,8 @@ Widget _buildCouponBox() {
                     )
                   : const SizedBox.shrink()
               : const SizedBox.shrink(),
+
+
 
           /* Paytm */
           paymentProvider.paymentOptionModel.result?.payTm != null
@@ -1141,7 +1151,7 @@ Widget _buildCouponBox() {
       });
 
       var response = await http.post(
-        Uri.parse('https://admin.aaryaadigital.com/api/create-order'),
+        Uri.parse('${Constant.baseurl}create-order'),
         headers: mapHeader,
         body: requestBody,
       );

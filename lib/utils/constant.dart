@@ -12,7 +12,7 @@ class Constant {
   static String appName = "Mahua Play";
   static String appPackageName = "com.release.mitwatv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 76;
+  static double curentAppVersion = 77;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -28,14 +28,14 @@ class Constant {
   static String androidAppUrl =
       "https://play.google.com/store/apps/details?id=com.release.mitwatv&hl=en";
   static String iosAppUrl =
-      "https://apps.apple.com/in/app/aaryaa-digital/id6502516384";
+      "";
 
   static String fbLink =
-      "https://hi-in.facebook.com/people/Aaryaa-Digital-OTT/100071111258219";
-  static String InstaLink = "https://www.instagram.com/aaryaadigital/";
+      "";
+  static String InstaLink = "";
   static String youtubeLink =
-      "https://youtube.com/@AaryaaDigital?si=-0vOh88za82oB3Gz";
-  static String twitterLink = "https://twitter.com/AaryaaDigital";
+      "";
+  static String twitterLink = "";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];
