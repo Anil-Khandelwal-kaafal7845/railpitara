@@ -12,6 +12,7 @@ import 'package:dtlive/widget/castcrew.dart';
 import 'package:dtlive/widget/moredetails.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:dtlive/widget/relatedvideoshow.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -51,6 +52,7 @@ class MovieDetails extends StatefulWidget {
   State<MovieDetails> createState() => MovieDetailsState();
 }
 
+
 class MovieDetailsState extends State<MovieDetails> with RouteAware {
   /* Trailer init */
   VideoPlayerController? _trailerNormalController;
@@ -66,9 +68,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   late VideoDetailsProvider videoDetailsProvider;
   late HomeProvider homeProvider;
   Map<String, String> qualityUrlList = <String, String>{};
-
+  late DateTime startTime;
   @override
   void initState() {
+        startTime = DateTime.now();
     if (!kIsWeb) {
       /* Download init ****/
       _bindBackgroundIsolate();
@@ -337,7 +340,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   }
 
   @override
-  void dispose() {
+  void dispose()async {
+
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     if (!(kIsWeb) || !(Constant.isTV)) {
@@ -358,6 +363,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       _trailerNormalController?.dispose();
       _trailerNormalController = null;
     }
+
+    // Record the time spent on the page when the page is closed
+    DateTime endTime = DateTime.now();
+    Duration timeSpent = endTime.difference(startTime);
+
+    // Log the screen view event with duration parameter
+    await FirebaseAnalytics.instance
+        .logEvent(name: 'kEventScreenView', parameters: {
+      'screen_name': 'MovieDetails Screen',
+      'duration_seconds': timeSpent.inSeconds,
+    });
+
     super.dispose();
   }
 
@@ -411,17 +428,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         }
       }
     }
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return false;
-      },
-      child: Scaffold(
-        key: widget.key,
-        backgroundColor: appBgColor,
-        body: SafeArea(
-          child: _buildUIWithAppBar(),
-        ),
+    return Scaffold(
+      key: widget.key,
+      backgroundColor: appBgColor,
+      body: SafeArea(
+        child: _buildUIWithAppBar(),
       ),
     );
   }
@@ -762,8 +773,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           constraints: const BoxConstraints(minHeight: 0),
                           margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
                           child: Row(
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               /* Rent Button */
                               _buildRentBtn(),
@@ -796,103 +806,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       );
                                     } else {
                                       /* Trailer */
-
-                                      if (videoDetailsProvider
-                                              .sectionDetailModel
-                                              .result
-                                              ?.isLive ==
-                                          1) {
-                                        // If it's a live URL, don't show the trailer button
-                                        return InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          focusColor: gray.withOpacity(0.5),
-                                          onTap: () async {
-                                            openPlayer("startOver");
-                                          },
-                                          child: _buildFeatureBtn(
-                                            icon: 'ic_restart.png',
-                                            title: 'startover',
-                                            multilanguage: true,
-                                          ),
-                                        );
-                                      } else {
-                                        // If it's not a live URL, show the trailer button
-                                        return (videoDetailsProvider
-                                                        .sectionDetailModel
-                                                        .result
-                                                        ?.trailerUrl ==
-                                                    "" ||
-                                                videoDetailsProvider
-                                                        .sectionDetailModel
-                                                        .result
-                                                        ?.trailerUrl ==
-                                                    null)
-                                            ? InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                focusColor:
-                                                    gray.withOpacity(0.5),
-                                                onTap: () async {
-                                                  openPlayer("startOver");
-                                                },
-                                                child: _buildFeatureBtn(
-                                                  icon: 'ic_restart.png',
-                                                  title: 'startover',
-                                                  multilanguage: true,
-                                                ),
-                                              )
-                                            : InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                focusColor:
-                                                    gray.withOpacity(0.5),
-                                                onTap: () {
-                                                  openPlayer("Trailer");
-                                                },
-                                                child: _buildFeatureBtn(
-                                                  icon: 'ic_borderplay.png',
-                                                  title: 'trailer',
-                                                  multilanguage: true,
-                                                ),
-                                              );
-                                      }
-
-                                      // videoDetailsProvider
-                                      //                 .sectionDetailModel
-                                      //                 .result
-                                      //                 ?.trailerUrl ==
-                                      //             "" ||
-                                      //         videoDetailsProvider
-                                      //                 .sectionDetailModel
-                                      //                 .result
-                                      //                 ?.trailerUrl ==
-                                      //             null
-                                      //     ? InkWell(
-                                      //   borderRadius: BorderRadius.circular(5),
-                                      //   focusColor: gray.withOpacity(0.5),
-                                      //   onTap: () async {
-                                      //     openPlayer("startOver");
-                                      //   },
-                                      //   child: _buildFeatureBtn(
-                                      //     icon: 'ic_restart.png',
-                                      //     title: 'startover',
-                                      //     multilanguage: true,
-                                      //   ),
-                                      // )
-                                      //     : InkWell(
-                                      //         borderRadius:
-                                      //             BorderRadius.circular(5),
-                                      //         focusColor: gray.withOpacity(0.5),
-                                      //         onTap: () {
-                                      //           openPlayer("Trailer");
-                                      //         },
-                                      //         child: _buildFeatureBtn(
-                                      //           icon: 'ic_borderplay.png',
-                                      //           title: 'trailer',
-                                      //           multilanguage: true,
-                                      //         ),
-                                      //       );
+                                      return InkWell(
+                                        borderRadius: BorderRadius.circular(5),
+                                        focusColor: gray.withOpacity(0.5),
+                                        onTap: () {
+                                          openPlayer("Trailer");
+                                        },
+                                        child: _buildFeatureBtn(
+                                          icon: 'ic_borderplay.png',
+                                          title: 'trailer',
+                                          multilanguage: true,
+                                        ),
+                                      );
                                     }
                                   },
                                 ),
@@ -1026,20 +951,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           const SizedBox(height: 18),
                           Row(
                             children: [
-                              MyText(
-                                color: otherColor,
-                                text:
-                                    "${videoDetailsProvider.sectionDetailModel.result?.ageRestriction ?? ""}",
-                                textalign: TextAlign.start,
-                                fontsizeNormal: 14,
-                                fontsizeWeb: 16,
-                                fontweight: FontWeight.w600,
-                                multilanguage: false,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                fontstyle: FontStyle.normal,
-                              ),
-                              const SizedBox(width: 8),
                               MyImage(
                                 width: 50,
                                 height: 23,
@@ -3557,7 +3468,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     );
   }
 
-  buildShareWithDialog() {
+ buildShareWithDialog() {
     showModalBottomSheet(
       context: context,
       backgroundColor: lightBlack,
@@ -3722,6 +3633,174 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     );
   }
 
+  // buildShareWithDialog() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: lightBlack,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+  //     ),
+  //     clipBehavior: Clip.antiAliasWithSaveLayer,
+  //     builder: (BuildContext context) {
+  //       return Wrap(
+  //         children: <Widget>[
+  //           Container(
+  //             padding: const EdgeInsets.all(23),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: <Widget>[
+  //                 MyText(
+  //                   text:
+  //                       videoDetailsProvider.sectionDetailModel.result?.name ??
+  //                           "",
+  //                   multilanguage: false,
+  //                   fontsizeNormal: 18,
+  //                   fontsizeWeb: 18,
+  //                   color: white,
+  //                   fontstyle: FontStyle.normal,
+  //                   fontweight: FontWeight.w700,
+  //                   maxline: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   textalign: TextAlign.start,
+  //                 ),
+  //                 const SizedBox(height: 5),
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.start,
+  //                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                   children: [
+  //                     (videoDetailsProvider.sectionDetailModel.result
+  //                                     ?.ageRestriction ??
+  //                                 "")
+  //                             .isNotEmpty
+  //                         ? Container(
+  //                             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+  //                             margin: const EdgeInsets.only(right: 8),
+  //                             decoration: Utils.setBGWithBorder(
+  //                                 transparentColor, otherColor, 3, 0.7),
+  //                             child: MyText(
+  //                               text: videoDetailsProvider.sectionDetailModel
+  //                                       .result?.ageRestriction ??
+  //                                   "",
+  //                               multilanguage: false,
+  //                               fontsizeNormal: 10,
+  //                               fontsizeWeb: 12,
+  //                               color: otherColor,
+  //                               fontstyle: FontStyle.normal,
+  //                               fontweight: FontWeight.w500,
+  //                               maxline: 1,
+  //                               overflow: TextOverflow.ellipsis,
+  //                               textalign: TextAlign.start,
+  //                             ),
+  //                           )
+  //                         : const SizedBox.shrink(),
+  //                     MyImage(
+  //                       width: 18,
+  //                       height: 18,
+  //                       imagePath: "ic_comment.png",
+  //                       fit: BoxFit.fill,
+  //                       color: lightGray,
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 const SizedBox(height: 12),
+
+  //                 /* SMS */
+  //                 InkWell(
+  //                   borderRadius: BorderRadius.circular(5),
+  //                   focusColor: white,
+  //                   onTap: () {
+  //                     Navigator.pop(context);
+  //                     if (Platform.isAndroid) {
+  //                       Utils.redirectToUrl(
+  //                           'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
+  //                       // 'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
+  //                     } else if (Platform.isIOS) {
+  //                       Utils.redirectToUrl(
+  //                           'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}.\n Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+  //                       //'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+  //                     }
+  //                   },
+  //                   child: _buildDialogItems(
+  //                     icon: "ic_sms.png",
+  //                     title: "sms",
+  //                     isMultilang: true,
+  //                   ),
+  //                 ),
+
+  //                 /* Instgram Stories */
+  //                 InkWell(
+  //                   borderRadius: BorderRadius.circular(5),
+  //                   focusColor: white,
+  //                   onTap: () {
+  //                     Navigator.pop(context);
+  //                     Utils.shareApp(Platform.isIOS
+  //                         ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+  //                         : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType}\n");
+  //                     // "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+  //                   },
+  //                   child: _buildDialogItems(
+  //                     icon: "ic_insta.png",
+  //                     title: "instagram_stories",
+  //                     isMultilang: true,
+  //                   ),
+  //                 ),
+
+  //                 /* Copy Link */
+  //                 InkWell(
+  //                   borderRadius: BorderRadius.circular(5),
+  //                   focusColor: white,
+  //                   onTap: () {
+  //                     Navigator.pop(context);
+  //                     SocialShare.copyToClipboard(
+  //                       text: Platform.isIOS
+  //                           ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+  //                           : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n",
+
+  //                       //"Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
+  //                     ).then((data) {
+  //                       debugPrint(data);
+  //                       Utils.showSnackbar(
+  //                           context, "success", "link_copied", true);
+  //                     });
+  //                   },
+  //                   child: _buildDialogItems(
+  //                     icon: "ic_link.png",
+  //                     title: "copy_link",
+  //                     isMultilang: true,
+  //                   ),
+  //                 ),
+
+  //                 /* More */
+  //                 InkWell(
+  //                   borderRadius: BorderRadius.circular(5),
+  //                   focusColor: white,
+  //                   onTap: () {
+  //                     Navigator.pop(context);
+  //                     Utils.shareApp(Platform.isIOS
+  //                         ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+  //                         : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n");
+  //                     //"Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+  //                   },
+  //                   child: _buildDialogItems(
+  //                     icon: "ic_dots_h.png",
+  //                     title: "more",
+  //                     isMultilang: true,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  
+  // }
+
+
+
   Widget _buildDialogItems({
     required String icon,
     required String title,
@@ -3778,7 +3857,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     int? vType =
         (videoDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
     int? vTypeID = widget.typeId;
-
+dynamic  trailerLibraryId,trailerUrlVideoId,videoLibraryId,videoUrlId, isLive;
     int? stopTime;
     if (playType == "startOver" || playType == "Trailer") {
       stopTime = 0;
@@ -3796,6 +3875,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
+      trailerLibraryId=(videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ?? "");
+      trailerUrlVideoId=(videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "");
     } else {
       /* Set-up Quality URLs */
       Utils.setQualityURLs(
@@ -3808,11 +3889,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         video1080:
             (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
       );
+      videoLibraryId=(videoDetailsProvider.sectionDetailModel.result?.videoLibraryId ?? "");
+      videoUrlId=(videoDetailsProvider.sectionDetailModel.result?.urlVideoId ?? "");
 
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.video320 ?? "");
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.videoUploadType ??
               "");
+              isLive=videoDetailsProvider.sectionDetailModel.result?.isLiveUrl 
+              ?? "";
     }
 
     debugPrint("vUploadType ===> $vUploadType");
@@ -3841,6 +3926,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         uploadType: vUploadType,
         videoThumb: videoThumb,
         vStopTime: stopTime,
+        trailerLibraryId: trailerLibraryId,
+        trailerUrlVideoId: trailerUrlVideoId,
+        videoLibraryId:videoLibraryId,
+        videoUrlVideoId:  videoUrlId,
+        isLive: isLive
       );
       debugPrint("isContinue ===> $isContinue");
       if (isContinue != null && isContinue == true) {

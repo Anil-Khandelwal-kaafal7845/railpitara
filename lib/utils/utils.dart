@@ -262,19 +262,23 @@ class Utils {
   /* ========= Check Supported Currency for PGs END =========== */
 
   /* ========= Open Player ========= */
-  static Future<dynamic> openPlayer({
-    required BuildContext context,
-    required String? playType,
-    required int? videoId,
-    required int? videoType,
-    required int? typeId,
-    required int? otherId,
-    required String? videoUrl,
-    required String? trailerUrl,
-    required String? uploadType,
-    required String? videoThumb,
-    required int? vStopTime,
-  }) async {
+  static Future<dynamic> openPlayer(
+      {required BuildContext context,
+      required String? playType,
+      required int? videoId,
+      required int? videoType,
+      required int? typeId,
+      required int? otherId,
+      required String? videoUrl,
+      required String? trailerUrl,
+      required String? uploadType,
+      required String? videoThumb,
+      required int? vStopTime,
+      dynamic trailerLibraryId,
+      dynamic trailerUrlVideoId,
+      dynamic videoLibraryId,
+      dynamic videoUrlVideoId,
+      dynamic isLive}) async {
     dynamic isContinue;
     int? vID = (videoId ?? 0);
     int? vType = (videoType ?? 0);
@@ -356,6 +360,34 @@ class Utils {
             MaterialPageRoute(
               builder: (context) {
                 return PlayerVideo(
+                    playType == "Trailer"
+                        ? "Trailer"
+                        : playType == "Download"
+                            ? "Download"
+                            : (videoType == 2 ? "Show" : "Video"),
+                    vID,
+                    vType,
+                    vTypeID,
+                    vOtherID,
+                    vUrl ?? "",
+                    stopTime,
+                    vUploadType,
+                    videoThumb,
+                    trailerLibraryId: trailerLibraryId,
+                    trailerUrlVideoId: trailerUrlVideoId,
+                    videoLibraryId: videoLibraryId,
+                    videoUrlId: videoUrlVideoId,
+                    isLive: isLive);
+              },
+            ),
+          );
+        }
+      } else {
+        isContinue = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PlayerVideo(
                   playType == "Trailer"
                       ? "Trailer"
                       : playType == "Download"
@@ -369,31 +401,11 @@ class Utils {
                   stopTime,
                   vUploadType,
                   videoThumb,
-                );
-              },
-            ),
-          );
-        }
-      } else {
-        isContinue = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return PlayerVideo(
-                playType == "Trailer"
-                    ? "Trailer"
-                    : playType == "Download"
-                        ? "Download"
-                        : (videoType == 2 ? "Show" : "Video"),
-                vID,
-                vType,
-                vTypeID,
-                vOtherID,
-                vUrl ?? "",
-                stopTime,
-                vUploadType,
-                videoThumb,
-              );
+                  trailerLibraryId: trailerLibraryId,
+                  trailerUrlVideoId: trailerUrlVideoId,
+                  videoLibraryId: videoLibraryId,
+                  videoUrlId: videoUrlVideoId,
+                  isLive: isLive);
             },
           ),
         );
@@ -476,20 +488,24 @@ class Utils {
             MaterialPageRoute(
               builder: (context) {
                 return PlayerVideo(
-                  playType == "Trailer"
-                      ? "Trailer"
-                      : playType == "Download"
-                          ? "Download"
-                          : (videoType == 2 ? "Show" : "Video"),
-                  vID,
-                  vType,
-                  vTypeID,
-                  vOtherID,
-                  vUrl ?? "",
-                  stopTime,
-                  vUploadType,
-                  videoThumb,
-                );
+                    playType == "Trailer"
+                        ? "Trailer"
+                        : playType == "Download"
+                            ? "Download"
+                            : (videoType == 2 ? "Show" : "Video"),
+                    vID,
+                    vType,
+                    vTypeID,
+                    vOtherID,
+                    vUrl ?? "",
+                    stopTime,
+                    vUploadType,
+                    videoThumb,
+                    trailerLibraryId: trailerLibraryId,
+                    trailerUrlVideoId: trailerUrlVideoId,
+                    videoLibraryId: videoLibraryId,
+                    videoUrlId: videoUrlVideoId,
+                    isLive: isLive);
               },
             ),
           );
@@ -513,6 +529,11 @@ class Utils {
                 stopTime,
                 vUploadType,
                 videoThumb,
+                trailerLibraryId: trailerLibraryId,
+                trailerUrlVideoId: trailerUrlVideoId,
+                videoLibraryId: videoLibraryId,
+                videoUrlId: videoUrlVideoId,
+                isLive: isLive,
               );
             },
           ),
@@ -902,10 +923,16 @@ class Utils {
 
   static void showSnackbar(BuildContext context, String showFor, String message,
       bool multilanguage) {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    // Hide any current SnackBar before showing a new one
+    scaffoldMessenger.hideCurrentSnackBar();
+
     ScaffoldMessenger.of(context).showSnackBar(
+
       SnackBar(
-        duration: const Duration(seconds: 1),
-        behavior: SnackBarBehavior.floating,
+
+duration: Duration(milliseconds:500),        behavior: SnackBarBehavior.floating,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         backgroundColor: showFor == "fail"
             ? failureBG
@@ -926,6 +953,10 @@ class Utils {
         ),
       ),
     );
+      // Hide the SnackBar after 2 seconds
+  Future.delayed(Duration(seconds: 2), () {
+    scaffoldMessenger.hideCurrentSnackBar();
+  });
   }
 
   static void showProgress(

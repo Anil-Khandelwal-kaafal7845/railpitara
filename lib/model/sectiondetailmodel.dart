@@ -76,6 +76,7 @@ class Cast {
     this.type,
     this.personalInfo,
     this.status,
+    this.orderNumber,
     this.createdAt,
     this.updatedAt,
   });
@@ -86,6 +87,7 @@ class Cast {
   String? type;
   String? personalInfo;
   int? status;
+  int? orderNumber;
   String? createdAt;
   String? updatedAt;
 
@@ -96,6 +98,7 @@ class Cast {
         type: json["type"],
         personalInfo: json["personal_info"],
         status: json["status"],
+        orderNumber: json["order_number"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
       );
@@ -107,6 +110,7 @@ class Cast {
         "type": type,
         "personal_info": personalInfo,
         "status": status,
+        "order_number": orderNumber,
         "created_at": createdAt,
         "updated_at": updatedAt,
       };
@@ -149,68 +153,87 @@ class Language {
 }
 
 class Result {
-  Result({
-    this.id,
-    this.categoryId,
-    this.languageId,
-    this.castId,
-    this.channelId,
-    this.directorId,
-    this.starringId,
-    this.supportingCastId,
-    this.networks,
-    this.maturityRating,
-    this.studios,
-    this.contentAdvisory,
-    this.viewingRights,
-    this.name,
-    this.thumbnail,
-    this.landscape,
-    this.videoUploadType,
-    this.trailerType,
-    this.trailerUrl,
-    this.releaseYear,
-    this.ageRestriction,
-    this.maxVideoQuality,
-    this.releaseTag,
-    this.typeId,
-    this.videoType,
-    this.videoExtension,
-    this.isPremium,
-    this.description,
-    this.videoDuration,
-    this.videoSize,
-    this.isLive,
-    this.view,
-    this.imdbRating,
-    this.download,
-    this.status,
-    this.isTitle,
-    this.releaseDate,
-    this.video320,
-    this.video480,
-    this.video720,
-    this.video1080,
-    this.subtitleType,
-    this.subtitleLang1,
-    this.subtitleLang2,
-    this.subtitleLang3,
-    this.subtitle1,
-    this.subtitle2,
-    this.subtitle3,
-    this.createdAt,
-    this.updatedAt,
-    this.stopTime,
-    this.isDownloaded,
-    this.isBookmark,
-    this.rentBuy,
-    this.isRent,
-    this.rentPrice,
-    this.isBuy,
-    this.categoryName,
-    this.sessionId,
-  });
-
+  Result(
+      {this.id,
+      this.channelId,
+      this.categoryId,
+      this.languageId,
+      this.castId,
+      this.typeId,
+      this.videoType,
+      this.name,
+      this.thumbnail,
+      this.landscape,
+      this.fullWidth,
+      this.thumbnail1,
+      this.landscape1,
+      this.description,
+      this.isPremium,
+      this.isTitle,
+      this.download,
+      this.videoUploadType,
+      this.video320,
+      this.video480,
+      this.video720,
+      this.video1080,
+      this.videoExtension,
+      this.videoDuration,
+      this.trailerType,
+      this.trailerUrl,
+      this.subtitleType,
+      this.subtitleLang1,
+      this.subtitle1,
+      this.subtitleLang2,
+      this.subtitle2,
+      this.subtitleLang3,
+      this.subtitle3,
+      this.releaseDate,
+      this.releaseYear,
+      this.imdbRating,
+      this.view,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.directorId,
+      this.starringId,
+      this.supportingCastId,
+      this.networks,
+      this.maturityRating,
+      this.ageRestriction,
+      this.maxVideoQuality,
+      this.releaseTag,
+      this.videoSize,
+      this.isLiveUrl,
+      this.providerId,
+      this.isAstroUrl,
+      this.stopTime,
+      this.isDownloaded,
+      this.isBookmark,
+      this.rentBuy,
+      this.isRent,
+      this.rentPrice,
+      this.isBuy,
+      this.categoryName,
+      this.sessionId,
+      this.upcomingType,
+      this.videoLibraryId,
+      this.urlVideoId,
+      this.trailerLibraryId,
+      this.trailerVideoId,
+      this.studios,
+      this.viewingRights,
+      this.contentAdvisory});
+  dynamic fullWidth;
+ dynamic upcomingType;
+  dynamic videoLibraryId;
+  dynamic urlVideoId;
+  dynamic trailerLibraryId;
+  dynamic trailerVideoId;
+ dynamic thumbnail1;
+  dynamic landscape1;
+  dynamic isLiveUrl;
+  dynamic providerId;
+ dynamic isAstroUrl;
   int? id;
   String? categoryId;
   String? languageId;
@@ -234,13 +257,12 @@ class Result {
   String? trailerType;
   String? trailerUrl;
   String? releaseYear;
-  dynamic? ageRestriction;
+  String? ageRestriction;
   String? maxVideoQuality;
   String? releaseTag;
   String? videoExtension;
   int? videoDuration;
   int? videoSize;
-  int?isLive;
   int? download;
   int? view;
   dynamic imdbRating;
@@ -272,6 +294,17 @@ class Result {
   String? sessionId;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
+        upcomingType: json["upcoming_type"],
+        videoLibraryId: json["video_library_id"],
+        urlVideoId: json["url_video_id"],
+        trailerLibraryId: json["trailer_library_id"],
+        trailerVideoId: json["trailer_video_id"],
+        fullWidth: json["full_width"],
+        thumbnail1: json["thumbnail_1"],
+        landscape1: json["landscape_1"],
+        isLiveUrl: json["is_live_url"],
+        providerId: json["provider_id"],
+        isAstroUrl: json["is_astro_url"],
         id: json["id"],
         categoryId: json["category_id"],
         languageId: json["language_id"],
@@ -302,7 +335,6 @@ class Result {
         description: json["description"],
         videoDuration: json["video_duration"],
         videoSize: json["video_size"],
-        isLive: json["is_live_url"],
         view: json["view"],
         imdbRating: json["imdb_rating"],
         download: json["download"],
@@ -335,6 +367,17 @@ class Result {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "full_width": fullWidth,
+        "is_live_url": isLiveUrl,
+        "upcoming_type": upcomingType,
+        "video_library_id": videoLibraryId,
+        "url_video_id": urlVideoId,
+        "trailer_library_id": trailerLibraryId,
+        "trailer_video_id": trailerVideoId,
+        "provider_id": providerId,
+        "is_astro_url": isAstroUrl,
+        "thumbnail_1": thumbnail1,
+        "landscape_1": landscape1,
         "category_id": categoryId,
         "language_id": languageId,
         "cast_id": castId,
@@ -363,7 +406,6 @@ class Result {
         "is_premium": isPremium,
         "video_duration": videoDuration,
         "video_size": videoSize,
-        "is_live_url":isLive ,
         "view": view,
         "imdb_rating": imdbRating,
         "status": status,
