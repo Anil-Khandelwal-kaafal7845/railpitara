@@ -162,10 +162,9 @@ class ApiService {
     return loginModel;
   }
 
- 
   /* type => 3-OTP */
   // login API
-  Future<LoginRegisterModel> loginWithOTP(mobile ,email) async {
+  Future<LoginRegisterModel> loginWithOTP(mobile, email) async {
     debugPrint("mobile :==> $mobile");
     debugPrint("mobile :==> $email");
 
@@ -174,11 +173,7 @@ class ApiService {
     Response response = await dio.post(
       '$baseUrl$doctorLogin',
       options: optHeaders,
-      data: {
-        'type': '3',
-        'mobile': mobile,
-        'email':email
-      },
+      data: {'type': '3', 'mobile': mobile, 'email': email},
     );
 
     loginModel = LoginRegisterModel.fromJson(response.data);
@@ -186,11 +181,10 @@ class ApiService {
   }
 
   // whatsapp login API
-  Future<bool> loginWithWhatsapp(mobile ,type ,email) async {
+  Future<bool> loginWithWhatsapp(mobile, type, email) async {
     debugPrint("mobile :==> $mobile");
-     debugPrint("email :==> $email");
-         debugPrint("type :==> $type");
-
+    debugPrint("email :==> $email");
+    debugPrint("type :==> $type");
 
     String doctorLogin = "sendotp";
     Response response = await dio.post(
@@ -198,9 +192,8 @@ class ApiService {
       options: optHeaders,
       data: {
         'mobile': mobile,
-        'login_type':type,
-        'email': email ,
-        
+        'login_type': type,
+        'email': email,
       },
     );
 
@@ -212,16 +205,17 @@ class ApiService {
   }
 
   // verify whatsapp login API
-  Future<bool> verifyLoginWithWhatsapp(String mobile, String otp ,String email) async {
+  Future<bool> verifyLoginWithWhatsapp(
+      String mobile, String otp, String email) async {
     debugPrint("mobile :==> $mobile");
-     debugPrint("email :==> $email");
+    debugPrint("email :==> $email");
 
     String doctorLogin = "verifyotp?mobile=$mobile&email=$email&token=$otp";
     try {
       Response response = await dio.post(
         '$baseUrl$doctorLogin',
         options: optHeaders,
-        data: {'mobile': mobile, 'token': otp ,'email':email},
+        data: {'mobile': mobile, 'token': otp, 'email': email},
       );
 
       if (response.statusCode == 200) {
@@ -235,7 +229,6 @@ class ApiService {
       return false; // Authentication failed due to an error
     }
   }
-
 
   // forgot_password API
   Future<SuccessModel> forgotPassword(email) async {
@@ -385,7 +378,7 @@ class ApiService {
   }
 
   // section_list API
-  Future<SectionListModel> sectionList(typeId, isHomePage,languageId) async {
+  Future<SectionListModel> sectionList(typeId, isHomePage, languageId) async {
     SectionListModel sectionListModel;
     String sectionList = "section_list";
     Response response = await dio.post(
@@ -395,7 +388,7 @@ class ApiService {
         'user_id': Constant.userID,
         'type_id': typeId,
         'is_home_page': isHomePage,
-                'language_id':languageId
+        'language_id': languageId
       },
     );
     sectionListModel = SectionListModel.fromJson(response.data);
@@ -421,7 +414,6 @@ class ApiService {
       throw Exception('Failed to load data');
     }
   }
-
 
   // section_detail API
   Future<SectionDetailModel> sectionDetails(
@@ -844,10 +836,9 @@ class ApiService {
     return payTmModel;
   }
 
- 
   // add_transaction API
   Future<SuccessModel> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode,orderStatus,orderId) async {
+      currencyCode, couponCode, orderStatus, orderId) async {
     debugPrint('addTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addTransaction packageId ==>>> $packageId');
     debugPrint('addTransaction description ==>>> $description');
@@ -857,7 +848,6 @@ class ApiService {
     debugPrint('addTransaction couponCode ==>>> $couponCode');
     debugPrint('addTransaction order_status ==>>> $orderStatus');
     debugPrint('addTransaction orderId ==>>> $orderId');
-
 
     SuccessModel successModel;
     String transaction = "add_transaction";
@@ -872,18 +862,17 @@ class ApiService {
         'payment_id': paymentId,
         'currency_code': currencyCode,
         'unique_id': couponCode,
-        'order_status':orderStatus,
-        'order_id':orderId
+        'order_status': orderStatus,
+        'order_id': orderId
       },
     );
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
 
-
   // add_rent_transaction API
-  Future<SuccessModel> addRentTransaction(
-      videoId, price, typeId, videoType, couponCode,orderStatus,orderId) async {
+  Future<SuccessModel> addRentTransaction(videoId, price, typeId, videoType,
+      couponCode, orderStatus, orderId) async {
     debugPrint('addRentTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addRentTransaction video_id ==>>> $videoId');
     debugPrint('addRentTransaction price ==>>> $price');
@@ -905,30 +894,24 @@ class ApiService {
         'type_id': typeId,
         'video_type': videoType,
         'unique_id': couponCode,
-          'order_status':orderStatus,
-        'order_id':orderId
+        'order_status': orderStatus,
+        'order_id': orderId
       },
     );
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
 
-
-   
-    Future<AuditionModel> auditionDetaiApi(
-  email) async {
+  Future<AuditionModel> auditionDetaiApi(email) async {
     AuditionModel auditonData;
     Response response = await dio.post(
       'https://admin.aaryaadigital.com/api/get-audition-user-data',
       options: optHeaders,
-      data: {
-       "email":email
-      },
+      data: {"email": email},
     );
     auditonData = AuditionModel.fromJson(response.data);
     return auditonData;
   }
-
 
   // subscription_list API
   Future<HistoryModel> subscriptionList() async {

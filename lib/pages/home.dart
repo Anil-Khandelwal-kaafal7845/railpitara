@@ -407,7 +407,6 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       key: _scaffoldKey,
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -442,95 +441,106 @@ class HomeState extends State<Home> {
               ),
             ),
           ),
-            Padding(
-  padding: const EdgeInsets.only(right: 10),
-  child: PopupMenuButton<type.Result>(
-    offset: const Offset(0, 70),
-    color: Colors.black54,
-    itemBuilder: (context) {
-      List<bool> tempSelectedLanguages = List.generate(
-        findProvider.langaugeModel.result!.length,
-        (index) => selectedLanguages[index],
-      );
-      return [
-        PopupMenuItem(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.33,
-            child: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < findProvider.langaugeModel.result!.length; i++)
-                      Theme(
-                        data: ThemeData(
-                          unselectedWidgetColor: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0), // Reduce padding
-                          child: CheckboxListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 5), // Reduce horizontal padding
-                            dense: true,
-                            title: Text(
-                              findProvider.langaugeModel.result![i].name!,
-                              style: const TextStyle(color: Colors.white, fontSize: 14),
-                            ),
-                            value: tempSelectedLanguages[i],
-                            onChanged: (bool? value) {
-                              setState(() {
-                                tempSelectedLanguages[i] = value!;
-                              });
-                            },
-                            autofocus: true,
-                            activeColor: primaryDark,
-                          ),
-                        ),
-                      ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: primaryDark,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          selectedLanguages = List.from(tempSelectedLanguages);
-                        });
-                        selectedLanguageIds.clear();
-                        for (int i = 0; i < tempSelectedLanguages.length; i++) {
-                          if (tempSelectedLanguages[i]) {
-                            selectedLanguageIds.add(
-                              findProvider.langaugeModel.result![i].id.toString(),
-                            );
-                          }
-                        }
-                        getTabData(
-                          homeProvider.selectedIndex,
-                          homeProvider.sectionTypeModel.result,
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: PopupMenuButton<type.Result>(
+              offset: const Offset(0, 70),
+              color: Colors.black54,
+              itemBuilder: (context) {
+                List<bool> tempSelectedLanguages = List.generate(
+                  findProvider.langaugeModel.result!.length,
+                  (index) => selectedLanguages[index],
+                );
+                return [
+                  PopupMenuItem(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.33,
+                      child: StatefulBuilder(
+                        builder: (context, setState) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 0;
+                                  i < findProvider.langaugeModel.result!.length;
+                                  i++)
+                                Theme(
+                                  data: ThemeData(
+                                    unselectedWidgetColor: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0,
+                                        horizontal: 0), // Reduce padding
+                                    child: CheckboxListTile(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              5), // Reduce horizontal padding
+                                      dense: true,
+                                      title: Text(
+                                        findProvider
+                                            .langaugeModel.result![i].name!,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      value: tempSelectedLanguages[i],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          tempSelectedLanguages[i] = value!;
+                                        });
+                                      },
+                                      autofocus: true,
+                                      activeColor: primaryDark,
+                                    ),
+                                  ),
+                                ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: primaryDark,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedLanguages =
+                                        List.from(tempSelectedLanguages);
+                                  });
+                                  selectedLanguageIds.clear();
+                                  for (int i = 0;
+                                      i < tempSelectedLanguages.length;
+                                      i++) {
+                                    if (tempSelectedLanguages[i]) {
+                                      selectedLanguageIds.add(
+                                        findProvider.langaugeModel.result![i].id
+                                            .toString(),
+                                      );
+                                    }
+                                  }
+                                  getTabData(
+                                    homeProvider.selectedIndex,
+                                    homeProvider.sectionTypeModel.result,
+                                  );
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Submit',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
-                  ],
-                );
+                  ),
+                ];
               },
-            ),
-          ),
-        ),
-      ];
-    },
-    child: Image.asset(
+              child: Image.asset(
                 "assets/images/ic_language.png",
                 width: 20,
                 height: 20,
                 color: white,
               ),
-   
-  ),
-)
+            ),
+          )
 
           // Padding(
           //   padding: const EdgeInsets.only(right: 15),
@@ -627,7 +637,6 @@ class HomeState extends State<Home> {
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
       ),
-      
       drawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor:
@@ -892,66 +901,64 @@ class HomeState extends State<Home> {
                     // if (!Platform.isIOS)
                     //   //  _buildLine(),
 
-              //       /* SignIn / SignOut */
-              //       _buildSettingButton(
-              //   title: Constant.userID == null
-              //       ? youAreNotSignIn
-              //       : (userType == "3" && (userName ?? "").isEmpty)
-              //           ? ("$signedInAs ${userMobileNo ?? ""}")
-              //           : ("$signedInAs ${userName ?? ""}"),
-              //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-              //   titleMultilang: false,
-              //   subTitleMultilang: true,
-              //   onClick: () async {
-              //     if (Constant.userID != null) {
-              //       final updatedUserName = await Navigator.of(context).push(
-              //         MaterialPageRoute(
-              //           builder: (context) => const ProfileEdit(),
-              //         ),
-              //       );
+                    //       /* SignIn / SignOut */
+                    //       _buildSettingButton(
+                    //   title: Constant.userID == null
+                    //       ? youAreNotSignIn
+                    //       : (userType == "3" && (userName ?? "").isEmpty)
+                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
+                    //           : ("$signedInAs ${userName ?? ""}"),
+                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                    //   titleMultilang: false,
+                    //   subTitleMultilang: true,
+                    //   onClick: () async {
+                    //     if (Constant.userID != null) {
+                    //       final updatedUserName = await Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const ProfileEdit(),
+                    //         ),
+                    //       );
 
-              //       if (updatedUserName != null && updatedUserName is String) {
-              //         setState(() {
-              //           userName = updatedUserName;
-              //         });
-              //       }
-              //     } else {
-              //       await Navigator.of(context).push(
-              //         MaterialPageRoute(
-              //           builder: (context) => const LoginSocial(),
-              //         ),
-              //       );
-              //       setState(() {});
-              //     }
-              //   },
-              // ),
+                    //       if (updatedUserName != null && updatedUserName is String) {
+                    //         setState(() {
+                    //           userName = updatedUserName;
+                    //         });
+                    //       }
+                    //     } else {
+                    //       await Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const LoginSocial(),
+                    //         ),
+                    //       );
+                    //       setState(() {});
+                    //     }
+                    //   },
+                    // ),
 
+                    /* SignIn / SignOut */
+                    _buildSettingButton(
+                      title: Constant.userID == null
+                          ? youAreNotSignIn
+                          : (userType == "3" && (userName ?? "").isEmpty)
+                              ? ("$signedInAs ${userMobileNo ?? ""}")
+                              : ("$signedInAs ${userName ?? ""}"),
+                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                      titleMultilang: false,
+                      subTitleMultilang: true,
+                      onClick: () async {
+                        if (Constant.userID != null) {
+                          logoutConfirmDialog();
+                        } else {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                          setState(() {});
+                        }
+                      },
+                    ),
 
-                 /* SignIn / SignOut */
-                _buildSettingButton(
-                  title: Constant.userID == null
-                      ? youAreNotSignIn
-                      : (userType == "3" && (userName ?? "").isEmpty)
-                          ? ("$signedInAs ${userMobileNo ?? ""}")
-                          : ("$signedInAs ${userName ?? ""}"),
-                  // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                  titleMultilang: false,
-                  subTitleMultilang: true,
-                  onClick: () async {
-                    if (Constant.userID != null) {
-                      logoutConfirmDialog();
-                    } else {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
-                        ),
-                      );
-                      setState(() {});
-                    }
-                  },
-                ),
-              
-                   
                     // _buildSettingButton(
                     //   title: Constant.userID == null
                     //       ? youAreNotSignIn
@@ -974,7 +981,7 @@ class HomeState extends State<Home> {
                     //     }
                     //   },
                     // ),
-                 
+
                     // _buildLine(),
 
                     // /* Rate App */
@@ -1080,7 +1087,6 @@ class HomeState extends State<Home> {
           ),
         ),
       ),
-     
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
             ? _webAppBarWithDetails()
@@ -1439,7 +1445,6 @@ class HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                     
                       ],
                     ),
                   ),
@@ -1931,23 +1936,19 @@ class HomeState extends State<Home> {
               Consumer<SectionDataProvider>(
                 builder: (context, sectionDataProvider, child) {
                   if (sectionDataProvider.loadingBanner) {
-                    if ((kIsWeb || Constant.isTV) &&
-                        MediaQuery.of(context).size.width > 720) {
-                      return ShimmerUtils.bannerWeb(context);
-                    } else {
-                      return ShimmerUtils.bannerMobile(context);
-                    }
+                    return (kIsWeb || Constant.isTV) &&
+                            MediaQuery.of(context).size.width > 720
+                        ? ShimmerUtils.bannerWeb(context)
+                        : ShimmerUtils.bannerMobile(context);
                   } else {
                     if (sectionDataProvider.sectionBannerModel.status == 200 &&
                         sectionDataProvider.sectionBannerModel.result != null) {
-                      if ((kIsWeb || Constant.isTV) &&
-                          MediaQuery.of(context).size.width > 720) {
-                        return _webHomeBanner(
-                            sectionDataProvider.sectionBannerModel.result);
-                      } else {
-                        return _mobileHomeBanner(
-                            sectionDataProvider.sectionBannerModel.result);
-                      }
+                      return (kIsWeb || Constant.isTV) &&
+                              MediaQuery.of(context).size.width > 720
+                          ? _webHomeBanner(
+                              sectionDataProvider.sectionBannerModel.result)
+                          : _mobileHomeBanner(
+                              sectionDataProvider.sectionBannerModel.result);
                     } else {
                       return const SizedBox.shrink();
                     }
@@ -1956,7 +1957,6 @@ class HomeState extends State<Home> {
               ),
 
               /* AdMob Banner */
-
               Utils.showBannerAd(context),
               const SizedBox(height: 5.5),
 
@@ -1967,26 +1967,40 @@ class HomeState extends State<Home> {
                     return sectionShimmer();
                   } else {
                     if (sectionDataProvider.sectionListModel.status == 200) {
-                      return Column(
-                        children: [
-                          // // SizedBox(
-                          // //   height: 5,
-                          // // ),
-                          // /* Continue Watching */
-                          (sectionDataProvider
-                                      .sectionListModel.continueWatching !=
-                                  null)
-                              ? continueWatchingLayout(sectionDataProvider
-                                  .sectionListModel.continueWatching)
-                              : const SizedBox.shrink(),
+                      bool allSectionsEmpty = sectionDataProvider
+                          .sectionListModel.result!
+                          .every((section) => section.data!.isEmpty);
 
-                          /* Remaining Sections */
-                          (sectionDataProvider.sectionListModel.result != null)
-                              ? setSectionByType(
-                                  sectionDataProvider.sectionListModel.result)
-                              : const SizedBox.shrink(),
-                        ],
-                      );
+                      if (allSectionsEmpty) {
+                        return Column(
+                          children: [
+
+                            SizedBox(height: 100,)
+ ,                            MyImage(
+                height: 100,
+                fit: BoxFit.contain,
+                imagePath: "nodata.png",
+              ),
+              SizedBox(height: 100,)
+                          ],
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            /* Continue Watching */
+                            sectionDataProvider
+                                        .sectionListModel.continueWatching !=
+                                    null
+                                ? continueWatchingLayout(sectionDataProvider
+                                    .sectionListModel.continueWatching)
+                                : const SizedBox.shrink(),
+
+                            /* Remaining Sections */
+                            setSectionByType(
+                                sectionDataProvider.sectionListModel.result),
+                          ],
+                        );
+                      }
                     } else {
                       return const SizedBox.shrink();
                     }
@@ -2003,6 +2017,112 @@ class HomeState extends State<Home> {
       ),
     );
   }
+
+  // Widget tabItem(List<type.Result>? sectionTypeList) {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     constraints: const BoxConstraints.expand(),
+  //     child: RefreshIndicator(
+  //       backgroundColor: white,
+  //       color: complimentryColor,
+  //       displacement: 80,
+  //       onRefresh: () async {
+  //         await Future.delayed(const Duration(milliseconds: 1500))
+  //             .then((value) {
+  //           debugPrint(
+  //               "selectedIndex ===========> ${homeProvider.selectedIndex}");
+  //           getTabData(
+  //               homeProvider.selectedIndex > 0
+  //                   ? (homeProvider.selectedIndex)
+  //                   : 0,
+  //               homeProvider.sectionTypeModel.result);
+  //         });
+  //       },
+  //       child: SingleChildScrollView(
+  //         physics: const AlwaysScrollableScrollPhysics(),
+  //         child: Column(
+  //           children: [
+  //             SizedBox(height: Dimens.homeTabHeight),
+
+  //             /* Banner */
+  //             Consumer<SectionDataProvider>(
+  //               builder: (context, sectionDataProvider, child) {
+  //                 if (sectionDataProvider.loadingBanner) {
+  //                   if ((kIsWeb || Constant.isTV) &&
+  //                       MediaQuery.of(context).size.width > 720) {
+  //                     return ShimmerUtils.bannerWeb(context);
+  //                   } else {
+  //                     return ShimmerUtils.bannerMobile(context);
+  //                   }
+  //                 } else {
+  //                   if (sectionDataProvider.sectionBannerModel.status == 200 &&
+  //                       sectionDataProvider.sectionBannerModel.result != null) {
+  //                     if ((kIsWeb || Constant.isTV) &&
+  //                         MediaQuery.of(context).size.width > 720) {
+  //                       return _webHomeBanner(
+  //                           sectionDataProvider.sectionBannerModel.result);
+  //                     } else {
+  //                       return _mobileHomeBanner(
+  //                           sectionDataProvider.sectionBannerModel.result);
+  //                     }
+  //                   } else {
+  //                     return const SizedBox.shrink();
+  //                   }
+  //                 }
+  //               },
+  //             ),
+
+  //             /* AdMob Banner */
+
+  //             Utils.showBannerAd(context),
+  //             const SizedBox(height: 5.5),
+
+  //             /* Continue Watching & Remaining Sections */
+  //             Consumer<SectionDataProvider>(
+  //               builder: (context, sectionDataProvider, child) {
+  //                 if (sectionDataProvider.loadingSection) {
+
+  //                   return sectionShimmer();
+  //                 } else {
+
+  //                   if (sectionDataProvider.sectionListModel.status == 200) {
+  //                     return Column(
+  //                       children: [
+  //                         // // SizedBox(
+  //                         // //   height: 5,
+  //                         // // ),
+  //                         // /* Continue Watching */
+  //                         (sectionDataProvider
+  //                                     .sectionListModel.continueWatching !=
+  //                                 null)
+  //                             ? continueWatchingLayout(sectionDataProvider
+  //                                 .sectionListModel.continueWatching)
+
+  //                             :const Text("ANIL" ,style: TextStyle(color: white ,fontSize: 70),),
+
+  //                         /* Remaining Sections */
+  //                         (sectionDataProvider.sectionListModel.result != null)
+  //                             ? setSectionByType(
+  //                                 sectionDataProvider.sectionListModel.result)
+  //                             : const Text("ANIL" ,style: TextStyle(color: white),),
+  //                       ],
+  //                     );
+  //                   } else {
+  //                     return const SizedBox.shrink();
+  //                   }
+  //                 }
+  //               },
+  //             ),
+  //             const SizedBox(height: 20),
+
+  //             /* Web Footer */
+  //             kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /* Section Shimmer */
   Widget sectionShimmer() {
@@ -2035,8 +2155,7 @@ class HomeState extends State<Home> {
 
   Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
     if ((sectionBannerList?.length ?? 0) > 0) {
-      return
-       Stack(
+      return Stack(
         alignment: AlignmentDirectional.bottomCenter,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
@@ -2065,7 +2184,7 @@ class HomeState extends State<Home> {
               itemBuilder:
                   (BuildContext context, int index, int pageViewIndex) {
                 return GestureDetector(
-                   behavior: HitTestBehavior.translucent,
+                  behavior: HitTestBehavior.translucent,
                   // focusColor: white,
                   // borderRadius: BorderRadius.circular(0),
                   onTap: () {
@@ -2221,37 +2340,47 @@ class HomeState extends State<Home> {
                                 )),
                           ),
                         ),
-                    Visibility(
-                    visible: sectionBannerList?[index].isLiveUrl == 1 ,
-                    child: FittedBox(
-                      child: Container(
-                        margin: EdgeInsets.only(right: 8),
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
+                        Visibility(
+                          visible: sectionBannerList?[index].isLiveUrl == 1,
+                          child: FittedBox(
+                            child: Container(
+                                margin: EdgeInsets.only(right: 8),
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                // decoration: const BoxDecoration(
+                                //   color: colorPrimary,
+                                //   borderRadius: BorderRadius.only(
+                                //       topLeft: Radius.circular(3),
+                                //       topRight: Radius.circular(4),
+                                //       bottomLeft: Radius.circular(8),
+                                //       bottomRight: Radius.circular(3)),
+                                // ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 7,
+                                      width: 7,
+                                      margin: EdgeInsets.only(right: 3),
+                                      decoration: BoxDecoration(
+                                        color: redColor,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                    ),
+                                    Text(
+                                      "LIVE",
+                                      style: TextStyle(
+                                          color: redColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
+                                )),
                           ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          // decoration: const BoxDecoration(
-                          //   color: colorPrimary,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(3),
-                          //       topRight: Radius.circular(4),
-                          //       bottomLeft: Radius.circular(8),
-                          //       bottomRight: Radius.circular(3)),
-                          // ),
-                          child: Row(
-                            children: [
-                              Container(height: 7 ,width: 7,
-                              margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 12 ,fontWeight: FontWeight.w700),)
-                            ],
-                          )
-                          ),
-                    ),
-                  ),
-               
+                        ),
                       ],
                     ),
                   ),
@@ -2281,7 +2410,6 @@ class HomeState extends State<Home> {
           ),
         ],
       );
-   
     } else {
       return const SizedBox.shrink();
     }
@@ -2650,21 +2778,22 @@ class HomeState extends State<Home> {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
-                
                   if (!isGenreOrLanguage)
                     GestureDetector(
-                     onTap: () {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (context) {
-      return MoreScreen(
-        sectionList[index].title.toString(),
-        sectionList[index].id.toString(), // Pass the section ID
-      );
-    },
-  ));
-},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return MoreScreen(
+                              sectionList[index].title.toString(),
+                              sectionList[index]
+                                  .id
+                                  .toString(), // Pass the section ID
+                            );
+                          },
+                        ));
+                      },
                       child: Padding(
-                       padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                         child: MyText(
                           color: colorPrimary,
                           text: "More",
@@ -2679,7 +2808,6 @@ class HomeState extends State<Home> {
                         ),
                       ),
                     ),
-               
                 ],
               ),
               const SizedBox(height: 5),
@@ -2698,7 +2826,7 @@ class HomeState extends State<Home> {
                       height: 15,
                     ),
                     Padding(
-                     padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
                       child: SizedBox(
                         height: Dimens.upcomingHeight,
                         width: MediaQuery.of(context).size.width,
@@ -2741,7 +2869,7 @@ class HomeState extends State<Home> {
                                 //           "",
                                 //           "")),
                                 // );
-                    
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => TestPlayerWeb(
                                         loadURL: sectionList[index]
@@ -3081,39 +3209,48 @@ class HomeState extends State<Home> {
                         )),
                   ),
                 ),
-              Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1 ,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          // decoration: const BoxDecoration(
-                          //   color: colorPrimary,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(3),
-                          //       topRight: Radius.circular(4),
-                          //       bottomLeft: Radius.circular(8),
-                          //       bottomRight: Radius.circular(3)),
-                          // ),
-                          child: Row(
-                            children: [
-                              Container(height: 5 ,width: 5,
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        // decoration: const BoxDecoration(
+                        //   color: colorPrimary,
+                        //   borderRadius: BorderRadius.only(
+                        //       topLeft: Radius.circular(3),
+                        //       topRight: Radius.circular(4),
+                        //       bottomLeft: Radius.circular(8),
+                        //       bottomRight: Radius.circular(3)),
+                        // ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 5,
+                              width: 5,
                               margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
-                            ],
-                          )
-                          ),
-                    ),
+                              decoration: BoxDecoration(
+                                color: redColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            Text(
+                              "LIVE",
+                              style: TextStyle(
+                                  color: redColor,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        )),
                   ),
-               
+                ),
               ],
             ),
-         
           );
         },
       ),
@@ -3287,35 +3424,45 @@ class HomeState extends State<Home> {
                   ),
                 ),
                 Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1 ,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          // decoration: const BoxDecoration(
-                          //   color: colorPrimary,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(3),
-                          //       topRight: Radius.circular(4),
-                          //       bottomLeft: Radius.circular(8),
-                          //       bottomRight: Radius.circular(3)),
-                          // ),
-                          child: Row(
-                            children: [
-                              Container(height: 5 ,width: 5,
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: FittedBox(
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 15,
+                          minWidth: 30,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(5),
+                        // decoration: const BoxDecoration(
+                        //   color: colorPrimary,
+                        //   borderRadius: BorderRadius.only(
+                        //       topLeft: Radius.circular(3),
+                        //       topRight: Radius.circular(4),
+                        //       bottomLeft: Radius.circular(8),
+                        //       bottomRight: Radius.circular(3)),
+                        // ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 5,
+                              width: 5,
                               margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
-                            ],
-                          )
-                          ),
-                    ),
+                              decoration: BoxDecoration(
+                                color: redColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            Text(
+                              "LIVE",
+                              style: TextStyle(
+                                  color: redColor,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        )),
                   ),
-               
+                ),
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 1,
@@ -3549,8 +3696,8 @@ class HomeState extends State<Home> {
                           )),
                     ),
                   ),
-               Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
                     child: FittedBox(
                       child: Container(
                           constraints: const BoxConstraints(
@@ -3569,14 +3716,19 @@ class HomeState extends State<Home> {
                           // ),
                           child: Row(
                             children: [
-                              Container(decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30)),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 12),)
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: redColor,
+                                    borderRadius: BorderRadius.circular(30)),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(color: redColor, fontSize: 12),
+                              )
                             ],
-                          )
-                          ),
+                          )),
                     ),
                   ),
-               
                 ],
               ));
         },
@@ -3779,8 +3931,8 @@ class HomeState extends State<Home> {
                           )),
                     ),
                   ),
-                Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
                     child: FittedBox(
                       child: Container(
                           constraints: const BoxConstraints(
@@ -3799,16 +3951,26 @@ class HomeState extends State<Home> {
                           // ),
                           child: Row(
                             children: [
-                              Container(height: 5 ,width: 5,
-                              margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                              Container(
+                                height: 5,
+                                width: 5,
+                                margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              )
                             ],
-                          )
-                          ),
+                          )),
                     ),
                   ),
-               
                 ],
               ));
         },
@@ -3922,8 +4084,8 @@ class HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                   Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1 ,
+                  Visibility(
+                    visible: sectionDataList?[index].isLiveUrl == 1,
                     child: FittedBox(
                       child: Container(
                           constraints: const BoxConstraints(
@@ -3942,16 +4104,26 @@ class HomeState extends State<Home> {
                           // ),
                           child: Row(
                             children: [
-                              Container(height: 5 ,width: 5,
-                              margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.circular(30),),)
-                          , Text("LIVE" ,style: TextStyle(color: redColor ,fontSize: 10 ,fontWeight: FontWeight.w700),)
+                              Container(
+                                height: 5,
+                                width: 5,
+                                margin: EdgeInsets.only(right: 3),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              Text(
+                                "LIVE",
+                                style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              )
                             ],
-                          )
-                          ),
+                          )),
                     ),
                   ),
-               
                   Visibility(
                     visible: sectionDataList?[index].isRent == 1 &&
                         sectionDataList?[index].isPremium == 0,

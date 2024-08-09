@@ -112,7 +112,7 @@ class AllPaymentState extends State<AllPayment>
     debugPrint('getUserData userName ==> $userName');
     debugPrint('getUserData userEmail ==> $userEmail');
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
-    
+
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
@@ -282,7 +282,7 @@ class AllPaymentState extends State<AllPayment>
         _payUInit();
       } else if (pgName == "paytm") {
         _paytmInit();
-      }else if (pgName == "instamojo") {
+      } else if (pgName == "instamojo") {
         _initInstamojo();
       } else if (pgName == "cash") {
         if (!mounted) return;
@@ -461,110 +461,109 @@ class AllPaymentState extends State<AllPayment>
     );
   }
 
-
-Widget _buildCouponBox() {
-  return Container(
-    width: MediaQuery.of(context).size.width,
-    height: 50,
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    padding: const EdgeInsets.only(right: 10),
-    decoration: BoxDecoration(
-      border: Border.all(color: primaryDark, width: 0.5),
-      borderRadius: BorderRadius.circular(5),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            alignment: Alignment.center,
-            child: TextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'\s')), // Disallow spaces
-              ],
-              onSubmitted: (value) async {
-                if (value.isNotEmpty) {
-                  strCouponCode = value.toString();
-                  applyCoupon();
-                } else {
-                  strCouponCode = "";
-                }
-                debugPrint("strCouponCode ===========> $strCouponCode");
-              },
-              onChanged: (value) async {
-                if (value.isNotEmpty) {
-                  strCouponCode = value.toString();
-                } else {
-                  strCouponCode = "";
-                }
-                debugPrint("strCouponCode ===========> $strCouponCode");
-              },
-              textInputAction: TextInputAction.done,
-              obscureText: false,
-              controller: couponController,
-              keyboardType: TextInputType.text,
-              maxLines: 1,
-              style: const TextStyle(
-                color: white,
-                fontSize: 16,
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.w600,
-              ),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                filled: true,
-                fillColor: transparentColor,
-                hintStyle: TextStyle(
-                  color: otherColor,
-                  fontSize: 14,
+  Widget _buildCouponBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 50,
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: primaryDark, width: 0.5),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              alignment: Alignment.center,
+              child: TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(
+                      RegExp(r'\s')), // Disallow spaces
+                ],
+                onSubmitted: (value) async {
+                  if (value.isNotEmpty) {
+                    strCouponCode = value.toString();
+                    applyCoupon();
+                  } else {
+                    strCouponCode = "";
+                  }
+                  debugPrint("strCouponCode ===========> $strCouponCode");
+                },
+                onChanged: (value) async {
+                  if (value.isNotEmpty) {
+                    strCouponCode = value.toString();
+                  } else {
+                    strCouponCode = "";
+                  }
+                  debugPrint("strCouponCode ===========> $strCouponCode");
+                },
+                textInputAction: TextInputAction.done,
+                obscureText: false,
+                controller: couponController,
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                style: const TextStyle(
+                  color: white,
+                  fontSize: 16,
                   overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
-                hintText: couponAddHint,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: transparentColor,
+                  hintStyle: TextStyle(
+                    color: otherColor,
+                    fontSize: 14,
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  hintText: couponAddHint,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(width: 10),
-        InkWell(
-          borderRadius: BorderRadius.circular(5),
-          onTap: () async {
-            debugPrint("Click on Apply!");
-            debugPrint("strCouponCode ===========> $strCouponCode");
-            if (strCouponCode != null && (strCouponCode ?? "").isNotEmpty) {
-              applyCoupon();
-            } else {
-              Utils.showSnackbar(context, "info", emptyCouponMsg, false);
-            }
-          },
-          child: Container(
-            height: 30,
-            constraints: const BoxConstraints(minWidth: 50),
-            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-            decoration: Utils.setBackground(white, 5),
-            alignment: Alignment.center,
-            child: MyText(
-              color: black,
-              text: "apply",
-              multilanguage: true,
-              fontsizeNormal: 13,
-              fontsizeWeb: 14,
-              maxline: 1,
-              overflow: TextOverflow.ellipsis,
-              fontweight: FontWeight.w600,
-              textalign: TextAlign.end,
-              fontstyle: FontStyle.normal,
+          const SizedBox(width: 10),
+          InkWell(
+            borderRadius: BorderRadius.circular(5),
+            onTap: () async {
+              debugPrint("Click on Apply!");
+              debugPrint("strCouponCode ===========> $strCouponCode");
+              if (strCouponCode != null && (strCouponCode ?? "").isNotEmpty) {
+                applyCoupon();
+              } else {
+                Utils.showSnackbar(context, "info", emptyCouponMsg, false);
+              }
+            },
+            child: Container(
+              height: 30,
+              constraints: const BoxConstraints(minWidth: 50),
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+              decoration: Utils.setBackground(white, 5),
+              alignment: Alignment.center,
+              child: MyText(
+                color: black,
+                text: "apply",
+                multilanguage: true,
+                fontsizeNormal: 13,
+                fontsizeWeb: 14,
+                maxline: 1,
+                overflow: TextOverflow.ellipsis,
+                fontweight: FontWeight.w600,
+                textalign: TextAlign.end,
+                fontstyle: FontStyle.normal,
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   // Widget _buildCouponBox() {
   //   return Container(
@@ -786,19 +785,69 @@ Widget _buildCouponBox() {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () async {
-                            try {
-                              var id = await createOrder();
+                            print(
+                                "FINAL PAYMENT IS: ${paymentProvider.finalAmount}");
+
+                            if (paymentProvider.finalAmount == "0") {
+                              // Directly call the addRentTransaction API
+                              print("CALL rent api WHEN PAYMENT ZERO");
+                              //               await paymentProvider.addRentTransaction( widget.itemId, paymentProvider.finalAmount,
+                              //                   widget.typeId,
+                              //                   widget.videoType,
+                              // strCouponCode, "success", "CouponCode");
+
+                              if (widget.payType == "Package") {
+                                addTransaction(
+                                    widget.itemId,
+                                    widget.itemTitle,
+                                    paymentProvider.finalAmount,
+                                    paymentId,
+                                    widget.currency,
+                                    "success");
+                              } else if (widget.payType == "Rent") {
+                                addRentTransaction(
+                                    widget.itemId,
+                                    paymentProvider.finalAmount,
+                                    widget.typeId,
+                                    widget.videoType,
+                                    "success");
+                              }
+
+                              // await addRentTransaction(
+                              //       widget.itemId,
+                              //       paymentProvider.finalAmount,
+                              //       widget.typeId,
+                              //       widget.videoType,
+                              //       "success");
+                            } else {
                               print(
-                                  "ORDER CREATION DONE IN ON TAP BUTTON ____>>>>>>>");
+                                  "FINAL PAYMENT IS: ${paymentProvider.finalAmount}");
+                              // Proceed with the existing payment flow
+
+                              print(
+                                  "CALL ORDER CREATION WHEN PAYMENT NOT ZERO");
+                              var id = await createOrder();
+
                               setState(() {
                                 orderId = id;
                               });
+
                               await paymentProvider
                                   .setCurrentPayment("razorpay");
                               openPayment(pgName: "razorpay");
-                            } catch (e) {
-                              print("Error creating order: $e");
-                           
+                              // try {
+                              //   print("CALL ORDER CREATION WHEN PAYMENT NOT ZERO");
+                              //   var id = await createOrder();
+
+                              //   setState(() {
+                              //     orderId = id;
+                              //   });
+
+                              //   await paymentProvider.setCurrentPayment("razorpay");
+                              //   openPayment(pgName: "razorpay");
+                              // } catch (e) {
+                              //   print("Error creating order: $e");
+                              // }
                             }
                           },
                           child: _buildPGButton(
@@ -809,7 +858,46 @@ Widget _buildCouponBox() {
                   : const SizedBox.shrink()
               : const SizedBox.shrink(),
 
+          // paymentProvider.paymentOptionModel.result?.razorpay != null
+          //     ? paymentProvider
+          //                 .paymentOptionModel.result?.razorpay?.visibility ==
+          //             "1"
+          //         ? Container(
+          //             margin: const EdgeInsets.only(bottom: 5),
+          //             child: Card(
+          //               semanticContainer: true,
+          //               clipBehavior: Clip.antiAliasWithSaveLayer,
+          //               elevation: 5,
+          //               color: colorPrimaryDark,
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(8),
+          //               ),
+          //               child: InkWell(
+          //                 borderRadius: BorderRadius.circular(8),
+          //                 onTap: () async {
+          //                   print("FINAL PAYMENT IS:${paymentProvider.finalAmount}");
+          //                   try {
+          //                     var id = await createOrder();
+          //                     print(
+          //                         "ORDER CREATION DONE IN ON TAP BUTTON ____>>>>>>>");
+          //                     setState(() {
+          //                       orderId = id;
+          //                     });
+          //                     await paymentProvider
+          //                         .setCurrentPayment("razorpay");
+          //                     openPayment(pgName: "razorpay");
+          //                   } catch (e) {
+          //                     print("Error creating order: $e");
 
+          //                   }
+          //                 },
+          //                 child: _buildPGButton(
+          //                     "pg_razorpay.png", "Razorpay", 35, 130),
+          //               ),
+          //             ),
+          //           )
+          //         : const SizedBox.shrink()
+          //     : const SizedBox.shrink(),
 
           /* Paytm */
           paymentProvider.paymentOptionModel.result?.payTm != null
@@ -1196,13 +1284,15 @@ Widget _buildCouponBox() {
           Razorpay razorpay = Razorpay();
           var options = {
             'key':
-            (paymentProvider.paymentOptionModel.result?.razorpay?.isLive == "1")
-                ? (paymentProvider
-                        .paymentOptionModel.result?.razorpay?.liveKey1 ??
-                    "")
-                : (paymentProvider
-                        .paymentOptionModel.result?.razorpay?.testKey1 ??
-                    ""),
+                (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.isLive ==
+                        "1")
+                    ? (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.liveKey1 ??
+                        "")
+                    : (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.testKey1 ??
+                        ""),
             'currency': Constant.currency,
             'amount': (double.parse(paymentProvider.finalAmount ?? "") * 100),
             'name': widget.itemTitle ?? "",

@@ -497,8 +497,8 @@ class SettingState extends State<Setting> {
                           appBarTitle: generalProvider
                                   .pagesModel.result?[position].pageName ??
                               '',
-                          loadURL:"https://backend.mahuaplay.com${generalProvider
-                                  .pagesModel.result?[position].url }"
+                          loadURL:"${generalProvider
+                                  .pagesModel.result?[position].url}"
                               ,
                         ),
                       ),

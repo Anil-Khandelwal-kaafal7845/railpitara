@@ -18,7 +18,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-
 import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/pages/castdetails.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -3468,7 +3467,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     );
   }
 
- buildShareWithDialog() {
+
+  buildShareWithDialog() {
     showModalBottomSheet(
       context: context,
       backgroundColor: lightBlack,
@@ -3632,6 +3632,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       },
     );
   }
+
+
 
   // buildShareWithDialog() {
   //   showModalBottomSheet(
