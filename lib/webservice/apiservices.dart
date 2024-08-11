@@ -696,7 +696,7 @@ class ApiService {
       BuildContext context, castId, typeId) async {
     try {
       Response response = await dio.post(
-          "https://aaryaconsole.ottpeople.in/public/api/video_by_artist",
+          "${baseUrl}video_by_artist",
           options: optHeaders,
           data: {
             'user_id': Constant.userID,

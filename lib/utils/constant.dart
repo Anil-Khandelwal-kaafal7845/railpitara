@@ -6,13 +6,13 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
   // static const String baseurl = '';
- static const String baseurl = 'https://backend.mahuaplay.com/api/';
-  static const String dynamicBaseUrl = 'https://mahuaplay.com/';
+ static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
+    static const String dynamicBaseUrl = 'https://captainplay.in/';
 
-  static String appName = "Mahua Play";
-  static String appPackageName = "com.release.mitwatv";
+  static String appName = "CAPTAIN PLAY";
+  static String appPackageName = "ccom.ott.captaintvott";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 79;
+  static double curentAppVersion = 16;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -26,12 +26,13 @@ class Constant {
 
 
   static String androidAppUrl =
-      "https://play.google.com/store/apps/details?id=com.release.mitwatv&hl=en";
+      "https://play.google.com/store/apps/details?id=${Constant.appPackageName}";
   static String iosAppUrl =
-      "";
+      "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
   static String fbLink =
-      "";
+      "https://www.facebook.com/captainBhojpuri?sfnsn=wiwspwa&mibextid=RUbZ1f";
+
   static String InstaLink = "";
   static String youtubeLink =
       "";

@@ -53,11 +53,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.release.mitwatv"
+        applicationId "ccom.ott.captaintvott"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 79
-        versionName '2.7.1'
+        versionCode 16
+        versionName '1.1.6'
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'

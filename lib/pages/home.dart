@@ -2819,73 +2819,75 @@ class HomeState extends State<Home> {
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),
-              if (isBannerVisible)
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
-                      child: SizedBox(
-                        height: Dimens.upcomingHeight,
-                        width: MediaQuery.of(context).size.width,
-                        child: GestureDetector(
-                          onTap: () {
-                            if (sectionList[index].bannerLinkType == 0) {
-                              // Handle onTap for bannerLinkType = 0
-                              if (sectionList[index].bannerBacklink != null &&
-                                  sectionList[index]
-                                      .bannerBacklink
-                                      .toString()
-                                      .isNotEmpty) {
-                                launchUrl(Uri.parse(sectionList[index]
-                                    .bannerBacklink
-                                    .toString()));
-                              }
-                            } else {
-                              // Handle onTap for bannerLinkType = 1
-                              if (Constant.userID == null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginSocial()),
-                                );
-                                // Utils.buildWebAlertDialog(context, "login", "");
-                              } else {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => PlayerVideo(
-                                //           '',
-                                //           0,
-                                //           0,
-                                //           typeId,
-                                //           0,
-                                //           sectionList[index]
-                                //               .bannerBacklink
-                                //               .toString(),
-                                //           0,
-                                //           "",
-                                //           "")),
-                                // );
+              // if (isBannerVisible)
+              //   Column(
+              //     children: [
+              //       const SizedBox(
+              //         height: 15,
+              //       ),
+              //       Padding(
+              //         padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+              //         child: SizedBox(
+              //           height: Dimens.upcomingHeight,
+              //           width: MediaQuery.of(context).size.width,
+              //           child: GestureDetector(
+              //             onTap: () {
+              //               if (sectionList[index].bannerLinkType == 0) {
+              //                 // Handle onTap for bannerLinkType = 0
+              //                 if (sectionList[index].bannerBacklink != null &&
+              //                     sectionList[index]
+              //                         .bannerBacklink
+              //                         .toString()
+              //                         .isNotEmpty) {
+              //                   launchUrl(Uri.parse(sectionList[index]
+              //                       .bannerBacklink
+              //                       .toString()));
+              //                 }
+              //               } else {
+              //                 // Handle onTap for bannerLinkType = 1
+              //                 if (Constant.userID == null) {
+              //                   Navigator.push(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                         builder: (context) => LoginSocial()),
+              //                   );
+              //                   // Utils.buildWebAlertDialog(context, "login", "");
+              //                 } else {
+              //                   // Navigator.push(
+              //                   //   context,
+              //                   //   MaterialPageRoute(
+              //                   //       builder: (context) => PlayerVideo(
+              //                   //           '',
+              //                   //           0,
+              //                   //           0,
+              //                   //           typeId,
+              //                   //           0,
+              //                   //           sectionList[index]
+              //                   //               .bannerBacklink
+              //                   //               .toString(),
+              //                   //           0,
+              //                   //           "",
+              //                   //           "")),
+              //                   // );
 
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => TestPlayerWeb(
-                                        loadURL: sectionList[index]
-                                            .bannerBacklink
-                                            .toString())));
-                              }
-                            }
-                          },
-                          child: Image.network(
-                              sectionList[index].bannerImage.toString(),
-                              fit: BoxFit.fill),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              //                   Navigator.of(context).push(MaterialPageRoute(
+              //                       builder: (context) => TestPlayerWeb(
+              //                           loadURL: sectionList[index]
+              //                               .bannerBacklink
+              //                               .toString())));
+              //                 }
+              //               }
+              //             },
+              //             child: Image.network(
+              //                 sectionList[index].bannerImage.toString(),
+              //                 fit: BoxFit.fill),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+           
+           
             ],
           );
         } else {

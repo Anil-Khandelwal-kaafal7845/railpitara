@@ -462,7 +462,7 @@ class SettingState extends State<Setting> {
   }
 
  
-  Widget _buildPages() {
+   Widget _buildPages() {
     if (generalProvider.loading) {
       return const SizedBox.shrink();
     } else {
@@ -489,17 +489,16 @@ class SettingState extends State<Setting> {
                   titleMultilang: false,
                   subTitleMultilang: false,
                   onClick: () {
-                    print("URL---${generalProvider
-                                  .pagesModel.result?[position].url}");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => AboutPrivacyTerms(
                           appBarTitle: generalProvider
                                   .pagesModel.result?[position].pageName ??
                               '',
-                          loadURL:"${generalProvider
+                          loadURL: "https://captainadmin.ottsnap.in${generalProvider
                                   .pagesModel.result?[position].url}"
-                              ,
+                          
+                          ,
                         ),
                       ),
                     );

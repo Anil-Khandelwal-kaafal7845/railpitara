@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAI_Wj-P_Lfo-vRIIpl5wIG48yZdB_werw',
-    appId: '1:663533434843:android:025c021a2250cc0afe99fe',
-    messagingSenderId: '663533434843',
-    projectId: 'mitwatv-3c8bf',
-    storageBucket: 'mitwatv-3c8bf.appspot.com',
+    apiKey: 'AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU',
+    appId: '1:38978885550:android:38365a78742e4f44d3da3f',
+    messagingSenderId: '38978885550',
+    projectId: 'captain-tv-ott',
+    storageBucket: 'captain-tv-ott.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBeHiYJJtmhC-s7OO5zAAcRoQXh7EvCkN4',
-    appId: '1:663533434843:ios:b1b508bc0128fb79fe99fe',
-    messagingSenderId: '663533434843',
-    projectId: 'mitwatv-3c8bf',
-    storageBucket: 'mitwatv-3c8bf.appspot.com',
-    androidClientId: '663533434843-485c0gqlg1390dldvbpdfukpm3r1kovk.apps.googleusercontent.com',
-    iosClientId: '663533434843-h0h2d56jv7c9ptbhk13gpnhiubc5ubde.apps.googleusercontent.com',
-    iosBundleId: 'com.release.mitwatv',
+    apiKey: 'AIzaSyAV5pHl9uV7xlOdO1bpD2ifOJKHMKTOF98',
+    appId: '1:38978885550:ios:cdc287e625fde2c3d3da3f',
+    messagingSenderId: '38978885550',
+    projectId: 'captain-tv-ott',
+    storageBucket: 'captain-tv-ott.appspot.com',
+    androidClientId: '38978885550-8n8322uhapj9u0unj5clonehuinjdkm3.apps.googleusercontent.com',
+    iosClientId: '38978885550-flu52rrl7969q6vhk6f1j6bfrhqqasbc.apps.googleusercontent.com',
+    iosBundleId: 'ccom.ott.captaintvott',
   );
 }
