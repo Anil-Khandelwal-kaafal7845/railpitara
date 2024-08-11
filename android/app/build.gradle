@@ -56,8 +56,8 @@ android {
         applicationId "com.release.mitwatv"
         minSdkVersion 21
         targetSdkVersion 33
-      versionCode 77
-         versionName '2.6.9'
+        versionCode 79
+        versionName '2.7.1'
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
