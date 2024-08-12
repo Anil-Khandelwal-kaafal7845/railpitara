@@ -122,7 +122,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherIcons,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -153,7 +153,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherIcons,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -184,7 +184,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherIcons,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),

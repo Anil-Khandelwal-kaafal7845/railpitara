@@ -5,9 +5,9 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-  // static const String baseurl = '';
- static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
-    static const String dynamicBaseUrl = 'https://captainplay.in/';
+
+  static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
+  static const String dynamicBaseUrl = 'https://captainplay.in/';
 
   static String appName = "CAPTAIN PLAY";
   static String appPackageName = "ccom.ott.captaintvott";
@@ -24,7 +24,6 @@ class Constant {
   static String currencySymbol = "";
   static String currency = "";
 
-
   static String androidAppUrl =
       "https://play.google.com/store/apps/details?id=${Constant.appPackageName}";
   static String iosAppUrl =
@@ -34,8 +33,7 @@ class Constant {
       "https://www.facebook.com/captainBhojpuri?sfnsn=wiwspwa&mibextid=RUbZ1f";
 
   static String InstaLink = "";
-  static String youtubeLink =
-      "";
+  static String youtubeLink = "";
   static String twitterLink = "";
 
   static List<QualityModel> resolutionsUrls = [];

@@ -1973,6 +1973,8 @@ class HomeState extends State<Home> {
 
                       if (allSectionsEmpty) {
                         return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
 
                             SizedBox(height: 100,)
@@ -2263,7 +2265,7 @@ class HomeState extends State<Home> {
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
-                                  color: colorPrimary,
+                                  color: otherIcons,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(3),
                                       topRight: Radius.circular(4),
@@ -2292,7 +2294,7 @@ class HomeState extends State<Home> {
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
-                                  color: colorPrimary,
+                                  color: otherIcons,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(3),
                                       topRight: Radius.circular(4),
@@ -2322,7 +2324,7 @@ class HomeState extends State<Home> {
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
-                                  color: colorPrimary,
+                                  color: otherIcons,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(3),
                                       topRight: Radius.circular(4),
@@ -3134,7 +3136,7 @@ class HomeState extends State<Home> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
-                          color: colorPrimary,
+                          color: otherIcons,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(3),
                               topRight: Radius.circular(4),
@@ -3163,7 +3165,7 @@ class HomeState extends State<Home> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
-                          color: colorPrimary,
+                          color: otherIcons,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(3),
                               topRight: Radius.circular(4),
@@ -3193,7 +3195,7 @@ class HomeState extends State<Home> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
-                          color: colorPrimary,
+                          color: otherIcons,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(3),
                               topRight: Radius.circular(4),
@@ -3407,7 +3409,7 @@ class HomeState extends State<Home> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
-                          color: colorPrimary,
+                          color: otherIcons,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(3),
                               topRight: Radius.circular(4),
@@ -3477,7 +3479,7 @@ class HomeState extends State<Home> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
-                          color: colorPrimary,
+                          color: otherIcons,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(3),
                               topRight: Radius.circular(4),
@@ -3621,7 +3623,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -3650,7 +3652,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -3680,7 +3682,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -3856,7 +3858,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -3885,7 +3887,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -3915,7 +3917,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -4138,7 +4140,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -4167,7 +4169,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -4197,7 +4199,7 @@ class HomeState extends State<Home> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(5),
                           decoration: const BoxDecoration(
-                            color: colorPrimary,
+                            color: otherIcons,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(3),
                                 topRight: Radius.circular(4),
@@ -4587,7 +4589,7 @@ class HomeState extends State<Home> {
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.all(5),
                                   decoration: const BoxDecoration(
-                                    color: colorPrimary,
+                                    color: otherIcons,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(3),
                                         topRight: Radius.circular(4),
@@ -4616,7 +4618,7 @@ class HomeState extends State<Home> {
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.all(5),
                                   decoration: const BoxDecoration(
-                                    color: colorPrimary,
+                                    color: otherIcons,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(3),
                                         topRight: Radius.circular(4),
@@ -4646,7 +4648,7 @@ class HomeState extends State<Home> {
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.all(5),
                                   decoration: const BoxDecoration(
-                                    color: colorPrimary,
+                                    color: otherIcons,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(3),
                                         topRight: Radius.circular(4),
