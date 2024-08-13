@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU',
-    appId: '1:38978885550:android:38365a78742e4f44d3da3f',
+    appId: '1:38978885550:android:9b4e7ae5652d51f5d3da3f',
     messagingSenderId: '38978885550',
     projectId: 'captain-tv-ott',
     storageBucket: 'captain-tv-ott.appspot.com',
@@ -59,12 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAV5pHl9uV7xlOdO1bpD2ifOJKHMKTOF98',
-    appId: '1:38978885550:ios:cdc287e625fde2c3d3da3f',
+    appId: '1:38978885550:ios:5a8dde08f89765eed3da3f',
     messagingSenderId: '38978885550',
     projectId: 'captain-tv-ott',
     storageBucket: 'captain-tv-ott.appspot.com',
     androidClientId: '38978885550-8n8322uhapj9u0unj5clonehuinjdkm3.apps.googleusercontent.com',
-    iosClientId: '38978885550-flu52rrl7969q6vhk6f1j6bfrhqqasbc.apps.googleusercontent.com',
-    iosBundleId: 'ccom.ott.captaintvott',
+    iosClientId: '38978885550-jt3prmlksjet8a19ffk71d7eda0raf98.apps.googleusercontent.com',
+    iosBundleId: 'com.ott.captaintvott',
   );
 }

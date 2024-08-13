@@ -1,4 +1,4 @@
-package ccom.ott.captaintvott
+package com.ott.captaintvott
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity
