@@ -261,7 +261,7 @@ class Utils {
   }
   /* ========= Check Supported Currency for PGs END =========== */
 
-  /* ========= Open Player ========= */
+    /* ========= Open Player ========= */
   static Future<dynamic> openPlayer(
       {required BuildContext context,
       required String? playType,

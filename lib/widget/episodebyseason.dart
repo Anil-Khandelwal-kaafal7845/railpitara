@@ -434,8 +434,10 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
     );
   }
 
-  /* ========= Open Player ========= */
+   /* ========= Open Player ========= */
   openPlayer(
+
+
       String playType, int epiPos, List<episode.Result>? episodeList) async {
     if ((episodeList?.length ?? 0) > 0) {
       /* CHECK SUBSCRIPTION */
@@ -448,6 +450,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
 
       int? epiID = (episodeList?[epiPos].id ?? 0);
       int? showID = (episodeList?[epiPos].showId ?? 0);
+      dynamic showVideoLibraryId, showVideoUrlId;
       int? vType =
           (showDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
       int? vTypeID = widget.typeId;
@@ -455,6 +458,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
       String? vUploadType = (episodeList?[epiPos].videoUploadType ?? "");
       String? videoThumb = (episodeList?[epiPos].landscape ?? "");
       String? epiUrl = (episodeList?[epiPos].video320 ?? "");
+      showVideoLibraryId = episodeList![epiPos].videoLibraryId ?? "";
+      showVideoUrlId = episodeList[epiPos].urlVideoId ?? "";
       debugPrint("epiID ========> $epiID");
       debugPrint("showID =======> $showID");
       debugPrint("vType ========> $vType");
@@ -500,6 +505,9 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
           uploadType: vUploadType,
           videoThumb: videoThumb,
           vStopTime: stopTime,
+          videoLibraryId: showVideoLibraryId,
+          videoUrlVideoId:showVideoUrlId ,
+ 
         );
 
         debugPrint("isContinue ===> $isContinue");
@@ -608,4 +616,6 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
     }
   }
   /* ========= Open Player ========= */
+
+
 }

@@ -5,9 +5,9 @@ import 'dart:ui';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/provider/showdownloadprovider.dart';
-import 'package:dtlive/provider/videodetailsprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/adhelper.dart';
+
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -68,10 +68,10 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   List<Cast>? directorList;
   late ShowDetailsProvider showDetailsProvider;
   late EpisodeProvider episodeProvider;
-   late VideoDetailsProvider videoDetailsProvider;
-
+  late DateTime startTime;
   @override
   void initState() {
+    startTime = DateTime.now();
     if (!kIsWeb) {
       /* Download init ****/
       _bindBackgroundIsolate();
@@ -81,8 +81,6 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
-            videoDetailsProvider =
-        Provider.of<VideoDetailsProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
     downloadProvider =
         Provider.of<ShowDownloadProvider>(context, listen: false);
@@ -301,6 +299,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   @override
   void dispose() {
+    DateTime endTime = DateTime.now();
+    Duration timeSpent = endTime.difference(startTime);
     debugPrint(
         "dispose isBroadcast ============================> ${_port.isBroadcast}");
     if (!_port.isBroadcast) {
@@ -319,6 +319,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       _trailerNormalController?.dispose();
       _trailerNormalController = null;
     }
+  
     super.dispose();
   }
 
@@ -3788,6 +3789,10 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           0);
       int? vType = widget.videoType;
       int? vTypeID = widget.typeId;
+      dynamic showTrailerLibraryId,
+          showTrailerVideoId,
+          showVideoLibraryId,
+          showVideoUrlId;
       int? stopTime;
       if (playType == "startOver" || playType == "Trailer") {
         stopTime = 0;
@@ -3812,6 +3817,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             (showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
         vUrl =
             (showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
+        showTrailerLibraryId =
+            showDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+                "";
+        showTrailerVideoId =
+            showDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "";
       } else {
         /* Set-up Quality URLs */
         Utils.setQualityURLs(
@@ -3828,7 +3838,12 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
               ""),
         );
-
+        showVideoUrlId = episodeProvider.episodeBySeasonModel
+                .result?[showDetailsProvider.mCurrentEpiPos].urlVideoId ??
+            "";
+        showVideoLibraryId = episodeProvider.episodeBySeasonModel
+                .result?[showDetailsProvider.mCurrentEpiPos].videoLibraryId ??
+            "";
         vUrl = (episodeProvider.episodeBySeasonModel
                 .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
             "");
@@ -3852,18 +3867,22 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       if (!mounted) return;
       AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
         dynamic isContinue = await Utils.openPlayer(
-          context: context,
-          playType: playType == "Trailer" ? "Trailer" : "Show",
-          videoId: epiID,
-          videoType: vType,
-          typeId: vTypeID,
-          otherId: showID,
-          videoUrl: vUrl,
-          trailerUrl: vUrl,
-          uploadType: vUploadType,
-          videoThumb: videoThumb,
-          vStopTime: stopTime,
-        );
+            context: context,
+            playType: playType == "Trailer" ? "Trailer" : "Show",
+            videoId: epiID,
+            videoType: vType,
+            typeId: vTypeID,
+            otherId: showID,
+            videoUrl: vUrl,
+            trailerUrl: vUrl,
+            uploadType: vUploadType,
+            videoThumb: videoThumb,
+            vStopTime: stopTime,
+            trailerLibraryId: showTrailerLibraryId,
+            trailerUrlVideoId: showTrailerVideoId,
+            videoLibraryId:showVideoLibraryId ,
+            videoUrlVideoId: showVideoUrlId,
+       );
 
         debugPrint("isContinue ===> $isContinue");
         if (isContinue != null && isContinue == true) {
@@ -3874,6 +3893,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       });
     } else {
       String? vUrl, vUploadType;
+      dynamic showTrailerLibraryId, showTrailerVideoId;
       if (playType == "Trailer") {
         int? stopTime = 0;
         String? videoThumb =
@@ -3885,7 +3905,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             (showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
         vUrl =
             (showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
-
+        showTrailerLibraryId =
+            showDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+                "";
+        showTrailerVideoId =
+            showDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "";
         debugPrint("vUploadType ===> $vUploadType");
         debugPrint("stopTime ===> $stopTime");
 
@@ -3898,18 +3922,19 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         if (!mounted) return;
         AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
           await Utils.openPlayer(
-            context: context,
-            playType: "Trailer",
-            videoId: 0,
-            videoType: 0,
-            typeId: 0,
-            otherId: 0,
-            videoUrl: vUrl,
-            trailerUrl: vUrl,
-            uploadType: vUploadType,
-            videoThumb: videoThumb,
-            vStopTime: stopTime,
-          );
+              context: context,
+              playType: "Trailer",
+              videoId: 0,
+              videoType: 0,
+              typeId: 0,
+              otherId: 0,
+              videoUrl: vUrl,
+              trailerUrl: vUrl,
+              uploadType: vUploadType,
+              videoThumb: videoThumb,
+              vStopTime: stopTime,
+              trailerLibraryId: showTrailerLibraryId,
+              trailerUrlVideoId: showTrailerVideoId);
         });
       } else {
         if (!mounted) return;

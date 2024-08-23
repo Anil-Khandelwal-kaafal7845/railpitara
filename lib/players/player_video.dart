@@ -52,8 +52,12 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   Widget build(BuildContext context) {
+     print("TRAILER ID :${widget.trailerLibraryId}");
+    print("Video ID :${widget.trailerUrlVideoId}");
+    print("PLAY TYPE:${widget.playType}");
     return Scaffold(
       body: widget.playType == "Trailer"
+      
           ? Stack(
   children: [
     InAppWebView(

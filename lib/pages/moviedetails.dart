@@ -70,6 +70,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   late DateTime startTime;
   @override
   void initState() {
+    print("HEY>>>>>>>>>>>>>>");
         startTime = DateTime.now();
     if (!kIsWeb) {
       /* Download init ****/
@@ -3845,6 +3846,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   /* ========= Open Player ========= */
   openPlayer(String playType) async {
+    
     /* CHECK SUBSCRIPTION */
     if (playType != "Trailer") {
       bool? isPrimiumUser = await _checkSubsRentLogin();
@@ -3859,7 +3861,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     int? vType =
         (videoDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
     int? vTypeID = widget.typeId;
-dynamic  trailerLibraryId,trailerUrlVideoId,videoLibraryId,videoUrlId, isLive;
+     dynamic? trailerLibraryId, trailerUrlVideoId, videoLibraryId, videoUrlId, isLive;
     int? stopTime;
     if (playType == "startOver" || playType == "Trailer") {
       stopTime = 0;
@@ -3873,12 +3875,18 @@ dynamic  trailerLibraryId,trailerUrlVideoId,videoLibraryId,videoUrlId, isLive;
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {
+    
+
       Utils.clearQualitySubtitle();
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
-      trailerLibraryId=(videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ?? "");
-      trailerUrlVideoId=(videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "");
+
+  trailerLibraryId = (videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ?? "");
+  trailerUrlVideoId = (videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "");
+       print("Trailer Library Id>>>>>>>>>>>:${trailerLibraryId}");
+       print("Trailer video Id>>>>>>>>>:${trailerUrlVideoId}");
+
     } else {
       /* Set-up Quality URLs */
       Utils.setQualityURLs(
@@ -3939,6 +3947,8 @@ dynamic  trailerLibraryId,trailerUrlVideoId,videoLibraryId,videoUrlId, isLive;
         _getData();
       }
     });
+  
+  
   }
   /* ========= Open Player ========= */
 
