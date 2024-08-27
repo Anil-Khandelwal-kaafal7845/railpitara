@@ -495,7 +495,7 @@ class SettingState extends State<Setting> {
                           appBarTitle: generalProvider
                                   .pagesModel.result?[position].pageName ??
                               '',
-                          loadURL: "https://captainadmin.ottsnap.in${generalProvider
+                          loadURL: "${Constant.baseurlwithoutapi}${generalProvider
                                   .pagesModel.result?[position].url}"
                           
                           ,

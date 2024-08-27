@@ -2390,26 +2390,27 @@ class HomeState extends State<Home> {
               },
             ),
           ),
-          const SizedBox(height: 5.5),
-          Positioned(
-            bottom: 10,
-            child: Consumer<SectionDataProvider>(
-              builder: (context, sectionDataProvider, child) {
-                return AnimatedSmoothIndicator(
-                  count: (sectionBannerList?.length ?? 0),
-                  activeIndex: sectionDataProvider.cBannerIndex ?? 0,
-                  effect: const ScrollingDotsEffect(
-                    spacing: 8,
-                    radius: 4,
-                    activeDotColor: colorPrimary,
-                    dotColor: dotsDefaultColor,
-                    dotHeight: 8,
-                    dotWidth: 8,
-                  ),
-                );
-              },
-            ),
-          ),
+          // const SizedBox(height: 5.5),
+          // Positioned(
+          //   bottom: 10,
+          //   child: Consumer<SectionDataProvider>(
+          //     builder: (context, sectionDataProvider, child) {
+          //       return AnimatedSmoothIndicator(
+          //         count: (sectionBannerList?.length ?? 0),
+          //         activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+          //         effect: const ScrollingDotsEffect(
+          //           spacing: 8,
+          //           radius: 4,
+          //           activeDotColor: colorPrimary,
+          //           dotColor: dotsDefaultColor,
+          //           dotHeight: 8,
+          //           dotWidth: 8,
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+       
         ],
       );
     } else {

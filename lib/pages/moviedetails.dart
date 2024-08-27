@@ -2328,6 +2328,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           width: 18,
                           height: 18,
                           imagePath: "ic_play.png",
+                          color: black,
                         ),
                         const SizedBox(width: 15),
                         Expanded(
@@ -2336,7 +2337,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               MyText(
-                                color: white,
+                                color: black,
                                 text: "continuewatching",
                                 multilanguage: true,
                                 textalign: TextAlign.start,
@@ -2350,7 +2351,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               Row(
                                 children: [
                                   MyText(
-                                    color: white,
+                                    color: black,
                                     text: Utils.remainTimeInMin(
                                         ((videoDetailsProvider
                                                         .sectionDetailModel
@@ -2374,7 +2375,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                   ),
                                   const SizedBox(width: 5),
                                   MyText(
-                                    color: white,
+                                    color: black,
                                     text: "left",
                                     textalign: TextAlign.start,
                                     fontsizeNormal: 10,
@@ -2450,11 +2451,12 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     width: 18,
                     height: 18,
                     imagePath: "ic_play.png",
+                    color: black,
                   ),
                   const SizedBox(width: 15),
                   Expanded(
                     child: MyText(
-                      color: white,
+                      color: black,
                       text: "watch_now",
                       multilanguage: true,
                       textalign: TextAlign.start,

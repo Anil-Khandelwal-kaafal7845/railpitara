@@ -8,10 +8,12 @@ class Constant {
 
   static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
   static const String dynamicBaseUrl = 'https://captainplay.in/';
+
+  static const String baseurlwithoutapi = 'https://captainadmin.ottsnap.in';
   static String appName = "CAPTAIN PLAY";
   static String appPackageName = "com.ott.captaintvott";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 20;
+  static double curentAppVersion = 21;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
