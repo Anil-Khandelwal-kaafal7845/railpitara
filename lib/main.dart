@@ -50,7 +50,7 @@ Future<void> main() async {
     await MobileAds.instance.initialize();
   }
   await Firebase.initializeApp(
-      name: 'aarya-ott', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'captain-tv-ott', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
@@ -31,17 +32,10 @@ class MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: AppBar(
-        shadowColor: appBgColor,
-        backgroundColor: appBgColor,
-        title: Center(child: Text(widget.appBarTitle)),
-        leading: IconButton(
-          icon: Icon(CupertinoIcons.back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+     appBar: (kIsWeb || Constant.isTV)
+          ? Utils.myAppBar(context, widget.appBarTitle, false)
+          : Utils.myAppBarWithBack(context, widget.appBarTitle, false),
+     
       body: SafeArea(
         child: Consumer<SectionDataProvider>(
           builder: (context, sectionDataProvider, child) {
@@ -66,7 +60,7 @@ class MoreScreenState extends State<MoreScreen> {
                       child: Column(
                         children: [
                           Container(
-                            padding: const EdgeInsets.fromLTRB(5, 6, 20, 5),
+                            padding: const EdgeInsets.fromLTRB(10, 6, 10, 5),
                             child: ResponsiveGridList(
                               minItemWidth: Dimens.widthLandmore,
                               verticalGridSpacing: 8,
@@ -122,7 +116,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: otherIcons,
+                                                color: colorPrimary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -153,7 +147,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: otherIcons,
+                                                color: colorPrimary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -184,7 +178,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: otherIcons,
+                                                color: colorPrimary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -204,40 +198,7 @@ class MoreScreenState extends State<MoreScreen> {
                                             ),
                                           ),
                                         ),
-                                        // Visibility(
-                                        //   visible: videoData.isLiveUrl == 1,
-                                        //   child: FittedBox(
-                                        //     child: Container(
-                                        //       constraints: const BoxConstraints(
-                                        //         minHeight: 15,
-                                        //         minWidth: 30,
-                                        //       ),
-                                        //       alignment: Alignment.center,
-                                        //       padding: const EdgeInsets.all(5),
-                                        //       child: Row(
-                                        //         children: [
-                                        //           Container(
-                                        //             height: 5,
-                                        //             width: 5,
-                                        //             margin: EdgeInsets.only(right: 3),
-                                        //             decoration: BoxDecoration(
-                                        //               color: redColor,
-                                        //               borderRadius: BorderRadius.circular(30),
-                                        //             ),
-                                        //           ),
-                                        //           Text(
-                                        //             "LIVE",
-                                        //             style: TextStyle(
-                                        //               color: redColor,
-                                        //               fontSize: 10,
-                                        //               fontWeight: FontWeight.w700,
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
+                                      
                                       ],
                                     ),
                                   );
