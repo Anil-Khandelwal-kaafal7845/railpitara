@@ -8,7 +8,6 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
-
 import '../utils/constant.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -32,15 +31,14 @@ class MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appBgColor,
-     appBar: (kIsWeb || Constant.isTV)
+      appBar: (kIsWeb || Constant.isTV)
           ? Utils.myAppBar(context, widget.appBarTitle, false)
           : Utils.myAppBarWithBack(context, widget.appBarTitle, false),
-     
       body: SafeArea(
         child: Consumer<SectionDataProvider>(
           builder: (context, sectionDataProvider, child) {
             if (sectionDataProvider.loadingViewAll) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(
                   color: primaryLight,
                 ),
@@ -55,7 +53,6 @@ class MoreScreenState extends State<MoreScreen> {
                 Expanded(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    constraints: const BoxConstraints.expand(),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -69,7 +66,7 @@ class MoreScreenState extends State<MoreScreen> {
                               maxItemsPerRow: 8,
                               listViewBuilderOptions: ListViewBuilderOptions(
                                 shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                               ),
                               children: List.generate(
                                 sectionDataList.length,
@@ -79,12 +76,15 @@ class MoreScreenState extends State<MoreScreen> {
                                     borderRadius: BorderRadius.circular(4),
                                     onTap: () {
                                       debugPrint("Clicked on position ==> $position");
-                                      Utils.openDetails(
-                                        context: context,
-                                        videoId: videoData.id,
-                                        upcomingType: 0,
-                                        videoType: 2,
-                                        typeId: 4,
+                                      // Reuse the openDetailPage logic as in landscape
+                                      openDetailPage(
+                                        (videoData.videoType ?? 0) == 2
+                                            ? "showdetail"
+                                            : "videodetail",
+                                        videoData.id ?? 0,
+                                        0, // You can replace this with the actual `upcomingType`
+                                        videoData.videoType ?? 0,
+                                        videoData.typeId ?? 0,
                                       );
                                     },
                                     child: Stack(
@@ -96,7 +96,6 @@ class MoreScreenState extends State<MoreScreen> {
                                           alignment: Alignment.center,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(4),
-                                            clipBehavior: Clip.antiAliasWithSaveLayer,
                                             child: MyNetworkImage(
                                               imageUrl: videoData.landscape.toString(),
                                               fit: BoxFit.cover,
@@ -105,7 +104,7 @@ class MoreScreenState extends State<MoreScreen> {
                                             ),
                                           ),
                                         ),
-                                        Visibility(
+                                         Visibility(
                                           visible: videoData.isRent == 1 && videoData.isPremium == 0,
                                           child: FittedBox(
                                             child: Container(
@@ -116,7 +115,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherColor,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -147,7 +146,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherColor,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -178,7 +177,7 @@ class MoreScreenState extends State<MoreScreen> {
                                               alignment: Alignment.center,
                                               padding: const EdgeInsets.all(5),
                                               decoration: const BoxDecoration(
-                                                color: colorPrimary,
+                                                color: otherColor,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
@@ -205,21 +204,29 @@ class MoreScreenState extends State<MoreScreen> {
                                 },
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                /* AdMob Banner */
-                Container(
-                  child: Utils.showBannerAd(context),
                 ),
               ],
             );
           },
         ),
       ),
+    );
+  }
+
+  // Assuming openDetailPage is a method in the current screen.
+  void openDetailPage(String pageName, int videoId, int upcomingType, int videoType, int typeId) {
+    debugPrint("pageName =======> $pageName");
+    Utils.openDetails(
+      context: context,
+      videoId: videoId,
+      upcomingType: upcomingType,
+      videoType: videoType,
+      typeId: typeId,
     );
   }
 }
