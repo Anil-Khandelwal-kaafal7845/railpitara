@@ -259,8 +259,8 @@ class _PlayerVideoState extends State<PlayerVideo> {
       ),
       initialOptions: InAppWebViewGroupOptions(
         crossPlatform: InAppWebViewOptions(
-          disableVerticalScroll: true,
-          disableHorizontalScroll: true,
+          disableVerticalScroll: false,
+          disableHorizontalScroll: false,
           disableContextMenu: true,
           useOnLoadResource: true,
           javaScriptEnabled: true,
