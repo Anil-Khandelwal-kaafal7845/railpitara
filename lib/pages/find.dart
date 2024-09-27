@@ -21,7 +21,6 @@ class Find extends StatefulWidget {
   @override
   State<Find> createState() => FindState();
 }
-
 class FindState extends State<Find> {
   final searchController = TextEditingController();
   late FindProvider findProvider = FindProvider();
@@ -37,31 +36,22 @@ class FindState extends State<Find> {
     super.initState();
   }
 
-  /// This has to happen only once per app
+  /// Initialize speech recognition
   void _initSpeech() async {
     speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
-  /// Each time to start a speech recognition session
+  /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
-    await _speechToText.listen(onResult: _onSpeechResult);
+    await _speechToText.listen(onResult: _onSpeechResult, listenMode: ListenMode.dictation);
     setState(() {
       _isListening = true;
     });
-    Future.delayed(const Duration(seconds: 5), () {
-      if (_isListening && searchController.text.toString().isEmpty) {
-        Utils.showSnackbar(context, "info", "speechnotavailable", true);
-        _stopListening();
-      }
-    });
   }
 
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
+  /// Stop listening to speech
   void _stopListening() async {
     debugPrint("<============== _stopListening ==============>");
     await _speechToText.stop();
@@ -72,23 +62,23 @@ class FindState extends State<Find> {
     });
   }
 
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
+  /// Callback when speech is recognized
   void _onSpeechResult(SpeechRecognitionResult result) async {
     debugPrint("<============== _onSpeechResult ==============>");
     _lastWords = result.recognizedWords;
     debugPrint("_lastWords ==============> $_lastWords");
-    if (_lastWords.isNotEmpty && _isListening) {
+
+    // Only perform the search when the user has finished speaking
+    if (result.finalResult && _lastWords.isNotEmpty) {
       searchController.text = _lastWords.toString();
       _isListening = false;
+
       if (!mounted) return;
       await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) {
-            return Search(
-              searchText: searchController.text.toString(),
-            );
+            return Search(searchText: searchController.text.toString());
           },
         ),
       );
@@ -117,6 +107,7 @@ class FindState extends State<Find> {
     findProvider.clearProvider();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +262,7 @@ class FindState extends State<Find> {
     );
   }
 
-  Widget searchBox() {
+ Widget searchBox() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 55,
@@ -303,20 +294,15 @@ class FindState extends State<Find> {
           ),
           Expanded(
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
               alignment: Alignment.center,
               child: TextField(
                 onSubmitted: (value) async {
-                  debugPrint("value ====> $value");
                   if (value.isNotEmpty) {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return Search(
-                            searchText: value.toString(),
-                          );
+                          return Search(searchText: value.toString());
                         },
                       ),
                     );
@@ -325,105 +311,73 @@ class FindState extends State<Find> {
                     });
                   }
                 },
-                onChanged: (value) async {},
-                textInputAction: TextInputAction.done,
-                obscureText: false,
                 controller: searchController,
-                keyboardType: TextInputType.text,
-                maxLines: 1,
                 style: const TextStyle(
                   color: white,
                   fontSize: 15,
-                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  filled: true,
+                  hintText: 'Search here...',
                   hintStyle: TextStyle(
                     color: otherColor,
                     fontSize: 15,
-                    overflow: TextOverflow.ellipsis,
-                    fontWeight: FontWeight.w500,
                   ),
-                  hintText: searchHint,
                 ),
               ),
             ),
           ),
           Consumer<FindProvider>(
             builder: (context, findProvider, child) {
-              if (searchController.text.toString().isNotEmpty) {
-                return InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () async {
-                    debugPrint("Click on Clear!");
-                    searchController.clear();
-                    setState(() {});
-                  },
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    padding: const EdgeInsets.all(15),
-                    alignment: Alignment.center,
-                    child: MyImage(
-                      imagePath: "ic_close.png",
-                      color: white,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                );
-              } else {
-                return InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () async {
-                    debugPrint("Click on Microphone!");
+              return InkWell(
+                borderRadius: BorderRadius.circular(5),
+                onTap: () {
+                  if (_isListening) {
+                    _stopListening();
+                  } else {
                     _startListening();
-                  },
-                  child: _isListening
-                      ? AvatarGlow(
-                          glowColor: colorPrimary,
-                          endRadius: 25,
-                          duration: const Duration(milliseconds: 2000),
-                          repeat: true,
-                          showTwoGlows: true,
-                          repeatPauseDuration:
-                              const Duration(milliseconds: 100),
-                          child: Material(
-                            elevation: 5,
-                            color: transparentColor,
-                            shape: const CircleBorder(),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              color: transparentColor,
-                              padding: const EdgeInsets.all(15),
-                              alignment: Alignment.center,
-                              child: MyImage(
-                                imagePath: "ic_voice.png",
-                                color: white,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: 50,
-                          height: 50,
-                          padding: const EdgeInsets.all(15),
-                          alignment: Alignment.center,
+                  }
+                },
+                child: _isListening
+                    ? AvatarGlow(
+                        glowColor: colorPrimary,
+                        endRadius: 25,
+                        duration: const Duration(milliseconds: 2000),
+                        repeat: true,
+                        child: Container(
+                          height: 25,
                           child: MyImage(
                             imagePath: "ic_voice.png",
                             color: white,
                             fit: BoxFit.fill,
+                              height: 20,
+                          width: 20,
                           ),
                         ),
-                );
-              }
+                      )
+                    : Container(
+                      height: 25,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: MyImage(
+                            imagePath: "ic_voice.png",
+                            color: white,
+                            fit: BoxFit.fill,
+                            height: 20,
+                            width: 20,
+                            
+                          ),
+                      ),
+                    ),
+              );
             },
           ),
         ],
       ),
     );
   }
+
+
+
 }

@@ -25,7 +25,7 @@ class Search extends StatefulWidget {
 }
 
 class SearchState extends State<Search> {
- final searchController = TextEditingController();
+   final searchController = TextEditingController();
   late SearchProvider searchProvider = SearchProvider();
   final SpeechToText _speechToText = SpeechToText();
   bool speechEnabled = false, _isListening = false;
@@ -40,58 +40,60 @@ class SearchState extends State<Search> {
     super.initState();
   }
 
-    /// This has to happen only once per app
+
+  /// Initialize speech recognition
   void _initSpeech() async {
     speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
- /// Each time to start a speech recognition session
+  /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
-    await _speechToText.listen(onResult: _onSpeechResult);
+    await _speechToText.listen(onResult: _onSpeechResult, listenMode: ListenMode.dictation);
     setState(() {
       _isListening = true;
     });
-    Future.delayed(const Duration(seconds: 40), () {
-      if (searchController.text.toString().isEmpty) {
-        Utils.showSnackbar(context, "info", "speechnotavailable", true);
-        _stopListening();
-      }
+  }
+
+  /// Stop listening to speech
+  void _stopListening() async {
+    debugPrint("<============== _stopListening ==============>");
+    await _speechToText.stop();
+    if (!mounted) return;
+    setState(() {
+      _lastWords = '';
+      _isListening = false;
     });
   }
 
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
-void _stopListening() async {
-    debugPrint("<============== _stopListening ==============>");
-    _lastWords = '';
-    _isListening = false;
-    await _speechToText.stop();
-  }
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
+  /// Callback when speech is recognized
+  void _onSpeechResult(SpeechRecognitionResult result) async {
     debugPrint("<============== _onSpeechResult ==============>");
+    _lastWords = result.recognizedWords;
+    debugPrint("_lastWords ==============> $_lastWords");
 
-    // Append the recognized words to the existing words
-    _lastWords += result.recognizedWords;
+    // Only perform the search when the user has finished speaking
+    if (result.finalResult && _lastWords.isNotEmpty) {
+      searchController.text = _lastWords.toString();
+      _isListening = false;
 
-    if (_lastWords.isNotEmpty && _isListening) {
+      if (!mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return Search(searchText: searchController.text.toString());
+          },
+        ),
+      );
       setState(() {
-        searchController.text = _lastWords;
-        _isListening = false;
-      });
-
-      // Process the search query
-      searchProvider.getSearchVideo(_lastWords).then((_) {
-        // Reset the _lastWords variable
         _lastWords = '';
+        searchController.clear();
       });
     }
   }
+
 
  @override
   void dispose() {
@@ -242,7 +244,7 @@ void _stopListening() async {
     );
   }
 
-  Widget searchBox() {
+Widget searchBox() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 55,
@@ -285,7 +287,7 @@ void _stopListening() async {
                 onChanged: (value) async {
                   if (value.isNotEmpty) {
                     await searchProvider.setLoading(true);
-                    await searchProvider.getSearchVideo(value.toString());
+                    await searchProvider.getSearchVideo(value);
                   }
                 },
                 textInputAction: TextInputAction.done,
@@ -309,18 +311,18 @@ void _stopListening() async {
                     overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.w500,
                   ),
-                  hintText: searchHint,
+                  hintText: "Search...",  // Update hint text
                 ),
               ),
             ),
           ),
           Consumer<SearchProvider>(
             builder: (context, searchProvider, child) {
-              if (searchController.text.toString().isNotEmpty) {
+              if (searchController.text.isNotEmpty) {
                 return InkWell(
                   borderRadius: BorderRadius.circular(5),
                   onTap: () async {
-                    debugPrint("Click on Clear!");
+                    debugPrint("Clear Search!");
                     searchController.clear();
                     await searchProvider.clearProvider();
                     await searchProvider.notifyProvider();
@@ -340,9 +342,12 @@ void _stopListening() async {
               } else {
                 return InkWell(
                   borderRadius: BorderRadius.circular(5),
-                  onTap: () async {
-                    debugPrint("Click on Microphone!");
-                    _startListening();
+                  onTap: () {
+                    if (_isListening) {
+                      _stopListening();
+                    } else {
+                      _startListening();
+                    }
                   },
                   child: _isListening
                       ? AvatarGlow(
@@ -390,7 +395,7 @@ void _stopListening() async {
       ),
     );
   }
-
+  
 Widget _buildVideoUI() {
   if (searchProvider.loading) {
     return _shimmerSearch();
