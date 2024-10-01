@@ -637,13 +637,15 @@ class HomeState extends State<Home> {
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
       ),
+       
       drawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor:
               appBgColor, //This will change the drawer background to blue.
           //other styles
         ),
-        child: Drawer(
+        child: 
+        Drawer(
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
@@ -750,57 +752,63 @@ class HomeState extends State<Home> {
                     // _buildLine(),
 
                     /* Purchases */
-                    _buildSettingButton(
-                      title: 'purchases',
-                      // subTitle: 'view_your_purchases',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const MyPurchaselist(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
+                    Visibility(
+                  visible: forceUpdateData!.result!.showPackage == 1,
+                  child: _buildSettingButton(
+                    title: 'purchases',
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () {
+                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                          () async {
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MyPurchaselist(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                  ),
+                ),
+                    
                     // _buildLine(),
 
                     /* Subscription */
-                    _buildSettingButton(
-                      title: 'subsciption',
-                      // subTitle: 'subsciptionnotes',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const Subscription(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
+                        Visibility(
+                  visible: forceUpdateData!.result!.showPackage == 1,
+                  child: _buildSettingButton(
+                    title: 'subsciption',
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () {
+                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                          () async {
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const Subscription(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                  ),
+                ),
+               
                     // _buildLine(),
 
                     // /* Transactions */
@@ -901,64 +909,66 @@ class HomeState extends State<Home> {
                     // if (!Platform.isIOS)
                     //   //  _buildLine(),
 
-                    //       /* SignIn / SignOut */
-                    //       _buildSettingButton(
-                    //   title: Constant.userID == null
-                    //       ? youAreNotSignIn
-                    //       : (userType == "3" && (userName ?? "").isEmpty)
-                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
-                    //           : ("$signedInAs ${userName ?? ""}"),
-                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                    //   titleMultilang: false,
-                    //   subTitleMultilang: true,
-                    //   onClick: () async {
-                    //     if (Constant.userID != null) {
-                    //       final updatedUserName = await Navigator.of(context).push(
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const ProfileEdit(),
-                    //         ),
-                    //       );
+              //       /* SignIn / SignOut */
+              //       _buildSettingButton(
+              //   title: Constant.userID == null
+              //       ? youAreNotSignIn
+              //       : (userType == "3" && (userName ?? "").isEmpty)
+              //           ? ("$signedInAs ${userMobileNo ?? ""}")
+              //           : ("$signedInAs ${userName ?? ""}"),
+              //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+              //   titleMultilang: false,
+              //   subTitleMultilang: true,
+              //   onClick: () async {
+              //     if (Constant.userID != null) {
+              //       final updatedUserName = await Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => const ProfileEdit(),
+              //         ),
+              //       );
 
-                    //       if (updatedUserName != null && updatedUserName is String) {
-                    //         setState(() {
-                    //           userName = updatedUserName;
-                    //         });
-                    //       }
-                    //     } else {
-                    //       await Navigator.of(context).push(
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const LoginSocial(),
-                    //         ),
-                    //       );
-                    //       setState(() {});
-                    //     }
-                    //   },
-                    // ),
+              //       if (updatedUserName != null && updatedUserName is String) {
+              //         setState(() {
+              //           userName = updatedUserName;
+              //         });
+              //       }
+              //     } else {
+              //       await Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => const LoginSocial(),
+              //         ),
+              //       );
+              //       setState(() {});
+              //     }
+              //   },
+              // ),
 
-                    /* SignIn / SignOut */
-                    _buildSettingButton(
-                      title: Constant.userID == null
-                          ? youAreNotSignIn
-                          : (userType == "3" && (userName ?? "").isEmpty)
-                              ? ("$signedInAs ${userMobileNo ?? ""}")
-                              : ("$signedInAs ${userName ?? ""}"),
-                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                      titleMultilang: false,
-                      subTitleMultilang: true,
-                      onClick: () async {
-                        if (Constant.userID != null) {
-                          logoutConfirmDialog();
-                        } else {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                          setState(() {});
-                        }
-                      },
-                    ),
 
+                 /* SignIn / SignOut */
+                _buildSettingButton(
+                  title: Constant.userID == null
+                      ? youAreNotSignIn
+                      : (userType == "3" && (userName ?? "").isEmpty)
+                          ? ("$signedInAs ${userMobileNo ?? ""}")
+                          : ("$signedInAs ${userName ?? ""}"),
+                  // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                  titleMultilang: false,
+                  subTitleMultilang: true,
+                  onClick: () async {
+                    if (Constant.userID != null) {
+                      logoutConfirmDialog();
+                    } else {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginSocial(),
+                        ),
+                      );
+                      setState(() {});
+                    }
+                  },
+                ),
+              
+                   
                     // _buildSettingButton(
                     //   title: Constant.userID == null
                     //       ? youAreNotSignIn
@@ -981,7 +991,7 @@ class HomeState extends State<Home> {
                     //     }
                     //   },
                     // ),
-
+                 
                     // _buildLine(),
 
                     // /* Rate App */
@@ -1011,26 +1021,26 @@ class HomeState extends State<Home> {
                     // ),
                     // // _buildLine(),
 
-                    // /* Delete Account */
-                    // if (Constant.userID != null)
-                    //   _buildSettingButton(
-                    //     title: 'delete_account',
-                    //     // subTitle: 'delete_account_desc',
-                    //     titleMultilang: true,
-                    //     subTitleMultilang: true,
-                    //     onClick: () async {
-                    //       if (Constant.userID != null) {
-                    //         deleteConfirmDialog();
-                    //       } else {
-                    //         await Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const LoginSocial(),
-                    //           ),
-                    //         );
-                    //         setState(() {});
-                    //       }
-                    //     },
-                    //   ),
+                    /* Delete Account */
+                    if (Constant.userID != null)
+                      _buildSettingButton(
+                        title: 'delete_account',
+                        // subTitle: 'delete_account_desc',
+                        titleMultilang: true,
+                        subTitleMultilang: true,
+                        onClick: () async {
+                          if (Constant.userID != null) {
+                            deleteConfirmDialog();
+                          } else {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginSocial(),
+                              ),
+                            );
+                            setState(() {});
+                          }
+                        },
+                      ),
                     // if (Constant.userID != null) _buildLine(),
 
                     // /* Pages */
@@ -1087,6 +1097,8 @@ class HomeState extends State<Home> {
           ),
         ),
       ),
+     
+      
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
             ? _webAppBarWithDetails()

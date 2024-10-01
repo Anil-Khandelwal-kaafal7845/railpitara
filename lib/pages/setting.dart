@@ -211,6 +211,7 @@ class SettingState extends State<Setting> {
                     },
                   ),
                 ),
+
                 Visibility(
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
@@ -270,6 +271,7 @@ class SettingState extends State<Setting> {
                     },
                   ),
                 ),
+
                 Visibility(
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
@@ -398,7 +400,29 @@ class SettingState extends State<Setting> {
                     }
                   },
                 ),
-              
+
+                _buildLine(16.0, 16.0),
+
+                if (Constant.userID != null)
+                  _buildSettingButton(
+                    title: 'delete_account',
+                    subTitle: 'delete_account_desc',
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () async {
+                      if (Constant.userID != null) {
+                        deleteConfirmDialog();
+                      } else {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginSocial(),
+                          ),
+                        );
+                        setState(() {});
+                      }
+                    },
+                  ),
+ if (Constant.userID != null)
                 _buildLine(16.0, 16.0),
 
                 // /* Rate App */
@@ -461,8 +485,7 @@ class SettingState extends State<Setting> {
     );
   }
 
- 
-   Widget _buildPages() {
+  Widget _buildPages() {
     if (generalProvider.loading) {
       return const SizedBox.shrink();
     } else {
@@ -495,10 +518,8 @@ class SettingState extends State<Setting> {
                           appBarTitle: generalProvider
                                   .pagesModel.result?[position].pageName ??
                               '',
-                          loadURL: "${Constant.baseurlwithoutapi}${generalProvider
-                                  .pagesModel.result?[position].url}"
-                          
-                          ,
+                          loadURL:
+                              "${Constant.baseurlwithoutapi}${generalProvider.pagesModel.result?[position].url}",
                         ),
                       ),
                     );
@@ -514,7 +535,6 @@ class SettingState extends State<Setting> {
       }
     }
   }
-
 
   // Widget _buildPages() {
   //   if (generalProvider.loading) {
@@ -629,6 +649,7 @@ class SettingState extends State<Setting> {
       color: otherColor,
     );
   }
+
   _languageChangeDialog() {
     showModalBottomSheet(
       context: context,
@@ -851,7 +872,6 @@ class SettingState extends State<Setting> {
                             ),
                           ),
                         ),
-                     
                       ],
                     ),
                   ),

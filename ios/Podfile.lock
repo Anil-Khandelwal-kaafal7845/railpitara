@@ -64,7 +64,7 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAppCheckInterop (10.27.0)
+  - FirebaseAppCheckInterop (10.29.0)
   - FirebaseAuth (10.15.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseCore (~> 10.0)
@@ -76,9 +76,9 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.27.0):
+  - FirebaseCoreInternal (10.29.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.27.0):
+  - FirebaseInstallations (10.29.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -150,7 +150,7 @@ PODS:
     - AppAuth (< 2.0, >= 1.7.3)
     - GTMAppAuth (< 5.0, >= 4.1.1)
     - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUserMessagingPlatform (2.4.0)
+  - GoogleUserMessagingPlatform (2.6.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -182,7 +182,7 @@ PODS:
   - GTMAppAuth (4.1.1):
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher/Core (3.4.1)
+  - GTMSessionFetcher/Core (3.5.0)
   - image_picker_ios (0.0.1):
     - Flutter
   - nanopb (2.30909.1):
@@ -245,7 +245,7 @@ PODS:
   - permission_handler_apple (9.1.1):
     - Flutter
   - PromisesObjC (2.4.0)
-  - razorpay-pod (1.3.8)
+  - razorpay-pod (1.3.11)
   - razorpay_web (1.1.10):
     - Flutter
     - razorpay-pod
@@ -296,7 +296,6 @@ DEPENDENCIES:
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
-  - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - paytm_allinonesdk (from `.symlinks/plugins/paytm_allinonesdk/ios`)
@@ -426,11 +425,11 @@ SPEC CHECKSUMS:
   firebase_core: 28e84c2a4fcf6a50ef83f47b145ded8c1fa331e4
   firebase_messaging: 91ec967913a5d144f951b3c3ac17a57796d38735
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
-  FirebaseAppCheckInterop: 0dd062c9926a76332ca5711dbed6f1a9ac540b54
+  FirebaseAppCheckInterop: 6a1757cfd4067d8e00fccd14fcc1b8fd78cfac07
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
-  FirebaseCoreInternal: 4b297a2d56063dbea2c1d0d04222d44a8d058862
-  FirebaseInstallations: 766dabca09fd94aef922538aaf144cc4a6fb6869
+  FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
+  FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseMessaging: 0c0ae1eb722ef0c07f7801e5ded8dccd1357d6d4
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_downloader: b7301ae057deadd4b1650dc7c05375f10ff12c39
@@ -445,10 +444,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
-  GoogleUserMessagingPlatform: f131fa7978d2ba88d7426702b057c2cc318e6595
+  GoogleUserMessagingPlatform: 0c3a08353e53ce8c2feab7addd0b652cde522450
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
-  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   onesignal_flutter: 7a501ebce03915c8d19f2e5aa85d531c21382ac2
@@ -459,7 +458,7 @@ SPEC CHECKSUMS:
   paytm_allinonesdk: 3771d12451cf9328d1474768b11120362958bbe6
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  razorpay-pod: c7064a37dd15fbc0e5f26776314c9a8842df1269
+  razorpay-pod: 5e7914fbfb78d09a2810791e2de44ee4d696cb3a
   razorpay_web: 4338051683c7e262b1defcf27c29d121ad7049d4
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
@@ -476,6 +475,6 @@ SPEC CHECKSUMS:
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
-PODFILE CHECKSUM: 406db0397faf54437fd291e5c71dfd111db2e569
+PODFILE CHECKSUM: a7410d796cef54ba470e88d0f6048adcf0f848c7
 
 COCOAPODS: 1.15.2

@@ -5,10 +5,8 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-
   static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
   static const String dynamicBaseUrl = 'https://captainplay.in/';
-
   static const String baseurlwithoutapi = 'https://captainadmin.ottsnap.in';
   static String appName = "CAPTAIN PLAY";
   static String appPackageName = "com.ott.captaintvott";
