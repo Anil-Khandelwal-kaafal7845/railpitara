@@ -133,6 +133,8 @@ class OTPVerifyState extends State<OTPVerify> {
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                widget.mobileNumber.isNotEmpty?
                 MyText(
                   color: white,
                   text: "verifyphonenumber",
@@ -143,11 +145,38 @@ class OTPVerifyState extends State<OTPVerify> {
                   overflow: TextOverflow.ellipsis,
                   textalign: TextAlign.center,
                   fontstyle: FontStyle.normal,
+                ):  MyText(
+                  color: white,
+                  text: "verifyemailid",
+                  fontsizeNormal: 22,
+                  multilanguage: true,
+                  fontweight: FontWeight.bold,
+                  maxline: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textalign: TextAlign.center,
+                  fontstyle: FontStyle.normal,
                 ),
+             
+
+
+             
+             
                 const SizedBox(height: 8),
+
+                 widget.mobileNumber.isNotEmpty?
                 MyText(
                   color: otherColor,
                   text: "code_sent_desc",
+                  fontsizeNormal: 15,
+                  fontweight: FontWeight.w500,
+                  maxline: 3,
+                  overflow: TextOverflow.ellipsis,
+                  textalign: TextAlign.center,
+                  multilanguage: true,
+                  fontstyle: FontStyle.normal,
+                ): MyText(
+                  color: otherColor,
+                  text: "code_sent_desc_email",
                   fontsizeNormal: 15,
                   fontweight: FontWeight.w500,
                   maxline: 3,

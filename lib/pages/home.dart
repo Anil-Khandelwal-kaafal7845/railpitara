@@ -646,6 +646,7 @@ class HomeState extends State<Home> {
         ),
         child: 
         Drawer(
+          backgroundColor:  appBgColor,
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
@@ -667,7 +668,7 @@ class HomeState extends State<Home> {
               ListTile(
                 title: Column(
                   children: [
-                    _buildLine(),
+               
 
                     /* Account Details */
                     _buildSettingButton(
@@ -753,7 +754,7 @@ class HomeState extends State<Home> {
 
                     /* Purchases */
                     Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
+                 visible: forceUpdateData?.result?.showPackage == 1,
                   child: _buildSettingButton(
                     title: 'purchases',
                     titleMultilang: true,
@@ -783,7 +784,7 @@ class HomeState extends State<Home> {
 
                     /* Subscription */
                         Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
+                  visible: forceUpdateData?.result?.showPackage == 1,
                   child: _buildSettingButton(
                     title: 'subsciption',
                     titleMultilang: true,

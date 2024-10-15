@@ -199,6 +199,7 @@ class LoginSocialState extends State<LoginSocial> {
                             textalign: TextAlign.center,
                             fontstyle: FontStyle.normal,
                           ),
+                        
                           const SizedBox(height: 30),
 
                           Container(

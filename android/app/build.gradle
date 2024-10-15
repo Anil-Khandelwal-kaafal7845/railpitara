@@ -56,8 +56,8 @@ android {
         applicationId "com.ott.captaintvott"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 27
-        versionName '1.2.7'
+        versionCode 28
+        versionName '1.2.8'
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'

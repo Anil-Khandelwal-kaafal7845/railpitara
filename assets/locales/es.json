@@ -13,6 +13,8 @@
     "bottomview4": "Almacenar",
     "bottomview5": "Mis cosas",
     "exit_warning": "Presione nuevamente para salir de la aplicación.",
+    "login_with_email_note": "Enter your email to login",   
+    "verifyemailid": "Verify Email Id", 
     "language_": "Idioma",
     "category": "Categoría",
     "accountdetails": "Detalles de la cuenta",

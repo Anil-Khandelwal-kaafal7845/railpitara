@@ -13,6 +13,8 @@
     "bottomview4": "محل",
     "bottomview5": "أشيائي",
     "exit_warning": "اضغط مرة أخرى للخروج من التطبيق.",
+    "login_with_email_note": "Enter your email to login",   
+    "verifyemailid": "Verify Email Id", 
     "language_": "لغة",
     "category": "فئة",
     "accountdetails": "تفاصيل الحساب",
@@ -91,6 +93,8 @@
     "welcomeback": "مرحبًا بعودتك!",
     "login": "تسجيل الدخول",
     "login_with_mobile_note": "أدخل رقم هاتفك المحمول لتسجيل الدخول",
+    "code_sent_desc_email": "We have sent code to your email",
+
     "or": "أو",
     "loginwithgoogle": "تسجيل الدخول عبر جوجل",
     "loginwithfacebook": "تسجيل الدخول باستخدام الفيسبوك",

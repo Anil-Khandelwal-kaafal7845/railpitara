@@ -36,7 +36,7 @@ class LoginSocialEmail extends StatefulWidget {
 class LoginSocialState extends State<LoginSocialEmail> {
   late ProgressDialog prDialog;
   late GeneralProvider generalProvider;
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   String? mobileNumber,
       email,
@@ -119,276 +119,299 @@ class LoginSocialState extends State<LoginSocialEmail> {
 
   @override
   Widget build(BuildContext context) {
-  
-    return Scaffold(
-      backgroundColor: appBgColor,
-      body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: 
-               Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                  child: Column(
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        backgroundColor: appBgColor,
+        body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 170,
+                    height: 60,
+                    alignment: Alignment.centerLeft,
+                    child: MyImage(
+                      fit: BoxFit.fill,
+                      imagePath: "appicon.png",
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  Text(
+                    "Login with Email",
+                    style: TextStyle(color: white, fontSize: 21),
+                  ),
+                  const SizedBox(height: 7),
+                  Text(
+                    "Enter your Email to login",
+                    style: TextStyle(color: otherColor, fontSize: 19),
+                  ),
+                  const SizedBox(height: 30),
+
+                
+                  Container(
+                    padding: EdgeInsets.only(left: 12),
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: colorPrimary,
+                        width: 0.7,
+                      ),
+                      color: edtBG,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    child: TextFormField(
+                      textAlignVertical: TextAlignVertical.center,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      controller:
+                          emailController, // Assuming you have a TextEditingController
+                      style: const TextStyle(fontSize: 16, color: white),
+                      keyboardType: TextInputType
+                          .emailAddress, // Setting keyboard type to email address
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        filled: false,
+                        hintStyle: GoogleFonts.montserrat(
+                          color: otherColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        hintText: 'Enter your email',
+                        // Placeholder text for the email input
+                      ),
+
+                      
+             
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  /* Login Button */
+                  InkWell(
+                 onTap: () {
+              String email = emailController.text.toString();
+              if (email.isEmpty) {
+                // Show snackbar if the email is empty
+              Utils.showSnackbar(
+                            context, "info", "login_with_email_note", true);
+              } else {
+                // Email regex pattern
+                String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$';
+                RegExp regex = RegExp(emailPattern);
+                if (!regex.hasMatch(email)) {
+                  // Show snackbar if the email is invalid
+                Utils.showSnackbar(
+                            context, "info", "login_with_email_note", true);
+                      } else {
+                  // Proceed to OTPVerify screen if email is valid
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          OTPVerify("", "email", emailController.text),
+                    ),
+                  );
+                }
+              }
+            },
+                    // onTap: () {
+                    //   print("EMAIL enter ${emailController.text.toString()}");
+                    //   //  debugPrint("Click mobileNumber ==> $mobileNumber");
+                    //   if (emailController.text.toString().isEmpty) {
+                    //     Utils.showSnackbar(
+                    //         context, "info", "login_with_email_note", true);
+                    //   } else {
+                    //     debugPrint("mobileNumber ==> $mobileNumber");
+                    //     Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             // OTPVerify( "","email" ,emailController.text.toString()?? ""),
+                    //             OTPVerify(
+                    //                 "", "email", emailController.text.toString()),
+                    //       ),
+                    //     );
+                    //   }
+                    // },
+                    borderRadius: BorderRadius.circular(18),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            primaryLight,
+                            primaryDark,
+                          ],
+                          begin: FractionalOffset(0.0, 0.0),
+                          end: FractionalOffset(1.0, 0.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      alignment: Alignment.center,
+                      child: MyText(
+                        color: white,
+                        text: "login",
+                        multilanguage: true,
+                        fontsizeNormal: 17,
+                        fontsizeWeb: 19,
+                        fontweight: FontWeight.w700,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        fontstyle: FontStyle.normal,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                  
+
+                  /* Privacy & TermsCondition link */
+                  if (strPrivacyAndTNC != null)
+               
+                    Utils.htmlTexts(strPrivacyAndTNC),
+                  const SizedBox(height: 10),
+
+                  /* Or */
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 170,
-                        height: 60,
-                        alignment: Alignment.centerLeft,
-                        child: MyImage(
-                          fit: BoxFit.fill,
-                          imagePath: "appicon.png",
-                        ),
+                        width: 80,
+                        height: 1,
+                        color: colorAccent,
                       ),
-                      const SizedBox(height: 25),
-                      const SizedBox(height: 30),
+                      const SizedBox(width: 15),
+                      MyText(
+                        color: otherColor,
+                        text: "or",
+                        multilanguage: true,
+                        fontsizeNormal: 14,
+                        fontsizeWeb: 16,
+                        fontweight: FontWeight.w500,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        fontstyle: FontStyle.normal,
+                      ),
+                      const SizedBox(width: 15),
                       Container(
-                        padding: EdgeInsets.only(left: 12),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: colorPrimary,
-                            width: 0.7,
-                          ),
-                          color: edtBG,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        child: TextFormField(
-                          textAlignVertical: TextAlignVertical.center,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          controller:
-                              emailController, // Assuming you have a TextEditingController
-                          style: const TextStyle(fontSize: 16, color: white),
-                          keyboardType: TextInputType
-                              .emailAddress, // Setting keyboard type to email address
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            filled: false,
-                            hintStyle: GoogleFonts.montserrat(
-                              color: otherColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            hintText: 'Enter your email',
-                            // Placeholder text for the email input
-                          ),
-                          onChanged: (email) {
-                            // Handle email changes if needed
-                            debugPrint('Entered email: $email');
-                            // You can assign the email to your variable if necessary
-                            // emailVariable = email;
-                          },
-                          // You can add validation logic if needed
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return 'Please enter your email';
-                          //   }
-                          //   if (!EmailValidator.validate(value)) {
-                          //     return 'Please enter a valid email';
-                          //   }
-                          //   return null;
-                          // },
-                        ),
+                        width: 80,
+                        height: 1,
+                        color: colorAccent,
                       ),
-                      const SizedBox(height: 25),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
 
-                      /* Login Button */
-                      InkWell(
-                        onTap: () {
-                          print(
-                              "EMAIL enter ${emailController.text.toString()}");
-                          //  debugPrint("Click mobileNumber ==> $mobileNumber");
-                          if (emailController.text.toString().isEmpty) {
-                            Utils.showSnackbar(
-                                context, "info", "login_with_email_note", true);
-                          } else {
-                            debugPrint("mobileNumber ==> $mobileNumber");
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    // OTPVerify( "","email" ,emailController.text.toString()?? ""),
-                                    OTPVerify("", "email",
-                                        emailController.text.toString()),
-                              ),
-                            );
-                          }
-                        },
-                        borderRadius: BorderRadius.circular(18),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 52,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                primaryLight,
-                                primaryDark,
-                              ],
-                              begin: FractionalOffset(0.0, 0.0),
-                              end: FractionalOffset(1.0, 0.0),
-                              stops: [0.0, 1.0],
-                              tileMode: TileMode.clamp,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          alignment: Alignment.center,
-                          child: MyText(
-                            color: white,
-                            text: "login",
-                            multilanguage: true,
-                            fontsizeNormal: 17,
-                            fontsizeWeb: 19,
-                            fontweight: FontWeight.w700,
-                            maxline: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textalign: TextAlign.center,
-                            fontstyle: FontStyle.normal,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      /* Privacy & TermsCondition link */
-                      if (strPrivacyAndTNC != null)
-                        Utils.htmlTexts(strPrivacyAndTNC),
-                      const SizedBox(height: 10),
-
-                      /* Or */
-                      Row(
+                  /* Mobile Login Button */
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 52,
+                    padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                    margin: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(26),
+                    ),
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () {
+                        // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginSocial()),
+                            (route) => false);
+                      },
+                      borderRadius: BorderRadius.circular(26),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 80,
-                            height: 1,
-                            color: colorAccent,
+                          Icon(
+                            CupertinoIcons.phone_fill, // Cupertino icon
+                            size: 28, // Adjust the size as needed
+                            color: Colors.black, // Adjust the color as needed
                           ),
-                          const SizedBox(width: 15),
+                          const SizedBox(width: 30),
                           MyText(
-                            color: otherColor,
-                            text: "or",
-                            multilanguage: true,
+                            color: black,
+                            text: "loginwithphone",
                             fontsizeNormal: 14,
                             fontsizeWeb: 16,
-                            fontweight: FontWeight.w500,
+                            multilanguage: true,
+                            fontweight: FontWeight.w600,
                             maxline: 1,
                             overflow: TextOverflow.ellipsis,
                             textalign: TextAlign.center,
                             fontstyle: FontStyle.normal,
-                          ),
-                          const SizedBox(width: 15),
-                          Container(
-                            width: 80,
-                            height: 1,
-                            color: colorAccent,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 25),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
 
-                   
-                      /* Google Login Button */
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 52,
-                        padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(26),
-                        ),
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                            // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginSocial()),
-                                (route) => false);
-                          },
-                          borderRadius: BorderRadius.circular(26),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.phone_fill, // Cupertino icon
-                                size: 28, // Adjust the size as needed
-                                color:
-                                    Colors.black, // Adjust the color as needed
-                              ),
-                              const SizedBox(width: 30),
-                              MyText(
-                                color: black,
-                                text: "loginwithphone",
-                                fontsizeNormal: 14,
-                                fontsizeWeb: 16,
-                                multilanguage: true,
-                                fontweight: FontWeight.w600,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textalign: TextAlign.center,
-                                fontstyle: FontStyle.normal,
-                              ),
-                            ],
-                          ),
+                  /* Apple Login Button */
+                  if (Platform.isIOS)
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          debugPrint("Clicked on : ====> loginWith Apple");
+                          signInWithApple();
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyImage(
+                              width: 30,
+                              height: 30,
+                              imagePath: "ic_apple.png",
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 30),
+                            MyText(
+                              color: black,
+                              text: "loginwithapple",
+                              fontsizeNormal: 14,
+                              fontsizeWeb: 16,
+                              multilanguage: true,
+                              fontweight: FontWeight.w600,
+                              maxline: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textalign: TextAlign.center,
+                              fontstyle: FontStyle.normal,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 5),
-
-                      /* Apple Login Button */
-                      if (Platform.isIOS)
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 52,
-                          padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: white,
-                            borderRadius: BorderRadius.circular(26),
-                          ),
-                          alignment: Alignment.center,
-                          child: InkWell(
-                            onTap: () {
-                              debugPrint("Clicked on : ====> loginWith Apple");
-                              signInWithApple();
-                            },
-                            borderRadius: BorderRadius.circular(26),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                MyImage(
-                                  width: 30,
-                                  height: 30,
-                                  imagePath: "ic_apple.png",
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(width: 30),
-                                MyText(
-                                  color: black,
-                                  text: "loginwithapple",
-                                  fontsizeNormal: 14,
-                                  fontsizeWeb: 16,
-                                  multilanguage: true,
-                                  fontweight: FontWeight.w600,
-                                  maxline: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textalign: TextAlign.center,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                )
-             
-                ),
+                    ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 
@@ -581,6 +604,4 @@ class LoginSocialState extends State<LoginSocialEmail> {
       }
     }
   }
-
-
 }
