@@ -3,12 +3,12 @@ import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/dimens.dart';
-import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/widget/nodata.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -25,13 +25,14 @@ class Search extends StatefulWidget {
 }
 
 class SearchState extends State<Search> {
-   final searchController = TextEditingController();
+  final searchController = TextEditingController();
   late SearchProvider searchProvider = SearchProvider();
   final SpeechToText _speechToText = SpeechToText();
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
+  late BuildContext dialogContext;
 
-@override
+  @override
   void initState() {
     _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
@@ -39,7 +40,6 @@ class SearchState extends State<Search> {
     _getData();
     super.initState();
   }
-
 
   /// Initialize speech recognition
   void _initSpeech() async {
@@ -50,43 +50,77 @@ class SearchState extends State<Search> {
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
-    await _speechToText.listen(onResult: _onSpeechResult, listenMode: ListenMode.dictation);
+
+    // Show a listening animation dialog
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Prevents dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        dialogContext = context; // Save the dialog context to close it later
+        return AlertDialog(
+          backgroundColor: colorPrimaryDark,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AvatarGlow(
+                glowColor: Colors.blue,
+                endRadius: 50,
+                duration: const Duration(milliseconds: 2000),
+                repeat: true,
+                child: Icon(CupertinoIcons.mic, color: white, size: 40),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Listening...",
+                style: TextStyle(color: white),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    await _speechToText.listen(
+        onResult: _onSpeechResult, listenMode: ListenMode.dictation);
     setState(() {
       _isListening = true;
     });
   }
 
-  /// Stop listening to speech
   void _stopListening() async {
     debugPrint("<============== _stopListening ==============>");
     await _speechToText.stop();
+
     if (!mounted) return;
     setState(() {
       _lastWords = '';
       _isListening = false;
     });
-  }
 
-  /// Callback when speech is recognized
-  void _onSpeechResult(SpeechRecognitionResult result) async {
-    debugPrint("<============== _onSpeechResult ==============>");
-    _lastWords = result.recognizedWords;
-    debugPrint("_lastWords ==============> $_lastWords");
+    // Close the listening popup
+    if (Navigator.canPop(dialogContext)) {
+      Navigator.of(dialogContext).pop();
+    }
 
-    // Only perform the search when the user has finished speaking
-    if (result.finalResult && _lastWords.isNotEmpty) {
+    // Perform search after stopping the listening
+    if (_lastWords.isNotEmpty) {
       searchController.text = _lastWords.toString();
-      _isListening = false;
 
-      if (!mounted) return;
+      // Perform the search after closing the dialog
+      await searchProvider.getSearchVideo(_lastWords.toString());
+
+      // Navigate to the search page with the result
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) {
-            return Search(searchText: searchController.text.toString());
-          },
+          builder: (context) => Search(searchText: _lastWords),
         ),
       );
+
       setState(() {
         _lastWords = '';
         searchController.clear();
@@ -94,8 +128,40 @@ class SearchState extends State<Search> {
     }
   }
 
+  /// Callback when speech is recognized
+  void _onSpeechResult(SpeechRecognitionResult result) async {
+    _lastWords = result.recognizedWords;
 
- @override
+    if (result.finalResult && _lastWords.isNotEmpty) {
+      // Close the dialog immediately when result is available
+      if (Navigator.canPop(dialogContext)) {
+        Navigator.pop(dialogContext); // Close the dialog first
+      }
+
+      // Stop listening immediately after getting the result
+      await _speechToText.stop();
+      setState(() {
+        _isListening = false;
+      });
+
+      // Perform the search
+      searchController.text = _lastWords;
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Search(searchText: _lastWords),
+        ),
+      );
+
+      setState(() {
+        _lastWords = '';
+        searchController.clear();
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _stopListening();
     searchController.dispose();
@@ -244,7 +310,7 @@ class SearchState extends State<Search> {
     );
   }
 
-Widget searchBox() {
+  Widget searchBox() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 55,
@@ -311,7 +377,7 @@ Widget searchBox() {
                     overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.w500,
                   ),
-                  hintText: "Search...",  // Update hint text
+                  hintText: "Search...", // Update hint text
                 ),
               ),
             ),
@@ -395,129 +461,149 @@ Widget searchBox() {
       ),
     );
   }
-  
-Widget _buildVideoUI() {
-  if (searchProvider.loading) {
-    return _shimmerSearch();
-  } else {
-    if (searchProvider.searchModel.status == 200) {
-      if (searchProvider.searchModel.video != null && searchProvider.searchModel.video!.isNotEmpty) {
-        return Expanded(
-          child: AlignedGridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            itemCount: searchProvider.searchModel.video?.length ?? 0,
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int position) {
-              return Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(4),
-                  onTap: () {
-                    debugPrint("Clicked on position ==> $position");
-                    Utils.openDetails(
-                      context: context,
-                      videoId: searchProvider.searchModel.video?[position].id ?? 0,
-                      upcomingType: 0,
-                      videoType: searchProvider.searchModel.video?[position].videoType ?? 0,
-                      typeId: searchProvider.searchModel.video?[position].typeId ?? 0,
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: Dimens.heightLand,
-                    alignment: Alignment.center,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: MyNetworkImage(
-                        imageUrl: searchProvider.searchModel.video?[position].landscape.toString() ?? "",
-                        fit: BoxFit.cover,
-                        imgHeight: MediaQuery.of(context).size.height,
-                        imgWidth: MediaQuery.of(context).size.width,
+
+  Widget _buildVideoUI() {
+    if (searchProvider.loading) {
+      return _shimmerSearch();
+    } else {
+      if (searchProvider.searchModel.status == 200) {
+        if (searchProvider.searchModel.video != null &&
+            searchProvider.searchModel.video!.isNotEmpty) {
+          return Expanded(
+            child: AlignedGridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              itemCount: searchProvider.searchModel.video?.length ?? 0,
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int position) {
+                return Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap: () {
+                      debugPrint("Clicked on position ==> $position");
+                      Utils.openDetails(
+                        context: context,
+                        videoId:
+                            searchProvider.searchModel.video?[position].id ?? 0,
+                        upcomingType: 0,
+                        videoType: searchProvider
+                                .searchModel.video?[position].videoType ??
+                            0,
+                        typeId: searchProvider
+                                .searchModel.video?[position].typeId ??
+                            0,
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Dimens.heightLand,
+                      alignment: Alignment.center,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: MyNetworkImage(
+                          imageUrl: searchProvider
+                                  .searchModel.video?[position].landscape
+                                  .toString() ??
+                              "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        );
+                );
+              },
+            ),
+          );
+        } else {
+          return const Expanded(
+            child: NoData(title: "", subTitle: ""),
+          );
+        }
       } else {
-        return const Expanded(
-          child: NoData(title: "", subTitle: ""),
-        );
+        return const SizedBox.shrink();
       }
-    } else {
-      return const SizedBox.shrink();
     }
   }
-}
- 
- Widget _buildShowUI() {
-  if (searchProvider.loading) {
-    return _shimmerSearch();
-  } else {
-    if (searchProvider.searchModel.status == 200) {
-      if (searchProvider.searchModel.tvshow != null && searchProvider.searchModel.tvshow!.isNotEmpty) {
-        return Expanded(
-          child: AlignedGridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int position) {
-              return Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  onTap: () {
-                    debugPrint("Clicked on position ==> $position");
-                    Utils.openDetails(
-                      context: context,
-                      videoId: searchProvider.searchModel.tvshow?[position].id ?? 0,
-                      upcomingType: 0,
-                      videoType: searchProvider.searchModel.tvshow?[position].videoType ?? 0,
-                      typeId: searchProvider.searchModel.tvshow?[position].typeId ?? 0,
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: Dimens.heightLand,
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: MyNetworkImage(
-                        imageUrl: searchProvider.searchModel.tvshow?.elementAt(position).landscape.toString() ?? "",
-                        fit: BoxFit.cover,
-                        imgHeight: MediaQuery.of(context).size.height,
-                        imgWidth: MediaQuery.of(context).size.width,
+
+  Widget _buildShowUI() {
+    if (searchProvider.loading) {
+      return _shimmerSearch();
+    } else {
+      if (searchProvider.searchModel.status == 200) {
+        if (searchProvider.searchModel.tvshow != null &&
+            searchProvider.searchModel.tvshow!.isNotEmpty) {
+          return Expanded(
+            child: AlignedGridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int position) {
+                return Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    onTap: () {
+                      debugPrint("Clicked on position ==> $position");
+                      Utils.openDetails(
+                        context: context,
+                        videoId:
+                            searchProvider.searchModel.tvshow?[position].id ??
+                                0,
+                        upcomingType: 0,
+                        videoType: searchProvider
+                                .searchModel.tvshow?[position].videoType ??
+                            0,
+                        typeId: searchProvider
+                                .searchModel.tvshow?[position].typeId ??
+                            0,
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Dimens.heightLand,
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: MyNetworkImage(
+                          imageUrl: searchProvider.searchModel.tvshow
+                                  ?.elementAt(position)
+                                  .landscape
+                                  .toString() ??
+                              "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        );
+                );
+              },
+            ),
+          );
+        } else {
+          return const Expanded(
+            child: NoData(title: "", subTitle: ""),
+          );
+        }
       } else {
-        return const Expanded(
-          child: NoData(title: "", subTitle: ""),
-        );
+        return const SizedBox.shrink();
       }
-    } else {
-      return const SizedBox.shrink();
     }
   }
-}
 
   Widget _shimmerSearch() {
     return Expanded(

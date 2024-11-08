@@ -1,14 +1,12 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:dtlive/pages/search.dart';
 import 'package:dtlive/pages/sectionbytype.dart';
-import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/provider/findprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
-import 'package:dtlive/utils/strings.dart';
-import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -21,19 +19,21 @@ class Find extends StatefulWidget {
   @override
   State<Find> createState() => FindState();
 }
+
 class FindState extends State<Find> {
   final searchController = TextEditingController();
-  late FindProvider findProvider = FindProvider();
+  late FindProvider findProvider;
   final SpeechToText _speechToText = SpeechToText();
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
+  late BuildContext dialogContext;
 
   @override
   void initState() {
+    super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
     _initSpeech();
-    super.initState();
   }
 
   /// Initialize speech recognition
@@ -45,7 +45,42 @@ class FindState extends State<Find> {
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
-    await _speechToText.listen(onResult: _onSpeechResult, listenMode: ListenMode.dictation);
+
+    // Show a listening animation dialog
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Prevents dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        dialogContext = context; // Save the dialog context to close it later
+        return AlertDialog(
+          backgroundColor: colorPrimaryDark,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AvatarGlow(
+                glowColor: Colors.blue,
+                endRadius: 50,
+                duration: const Duration(milliseconds: 2000),
+                repeat: true,
+                child: Icon(CupertinoIcons.mic, color: white, size: 40),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Listening...",
+                style: TextStyle(color: white),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    await _speechToText.listen(
+        onResult: _onSpeechResult, listenMode: ListenMode.dictation);
     setState(() {
       _isListening = true;
     });
@@ -55,25 +90,21 @@ class FindState extends State<Find> {
   void _stopListening() async {
     debugPrint("<============== _stopListening ==============>");
     await _speechToText.stop();
+
     if (!mounted) return;
     setState(() {
       _lastWords = '';
       _isListening = false;
     });
-  }
 
-  /// Callback when speech is recognized
-  void _onSpeechResult(SpeechRecognitionResult result) async {
-    debugPrint("<============== _onSpeechResult ==============>");
-    _lastWords = result.recognizedWords;
-    debugPrint("_lastWords ==============> $_lastWords");
+    // Close the listening popup
+    if (Navigator.canPop(dialogContext)) {
+      Navigator.of(dialogContext).pop();
+    }
 
-    // Only perform the search when the user has finished speaking
-    if (result.finalResult && _lastWords.isNotEmpty) {
+    // Perform search after stopping the listening
+    if (_lastWords.isNotEmpty) {
       searchController.text = _lastWords.toString();
-      _isListening = false;
-
-      if (!mounted) return;
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -82,6 +113,39 @@ class FindState extends State<Find> {
           },
         ),
       );
+      setState(() {
+        _lastWords = '';
+        searchController.clear();
+      });
+    }
+  }
+
+  /// Callback when speech is recognized
+  void _onSpeechResult(SpeechRecognitionResult result) async {
+    _lastWords = result.recognizedWords;
+
+    if (result.finalResult && _lastWords.isNotEmpty) {
+      // Close the dialog immediately when result is available
+      if (Navigator.canPop(dialogContext)) {
+        Navigator.pop(dialogContext); // Close the dialog first
+      }
+
+      // Stop listening immediately after getting the result
+      await _speechToText.stop();
+      setState(() {
+        _isListening = false;
+      });
+
+      // Perform the search
+      searchController.text = _lastWords;
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Search(searchText: _lastWords),
+        ),
+      );
+
       setState(() {
         _lastWords = '';
         searchController.clear();
@@ -108,7 +172,6 @@ class FindState extends State<Find> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +192,6 @@ class FindState extends State<Find> {
             child: Column(
               children: [
                 const SizedBox(height: 15),
-
                 /* Search Box */
                 searchBox(),
                 const SizedBox(height: 22),
@@ -228,20 +290,6 @@ class FindState extends State<Find> {
                                 },
                               ),
                               /* Browse by END */
-
-                              /* AdMob Banner */
-                              const SizedBox(height: 10),
-                              Utils.showBannerAd(context),
-                              const SizedBox(height: 12),
-
-                           
-                              /* AdMob Banner */
-                              const SizedBox(height: 10),
-                              Utils.showBannerAd(context),
-                              const SizedBox(height: 20),
-
-                           
-                          
                             ],
                           );
                         } else {
@@ -253,7 +301,6 @@ class FindState extends State<Find> {
                     }
                   },
                 ),
-                const SizedBox(height: 22),
               ],
             ),
           ),
@@ -262,7 +309,7 @@ class FindState extends State<Find> {
     );
   }
 
- Widget searchBox() {
+  Widget searchBox() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 55,
@@ -351,25 +398,24 @@ class FindState extends State<Find> {
                             imagePath: "ic_voice.png",
                             color: white,
                             fit: BoxFit.fill,
-                              height: 20,
-                          width: 20,
+                            height: 20,
+                            width: 20,
                           ),
                         ),
                       )
                     : Container(
-                      height: 25,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: MyImage(
+                        height: 25,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: MyImage(
                             imagePath: "ic_voice.png",
                             color: white,
                             fit: BoxFit.fill,
                             height: 20,
                             width: 20,
-                            
                           ),
+                        ),
                       ),
-                    ),
               );
             },
           ),
@@ -377,7 +423,4 @@ class FindState extends State<Find> {
       ),
     );
   }
-
-
-
 }
