@@ -1,3 +1,6 @@
+import 'package:dtlive/main.dart';
+import 'package:dtlive/pages/pip_web_player.dart';
+import 'package:dtlive/utils/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +31,8 @@ class PlayerVideo extends StatefulWidget {
 
 class _PlayerVideoState extends State<PlayerVideo> {
   bool backButtonClicked = false;
+    DateTime? videoStartTime; // To track when video starts
+  DateTime? videoEndTime; // To track when video ends
 
   @override
   void initState() {
@@ -37,12 +42,15 @@ class _PlayerVideoState extends State<PlayerVideo> {
     ]);
   
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+     videoStartTime = DateTime.now(); 
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    videoEndTime = DateTime.now(); // Log video end time
+    _logVideoAnalytics(); // Log analytics event
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -50,11 +58,35 @@ class _PlayerVideoState extends State<PlayerVideo> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
+   void _logVideoAnalytics() {
+    if (videoStartTime != null && videoEndTime != null) {
+      final watchDuration = videoEndTime!.difference(videoStartTime!).inSeconds;
+
+      analytics.logEvent(
+        name: "video_watch_event",
+        parameters: {
+          "video_id": widget.videoId,
+          "user_id": Constant.userID,
+          "watch_duration": watchDuration, // Duration in seconds
+          "play_type": widget.playType,
+          "video_url": widget.videoUrl,
+          "video_type": widget.videoType,
+          "is_live": widget.isLive == 1 ? "yes" : "no",
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-     print("TRAILER ID :${widget.trailerLibraryId}");
-    print("Video ID :${widget.trailerUrlVideoId}");
-    print("PLAY TYPE:${widget.playType}");
+
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Player Screen",
+    "user_id": Constant.userID, 
+  },
+);
     return Scaffold(
       body: widget.playType == "Trailer"
       
@@ -148,53 +180,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
 )
 
           : widget.isLive == 1
-          ? Stack(
-        children: [
-          InAppWebView(
-            initialUrlRequest: URLRequest(
-              url: Uri.parse('https://unvii-player.web.app/app/${widget.videoUrl}'),
-            ),
-            onLoadStop: (controller, url) {
-              controller.evaluateJavascript(source: '''
-                    document.getElementById('backButton').addEventListener('click', () => {
-                      if (!window.flutter_inappwebview.backButtonClicked) {
-                        window.flutter_inappwebview.backButtonClicked = true;
-                        window.flutter_inappwebview.callHandler('goBack');
-                      }
-                    });
-                  ''');
-            },
-            onWebViewCreated: (InAppWebViewController controller) {
-              controller.addJavaScriptHandler(handlerName: 'goBack', callback: (args) {
-                Navigator.pop(context);
-              });
-            },
-            onConsoleMessage: (controller, consoleMessage) {
-              print("Console message: ${consoleMessage.message}");
-            },
-            onLoadError: (controller, url, code, message) {
-              print("Load error: $message");
-            },
-            onProgressChanged: (controller, progress) {
-              print("Loading progress: $progress%");
-            },
-          ),
-          Positioned(
-            top: 40.0,
-            left: 16.0,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                CupertinoIcons.back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      )
-          : 
+          ?  TestPlayerWeb(loadURL: widget.videoUrl ?? '') : 
           
        Stack(
   children: [

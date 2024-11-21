@@ -918,7 +918,9 @@
 // }
 
 import 'dart:developer';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/utils/color.dart';
+import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -1056,6 +1058,13 @@ class _NewLivePlayerState extends State<NewLivePlayer>
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Live Channels Screen",
+    "user_id": Constant.userID, 
+  },
+);
     log("LENGTHHH ${channelSectionProvider.channelSectionModel.result?.length}");
     final List<Result>? validResults = channelSectionProvider
         .channelSectionModel.result

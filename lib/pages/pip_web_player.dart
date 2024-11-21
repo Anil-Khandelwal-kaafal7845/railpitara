@@ -1,13 +1,9 @@
-// import 'dart:developer';
-
-import 'package:dtlive/utils/color.dart';
-import 'package:dtlive/utils/sharedpre.dart';
-import 'package:dtlive/utils/utils.dart';
-import 'package:floating/floating.dart';
-import 'package:flutter/foundation.dart';
+import 'package:dtlive/main.dart';
+import 'package:dtlive/utils/constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter/services.dart';
 
 class TestPlayerWeb extends StatefulWidget {
   final String loadURL;
@@ -21,163 +17,160 @@ class TestPlayerWeb extends StatefulWidget {
   State<TestPlayerWeb> createState() => _TestPlayerWebState();
 }
 
-class _TestPlayerWebState extends State<TestPlayerWeb>
-    with WidgetsBindingObserver {
-  var loadingPercentage = 0;
+class _TestPlayerWebState extends State<TestPlayerWeb> {
   InAppWebViewController? webViewController;
-  PullToRefreshController? pullToRefreshController;
-  SharedPre sharedPref = SharedPre();
+  bool _isLoading = true; // Track if the web view is still loading
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(
-        this); // Registering this class as an observer for app lifecycle changes
-    pip =
-        Floating(); // Instantiating the "Floating" instance to manage PiP functionality
-    _checkPiPAvailability(); // Checking the availability of PiP upon initializing the widget
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    //ENABLE THE FULLSCREEN MODE
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    debugPrint("loadURL ========> ${widget.loadURL}");
-    pullToRefreshController = (kIsWeb) ||
-            ![TargetPlatform.iOS, TargetPlatform.android]
-                .contains(defaultTargetPlatform)
-        ? null
-        : PullToRefreshController(
-            options: PullToRefreshOptions(color: complimentryColor),
-            onRefresh: () async {
-              if (defaultTargetPlatform == TargetPlatform.android) {
-                webViewController?.reload();
-              } else if (defaultTargetPlatform == TargetPlatform.iOS ||
-                  defaultTargetPlatform == TargetPlatform.macOS) {
-                webViewController?.loadUrl(
-                    urlRequest:
-                        URLRequest(url: await webViewController?.getUrl()));
-              }
-            },
-          );
+    // Lock the orientation to portrait when the screen is initialized
+    setPortraitOrientation();
   }
 
-  late Floating pip; // Initializing a variable to handle PiP functionalities
-  bool isPipAvailable = false; // Variable to track PiP availability status
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // log(" CYCLEC${state.name}");
-    // log(" CYCLEC${state}");
-    // Listening to app lifecycle changes to detect when the app enters the hidden state (minimized)
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.hidden) {
-      // Triggering PiP mode with a landscape aspect ratio when the app is minimized
-      pip.enable(aspectRatio: const Rational.landscape());
-    }
-  }
-
-  // Method to verify the availability of PiP feature asynchronously
-  _checkPiPAvailability() async {
-    isPipAvailable = await pip
-        .isPipAvailable; // Checking if PiP mode is available on the device
-    setState(
-        () {}); // Triggering a UI update based on the PiP availability status
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(
-        this); // Unregistering this class as an observer for app lifecycle changes
+  // Set portrait mode
+  void setPortraitOrientation() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    //DISABLE THE FULLSCREEN MODE
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+  }
+
+  @override
+  void dispose() {
+    // Restore system UI and orientation settings when leaving the screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PiPSwitcher(
-      // Widget displayed when PiP is disabled or app is in foreground state
-      childWhenDisabled: Scaffold(
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     // Enabling PiP mode if available and configuring the aspect ratio for landscape orientation.
-        //     if (isPipAvailable) {
-        //       pip.enable(
-        //           aspectRatio: const Rational
-        //               .landscape()); // Enabling PiP with a landscape aspect ratio
-        //     }
-        //   },
-        // ),
-        resizeToAvoidBottomInset: true,
-        backgroundColor: appBgColor,
-        // appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),
-        body: Column(
-          children: [
-            /* AdMob Banner */
-            Container(
-              child: Utils.showBannerAd(context),
-            ),
-            Expanded(
-              child: setWebView(),
-            ),
-          ],
-        ),
-      ),
-      // Widget displayed when PiP window is enabled or app is in background state
-      childWhenEnabled: Expanded(
-        child: setWebView(),
-      ),
-    );
-  }
+         analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Player Screen",
+    "user_id": Constant.userID, 
+  },
+);
+    // HTML player code with autoplay and muted settings
+    String htmlPlayer = '''
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+          <title>Live Player</title>
+          <style>
+              body, html {
+                  margin: 0;
+                  padding: 0;
+                  height: 100%;
+                  overflow: hidden; /* Prevents scrolling */
+              }
+              #my_player {
+                  width: 100%;
+                  height: 100vh; /* Full viewport height */
+              }
+          </style>
+          <script src='https://player-static.qencode.com/release/qencode-bootstrapper.min.js'></script>
+      </head>
+      <body>
+          <div id="my_player"></div>
+          <script>
+              var params = {
+                  licenseKey: "7b6199e3-9329-3f02-65e7-e7d674722277",
+                  size: { fill: true },
+                  playback: { muted: true, autoplay: true }, // Muted to ensure autoplay works
+                  env: "prod",
+                  titleBar: { text: "" },
+                  videoSources: { src: "${widget.loadURL}" }
+              };
 
-  Widget setWebView() {
-    return Stack(
-      children: [
-        InAppWebView(
-          initialUrlRequest: URLRequest(url: Uri.parse(widget.loadURL)),
-          pullToRefreshController: pullToRefreshController,
-          onWebViewCreated: (controller) async {
-            webViewController = controller;
-          },
-          onLoadStart: (controller, url) async {
-            setState(() {
-              loadingPercentage = 0;
-            });
-          },
-          shouldOverrideUrlLoading: (controller, navigationAction) async {
-            return NavigationActionPolicy.ALLOW;
-          },
-          onLoadStop: (controller, url) async {
-            setState(() {
-              loadingPercentage = 100;
-            });
-          },
-          onProgressChanged: (controller, progress) {
-            setState(() {
-              loadingPercentage = progress;
-            });
-          },
-          onUpdateVisitedHistory: (controller, url, isReload) {
-            debugPrint("onUpdateVisitedHistory url =========> $url");
-          },
-          onConsoleMessage: (controller, consoleMessage) {
-            debugPrint("consoleMessage =========> $consoleMessage");
-          },
-        ),
-        if (loadingPercentage < 100)
-          LinearProgressIndicator(
-            color: complimentryColor,
-            backgroundColor: appBgColor,
-            value: loadingPercentage / 100.0,
+              var player = qPlayer("my_player", params, function() {
+                  console.log("Player is loaded with source: ${widget.loadURL}");
+              });
+
+              player.on('ready', function() {
+                  player.play();  // Ensure play is triggered after player is ready
+              });
+          </script>
+      </body>
+      </html>
+    ''';
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          // WebView to load the player
+          Positioned.fill(
+            child: InAppWebView(
+              initialData: InAppWebViewInitialData(data: htmlPlayer),
+              initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+                  supportZoom: false, // Disable zoom
+                  disableVerticalScroll: true, // Prevent vertical scrolling
+                  disableHorizontalScroll: true, // Prevent horizontal scrolling
+                ),
+              ),
+              onWebViewCreated: (InAppWebViewController controller) {
+                webViewController = controller;
+              },
+              onLoadStart: (controller, url) {
+                setState(() {
+                  _isLoading = true; // Web view is still loading
+                });
+              },
+              onLoadStop: (controller, url) async {
+                setState(() {
+                  _isLoading = false; // Web view finished loading
+                });
+              },
+              onConsoleMessage: (controller, consoleMessage) {
+                print("Console message: ${consoleMessage.message}");
+              },
+            ),
           ),
-      ],
+          
+          // Black background with a loading indicator while the web view is loading
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          
+          // Back button positioned on top, even in full-screen mode
+          Positioned(
+            top: 50.0, // Adjust as per your design
+            left: 16.0,
+            child: GestureDetector(
+              onTap: () {
+                // When the back button is pressed, navigate back
+                Navigator.pop(context);  // Exit the screen
+              },
+              child: Container(
+                padding: EdgeInsets.all(0),
+                child: Icon(
+                  CupertinoIcons.back,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+

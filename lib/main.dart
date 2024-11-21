@@ -30,6 +30,7 @@ import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ Future<void> main() async {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
   }
+  
   await Firebase.initializeApp(
       name: 'captain-tv-ott', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
@@ -125,8 +127,11 @@ Future<void> main() async {
   ]);
 }
 
-final RouteObserver<ModalRoute<void>> routeObserver =
-    RouteObserver<ModalRoute<void>>();
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
+
+final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -135,7 +140,11 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
+final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
+
+
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   // final _noScreenshot = NoScreenshot.instance;
   @override
@@ -157,7 +166,7 @@ class _MyAppState extends State<MyApp> {
                   builder: (locale) => MaterialApp(
                     navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
-                    navigatorObservers: [routeObserver], //HERE
+                    navigatorObservers: [routeObserver ,analyticsObserver], //HERE
                     theme: ThemeData(
                       primaryColor: colorPrimary,
                       primaryColorDark: colorPrimaryDark,
@@ -213,7 +222,8 @@ class _MyAppState extends State<MyApp> {
                   builder: (locale) => MaterialApp(
                     navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
-                    navigatorObservers: [routeObserver], //HERE
+                   navigatorObservers: [routeObserver ,analyticsObserver], 
+
                     theme: ThemeData(
                       primaryColor: colorPrimary,
                       primaryColorDark: colorPrimaryDark,

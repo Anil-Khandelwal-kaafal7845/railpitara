@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/otpverify.dart';
@@ -119,6 +120,13 @@ class LoginSocialState extends State<LoginSocialEmail> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Login Email",
+    "user_id": Constant.userID, 
+  },
+);
     return Form(
       key: _formKey,
       child: Scaffold(

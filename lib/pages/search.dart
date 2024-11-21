@@ -1,7 +1,9 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
+import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
@@ -179,6 +181,13 @@ class SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Search Screen",
+    "user_id": Constant.userID, 
+  },
+);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appBgColor,

@@ -1,3 +1,4 @@
+import 'package:dtlive/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,13 @@ class MoreScreenState extends State<MoreScreen> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "More Section Screen",
+    "user_id": Constant.userID, 
+  },
+);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: (kIsWeb || Constant.isTV)

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/aboutprivacyterms.dart';
 import 'package:dtlive/pages/emailscrren.dart';
 import 'package:dtlive/pages/home.dart';
@@ -92,6 +93,13 @@ class SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Setting screen",
+    "user_id": Constant.userID, 
+  },
+);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBar(context, "setting", true),

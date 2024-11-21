@@ -51,7 +51,6 @@ class MovieDetails extends StatefulWidget {
   State<MovieDetails> createState() => MovieDetailsState();
 }
 
-
 class MovieDetailsState extends State<MovieDetails> with RouteAware {
   /* Trailer init */
   VideoPlayerController? _trailerNormalController;
@@ -71,7 +70,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   @override
   void initState() {
     print("HEY>>>>>>>>>>>>>>");
-        startTime = DateTime.now();
+    startTime = DateTime.now();
     if (!kIsWeb) {
       /* Download init ****/
       _bindBackgroundIsolate();
@@ -340,9 +339,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   }
 
   @override
-  void dispose()async {
-
-
+  void dispose() async {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     if (!(kIsWeb) || !(Constant.isTV)) {
@@ -364,22 +361,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       _trailerNormalController = null;
     }
 
-    // Record the time spent on the page when the page is closed
-    DateTime endTime = DateTime.now();
-    Duration timeSpent = endTime.difference(startTime);
-
-    // Log the screen view event with duration parameter
-    await FirebaseAnalytics.instance
-        .logEvent(name: 'kEventScreenView', parameters: {
-      'screen_name': 'MovieDetails Screen',
-      'duration_seconds': timeSpent.inSeconds,
-    });
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Details Screen",
+        "user_id": Constant.userID,
+      },
+    );
+
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.cast != null &&
           (videoDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -796,6 +790,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         borderRadius: BorderRadius.circular(5),
                                         focusColor: gray.withOpacity(0.5),
                                         onTap: () async {
+                                          analytics.logEvent(
+                            name: 'watch_from_start',
+                            parameters: {
+                              'video_id': widget.videoId,
+                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                            },
+                          );
                                           openPlayer("startOver");
                                         },
                                         child: _buildFeatureBtn(
@@ -810,6 +811,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         borderRadius: BorderRadius.circular(5),
                                         focusColor: gray.withOpacity(0.5),
                                         onTap: () {
+                                          analytics.logEvent(
+                            name: 'watch_trailer',
+                            parameters: {
+                              'video_id': widget.videoId,
+                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                 
+                            },
+                          );
                                           openPlayer("Trailer");
                                         },
                                         child: _buildFeatureBtn(
@@ -843,6 +852,26 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         context, Constant.rewardAdType,
                                         () async {
                                       if (Constant.userID != null) {
+                                        final isCurrentlyBookmarked =
+                                            videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.isBookmark ??
+                                                0;
+
+                                        // Log event for adding/removing from watchlist
+                                        analytics.logEvent(
+                                          name: isCurrentlyBookmarked == 1
+                                              ? "watchlist_removed"
+                                              : "watchlist_added",
+                                          parameters: {
+                                            "video_id": widget.videoId,
+                                            "video_type": widget.videoType,
+                                            "type_id": widget.typeId,
+                                            "user_id": Constant.userID,
+                                          },
+                                        );
+
                                         await videoDetailsProvider.setBookMark(
                                           context,
                                           widget.typeId,
@@ -913,6 +942,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                     ),
                                   ),
                                 ),
+                           
                             ],
                           ),
                         ),
@@ -2511,6 +2541,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                       '',
                 );
                 if (isRented != null && isRented == true) {
+
+                    analytics.logEvent(
+        name: "Watch_Rented_video",
+        parameters: {
+          "user_id": Constant.userID,
+          'video_id': videoDetailsProvider.sectionDetailModel.result?.id ?? '',
+                    'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? '',
+                    'rent_price': videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0,
+        },
+      );
                   _getData();
                 }
               } else {
@@ -2570,6 +2610,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                       '',
                 );
                 if (isRented != null && isRented == true) {
+                             analytics.logEvent(
+        name: "Watch_Rented_video",
+        parameters: {
+          "user_id": Constant.userID,
+          'video_id': videoDetailsProvider.sectionDetailModel.result?.id ?? '',
+                    'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? '',
+                    'rent_price': videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0,
+        },
+      );
                   _getData();
                 }
               } else {
@@ -2601,6 +2650,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return const SizedBox.shrink();
     }
   }
+
+
 
   Widget _buildTabs() {
     return Column(
@@ -3436,6 +3487,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     focusColor: white,
                     onTap: () {
                       Navigator.pop(context);
+                      analytics.logEvent(
+                      name: 'share_video',
+                      parameters: {
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                        'type_id': widget.typeId,
+                        'video_type': widget.videoType,
+                      },
+                    );
+  
                       buildShareWithDialog();
                     },
                     child: _buildDialogItems(
@@ -3452,6 +3513,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           focusColor: white,
                           onTap: () {
                             Navigator.pop(context);
+                             analytics.logEvent(
+                            name: 'watch_trailer',
+                            parameters: {
+                              'video_id': widget.videoId,
+                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                              'stop_time': stopTime,
+                            },
+                          );
                             openPlayer("Trailer");
                           },
                           child: _buildDialogItems(
@@ -3469,7 +3538,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       },
     );
   }
-
 
   buildShareWithDialog() {
     showModalBottomSheet(
@@ -3550,6 +3618,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     focusColor: white,
                     onTap: () {
                       Navigator.pop(context);
+                       analytics.logEvent(
+                      name: 'share_video_sms',
+                      parameters: {
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                        'type_id': widget.typeId,
+                        'video_type': widget.videoType,
+                      },
+                    );
                       if (Platform.isAndroid) {
                         Utils.redirectToUrl(
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
@@ -3591,6 +3668,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     focusColor: white,
                     onTap: () {
                       Navigator.pop(context);
+                        analytics.logEvent(
+                      name: 'share_video_copy_link',
+                      parameters: {
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
+                        'type_id': widget.typeId,
+                        'video_type': widget.videoType,
+                      },
+                    );
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
                             ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
@@ -3635,8 +3721,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       },
     );
   }
-
-
 
   // buildShareWithDialog() {
   //   showModalBottomSheet(
@@ -3801,10 +3885,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //       );
   //     },
   //   );
-  
+
   // }
-
-
 
   Widget _buildDialogItems({
     required String icon,
@@ -3848,7 +3930,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   /* ========= Open Player ========= */
   openPlayer(String playType) async {
-    
     /* CHECK SUBSCRIPTION */
     if (playType != "Trailer") {
       bool? isPrimiumUser = await _checkSubsRentLogin();
@@ -3863,7 +3944,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     int? vType =
         (videoDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
     int? vTypeID = widget.typeId;
-     dynamic? trailerLibraryId, trailerUrlVideoId, videoLibraryId, videoUrlId, isLive;
+    dynamic? trailerLibraryId,
+        trailerUrlVideoId,
+        videoLibraryId,
+        videoUrlId,
+        isLive;
     int? stopTime;
     if (playType == "startOver" || playType == "Trailer") {
       stopTime = 0;
@@ -3877,18 +3962,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {
-    
-
       Utils.clearQualitySubtitle();
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
 
-  trailerLibraryId = (videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ?? "");
-  trailerUrlVideoId = (videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "");
-       print("Trailer Library Id>>>>>>>>>>>:${trailerLibraryId}");
-       print("Trailer video Id>>>>>>>>>:${trailerUrlVideoId}");
-
+      trailerLibraryId =
+          (videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+              "");
+      trailerUrlVideoId =
+          (videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ??
+              "");
+      print("Trailer Library Id>>>>>>>>>>>:${trailerLibraryId}");
+      print("Trailer video Id>>>>>>>>>:${trailerUrlVideoId}");
     } else {
       /* Set-up Quality URLs */
       Utils.setQualityURLs(
@@ -3901,15 +3987,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         video1080:
             (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
       );
-      videoLibraryId=(videoDetailsProvider.sectionDetailModel.result?.videoLibraryId ?? "");
-      videoUrlId=(videoDetailsProvider.sectionDetailModel.result?.urlVideoId ?? "");
+      videoLibraryId =
+          (videoDetailsProvider.sectionDetailModel.result?.videoLibraryId ??
+              "");
+      videoUrlId =
+          (videoDetailsProvider.sectionDetailModel.result?.urlVideoId ?? "");
 
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.video320 ?? "");
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.videoUploadType ??
               "");
-              isLive=videoDetailsProvider.sectionDetailModel.result?.isLiveUrl 
-              ?? "";
+      isLive = videoDetailsProvider.sectionDetailModel.result?.isLiveUrl ?? "";
     }
 
     debugPrint("vUploadType ===> $vUploadType");
@@ -3927,30 +4015,27 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
       dynamic isContinue;
       isContinue = await Utils.openPlayer(
-        context: context,
-        playType: playType == "Trailer" ? "Trailer" : "Video",
-        videoId: vID,
-        videoType: vType,
-        typeId: vTypeID,
-        otherId: 0,
-        videoUrl: vUrl,
-        trailerUrl: vUrl,
-        uploadType: vUploadType,
-        videoThumb: videoThumb,
-        vStopTime: stopTime,
-        trailerLibraryId: trailerLibraryId,
-        trailerUrlVideoId: trailerUrlVideoId,
-        videoLibraryId:videoLibraryId,
-        videoUrlVideoId:  videoUrlId,
-        isLive: isLive
-      );
+          context: context,
+          playType: playType == "Trailer" ? "Trailer" : "Video",
+          videoId: vID,
+          videoType: vType,
+          typeId: vTypeID,
+          otherId: 0,
+          videoUrl: vUrl,
+          trailerUrl: vUrl,
+          uploadType: vUploadType,
+          videoThumb: videoThumb,
+          vStopTime: stopTime,
+          trailerLibraryId: trailerLibraryId,
+          trailerUrlVideoId: trailerUrlVideoId,
+          videoLibraryId: videoLibraryId,
+          videoUrlVideoId: videoUrlId,
+          isLive: isLive);
       debugPrint("isContinue ===> $isContinue");
       if (isContinue != null && isContinue == true) {
         _getData();
       }
     });
-  
-  
   }
   /* ========= Open Player ========= */
 

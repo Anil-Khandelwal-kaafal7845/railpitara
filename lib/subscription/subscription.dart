@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/model/subscriptionmodel.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
@@ -69,6 +70,17 @@ class SubscriptionState extends State<Subscription> {
 
       
       if (packageList?[index].isBuy == 0) {
+
+         analytics.logEvent(
+        name: "choose_subscription_plan_pay",
+        parameters: {
+          "package_id": packageList?[index].id,
+          "package_name": packageList?[index].name,
+          "package_price": packageList?[index].price,
+          "user_id": Constant.userID,
+        },
+      );
+
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -113,6 +125,13 @@ class SubscriptionState extends State<Subscription> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Subscription Package Screen",
+    "user_id": Constant.userID, 
+  },
+);
     if (kIsWeb) {
       return Scaffold(
         backgroundColor: appBgColor,
@@ -230,6 +249,7 @@ class SubscriptionState extends State<Subscription> {
     }
   }
 
+
   Widget buildMobileItem(List<Result>? packageList) {
     if (packageList != null) {
       return Container(
@@ -241,7 +261,7 @@ class SubscriptionState extends State<Subscription> {
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 4,
           ),
-          shrinkWrap: true, // Set shrinkWrap to true
+          shrinkWrap: true, 
           itemCount: packageList.length,
           itemBuilder: (BuildContext context, int index) {
             bool isSelected = selectedIndex == index;
@@ -252,6 +272,18 @@ class SubscriptionState extends State<Subscription> {
                 setState(() {
                   selectedIndex = index;
                 });
+
+
+                 analytics.logEvent(
+                name: "package_selected",
+                parameters: {
+                  "package_id": packageList[index].id,
+                  "package_name": packageList[index].name,
+                  "package_price": packageList[index].price,
+                  "user_id": Constant.userID,
+                },
+              );
+
               },
               child: Container(
                 child: Card(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dtlive/main.dart';
 import 'package:dtlive/provider/channelsectionprovider.dart';
 import 'package:dtlive/provider/paymentprovider.dart';
 import 'package:dtlive/provider/profileprovider.dart';
@@ -15,6 +16,7 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/widget/nodata.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -345,18 +347,46 @@ class AllPaymentState extends State<AllPayment>
   }
 
   Widget _buildPage() {
-    return Scaffold(
-      backgroundColor: appBgColor,
-      appBar: (kIsWeb || Constant.isTV)
-          ? null
-          : Utils.myAppBarWithBack(context, "payment_details", true),
-      body: SafeArea(
-        child: Center(
-          child: _buildMobilePage(),
-        ),
-      ),
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Payment screen",
+        "user_id": Constant.userID,
+      },
     );
+   return Scaffold(
+  backgroundColor: appBgColor,
+  appBar: AppBar(
+    centerTitle: true,
+    backgroundColor: appBgColor, // Set the app bar background color
+    title: const Text(
+      "Payment Details", // Title of the app bar
+      style: TextStyle(
+        color: colorPrimary, // Title text color
+        fontSize: 18, // Title font size
+        fontWeight: FontWeight.bold, // Title font weight
+      ),
+    ),
+     leading: IconButton(
+      icon: const Icon(CupertinoIcons.back, color: Colors.white), // Cupertino-style back icon
+      onPressed: () async {
+        // Call the onBackPressed event when the back button is pressed
+        await onBackPressed();
+      },
+    ),
+    elevation: 0, // Optional: Removes shadow under the app bar
+  ),
+  body: SafeArea(
+    child: Center(
+      child: _buildMobilePage(),
+    ),
+  ),
+);
+
+ 
+ 
   }
+
 
   Widget _buildMobilePage() {
     return Container(
@@ -1281,6 +1311,15 @@ class AllPaymentState extends State<AllPayment>
           Utils.showSnackbar(context, "", "order_creation_failed", true);
           return;
         } else {
+           analytics.logEvent(
+        name: "Razorpay open",
+        parameters: {
+          "user_id": Constant.userID,
+          "PayType":widget.payType,
+          "price":widget.price,
+          "name":widget.itemTitle
+        },
+      );
           Razorpay razorpay = Razorpay();
           var options = {
             'key':
@@ -1324,6 +1363,18 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handlePaymentErrorResponse(PaymentFailureResponse response) async {
+     analytics.logEvent(
+        name: "Razorpay Payment Faild",
+        parameters: {
+          "user_id": Constant.userID,
+          "PayType":widget.payType,
+          "price":widget.price,
+          "final amount":paymentProvider.finalAmount,
+          "name":widget.itemTitle,
+          "VId":widget.itemId
+
+        },
+      );
     /*
     * PaymentFailureResponse contains three values:
     * 1. Error Code
@@ -1342,6 +1393,18 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+
+     analytics.logEvent(
+        name: "Razorpay Payment Success",
+        parameters: {
+          "user_id": Constant.userID,
+          "PayType":widget.payType,
+          "price":widget.price,
+          "final amount":paymentProvider.finalAmount,
+          "name":widget.itemTitle,
+          "VId":widget.itemId
+        },
+      );
     /*
     * Payment Success Response contains three values:
     * 1. Order ID
@@ -2159,6 +2222,21 @@ class AllPaymentState extends State<AllPayment>
 
   Future<bool> onBackPressed() async {
     if (!mounted) return Future.value(false);
+
+    if (!isPaymentDone) {
+      print("----------AAAA");
+      analytics.logEvent(
+        name: "subscription_canceled",
+        parameters: {
+          "user_id": Constant.userID,
+          "package_id": widget.itemId, // Add the actual package id if available
+          "package_name":
+              widget.itemTitle, // Add the actual package name if available
+          "package_amount":
+              widget.price, // Add the actual package name if available
+        },
+      );
+    }
     Navigator.pop(context, isPaymentDone);
     return Future.value(isPaymentDone == true ? true : false);
   }

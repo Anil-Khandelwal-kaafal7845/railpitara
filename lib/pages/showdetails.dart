@@ -325,6 +325,14 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Tv Show Details",
+    "user_id": Constant.userID, 
+  },
+);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {

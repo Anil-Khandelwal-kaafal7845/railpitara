@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
@@ -406,6 +407,13 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+      analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "HomePage",
+    "user_id": Constant.userID, 
+  },
+);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: appBgColor,

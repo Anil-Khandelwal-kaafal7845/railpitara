@@ -1,3 +1,4 @@
+import 'package:dtlive/main.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
@@ -44,6 +45,13 @@ class RentStoreState extends State<RentStore> {
 
   @override
   Widget build(BuildContext context) {
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Rent Stor",
+    "user_id": Constant.userID, 
+  },
+);
     if (kIsWeb || Constant.isTV) {
       return Scaffold(
         backgroundColor: appBgColor,

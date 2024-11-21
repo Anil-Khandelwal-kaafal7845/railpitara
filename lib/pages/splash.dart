@@ -1,3 +1,4 @@
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
@@ -54,6 +55,14 @@ class SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Splash Screen",
+     "user_id": Constant.userID, 
+
+  },
+);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

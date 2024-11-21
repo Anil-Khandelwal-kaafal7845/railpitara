@@ -1,3 +1,4 @@
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/moviedetails.dart';
 import 'package:dtlive/pages/showdetails.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -113,6 +114,14 @@ class TVShowDetailsState extends State<TVShowDetails> {
 
   @override
   Widget build(BuildContext context) {
+
+        analytics.logEvent(
+  name: "screen_view",
+  parameters: {
+    "screen_name": "Tv Show",
+    "user_id": Constant.userID, 
+  },
+);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
