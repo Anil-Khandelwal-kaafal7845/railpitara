@@ -5,12 +5,9 @@ import 'package:dtlive/pages/sectionbytype.dart';
 import 'package:dtlive/provider/findprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
-<<<<<<< HEAD
-=======
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
->>>>>>> e01207d (GA added done)
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:flutter/cupertino.dart';
