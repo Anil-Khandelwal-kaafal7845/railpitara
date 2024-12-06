@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/aboutprivacyterms.dart';
+import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/emailscrren.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -13,6 +14,7 @@ import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/profileprovider.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
+import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
@@ -44,10 +46,12 @@ class SettingState extends State<Setting> {
   late GeneralProvider generalProvider;
   SharedPre sharedPref = SharedPre();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+    late WalletProvider walletProvider;
 
   @override
   void initState() {
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
     getUserData();
     super.initState();
   }
@@ -111,6 +115,9 @@ class SettingState extends State<Setting> {
             child: Column(
               children: [
                 /* Account Details */
+                // Account Details Button On Click
+
+
                 _buildSettingButton(
                   title: 'accountdetails',
                   subTitle: 'manageprofile',
@@ -135,34 +142,11 @@ class SettingState extends State<Setting> {
                     });
                   },
                 ),
+               
+               
                 _buildLine(16.0, 16.0),
 
-                // /* Active TV */
-                // _buildSettingButton(
-                //   title: 'activetv',
-                //   subTitle: 'activetv_desc',
-                //   titleMultilang: true,
-                //   subTitleMultilang: true,
-                //   onClick: () {
-                //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                //         () async {
-                //       if (Constant.userID != null) {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const ActiveTV(),
-                //           ),
-                //         );
-                //       } else {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const LoginSocial(),
-                //           ),
-                //         );
-                //       }
-                //     });
-                //   },
-                // ),
-                // _buildLine(16.0, 16.0),
+               
 
                 /* Watchlist */
                 _buildSettingButton(
@@ -171,8 +155,7 @@ class SettingState extends State<Setting> {
                   titleMultilang: true,
                   subTitleMultilang: true,
                   onClick: () {
-                    AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                        () async {
+               
                       if (Constant.userID != null) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -186,7 +169,7 @@ class SettingState extends State<Setting> {
                           ),
                         );
                       }
-                    });
+               
                   },
                 ),
                 _buildLine(16.0, 16.0),
@@ -200,8 +183,8 @@ class SettingState extends State<Setting> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                          () async {
+                     
+           
                         if (Constant.userID != null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -215,7 +198,7 @@ class SettingState extends State<Setting> {
                             ),
                           );
                         }
-                      });
+                 
                     },
                   ),
                 ),
@@ -224,32 +207,39 @@ class SettingState extends State<Setting> {
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-                // /* Downloads */
-                // _buildSettingButton(
-                //   title: 'downloads',
-                //   subTitle: 'view_your_downloads',
-                //   titleMultilang: true,
-                //   subTitleMultilang: true,
-                //   onClick: () {
-                //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                //         () async {
-                //       if (Constant.userID != null) {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const MyDownloads(),
-                //           ),
-                //         );
-                //       } else {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const LoginSocial(),
-                //           ),
-                //         );
-                //       }
-                //     });
-                //   },
-                // ),
-                // _buildLine(16.0, 16.0),
+                /* Coin--- */
+                Visibility(
+                  visible: forceUpdateData!.result!.showPackage == 1,
+                  child: _buildSettingButton(
+                    title: 'coin',
+                    subTitle: 'view_your_coin',
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () {
+                     
+           
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CoinStoreScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+                 
+                    },
+                  ),
+                ),
+
+                Visibility(
+                    visible: forceUpdateData!.result!.showPackage == 1,
+                    child: _buildLine(16.0, 16.0)),
+
 
                 /* Subscription */
                 Visibility(
@@ -260,8 +250,8 @@ class SettingState extends State<Setting> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                          () async {
+                  
+                       
                         if (Constant.userID != null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -275,7 +265,7 @@ class SettingState extends State<Setting> {
                             ),
                           );
                         }
-                      });
+                
                     },
                   ),
                 ),
@@ -284,38 +274,7 @@ class SettingState extends State<Setting> {
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-                // /* Transactions */
-                // Visibility(
-                //   visible: forceUpdateData!.result!.showPackage == 1,
-                //   child: _buildSettingButton(
-                //     title: 'transactions',
-                //     subTitle: 'transactions_notes',
-                //     titleMultilang: true,
-                //     subTitleMultilang: true,
-                //     onClick: () {
-                //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                //           () async {
-                //         if (Constant.userID != null) {
-                //           Navigator.of(context).push(
-                //             MaterialPageRoute(
-                //               builder: (context) => const SubscriptionHistory(),
-                //             ),
-                //           );
-                //         } else {
-                //           Navigator.of(context).push(
-                //             MaterialPageRoute(
-                //               builder: (context) => const LoginSocial(),
-                //             ),
-                //           );
-                //         }
-                //       });
-                //     },
-                //   ),
-                // ),
-                // Visibility(
-                //     visible: forceUpdateData!.result!.showPackage == 1,
-                //     child: _buildLine(16.0, 16.0)),
-
+               
                 /* MaltiLanguage */
                 _buildSettingButton(
                   title: 'change_language',

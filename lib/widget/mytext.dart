@@ -74,3 +74,74 @@ class MyText extends StatelessWidget {
     }
   }
 }
+
+class MyTextTWO extends StatelessWidget {
+  final String text;
+  final double? fontsizeNormal, fontsizeWeb;
+  final int? maxline;
+  final FontStyle fontstyle;
+  final FontWeight fontweight;
+  final TextAlign textalign;
+  final bool multilanguage;
+  final Color color;
+  final TextOverflow overflow;
+
+  MyTextTWO({
+    Key? key,
+    required this.color,
+    required this.text,
+    this.fontsizeNormal,
+    this.fontsizeWeb,
+    this.maxline,
+    this.multilanguage = false,
+    this.overflow = TextOverflow.ellipsis,
+    this.textalign = TextAlign.left,
+    this.fontweight = FontWeight.normal,
+    this.fontstyle = FontStyle.normal,
+  }) : super(key: key);
+
+  static double getAdaptiveTextSize(BuildContext context, double value) {
+    if (kIsWeb || Constant.isTV) {
+      return (value / 650) *
+          min(MediaQuery.of(context).size.height,
+              MediaQuery.of(context).size.width);
+    } else {
+      return (value / 720) * MediaQuery.of(context).size.height;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle textStyle = TextStyle(
+      fontFamily: 'Proximanova',
+      fontSize: getAdaptiveTextSize(context, (kIsWeb || Constant.isTV) ? fontsizeWeb! : fontsizeNormal!),
+      fontStyle: fontstyle,
+      color: color,
+      fontWeight: fontweight,
+    );
+
+    Widget textWidget;
+    if (multilanguage) {
+      textWidget = LocaleText(
+        text,
+        textAlign: textalign,
+        overflow: overflow,
+        maxLines: maxline,
+        style: textStyle,
+      );
+    } else {
+      textWidget = Text(
+        text,
+        textAlign: textalign,
+        overflow: overflow,
+        maxLines: maxline,
+        style: textStyle,
+      );
+    }
+
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.4,
+      child: textWidget,
+    );
+  }
+}

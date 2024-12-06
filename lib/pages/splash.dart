@@ -55,14 +55,17 @@ class SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
+   if (Constant.userID != null){
+      analytics.logEvent(
   name: "screen_view",
   parameters: {
     "screen_name": "Splash Screen",
      "user_id": Constant.userID, 
-
   },
 );
+
+    }
+  
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

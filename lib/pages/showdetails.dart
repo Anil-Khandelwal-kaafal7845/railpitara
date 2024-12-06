@@ -413,6 +413,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         color: complimentryColor,
         displacement: 80,
         onRefresh: () async {
+       
           await Future.delayed(const Duration(milliseconds: 1500))
               .then((value) {
             showDetailsProvider.setLoading(true);
@@ -828,9 +829,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
-                                    AdHelper.showFullscreenAd(
-                                        context, Constant.rewardAdType,
-                                        () async {
+                                  
                                       if (Constant.userID != null) {
                                         await showDetailsProvider.setBookMark(
                                           context,
@@ -853,7 +852,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                           ),
                                         );
                                       }
-                                    });
+                              
                                   },
                                   borderRadius: BorderRadius.circular(5),
                                   child: Consumer<ShowDetailsProvider>(
@@ -1117,7 +1116,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     ),
 
                     /* AdMob Banner */
-                    Utils.showBannerAd(context),
+                    // Utils.showBannerAd(context),
                     const SizedBox(height: 10),
                     // /* Related ~ More Details */
                     Consumer<ShowDetailsProvider>(
@@ -3873,7 +3872,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         return;
       }
       if (!mounted) return;
-      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+   
         dynamic isContinue = await Utils.openPlayer(
             context: context,
             playType: playType == "Trailer" ? "Trailer" : "Show",
@@ -3898,7 +3897,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           await getAllEpisode(showDetailsProvider.seasonPos,
               showDetailsProvider.sectionDetailModel.session);
         }
-      });
+
     } else {
       String? vUrl, vUploadType;
       dynamic showTrailerLibraryId, showTrailerVideoId;
@@ -3928,7 +3927,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         }
 
         if (!mounted) return;
-        AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+      
           await Utils.openPlayer(
               context: context,
               playType: "Trailer",
@@ -3943,7 +3942,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
               vStopTime: stopTime,
               trailerLibraryId: showTrailerLibraryId,
               trailerUrlVideoId: showTrailerVideoId);
-        });
+
       } else {
         if (!mounted) return;
         Utils.showSnackbar(context, "info", "episode_not_found", true);

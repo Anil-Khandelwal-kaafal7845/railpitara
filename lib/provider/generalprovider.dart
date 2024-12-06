@@ -24,6 +24,7 @@ class GeneralProvider extends ChangeNotifier {
    String? isGoogleLogin;
    String? isFbLogin;
    String ? isMobileLogin;
+   dynamic isAdsCoin;
    
 
 
@@ -50,12 +51,16 @@ class GeneralProvider extends ChangeNotifier {
         isGoogleLogin = await sharedPre.read("is_google") ?? "0";  
         isFbLogin = await sharedPre.read("is_facebook") ?? "0";  
         isMobileLogin = await sharedPre.read("is_mobile") ?? "0";
+        isAdsCoin = await sharedPre.read("no_of_coin_watch_ad") ?? "0";
+
+        
       
       
       debugPrint("isEmail ===========> $isEmail");
       debugPrint("isGoogleLogin ===========> $isGoogleLogin");
       debugPrint("isFbLogin ===========> $isFbLogin");
       debugPrint("isMobileLogin ===========> $isMobileLogin");
+            debugPrint("isAdsCoin ===========> $isAdsCoin");
 
         debugPrint("appDescription ===========> $appDescription");
         /* Get Ads Init */

@@ -5,13 +5,13 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-  static const String baseurl = 'https://captainadmin.ottsnap.in/api/';
-  static const String dynamicBaseUrl = 'https://captainplay.in/';
-  static const String baseurlwithoutapi = 'https://captainadmin.ottsnap.in';
-  static String appName = "CAPTAIN PLAY";
-  static String appPackageName = "com.ott.captaintvott";
+  static const String baseurl = 'https://stage.ottsnap.com/api/';
+  static const String dynamicBaseUrl = 'https://omtvlive.in/';
+  static const String baseurlwithoutapi = 'https://omtv.ottsnap.in';
+  static String appName = "OM TV";
+  static String appPackageName = "com.blackboardfilms.omtv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 29;
+  static double curentAppVersion = 45;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -29,7 +29,7 @@ class Constant {
       "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
   static String fbLink =
-      "https://www.facebook.com/captainBhojpuri?sfnsn=wiwspwa&mibextid=RUbZ1f";
+      "";
 
   static String InstaLink = "";
   static String youtubeLink = "";

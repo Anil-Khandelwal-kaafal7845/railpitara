@@ -74,9 +74,9 @@ class _AboutPrivacyTermsState extends State<AboutPrivacyTerms> {
         body: Column(
           children: [
             /* AdMob Banner */
-            Container(
-              child: Utils.showBannerAd(context),
-            ),
+            // Container(
+            //   child: Utils.showBannerAd(context),
+            // ),
             Expanded(
               child: setWebView(),
             ),

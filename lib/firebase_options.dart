@@ -65,6 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'captain-tv-ott.appspot.com',
     androidClientId: '38978885550-8n8322uhapj9u0unj5clonehuinjdkm3.apps.googleusercontent.com',
     iosClientId: '38978885550-jt3prmlksjet8a19ffk71d7eda0raf98.apps.googleusercontent.com',
-    iosBundleId: 'com.ott.captaintvott',
+    iosBundleId: 'com.blackboardfilms.omtv',
   );
 }

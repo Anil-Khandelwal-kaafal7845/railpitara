@@ -4,6 +4,7 @@ import 'dart:math';
 // import 'package:dtlive/web_js/js_helper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/main.dart';
+import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
@@ -66,7 +67,7 @@ class Home extends StatefulWidget {
 
 ForceUpdatemodel? forceUpdateData;
 
-class HomeState extends State<Home> {
+class HomeState extends State<Home> with RouteAware{
   // final JSHelper _jsHelper = JSHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
@@ -138,6 +139,7 @@ class HomeState extends State<Home> {
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
 
     await generalProvider.getPages();
+    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
 
     isSwitched = await sharedPref.readBool("PUSH");
     debugPrint('getUserData isSwitched ==> $isSwitched');
@@ -149,8 +151,10 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
+    print("-----${Constant.userID}");
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     getUserData();
+    
 
     fetchForceUpdateData();
 
@@ -178,6 +182,13 @@ class HomeState extends State<Home> {
       });
       checkForUpdate();
     });
+  }
+
+   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Register this route with the RouteObserver
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   checkForUpdate() async {
@@ -287,6 +298,7 @@ class HomeState extends State<Home> {
   _getData() async {
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
+    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
     findProvider = Provider.of<FindProvider>(context, listen: false);
     if (!homeProvider.loading) {
       if (homeProvider.sectionTypeModel.status == 200 &&
@@ -392,7 +404,20 @@ class HomeState extends State<Home> {
 
   @override
   void dispose() {
+        routeObserver.unsubscribe(this);
+
     super.dispose();
+  }
+
+   @override
+  void didPopNext() {
+    // Called when returning to this screen
+    _fetchWalletBalance();
+  }
+
+  void _fetchWalletBalance() async {
+    await homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
+    setState(() {});
   }
 
   _scrollToCurrent() {
@@ -415,6 +440,7 @@ class HomeState extends State<Home> {
   },
 );
     return Scaffold(
+      
       key: _scaffoldKey,
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -432,126 +458,47 @@ class HomeState extends State<Home> {
           },
         ),
         actions: [
+
+
+
+
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Find()),
+                MaterialPageRoute(builder: (context) => CoinStoreScreen()),
               );
             },
-            child: Padding(
+            child: 
+            Padding(
               padding: const EdgeInsets.only(right: 15),
-              child: Image.asset(
-                "assets/images/ic_find.png",
-                width: 17,
-                height: 17,
-                color: white,
+              child: Row(
+                children: [
+                  Image.asset(
+                "assets/images/coin.png",
+                width: 40,
+                height: 40,
+                // color: white,
               ),
+              
+Constant.userID != null
+          ? Text(
+              "${homeProvider.userWalletBalanceModel?.balance ?? ''}",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          : SizedBox.shrink(),         
+                ],
+              )
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: PopupMenuButton<type.Result>(
-              offset: const Offset(0, 70),
-              color: Colors.black54,
-              itemBuilder: (context) {
-                List<bool> tempSelectedLanguages = List.generate(
-                  findProvider.langaugeModel.result!.length,
-                  (index) => selectedLanguages[index],
-                );
-                return [
-                  PopupMenuItem(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.33,
-                      child: StatefulBuilder(
-                        builder: (context, setState) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              for (int i = 0;
-                                  i < findProvider.langaugeModel.result!.length;
-                                  i++)
-                                Theme(
-                                  data: ThemeData(
-                                    unselectedWidgetColor: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 0,
-                                        horizontal: 0), // Reduce padding
-                                    child: CheckboxListTile(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              5), // Reduce horizontal padding
-                                      dense: true,
-                                      title: Text(
-                                        findProvider
-                                            .langaugeModel.result![i].name!,
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 14),
-                                      ),
-                                      value: tempSelectedLanguages[i],
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          tempSelectedLanguages[i] = value!;
-                                        });
-                                      },
-                                      autofocus: true,
-                                      activeColor: primaryDark,
-                                    ),
-                                  ),
-                                ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: primaryDark,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedLanguages =
-                                        List.from(tempSelectedLanguages);
-                                  });
-                                  selectedLanguageIds.clear();
-                                  for (int i = 0;
-                                      i < tempSelectedLanguages.length;
-                                      i++) {
-                                    if (tempSelectedLanguages[i]) {
-                                      selectedLanguageIds.add(
-                                        findProvider.langaugeModel.result![i].id
-                                            .toString(),
-                                      );
-                                    }
-                                  }
-                                  getTabData(
-                                    homeProvider.selectedIndex,
-                                    homeProvider.sectionTypeModel.result,
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'Submit',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ];
-              },
-              child: Image.asset(
-                "assets/images/ic_language.png",
-                width: 20,
-                height: 20,
-                color: white,
-              ),
-            ),
-          )
+
 
           // Padding(
-          //   padding: const EdgeInsets.only(right: 15),
+          //   padding: const EdgeInsets.only(right: 10),
           //   child: PopupMenuButton<type.Result>(
           //     offset: const Offset(0, 70),
           //     color: Colors.black54,
@@ -563,12 +510,12 @@ class HomeState extends State<Home> {
           //       return [
           //         PopupMenuItem(
           //           child: SizedBox(
-          //             width: MediaQuery.of(context).size.width *
-          //                 0.55, // Adjust width here
+          //             width: MediaQuery.of(context).size.width * 0.33,
           //             child: StatefulBuilder(
           //               builder: (context, setState) {
           //                 return Column(
           //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   mainAxisAlignment: MainAxisAlignment.center,
           //                   children: [
           //                     for (int i = 0;
           //                         i < findProvider.langaugeModel.result!.length;
@@ -577,21 +524,30 @@ class HomeState extends State<Home> {
           //                         data: ThemeData(
           //                           unselectedWidgetColor: Colors.white,
           //                         ),
-          //                         child: CheckboxListTile(
-          //                           title: Text(
-          //                             findProvider
-          //                                 .langaugeModel.result![i].name!,
-          //                             style: const TextStyle(
-          //                                 color: Colors.white, fontSize: 15),
+          //                         child: Padding(
+          //                           padding: const EdgeInsets.symmetric(
+          //                               vertical: 0,
+          //                               horizontal: 0), // Reduce padding
+          //                           child: CheckboxListTile(
+          //                             contentPadding: EdgeInsets.symmetric(
+          //                                 horizontal:
+          //                                     5), // Reduce horizontal padding
+          //                             dense: true,
+          //                             title: Text(
+          //                               findProvider
+          //                                   .langaugeModel.result![i].name!,
+          //                               style: const TextStyle(
+          //                                   color: Colors.white, fontSize: 14),
+          //                             ),
+          //                             value: tempSelectedLanguages[i],
+          //                             onChanged: (bool? value) {
+          //                               setState(() {
+          //                                 tempSelectedLanguages[i] = value!;
+          //                               });
+          //                             },
+          //                             autofocus: true,
+          //                             activeColor: primaryDark,
           //                           ),
-          //                           value: tempSelectedLanguages[i],
-          //                           onChanged: (bool? value) {
-          //                             setState(() {
-          //                               tempSelectedLanguages[i] = value!;
-          //                             });
-          //                           },
-          //                           autofocus: true,
-          //                           activeColor: primaryDark,
           //                         ),
           //                       ),
           //                     ElevatedButton(
@@ -641,6 +597,7 @@ class HomeState extends State<Home> {
           //     ),
           //   ),
           // )
+
         ],
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
@@ -685,8 +642,7 @@ class HomeState extends State<Home> {
                       titleMultilang: true,
                       subTitleMultilang: true,
                       onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
+                  
                           if (Constant.userID != null) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -700,9 +656,11 @@ class HomeState extends State<Home> {
                               ),
                             );
                           }
-                        });
+                 
                       },
                     ),
+                   
+                   
                     // _buildLine(),
                     // _buildLine(16.0, 16.0),
 
@@ -740,8 +698,7 @@ class HomeState extends State<Home> {
                       titleMultilang: true,
                       subTitleMultilang: true,
                       onClick: () {
-                        AdHelper.showFullscreenAd(
-                            context, Constant.rewardAdType, () async {
+                      
                           if (Constant.userID != null) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -755,7 +712,7 @@ class HomeState extends State<Home> {
                               ),
                             );
                           }
-                        });
+                      
                       },
                     ),
                     // _buildLine(),
@@ -768,8 +725,7 @@ class HomeState extends State<Home> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                          () async {
+                    
                         if (Constant.userID != null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -783,10 +739,41 @@ class HomeState extends State<Home> {
                             ),
                           );
                         }
-                      });
+                     
                     },
                   ),
                 ),
+
+                    /* Coin--- */
+                Visibility(
+                  visible: forceUpdateData?.result?.showPackage == 1,
+                  child: _buildSettingButton(
+                    title: 'coin',
+                   
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () {
+                     
+           
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CoinStoreScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+                 
+                    },
+                  ),
+                ),
+
+              
                     
                     // _buildLine(),
 
@@ -798,8 +785,7 @@ class HomeState extends State<Home> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                      AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                          () async {
+                    
                         if (Constant.userID != null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -813,7 +799,7 @@ class HomeState extends State<Home> {
                             ),
                           );
                         }
-                      });
+                   
                     },
                   ),
                 ),
@@ -1883,12 +1869,11 @@ class HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(25),
                   onTap: () async {
                     debugPrint("index ===========> $index");
-                    AdHelper.showFullscreenAd(
-                        context, Constant.interstialAdType, () async {
+                  
                       if (kIsWeb) _onItemTapped("");
                       await getTabData(
                           index, homeProvider.sectionTypeModel.result);
-                    });
+                 
                   },
                   child: Stack(
                     children: [
@@ -1978,7 +1963,7 @@ class HomeState extends State<Home> {
               ),
 
               /* AdMob Banner */
-              Utils.showBannerAd(context),
+         
               const SizedBox(height: 5.5),
 
               /* Continue Watching & Remaining Sections */
@@ -2097,7 +2082,7 @@ class HomeState extends State<Home> {
 
   //             /* AdMob Banner */
 
-  //             Utils.showBannerAd(context),
+  //           
   //             const SizedBox(height: 5.5),
 
   //             /* Continue Watching & Remaining Sections */
@@ -2222,20 +2207,7 @@ class HomeState extends State<Home> {
                               builder: (context) => LoginSocial()),
                         );
                       } else {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => PlayerVideo(
-                        //           '',
-                        //           0,
-                        //           0,
-                        //           typeId,
-                        //           0,
-                        //           sectionBannerList?[index].videoUrl,
-                        //           0,
-                        //           "",
-                        //           "")),
-                        // );
+                       
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => TestPlayerWeb(
                                 loadURL: sectionBannerList?[index].videoUrl!)));
@@ -2788,20 +2760,21 @@ class HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: MyText(
-                      color: white,
-                      text: sectionList[index].title.toString(),
-                      textalign: TextAlign.center,
-                      fontsizeNormal: 14,
-                      fontweight: FontWeight.w600,
-                      fontsizeWeb: 16,
-                      multilanguage: false,
-                      maxline: 1,
-                      overflow: TextOverflow.ellipsis,
-                      fontstyle: FontStyle.normal,
-                    ),
-                  ),
+                          padding: const EdgeInsets.fromLTRB(20, 9, 20, 7),
+                          child: MyTextTWO(
+                            maxline:2 ,
+                            color: white,
+                            text: sectionList[index].title.toString(),
+                            textalign: TextAlign.left,
+                            fontsizeNormal: 14,
+                            fontweight: FontWeight.w600,
+                            fontsizeWeb: 16,
+                            multilanguage: false,
+                            overflow: TextOverflow.ellipsis,
+                            fontstyle: FontStyle.normal,
+                           
+                          ),
+                        ),
                   if (!isGenreOrLanguage)
                     GestureDetector(
                       onTap: () {
@@ -4840,10 +4813,7 @@ class HomeState extends State<Home> {
     );
 
     if (!mounted) return;
-    AdHelper.showFullscreenAd(
-      context,
-      Constant.interstialAdType,
-      () async {
+   
         dynamic isContinue = await Utils.openPlayer(
           context: context,
           playType: (continueWatchingList?[index].videoType ?? 0) == 2
@@ -4869,8 +4839,7 @@ class HomeState extends State<Home> {
             setState(() {});
           });
         }
-      },
-    );
+     
   }
 
   Future<bool> _checkSubsRentLogin(

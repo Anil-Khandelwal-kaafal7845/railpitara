@@ -1288,6 +1288,7 @@ class AllPaymentState extends State<AllPayment>
     }
   }
 
+
   void _initializeRazorpay() async {
     if (paymentProvider.paymentOptionModel.result?.razorpay != null) {
       /* Check Keys */
@@ -1315,7 +1316,6 @@ class AllPaymentState extends State<AllPayment>
         name: "Razorpay open",
         parameters: {
           "user_id": Constant.userID,
-          "PayType":widget.payType,
           "price":widget.price,
           "name":widget.itemTitle
         },
@@ -1392,7 +1392,11 @@ class AllPaymentState extends State<AllPayment>
     await paymentProvider.setCurrentPayment("");
   }
 
+
+
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+
+
 
      analytics.logEvent(
         name: "Razorpay Payment Success",
@@ -1433,6 +1437,7 @@ class AllPaymentState extends State<AllPayment>
           widget.typeId, widget.videoType, "external");
     }
   }
+  
   /* ********* Razorpay END ********* */
 
   /* ********* Paytm START ********* */

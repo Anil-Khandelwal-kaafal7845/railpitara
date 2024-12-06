@@ -9,6 +9,7 @@ import 'package:dtlive/provider/castdetailsprovider.dart';
 import 'package:dtlive/provider/channelsectionprovider.dart';
 import 'package:dtlive/provider/showdownloadprovider.dart';
 import 'package:dtlive/provider/subhistoryprovider.dart';
+import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/provider/videodownloadprovider.dart';
 import 'package:dtlive/provider/episodeprovider.dart';
 import 'package:dtlive/provider/findprovider.dart';
@@ -52,7 +53,7 @@ Future<void> main() async {
   }
   
   await Firebase.initializeApp(
-      name: 'captain-tv-ott', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'omtv-32b09', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',
@@ -116,6 +117,9 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => VideoDetailsProvider()),
         ChangeNotifierProvider(create: (_) => VideoDownloadProvider()),
         ChangeNotifierProvider(create: (_) => WatchlistProvider()),
+        ChangeNotifierProvider(create: (_) => WalletProvider()),
+
+
       ],
       child: const MyApp(),
     ),

@@ -104,9 +104,9 @@ class VideosByIDState extends State<VideosByID> {
               ),
             ),
             /* AdMob Banner */
-            Container(
-              child: Utils.showBannerAd(context),
-            ),
+            // Container(
+            //   child: Utils.showBannerAd(context),
+            // ),
           ],
         ),
       ),

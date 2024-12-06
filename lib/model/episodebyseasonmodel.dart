@@ -59,6 +59,7 @@ class Result {
     String? subtitle2;
     String? subtitleLang3;
     String? subtitle3;
+    dynamic? isadshow;
     int? view;
     int? status;
     DateTime? createdAt;
@@ -83,6 +84,7 @@ class Result {
         this.videoType,
         this.name,
         this.thumbnail,
+        this.isadshow,
         this.landscape,
         this.fullWidth,
         this.description,
@@ -128,6 +130,7 @@ class Result {
         videoType: json["video_type"],
         name: json["name"],
         thumbnail: json["thumbnail"],
+        isadshow: json["is_ads_show"],
         landscape: json["landscape"],
         fullWidth: json["full_width"],
         description: json["description"],
@@ -173,6 +176,7 @@ class Result {
         "video_type": videoType,
         "name": name,
         "thumbnail": thumbnail,
+        "is_ads_show":isadshow,
         "landscape": landscape,
         "full_width": fullWidth,
         "description": description,

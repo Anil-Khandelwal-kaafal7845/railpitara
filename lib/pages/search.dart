@@ -299,7 +299,7 @@ class SearchState extends State<Search> {
                         ),
 
                         /* AdMob Banner */
-                        Utils.showBannerAd(context),
+                        // Utils.showBannerAd(context),
                         const SizedBox(height: 22),
                         searchProvider.isVideoClick
                             ? _buildVideoUI()

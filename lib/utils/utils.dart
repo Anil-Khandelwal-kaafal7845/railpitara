@@ -39,14 +39,7 @@ import 'package:url_launcher/url_launcher.dart';
 // import 'package:screen_protector/screen_protector.dart';
 
 class Utils {
-  static void enableScreenCapture() async {
-    // await ScreenProtector.preventScreenshotOn();
-    // if (Platform.isIOS) {
-    //   await ScreenProtector.protectDataLeakageWithBlur();
-    // } else if (Platform.isAndroid) {
-    //   await ScreenProtector.protectDataLeakageOn();
-    // }
-  }
+  
 
   static Widget showBannerAd(BuildContext context) {
     if (!kIsWeb) {
@@ -74,6 +67,8 @@ class Utils {
       AdHelper.createRewardedAd();
     }
   }
+
+
 
   static showToast(String msg) {
     Fluttertoast.showToast(

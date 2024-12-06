@@ -120,9 +120,9 @@ class _MyWatchlistState extends State<MyWatchlist> {
               ),
             ),
             /* AdMob Banner */
-            Container(
-              child: Utils.showBannerAd(context),
-            ),
+            // Container(
+            //   child: Utils.showBannerAd(context),
+            // ),
           ],
         ),
       ),
@@ -680,8 +680,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           onTap: () async {
                             Navigator.pop(context);
                             if (!mounted) return;
-                            AdHelper.showFullscreenAd(
-                                context, Constant.interstialAdType, () async {
+                         
                               Utils.openPlayer(
                                   context: context,
                                   playType: "Trailer",
@@ -705,7 +704,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                                       watchlistProvider.watchlistModel.result?[position].trailerType ?? "",
                                   videoThumb: watchlistProvider.watchlistModel.result?[position].landscape ?? "",
                                   vStopTime: 0);
-                            });
+                        
                           },
                           child: _buildDialogItems(
                             icon: "ic_borderplay.png",
@@ -1072,7 +1071,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
     );
 
     if (!mounted) return;
-    AdHelper.showFullscreenAd(context, Constant.interstialAdType, () async {
+   
       dynamic isContinue = await Utils.openPlayer(
           context: context,
           playType: playType ?? "",
@@ -1098,7 +1097,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
       if (isContinue != null && isContinue == true) {
         await watchlistProvider.getWatchlist();
       }
-    });
+    
   }
   /* ========= Open Player ========= */
 

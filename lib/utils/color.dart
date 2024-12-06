@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-const colorPrimary = Color(0xffFDF21B);
+const colorPrimary = Color(0xffED7339);
 const colorPrimaryDark = Color(0xff0e0e16);
-const colorAccent = Color(0xffFDF21B);
+const colorAccent = Color(0xffED7339);
 const subscriblue = Color(0xff03084C);
 const subscrimain = Color(0xffFDAF5A);
 const subscridark = Color(0xffD57648);
@@ -14,11 +14,11 @@ const topTen =Color(0xfffe9eced);
 const colorGraidentLeft = Color(0xffF9D1A0);
 const colorGraidentRight = Color(0xffFFFFFF);
 
-const complimentryColor = Color(0xffFDF21B);
-const primaryLight = Color(0xffFDF21B);
-const primaryDark =Color(0xffFDF21B);
-const primaryTras75 = Color(0xffFDF21B);
-const primaryTras50 = Color(0xffFDF21B);
+const complimentryColor = Color(0xffED7339);
+const primaryLight = Color(0xffFA9442);
+const primaryDark =Color(0xffED7339);
+const primaryTras75 = Color(0xffED7339);
+const primaryTras50 = Color(0xffED7339);
 const primaryTras25 = Color(0x40bafa34);
 const primaryTras10 = Color(0x1Abafa34);
 const primaryTras5 = Color(0x0Dbafa34);
@@ -64,4 +64,7 @@ const lightGray = Color(0xffc3c3c3);
 const white = Color(0xffffffff);
 const whiteLight = Color(0xCCFAF9F6);
 const whiteTransparent = Color(0x50FFFFFF);
+
+
+
 

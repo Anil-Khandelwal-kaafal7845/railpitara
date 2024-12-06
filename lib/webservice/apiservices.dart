@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dtlive/model/addCoinModel.dart';
 import 'package:dtlive/model/auditionmodel.dart';
 import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/browsebyartistmodel.dart';
 import 'package:dtlive/model/castdetailmodel.dart';
+import 'package:dtlive/model/coinpackagesmodel.dart';
 import 'package:dtlive/model/couponmodel.dart';
 import 'package:dtlive/model/force_update_model.dart';
 import 'package:dtlive/model/historymodel.dart';
@@ -27,8 +29,10 @@ import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectiontypemodel.dart';
 import 'package:dtlive/model/successmodel.dart';
+import 'package:dtlive/model/userwalletmodel.dart';
 import 'package:dtlive/model/videobyidmodel.dart';
 import 'package:dtlive/model/viewallmodel.dart';
+import 'package:dtlive/model/wallettransction.dart';
 import 'package:dtlive/model/watchlistmodel.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +79,7 @@ class HomeScreenRepo {
 
 class ApiService {
   String baseUrl = Constant.baseurl;
+  String StagebaseUrl = "https://stage.ottsnap.com/api/" ;
 
   late Dio dio;
 
@@ -927,4 +932,199 @@ class ApiService {
     historyModel = HistoryModel.fromJson(response.data);
     return historyModel;
   }
+
+// //get user wallet balance----API
+
+
+// get user wallet balance----API
+Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
+  String endpoint = "get-user-wallet-balance";
+  
+  try {
+    Response response = await dio.post(
+      '$StagebaseUrl$endpoint',
+      data: {
+        'user_id': userId,
+      },
+    );
+
+    // Print the full response data
+    print("Response Data: ${response.data}");
+
+    if (response.statusCode == 200) {
+      // Assuming UserWalletBalanceModel has a 'balance' field
+      var walletBalance = UserWalletBalanceModel.fromJson(response.data);
+      
+      // Print the wallet balance
+      print("Wallet Balance: ${walletBalance.balance}");
+
+      return walletBalance;
+    } else {
+      throw Exception("Failed to fetch wallet balance");
+    }
+  } catch (e) {
+    print("Error fetching wallet balance: $e");
+    rethrow; // Re-throw the error after logging
+  }
+}
+
+
+//get the coin after watch full ads--
+Future<UserWalletBalanceModel> addCoinsAfterWatchAd(String userId, dynamic videoId ,dynamic showId ,dynamic tokenValue) async {
+    String endpoint = "add-coin-on-watch-ads";
+    
+    try {
+      Response response = await dio.post(
+        '$StagebaseUrl$endpoint',
+        data: {
+          'user_id': userId,
+          'video_id': videoId,
+          'show_id': showId,
+          'token_from': 'watch_ads',
+          'ad_url': 'test.com',
+          'no_of_token': tokenValue, 
+        },
+      );
+      print("Response Data: ${response.data}");
+
+      if (response.statusCode == 200) {
+        // Handle the response and update the wallet balance
+        var walletBalance = UserWalletBalanceModel.fromJson(response.data);
+        print("New Wallet Balance: ${walletBalance.balance}");
+        return walletBalance;
+      } else {
+        throw Exception("Failed to add coins after watching ad");
+      }
+    } catch (e) {
+      print("Error adding coins after watching ad: $e");
+      rethrow; // Re-throw the error after logging
+    }
+  }
+
+
+//get coin poackages ----
+Future<List<CoinPackage>> getCoinPackages() async {
+    try {
+      final response = await dio.post(
+        'https://stage.ottsnap.com/api/get-coin-package',
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response data and map it to the model
+        List<dynamic> data = response.data['result'];
+        return data.map((coin) => CoinPackage.fromJson(coin)).toList();
+      } else {
+        throw Exception("Failed to load coin packages");
+      }
+    } catch (e) {
+      print("Error fetching coin packages: $e");
+      rethrow;
+    }
+  }
+
+//wallet transctions----
+Future<List<WalletTransaction>> getWalletHistory(String userId) async {
+    try {
+      final response = await dio.post(
+        'https://stage.ottsnap.com/api/user-wallet-history',
+        data: {'user_id': userId},
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data['result'];
+        return data
+            .map((transaction) => WalletTransaction.fromJson(transaction))
+            .toList();
+      } else {
+        throw Exception("Failed to load wallet history");
+      }
+    } catch (e) {
+      print("Error fetching wallet history: $e");
+      rethrow;
+    }
+  }
+
+//purches coin and update the coin api ----
+// ApiService class
+
+Future<bool> addCoinTransaction({
+  required String userId,
+  required int coinPackageId,
+  required dynamic amount,
+  required String paymentId,
+  required String currencyCode,
+  required String orderStatus,
+  required String orderId,
+  required String paymentMethod,
+}) async {
+  try {
+    final response = await dio.post(
+      'https://stage.ottsnap.com/api/add-coin-transaction',
+      data: {
+        "user_id": userId,
+        "coin_package_id": coinPackageId,
+        "amount": amount,
+        "payment_id": paymentId,
+        "currency_code": currencyCode,
+        "unique_id": "",
+        "order_status": orderStatus,
+        "order_id": orderId,
+        "payment_method": paymentMethod,
+      },
+    );
+  print("Response Data: ${response.data}");
+    // If status code is 200, return true (success)
+    if (response.statusCode == 200) {
+      print("Coin transaction added successfully: ${response.data}");
+      return true;
+    } else {
+      print("Failed to add coin transaction: ${response.statusCode}");
+      return false;
+    }
+  } catch (e) {
+    print("Error in addCoinTransaction: $e");
+    return false; // Return false in case of error
+  }
+}
+
+
+// Future<void> addCoinTransaction({
+//   required String userId,
+//   required int coinPackageId,
+//   required dynamic amount,
+//   required String paymentId,
+//   required String currencyCode,
+//   required String orderStatus,
+//   required String orderId,
+//   required String paymentMethod,
+// }) async {
+//   try {
+//     final response = await dio.post(
+//       'https://stage.ottsnap.com/api/add-coin-transaction',
+//       data: {
+//         "user_id": userId,
+//         "coin_package_id": coinPackageId,
+//         "amount": amount,
+//         "payment_id": paymentId,
+//         "currency_code": currencyCode,
+//         "unique_id": "",
+//         "order_status": orderStatus,
+//         "order_id": orderId,
+//         "payment_method": paymentMethod,
+//       },
+//     );
+
+//     if (response.statusCode == 200) {
+//       print("Coin transaction added successfully: ${response.data}");
+//     } else {
+//       throw Exception("Failed to add coin transaction: ${response.statusCode}");
+//     }
+//   } catch (e) {
+//     print("Error in addCoinTransaction: $e");
+//     rethrow;
+//   }
+// }
+
+
+
 }

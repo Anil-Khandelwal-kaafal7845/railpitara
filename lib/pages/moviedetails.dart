@@ -3,6 +3,8 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/mydownloads.dart';
+import 'package:dtlive/provider/generalprovider.dart';
+import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/provider/videodownloadprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
@@ -65,10 +67,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   List<Cast>? directorList;
   late VideoDetailsProvider videoDetailsProvider;
   late HomeProvider homeProvider;
+  late GeneralProvider generalProvider;
+  late WalletProvider walletProvider;
   Map<String, String> qualityUrlList = <String, String>{};
   late DateTime startTime;
   @override
   void initState() {
+   generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     print("HEY>>>>>>>>>>>>>>");
     startTime = DateTime.now();
     if (!kIsWeb) {
@@ -79,6 +84,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     }
 
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
+     walletProvider = Provider.of<WalletProvider>(context, listen: false);
     videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     downloadProvider =
@@ -848,9 +854,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
-                                    AdHelper.showFullscreenAd(
-                                        context, Constant.rewardAdType,
-                                        () async {
+                                   
                                       if (Constant.userID != null) {
                                         final isCurrentlyBookmarked =
                                             videoDetailsProvider
@@ -893,7 +897,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           ),
                                         );
                                       }
-                                    });
+                           
                                   },
                                   borderRadius: BorderRadius.circular(5),
                                   child: Consumer<VideoDetailsProvider>(
@@ -1162,7 +1166,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     ),
 
                     /* AdMob Banner */
-                    Utils.showBannerAd(context),
+                    // Utils.showBannerAd(context),
                     const SizedBox(height: 10),
 
                     /* Related ~ More Details */
@@ -2329,7 +2333,24 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () async {
-            openPlayer("Video");
+
+             if (Constant.userID != null) {
+      
+      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+        // After ad is watched, call the API to add coins
+        await walletProvider.addCoinsAfterWatchAd(Constant.userID!, videoDetailsProvider.sectionDetailModel.result?.id ,0 ,generalProvider.isAdsCoin);
+    
+           openPlayer("Video");
+      });
+    } else {
+      // User is not logged in, navigate to login screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const LoginSocial(),
+        ),
+      );
+    }
+    
           },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
@@ -2455,7 +2476,23 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () {
-            openPlayer("Video");
+           
+             if (Constant.userID != null) {
+      
+      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+        // After ad is watched, call the API to add coins
+         await walletProvider.addCoinsAfterWatchAd(Constant.userID!, videoDetailsProvider.sectionDetailModel.result?.id ,0 ,generalProvider.isAdsCoin); 
+    
+           openPlayer("Video");
+      });
+    } else {
+      // User is not logged in, navigate to login screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const LoginSocial(),
+        ),
+      );
+    }
           },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
@@ -4012,7 +4049,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       }
       return;
     }
-    AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+   
       dynamic isContinue;
       isContinue = await Utils.openPlayer(
           context: context,
@@ -4035,7 +4072,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       if (isContinue != null && isContinue == true) {
         _getData();
       }
-    });
+
   }
   /* ========= Open Player ========= */
 

@@ -1,3 +1,5 @@
+import 'package:dtlive/provider/generalprovider.dart';
+import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
@@ -22,6 +24,7 @@ import 'package:provider/provider.dart';
 class EpisodeBySeason extends StatefulWidget {
   final int? videoId, upcomingType, typeId, seasonPos;
   final List<Session>? seasonList;
+  
   final Result? sectionDetails;
   const EpisodeBySeason(this.videoId, this.upcomingType, this.typeId,
       this.seasonPos, this.seasonList, this.sectionDetails,
@@ -34,13 +37,18 @@ class EpisodeBySeason extends StatefulWidget {
 
 class _EpisodeBySeasonState extends State<EpisodeBySeason> {
   late EpisodeProvider episodeProvider;
+  late GeneralProvider generalProvider;
   late ShowDetailsProvider showDetailsProvider;
+  late WalletProvider walletProvider;
   String? finalVUrl = "";
   Map<String, String> qualityUrlList = <String, String>{};
 
   @override
   void initState() {
+   generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
+
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
     getAllEpisode();
@@ -103,12 +111,49 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                               borderRadius: BorderRadius.circular(16),
                               focusColor: white.withOpacity(0.5),
                               onTap: () async {
-                                debugPrint("===> index $index");
-                                openPlayer(
-                                  "Show",
-                                  index,
-                                  episodeProvider.episodeBySeasonModel.result,
-                                );
+                                // Check if the user is logged in
+                                if (Constant.userID != null) {
+                                  // Get the value of isadshow from the episode data
+                                  bool isAdShow = episodeProvider
+                                          .episodeBySeasonModel
+                                          .result?[index]
+                                          .isadshow ==
+                                      1;
+
+                                  if (isAdShow) {
+                                    // If isadshow is 1, show the ad
+                                    AdHelper.showFullscreenAd(
+                                        context, Constant.rewardAdType,
+                                        () async {
+                                      // After the ad is watched, call the API to add coins
+                                      await walletProvider.addCoinsAfterWatchAd(Constant.userID!,0,episodeProvider
+                                          .episodeBySeasonModel
+                                          .result?[index].showId ,generalProvider.isAdsCoin); 
+                                      // Navigate to player Edit screen after adding coins
+                                      openPlayer(
+                                        "Show",
+                                        index,
+                                        episodeProvider
+                                            .episodeBySeasonModel.result,
+                                      );
+                                    });
+                                  } else {
+                                    // If isadshow is 0, directly navigate to player Edit screen without ad
+                                    openPlayer(
+                                      "Show",
+                                      index,
+                                      episodeProvider
+                                          .episodeBySeasonModel.result,
+                                    );
+                                  }
+                                } else {
+                                  // If the user is not logged in, navigate to the login screen
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginSocial(),
+                                    ),
+                                  );
+                                }
                               },
                               child: Container(
                                 width: 160,
@@ -141,38 +186,6 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                                 ),
                               ),
                             ),
-
-                            // InkWell(
-                            //   borderRadius: BorderRadius.circular(16),
-                            //   focusColor: white.withOpacity(0.5),
-                            //   onTap: () async {
-                            //     debugPrint("===> index $index");
-                            //     openPlayer(
-                            //         "Show",
-                            //         index,
-                            //         episodeProvider
-                            //             .episodeBySeasonModel.result);
-                            //   },
-                            //   child: Container(
-                            //     width: 32,
-                            //     height: 32,
-                            //     alignment: Alignment.centerLeft,
-                            //     padding: const EdgeInsets.all(2.0),
-                            //     decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(4),
-                            //     ),
-                            //     child: ClipRRect(
-                            //       borderRadius: BorderRadius.circular(4),
-                            //       child: MyImage(
-                            //         fit: BoxFit.cover,
-                            //         height: 32,
-                            //         width: 32,
-                            //         imagePath: "play.png",
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-
                             (episodeProvider.episodeBySeasonModel.result?[index]
                                             .videoDuration !=
                                         null &&
@@ -265,123 +278,6 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                       ],
                     ),
                   ),
-
-                  // ScrollOnExpand(
-                  //   scrollOnExpand: true,
-                  //   scrollOnCollapse: false,
-                  //   child:
-
-                  //   ExpandablePanel(
-                  //     theme: const ExpandableThemeData(
-                  //       headerAlignment: ExpandablePanelHeaderAlignment.center,
-                  //       tapBodyToCollapse: true,
-                  //       tapBodyToExpand: true,
-                  //     ),
-                  //     collapsed:
-
-                  //     // expanded: Column(
-                  //     //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //     //   children: <Widget>[
-                  //     //     MyNetworkImage(
-                  //     //       fit: BoxFit.cover,
-                  //     //       imgHeight: Dimens.epiPoster,
-                  //     //       imgWidth: MediaQuery.of(context).size.width,
-                  //     //       imageUrl: (episodeProvider.episodeBySeasonModel
-                  //     //               .result?[index].landscape ??
-                  //     //           ""),
-                  //     //     ),
-                  //     //     Container(
-                  //     //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 8),
-                  //     //       child: MyText(
-                  //     //         color: white,
-                  //     //         text: episodeProvider.episodeBySeasonModel
-                  //     //                 .result?[index].name ??
-                  //     //             "",
-                  //     //         textalign: TextAlign.start,
-                  //     //         fontstyle: FontStyle.normal,
-                  //     //         fontsizeNormal: 14,
-                  //     //         fontsizeWeb: 14,
-                  //     //         maxline: 2,
-                  //     //         overflow: TextOverflow.ellipsis,
-                  //     //         fontweight: FontWeight.w600,
-                  //     //       ),
-                  //     //     ),
-                  //     //     Container(
-                  //     //       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  //     //       child: MyText(
-                  //     //         color: whiteLight,
-                  //     //         text: episodeProvider.episodeBySeasonModel
-                  //     //                 .result?[index].description ??
-                  //     //             "",
-                  //     //         textalign: TextAlign.start,
-                  //     //         fontstyle: FontStyle.normal,
-                  //     //         fontsizeNormal: 12,
-                  //     //         fontsizeWeb: 12,
-                  //     //         maxline: 5,
-                  //     //         overflow: TextOverflow.ellipsis,
-                  //     //         fontweight: FontWeight.w500,
-                  //     //       ),
-                  //     //     ),
-                  //     //     Container(
-                  //     //       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  //     //       child: Row(
-                  //     //         mainAxisSize: MainAxisSize.max,
-                  //     //         children: [
-                  //     //           MyText(
-                  //     //             color: otherColor,
-                  //     //             text: ((episodeProvider
-                  //     //                             .episodeBySeasonModel
-                  //     //                             .result?[index]
-                  //     //                             .videoDuration ??
-                  //     //                         0) >
-                  //     //                     0)
-                  //     //                 ? Utils.convertTimeToText(episodeProvider
-                  //     //                         .episodeBySeasonModel
-                  //     //                         .result?[index]
-                  //     //                         .videoDuration ??
-                  //     //                     0)
-                  //     //                 : "-",
-                  //     //             textalign: TextAlign.start,
-                  //     //             fontsizeNormal: 12,
-                  //     //             fontsizeWeb: 14,
-                  //     //             fontweight: FontWeight.w600,
-                  //     //             maxline: 1,
-                  //     //             overflow: TextOverflow.ellipsis,
-                  //     //             fontstyle: FontStyle.normal,
-                  //     //           ),
-                  //     //           if ((episodeProvider.episodeBySeasonModel
-                  //     //                       .result?[index].isPremium ??
-                  //     //                   0) ==
-                  //     //               1)
-                  //     //             Container(
-                  //     //               margin: const EdgeInsets.only(left: 10),
-                  //     //               child: MyText(
-                  //     //                 color: colorPrimary,
-                  //     //                 text: "primetag",
-                  //     //                 textalign: TextAlign.start,
-                  //     //                 fontsizeNormal: 12,
-                  //     //                 fontsizeWeb: 14,
-                  //     //                 multilanguage: true,
-                  //     //                 fontweight: FontWeight.w600,
-                  //     //                 maxline: 1,
-                  //     //                 overflow: TextOverflow.ellipsis,
-                  //     //                 fontstyle: FontStyle.normal,
-                  //     //               ),
-                  //     //             ),
-                  //     //         ],
-                  //     //       ),
-                  //     //     ),
-                  //     //   ],
-                  //     // ),
-                  //     // builder: (_, collapsed, expanded) {
-                  //     //   return Expandable(
-                  //     //     collapsed: collapsed,
-                  //     //     expanded: expanded,
-                  //     //     theme: const ExpandableThemeData(crossFadePoint: 0),
-                  //     //   );
-                  //     // },
-                  //   ),
-                  // ),
                 ),
               ],
             ),
@@ -434,10 +330,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
     );
   }
 
-   /* ========= Open Player ========= */
+  /* ========= Open Player ========= */
   openPlayer(
-
-
       String playType, int epiPos, List<episode.Result>? episodeList) async {
     if ((episodeList?.length ?? 0) > 0) {
       /* CHECK SUBSCRIPTION */
@@ -492,29 +386,27 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
       );
 
       if (!mounted) return;
-      AdHelper.showFullscreenAd(context, Constant.interstialAdType, () async {
-        dynamic isContinue = await Utils.openPlayer(
-          context: context,
-          playType: "Show",
-          videoId: epiID,
-          videoType: vType,
-          typeId: vTypeID,
-          otherId: showID,
-          videoUrl: epiUrl,
-          trailerUrl: "",
-          uploadType: vUploadType,
-          videoThumb: videoThumb,
-          vStopTime: stopTime,
-          videoLibraryId: showVideoLibraryId,
-          videoUrlVideoId:showVideoUrlId ,
- 
-        );
 
-        debugPrint("isContinue ===> $isContinue");
-        if (isContinue != null && isContinue == true) {
-          await getAllEpisode();
-        }
-      });
+      dynamic isContinue = await Utils.openPlayer(
+        context: context,
+        playType: "Show",
+        videoId: epiID,
+        videoType: vType,
+        typeId: vTypeID,
+        otherId: showID,
+        videoUrl: epiUrl,
+        trailerUrl: "",
+        uploadType: vUploadType,
+        videoThumb: videoThumb,
+        vStopTime: stopTime,
+        videoLibraryId: showVideoLibraryId,
+        videoUrlVideoId: showVideoUrlId,
+      );
+
+      debugPrint("isContinue ===> $isContinue");
+      if (isContinue != null && isContinue == true) {
+        await getAllEpisode();
+      }
     }
   }
 
@@ -616,6 +508,4 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
     }
   }
   /* ========= Open Player ========= */
-
-
 }

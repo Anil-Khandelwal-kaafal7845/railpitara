@@ -327,55 +327,88 @@ class AdHelper {
     _rewardedAd = null;
   }
 
-  // Show Fullscreen Ad Function
-  static showFullscreenAd(
+
+
+   // Show Fullscreen Ad Function
+
+
+    static showFullscreenAd(
       BuildContext context, String adType, VoidCallback callAction) async {
-    bool? isBuy = await Utils.checkPremiumUser();
-    debugPrint("showFullscreenAd isBuy ============> $isBuy");
-    if (isBuy) {
-      callAction();
-      return;
-    }
+    // bool? isBuy = await Utils.checkPremiumUser();
+    // debugPrint("showFullscreenAd isBuy ============> $isBuy");
+    // // if (isBuy) {
+    //   callAction();
+    //   return;
+    // }
+       callAction();
+
     if (!kIsWeb) {
       if (adType == Constant.rewardAdType) {
-        if (((rewardad == "1" && Platform.isAndroid) ||
-                (rewardadIos == "1" && Platform.isIOS)) &&
-            checkRewardAdAndShow()) {
-          debugPrint("rewardedAd add");
-          showRewardedAd(callAction);
-        } else {
-          debugPrint("rewardedAd action Device");
-          callAction();
-        }
+        rewardedAd(context, callAction);
       } else if (adType == Constant.interstialAdType) {
-        if (((interstitalad == "1" && Platform.isAndroid) ||
-                (interstitalIos == "1" && Platform.isIOS)) &&
-            checkInterstialAdAndShow()) {
-          showInterstitialAd(callAction);
-        } else {
-          debugPrint("rewardedAd action Device");
-          callAction();
-        }
+        interstitialAd(context, callAction);
       } else {
-        if (((rewardad == "1" && Platform.isAndroid) ||
-                (rewardadIos == "1" && Platform.isIOS)) &&
-            checkRewardAdAndShow()) {
-          debugPrint("rewardedAd add");
-          showRewardedAd(callAction);
-        } else if (((interstitalad == "1" && Platform.isAndroid) ||
-                (interstitalIos == "1" && Platform.isIOS)) &&
-            checkInterstialAdAndShow()) {
-          showInterstitialAd(callAction);
-        } else {
-          debugPrint("rewardedAd action Device");
-          callAction();
-        }
+        debugPrint("Invalid ad type: $adType");
+        callAction();
       }
     } else {
-      debugPrint("rewardedAd action Device");
+      debugPrint("Web does not support ads");
       callAction();
     }
   }
+
+
+
+  // static showFullscreenAd(
+  //     BuildContext context, String adType, VoidCallback callAction) async {
+  //   bool? isBuy = await Utils.checkPremiumUser();
+  //   debugPrint("showFullscreenAd isBuy ============> $isBuy");
+  //   if (isBuy) {
+  //     callAction();
+  //     return;
+  //   }
+  //   if (!kIsWeb) {
+  //     if (adType == Constant.rewardAdType) {
+  //       if (((rewardad == "1" && Platform.isAndroid) ||
+  //               (rewardadIos == "1" && Platform.isIOS)) &&
+  //           checkRewardAdAndShow()) {
+  //         debugPrint("rewardedAd add");
+  //         showRewardedAd(callAction);
+  //       } else {
+  //         debugPrint("rewardedAd action Device");
+  //         callAction();
+  //       }
+  //     } else if (adType == Constant.interstialAdType) {
+  //       if (((interstitalad == "1" && Platform.isAndroid) ||
+  //               (interstitalIos == "1" && Platform.isIOS)) &&
+  //           checkInterstialAdAndShow()) {
+  //         showInterstitialAd(callAction);
+  //       } else {
+  //         debugPrint("rewardedAd action Device");
+  //         callAction();
+  //       }
+  //     } else {
+  //       if (((rewardad == "1" && Platform.isAndroid) ||
+  //               (rewardadIos == "1" && Platform.isIOS)) &&
+  //           checkRewardAdAndShow()) {
+  //         debugPrint("rewardedAd add");
+  //         showRewardedAd(callAction);
+  //       } else if (((interstitalad == "1" && Platform.isAndroid) ||
+  //               (interstitalIos == "1" && Platform.isIOS)) &&
+  //           checkInterstialAdAndShow()) {
+  //         showInterstitialAd(callAction);
+  //       } else {
+  //         debugPrint("rewardedAd action Device");
+  //         callAction();
+  //       }
+  //     }
+  //   } else {
+  //     debugPrint("rewardedAd action Device");
+  //     callAction();
+  //   }
+  // }
+
+
 
   static bool checkInterstialAdAndShow() {
     debugPrint("loadAttempts ================> $_numInterstitialLoadAttempts");

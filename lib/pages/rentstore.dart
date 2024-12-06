@@ -101,7 +101,7 @@ class RentStoreState extends State<RentStore> {
                         _buildRentVideos(),
                         /* AdMob Banner */
                         const SizedBox(height: 11),
-                        Utils.showBannerAd(context),
+                        // Utils.showBannerAd(context),
                         const SizedBox(height: 11),
                         _buildRentTVShows(),
                         const SizedBox(height: 20),
