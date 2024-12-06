@@ -107,85 +107,101 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                       children: [
                         Column(
                           children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              focusColor: white.withOpacity(0.5),
-                              onTap: () async {
-                                // Check if the user is logged in
-                                if (Constant.userID != null) {
-                                  // Get the value of isadshow from the episode data
-                                  bool isAdShow = episodeProvider
-                                          .episodeBySeasonModel
-                                          .result?[index]
-                                          .isadshow ==
-                                      1;
+                         InkWell(
+  borderRadius: BorderRadius.circular(16),
+  focusColor: white.withOpacity(0.5),
+  onTap: () async {
+    // Check if the user is logged in
+    if (Constant.userID != null) {
+      // Get the values of isadshow and isbuy from the episode data
+      bool isAdShow = episodeProvider
+              .episodeBySeasonModel
+              .result?[index]
+              .isadshow ==
+          1;
+      bool isBuy = episodeProvider
+              .episodeBySeasonModel
+              .result?[index]
+              .isBuy ==
+          0;
 
-                                  if (isAdShow) {
-                                    // If isadshow is 1, show the ad
-                                    AdHelper.showFullscreenAd(
-                                        context, Constant.rewardAdType,
-                                        () async {
-                                      // After the ad is watched, call the API to add coins
-                                      await walletProvider.addCoinsAfterWatchAd(Constant.userID!,0,episodeProvider
-                                          .episodeBySeasonModel
-                                          .result?[index].showId ,generalProvider.isAdsCoin); 
-                                      // Navigate to player Edit screen after adding coins
-                                      openPlayer(
-                                        "Show",
-                                        index,
-                                        episodeProvider
-                                            .episodeBySeasonModel.result,
-                                      );
-                                    });
-                                  } else {
-                                    // If isadshow is 0, directly navigate to player Edit screen without ad
-                                    openPlayer(
-                                      "Show",
-                                      index,
-                                      episodeProvider
-                                          .episodeBySeasonModel.result,
-                                    );
-                                  }
-                                } else {
-                                  // If the user is not logged in, navigate to the login screen
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginSocial(),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
-                                width: 160,
-                                height: 100,
-                                alignment: Alignment.centerLeft,
-                                padding: const EdgeInsets.all(2.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    MyNetworkImage(
-                                      fit: BoxFit.fill,
-                                      imageUrl: (episodeProvider
-                                              .episodeBySeasonModel
-                                              .result?[index]
-                                              .landscape ??
-                                          ""),
-                                    ),
-                                    Center(
-                                      child: MyImage(
-                                        fit: BoxFit.cover,
-                                        height: 32,
-                                        width: 32,
-                                        imagePath: "play.png",
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+      // If isbuy is 0, proceed to check isadshow
+      if (isBuy) {
+        if (isAdShow) {
+          // If isadshow is 1, show the ad
+          AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+            // After the ad is watched, call the API to add coins
+            await walletProvider.addCoinsAfterWatchAd(
+              Constant.userID!,
+              0,
+              episodeProvider.episodeBySeasonModel.result?[index].showId,
+              generalProvider.isAdsCoin,
+            );
+            // Navigate to player Edit screen after adding coins
+            openPlayer(
+              "Show",
+              index,
+              episodeProvider.episodeBySeasonModel.result,
+            );
+          });
+        } else {
+          // If isadshow is 0, directly navigate to player Edit screen without ad
+          openPlayer(
+            "Show",
+            index,
+            episodeProvider.episodeBySeasonModel.result,
+          );
+        }
+      } else {
+        // If isbuy is 1, directly navigate to player Edit screen without ad
+        openPlayer(
+          "Show",
+          index,
+          episodeProvider.episodeBySeasonModel.result,
+        );
+      }
+    } else {
+      // If the user is not logged in, navigate to the login screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const LoginSocial(),
+        ),
+      );
+    }
+  },
+  child: Container(
+    width: 160,
+    height: 100,
+    alignment: Alignment.centerLeft,
+    padding: const EdgeInsets.all(2.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(7),
+    ),
+    child: Stack(
+      fit: StackFit.expand,
+      children: [
+        MyNetworkImage(
+          fit: BoxFit.fill,
+          imageUrl: (episodeProvider
+                  .episodeBySeasonModel
+                  .result?[index]
+                  .landscape ??
+              ""),
+        ),
+        Center(
+          child: MyImage(
+            fit: BoxFit.cover,
+            height: 32,
+            width: 32,
+            imagePath: "play.png",
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
+                            
                             (episodeProvider.episodeBySeasonModel.result?[index]
                                             .videoDuration !=
                                         null &&

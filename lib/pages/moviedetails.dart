@@ -73,7 +73,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   late DateTime startTime;
   @override
   void initState() {
-   generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     print("HEY>>>>>>>>>>>>>>");
     startTime = DateTime.now();
     if (!kIsWeb) {
@@ -84,7 +84,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     }
 
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-     walletProvider = Provider.of<WalletProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
     videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     downloadProvider =
@@ -797,12 +797,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         focusColor: gray.withOpacity(0.5),
                                         onTap: () async {
                                           analytics.logEvent(
-                            name: 'watch_from_start',
-                            parameters: {
-                              'video_id': widget.videoId,
-                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                            },
-                          );
+                                            name: 'watch_from_start',
+                                            parameters: {
+                                              'video_id': widget.videoId,
+                                              'video_name': videoDetailsProvider
+                                                      .sectionDetailModel
+                                                      .result
+                                                      ?.name ??
+                                                  "",
+                                            },
+                                          );
                                           openPlayer("startOver");
                                         },
                                         child: _buildFeatureBtn(
@@ -818,13 +822,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         focusColor: gray.withOpacity(0.5),
                                         onTap: () {
                                           analytics.logEvent(
-                            name: 'watch_trailer',
-                            parameters: {
-                              'video_id': widget.videoId,
-                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                 
-                            },
-                          );
+                                            name: 'watch_trailer',
+                                            parameters: {
+                                              'video_id': widget.videoId,
+                                              'video_name': videoDetailsProvider
+                                                      .sectionDetailModel
+                                                      .result
+                                                      ?.name ??
+                                                  "",
+                                            },
+                                          );
                                           openPlayer("Trailer");
                                         },
                                         child: _buildFeatureBtn(
@@ -854,50 +861,49 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
-                                   
-                                      if (Constant.userID != null) {
-                                        final isCurrentlyBookmarked =
-                                            videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.isBookmark ??
-                                                0;
 
-                                        // Log event for adding/removing from watchlist
-                                        analytics.logEvent(
-                                          name: isCurrentlyBookmarked == 1
-                                              ? "watchlist_removed"
-                                              : "watchlist_added",
-                                          parameters: {
-                                            "video_id": widget.videoId,
-                                            "video_type": widget.videoType,
-                                            "type_id": widget.typeId,
-                                            "user_id": Constant.userID,
-                                          },
-                                        );
+                                    if (Constant.userID != null) {
+                                      final isCurrentlyBookmarked =
+                                          videoDetailsProvider
+                                                  .sectionDetailModel
+                                                  .result
+                                                  ?.isBookmark ??
+                                              0;
 
-                                        await videoDetailsProvider.setBookMark(
-                                          context,
-                                          widget.typeId,
-                                          widget.videoType,
-                                          widget.videoId,
-                                        );
-                                      } else {
-                                        if ((kIsWeb || Constant.isTV)) {
-                                          Utils.buildWebAlertDialog(
-                                              context, "login", "");
-                                          return;
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return const LoginSocial();
-                                            },
-                                          ),
-                                        );
+                                      // Log event for adding/removing from watchlist
+                                      analytics.logEvent(
+                                        name: isCurrentlyBookmarked == 1
+                                            ? "watchlist_removed"
+                                            : "watchlist_added",
+                                        parameters: {
+                                          "video_id": widget.videoId,
+                                          "video_type": widget.videoType,
+                                          "type_id": widget.typeId,
+                                          "user_id": Constant.userID,
+                                        },
+                                      );
+
+                                      await videoDetailsProvider.setBookMark(
+                                        context,
+                                        widget.typeId,
+                                        widget.videoType,
+                                        widget.videoId,
+                                      );
+                                    } else {
+                                      if ((kIsWeb || Constant.isTV)) {
+                                        Utils.buildWebAlertDialog(
+                                            context, "login", "");
+                                        return;
                                       }
-                           
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const LoginSocial();
+                                          },
+                                        ),
+                                      );
+                                    }
                                   },
                                   borderRadius: BorderRadius.circular(5),
                                   child: Consumer<VideoDetailsProvider>(
@@ -946,7 +952,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                     ),
                                   ),
                                 ),
-                           
                             ],
                           ),
                         ),
@@ -2332,26 +2337,67 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
-          onTap: () async {
+           onTap: () {
+            if (Constant.userID != null) {
+              print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
+              if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
+                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    () async {
+                  // After ad is watched, call the API to add coins
+                  await walletProvider.addCoinsAfterWatchAd(
+                      Constant.userID!,
+                      videoDetailsProvider.sectionDetailModel.result?.id,
+                      0,
+                      generalProvider.isAdsCoin);
 
-             if (Constant.userID != null) {
-      
-      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-        // After ad is watched, call the API to add coins
-        await walletProvider.addCoinsAfterWatchAd(Constant.userID!, videoDetailsProvider.sectionDetailModel.result?.id ,0 ,generalProvider.isAdsCoin);
-    
-           openPlayer("Video");
-      });
-    } else {
-      // User is not logged in, navigate to login screen
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const LoginSocial(),
-        ),
-      );
-    }
-    
+                  openPlayer("Video");
+                });
+              } else {
+                openPlayer("Video");
+              }
+
+              // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+              //     () async {
+              //   // After ad is watched, call the API to add coins
+              //   await walletProvider.addCoinsAfterWatchAd(
+              //       Constant.userID!,
+              //       videoDetailsProvider.sectionDetailModel.result?.id,
+              //       0,
+              //       generalProvider.isAdsCoin);
+
+              //   openPlayer("Video");
+              // });
+            } else {
+              // User is not logged in, navigate to login screen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginSocial(),
+                ),
+              );
+            }
           },
+          // onTap: () async {
+          //   if (Constant.userID != null) {
+          //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+          //         () async {
+          //       // After ad is watched, call the API to add coins
+          //       await walletProvider.addCoinsAfterWatchAd(
+          //           Constant.userID!,
+          //           videoDetailsProvider.sectionDetailModel.result?.id,
+          //           0,
+          //           generalProvider.isAdsCoin);
+
+          //       openPlayer("Video");
+          //     });
+          //   } else {
+          //     // User is not logged in, navigate to login screen
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) => const LoginSocial(),
+          //       ),
+          //     );
+          //   }
+          // },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
@@ -2476,23 +2522,43 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () {
-           
-             if (Constant.userID != null) {
-      
-      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-        // After ad is watched, call the API to add coins
-         await walletProvider.addCoinsAfterWatchAd(Constant.userID!, videoDetailsProvider.sectionDetailModel.result?.id ,0 ,generalProvider.isAdsCoin); 
-    
-           openPlayer("Video");
-      });
-    } else {
-      // User is not logged in, navigate to login screen
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const LoginSocial(),
-        ),
-      );
-    }
+            if (Constant.userID != null) {
+              print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
+              if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
+                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    () async {
+                  // After ad is watched, call the API to add coins
+                  await walletProvider.addCoinsAfterWatchAd(
+                      Constant.userID!,
+                      videoDetailsProvider.sectionDetailModel.result?.id,
+                      0,
+                      generalProvider.isAdsCoin);
+
+                  openPlayer("Video");
+                });
+              } else {
+                openPlayer("Video");
+              }
+
+              // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+              //     () async {
+              //   // After ad is watched, call the API to add coins
+              //   await walletProvider.addCoinsAfterWatchAd(
+              //       Constant.userID!,
+              //       videoDetailsProvider.sectionDetailModel.result?.id,
+              //       0,
+              //       generalProvider.isAdsCoin);
+
+              //   openPlayer("Video");
+              // });
+            } else {
+              // User is not logged in, navigate to login screen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginSocial(),
+                ),
+              );
+            }
           },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
@@ -2578,16 +2644,21 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                       '',
                 );
                 if (isRented != null && isRented == true) {
-
-                    analytics.logEvent(
-        name: "Watch_Rented_video",
-        parameters: {
-          "user_id": Constant.userID,
-          'video_id': videoDetailsProvider.sectionDetailModel.result?.id ?? '',
-                    'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? '',
-                    'rent_price': videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0,
-        },
-      );
+                  analytics.logEvent(
+                    name: "Watch_Rented_video",
+                    parameters: {
+                      "user_id": Constant.userID,
+                      'video_id':
+                          videoDetailsProvider.sectionDetailModel.result?.id ??
+                              '',
+                      'video_name': videoDetailsProvider
+                              .sectionDetailModel.result?.name ??
+                          '',
+                      'rent_price': videoDetailsProvider
+                              .sectionDetailModel.result?.rentPrice ??
+                          0,
+                    },
+                  );
                   _getData();
                 }
               } else {
@@ -2647,15 +2718,21 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                       '',
                 );
                 if (isRented != null && isRented == true) {
-                             analytics.logEvent(
-        name: "Watch_Rented_video",
-        parameters: {
-          "user_id": Constant.userID,
-          'video_id': videoDetailsProvider.sectionDetailModel.result?.id ?? '',
-                    'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? '',
-                    'rent_price': videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0,
-        },
-      );
+                  analytics.logEvent(
+                    name: "Watch_Rented_video",
+                    parameters: {
+                      "user_id": Constant.userID,
+                      'video_id':
+                          videoDetailsProvider.sectionDetailModel.result?.id ??
+                              '',
+                      'video_name': videoDetailsProvider
+                              .sectionDetailModel.result?.name ??
+                          '',
+                      'rent_price': videoDetailsProvider
+                              .sectionDetailModel.result?.rentPrice ??
+                          0,
+                    },
+                  );
                   _getData();
                 }
               } else {
@@ -2687,8 +2764,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return const SizedBox.shrink();
     }
   }
-
-
 
   Widget _buildTabs() {
     return Column(
@@ -3525,15 +3600,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     onTap: () {
                       Navigator.pop(context);
                       analytics.logEvent(
-                      name: 'share_video',
-                      parameters: {
-                        'video_id': widget.videoId,
-                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                        'type_id': widget.typeId,
-                        'video_type': widget.videoType,
-                      },
-                    );
-  
+                        name: 'share_video',
+                        parameters: {
+                          'video_id': widget.videoId,
+                          'video_name': videoDetailsProvider
+                                  .sectionDetailModel.result?.name ??
+                              "",
+                          'type_id': widget.typeId,
+                          'video_type': widget.videoType,
+                        },
+                      );
+
                       buildShareWithDialog();
                     },
                     child: _buildDialogItems(
@@ -3550,14 +3627,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           focusColor: white,
                           onTap: () {
                             Navigator.pop(context);
-                             analytics.logEvent(
-                            name: 'watch_trailer',
-                            parameters: {
-                              'video_id': widget.videoId,
-                              'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                              'stop_time': stopTime,
-                            },
-                          );
+                            analytics.logEvent(
+                              name: 'watch_trailer',
+                              parameters: {
+                                'video_id': widget.videoId,
+                                'video_name': videoDetailsProvider
+                                        .sectionDetailModel.result?.name ??
+                                    "",
+                                'stop_time': stopTime,
+                              },
+                            );
                             openPlayer("Trailer");
                           },
                           child: _buildDialogItems(
@@ -3655,15 +3734,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     focusColor: white,
                     onTap: () {
                       Navigator.pop(context);
-                       analytics.logEvent(
-                      name: 'share_video_sms',
-                      parameters: {
-                        'video_id': widget.videoId,
-                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                        'type_id': widget.typeId,
-                        'video_type': widget.videoType,
-                      },
-                    );
+                      analytics.logEvent(
+                        name: 'share_video_sms',
+                        parameters: {
+                          'video_id': widget.videoId,
+                          'video_name': videoDetailsProvider
+                                  .sectionDetailModel.result?.name ??
+                              "",
+                          'type_id': widget.typeId,
+                          'video_type': widget.videoType,
+                        },
+                      );
                       if (Platform.isAndroid) {
                         Utils.redirectToUrl(
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
@@ -3705,15 +3786,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     focusColor: white,
                     onTap: () {
                       Navigator.pop(context);
-                        analytics.logEvent(
-                      name: 'share_video_copy_link',
-                      parameters: {
-                        'video_id': widget.videoId,
-                        'video_name': videoDetailsProvider.sectionDetailModel.result?.name ?? "",
-                        'type_id': widget.typeId,
-                        'video_type': widget.videoType,
-                      },
-                    );
+                      analytics.logEvent(
+                        name: 'share_video_copy_link',
+                        parameters: {
+                          'video_id': widget.videoId,
+                          'video_name': videoDetailsProvider
+                                  .sectionDetailModel.result?.name ??
+                              "",
+                          'type_id': widget.typeId,
+                          'video_type': widget.videoType,
+                        },
+                      );
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
                             ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
@@ -4049,30 +4132,29 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       }
       return;
     }
-   
-      dynamic isContinue;
-      isContinue = await Utils.openPlayer(
-          context: context,
-          playType: playType == "Trailer" ? "Trailer" : "Video",
-          videoId: vID,
-          videoType: vType,
-          typeId: vTypeID,
-          otherId: 0,
-          videoUrl: vUrl,
-          trailerUrl: vUrl,
-          uploadType: vUploadType,
-          videoThumb: videoThumb,
-          vStopTime: stopTime,
-          trailerLibraryId: trailerLibraryId,
-          trailerUrlVideoId: trailerUrlVideoId,
-          videoLibraryId: videoLibraryId,
-          videoUrlVideoId: videoUrlId,
-          isLive: isLive);
-      debugPrint("isContinue ===> $isContinue");
-      if (isContinue != null && isContinue == true) {
-        _getData();
-      }
 
+    dynamic isContinue;
+    isContinue = await Utils.openPlayer(
+        context: context,
+        playType: playType == "Trailer" ? "Trailer" : "Video",
+        videoId: vID,
+        videoType: vType,
+        typeId: vTypeID,
+        otherId: 0,
+        videoUrl: vUrl,
+        trailerUrl: vUrl,
+        uploadType: vUploadType,
+        videoThumb: videoThumb,
+        vStopTime: stopTime,
+        trailerLibraryId: trailerLibraryId,
+        trailerUrlVideoId: trailerUrlVideoId,
+        videoLibraryId: videoLibraryId,
+        videoUrlVideoId: videoUrlId,
+        isLive: isLive);
+    debugPrint("isContinue ===> $isContinue");
+    if (isContinue != null && isContinue == true) {
+      _getData();
+    }
   }
   /* ========= Open Player ========= */
 
