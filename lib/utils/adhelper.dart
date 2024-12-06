@@ -330,32 +330,48 @@ class AdHelper {
 
 
    // Show Fullscreen Ad Function
-
-
-    static showFullscreenAd(
-      BuildContext context, String adType, VoidCallback callAction) async {
-    // bool? isBuy = await Utils.checkPremiumUser();
-    // debugPrint("showFullscreenAd isBuy ============> $isBuy");
-    // // if (isBuy) {
-    //   callAction();
-    //   return;
-    // }
-       callAction();
-
-    if (!kIsWeb) {
-      if (adType == Constant.rewardAdType) {
-        rewardedAd(context, callAction);
-      } else if (adType == Constant.interstialAdType) {
-        interstitialAd(context, callAction);
-      } else {
-        debugPrint("Invalid ad type: $adType");
-        callAction();
-      }
+static showFullscreenAd(
+    BuildContext context, String adType, VoidCallback onAdDismissed) async {
+  if (!kIsWeb) {
+    if (adType == Constant.rewardAdType) {
+      rewardedAd(context, onAdDismissed);
+    } else if (adType == Constant.interstialAdType) {
+      interstitialAd(context, onAdDismissed);
     } else {
-      debugPrint("Web does not support ads");
-      callAction();
+      debugPrint("Invalid ad type: $adType");
+      onAdDismissed();
     }
+  } else {
+    debugPrint("Web does not support ads");
+    onAdDismissed();
   }
+}
+
+
+  //   static showFullscreenAd(
+  //     BuildContext context, String adType, VoidCallback callAction) async {
+  //   // bool? isBuy = await Utils.checkPremiumUser();
+  //   // debugPrint("showFullscreenAd isBuy ============> $isBuy");
+  //   // // if (isBuy) {
+  //   //   callAction();
+  //   //   return;
+  //   // }
+  //      callAction();
+
+  //   if (!kIsWeb) {
+  //     if (adType == Constant.rewardAdType) {
+  //       rewardedAd(context, callAction);
+  //     } else if (adType == Constant.interstialAdType) {
+  //       interstitialAd(context, callAction);
+  //     } else {
+  //       debugPrint("Invalid ad type: $adType");
+  //       callAction();
+  //     }
+  //   } else {
+  //     debugPrint("Web does not support ads");
+  //     callAction();
+  //   }
+  // }
 
 
 

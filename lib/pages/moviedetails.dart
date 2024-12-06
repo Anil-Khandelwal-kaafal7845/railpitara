@@ -2337,67 +2337,79 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
-           onTap: () {
-            if (Constant.userID != null) {
-              print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
-              if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
-                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                    () async {
-                  // After ad is watched, call the API to add coins
-                  await walletProvider.addCoinsAfterWatchAd(
-                      Constant.userID!,
-                      videoDetailsProvider.sectionDetailModel.result?.id,
-                      0,
-                      generalProvider.isAdsCoin);
 
-                  openPlayer("Video");
-                });
-              } else {
-                openPlayer("Video");
-              }
+          onTap: () async {
+  if (Constant.userID != null) {
+    // Check if the user is a "prime" user
+    bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
 
-              // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-              //     () async {
-              //   // After ad is watched, call the API to add coins
-              //   await walletProvider.addCoinsAfterWatchAd(
-              //       Constant.userID!,
-              //       videoDetailsProvider.sectionDetailModel.result?.id,
-              //       0,
-              //       generalProvider.isAdsCoin);
+    if (isPrimeUser) {
+      // Prime user, directly navigate to the player
+      openPlayer("Video");
+    } else {
+   
+      // Non-prime user, show the ad
+      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+        // Handle the logic for adding coins after the ad is dismissed
+        try {
+          await walletProvider.addCoinsAfterWatchAd(
+            Constant.userID!,
+            videoDetailsProvider.sectionDetailModel.result?.id,
+            0,
+            generalProvider.isAdsCoin,
+          );
+          print("Coins added successfully!");
+        } catch (e) {
+          print("Error adding coins: $e");
+        }
+        // Navigate to the player
+        openPlayer("Video");
+      });
+    }
+  } else {
+    // User is not logged in, navigate to login screen
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginSocial(),
+      ),
+    );
+  }
+},
 
-              //   openPlayer("Video");
-              // });
-            } else {
-              // User is not logged in, navigate to login screen
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginSocial(),
-                ),
-              );
-            }
-          },
-          // onTap: () async {
-          //   if (Constant.userID != null) {
-          //     AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-          //         () async {
-          //       // After ad is watched, call the API to add coins
-          //       await walletProvider.addCoinsAfterWatchAd(
-          //           Constant.userID!,
-          //           videoDetailsProvider.sectionDetailModel.result?.id,
-          //           0,
-          //           generalProvider.isAdsCoin);
+//          onTap: () async {
+//   if (Constant.userID != null) {
+//     // Check if the user is a "prime" user
+//     bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
 
-          //       openPlayer("Video");
-          //     });
-          //   } else {
-          //     // User is not logged in, navigate to login screen
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) => const LoginSocial(),
-          //       ),
-          //     );
-          //   }
-          // },
+//     if (isPrimeUser) {
+//       // Prime user, directly navigate to the player
+//       openPlayer("Video");
+//     } else {
+//       print("HIT 1");
+//       // Non-prime user, show the ad
+//       AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+//         // After the ad is watched, call the API to add coins
+//         await walletProvider.addCoinsAfterWatchAd(
+//           Constant.userID!,
+//           videoDetailsProvider.sectionDetailModel.result?.id,
+//           0,
+//           generalProvider.isAdsCoin,
+//         );
+
+//         // Navigate to the player after adding coins
+//         openPlayer("Video");
+//       });
+//     }
+//   } else {
+//     // User is not logged in, navigate to login screen
+//     Navigator.of(context).push(
+//       MaterialPageRoute(
+//         builder: (context) => const LoginSocial(),
+//       ),
+//     );
+//   }
+// },
+
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
@@ -2521,45 +2533,76 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
-          onTap: () {
-            if (Constant.userID != null) {
-              print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
-              if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
-                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                    () async {
-                  // After ad is watched, call the API to add coins
-                  await walletProvider.addCoinsAfterWatchAd(
-                      Constant.userID!,
-                      videoDetailsProvider.sectionDetailModel.result?.id,
-                      0,
-                      generalProvider.isAdsCoin);
 
-                  openPlayer("Video");
-                });
-              } else {
-                openPlayer("Video");
-              }
+             onTap: () async {
+  if (Constant.userID != null) {
+    // Check if the user is a "prime" user
+    bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
 
-              // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-              //     () async {
-              //   // After ad is watched, call the API to add coins
-              //   await walletProvider.addCoinsAfterWatchAd(
-              //       Constant.userID!,
-              //       videoDetailsProvider.sectionDetailModel.result?.id,
-              //       0,
-              //       generalProvider.isAdsCoin);
+    if (isPrimeUser) {
+      // Prime user, directly navigate to the player
+      openPlayer("Video");
+    } else {
+   
+      // Non-prime user, show the ad
+      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
+        // Handle the logic for adding coins after the ad is dismissed
+        try {
+          await walletProvider.addCoinsAfterWatchAd(
+            Constant.userID!,
+            videoDetailsProvider.sectionDetailModel.result?.id,
+            0,
+            generalProvider.isAdsCoin,
+          );
+          print("Coins added successfully!");
+        } catch (e) {
+          print("Error adding coins: $e");
+        }
+        // Navigate to the player
+        openPlayer("Video");
+      });
+    }
+  } else {
+    // User is not logged in, navigate to login screen
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginSocial(),
+      ),
+    );
+  }
+},
 
-              //   openPlayer("Video");
-              // });
-            } else {
-              // User is not logged in, navigate to login screen
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginSocial(),
-                ),
-              );
-            }
-          },
+          // onTap: () {
+          //   if (Constant.userID != null) {
+          //     print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
+          //     if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
+          //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+          //           () async {
+                    
+          //         // After ad is watched, call the API to add coins
+          //         await walletProvider.addCoinsAfterWatchAd(
+          //             Constant.userID!,
+          //             videoDetailsProvider.sectionDetailModel.result?.id,
+          //             0,
+          //             generalProvider.isAdsCoin);
+
+          //         openPlayer("Video");
+          //       });
+          //     } else {
+          //       openPlayer("Video");
+          //     }
+
+            
+
+          //   } else {
+          //     // User is not logged in, navigate to login screen
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) => const LoginSocial(),
+          //       ),
+          //     );
+          //   }
+          // },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
