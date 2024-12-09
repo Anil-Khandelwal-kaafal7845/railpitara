@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as number;
-
 import 'package:dtlive/model/qualitymodel.dart';
 import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:dtlive/pages/moviedetails.dart';
@@ -36,10 +35,9 @@ import 'package:html/parser.dart' show parse;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:screen_protector/screen_protector.dart';
+
 
 class Utils {
-  
 
   static Widget showBannerAd(BuildContext context) {
     if (!kIsWeb) {
@@ -67,8 +65,6 @@ class Utils {
       AdHelper.createRewardedAd();
     }
   }
-
-
 
   static showToast(String msg) {
     Fluttertoast.showToast(

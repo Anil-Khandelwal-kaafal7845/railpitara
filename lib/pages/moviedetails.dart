@@ -4293,4 +4293,5 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return false;
     }
   }
+
 }
