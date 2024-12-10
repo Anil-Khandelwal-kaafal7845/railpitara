@@ -7,6 +7,7 @@ import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/browsebyartistmodel.dart';
 import 'package:dtlive/model/castdetailmodel.dart';
 import 'package:dtlive/model/coinpackagesmodel.dart';
+import 'package:dtlive/model/coinrentmodel.dart';
 import 'package:dtlive/model/couponmodel.dart';
 import 'package:dtlive/model/force_update_model.dart';
 import 'package:dtlive/model/historymodel.dart';
@@ -843,7 +844,7 @@ class ApiService {
 
   // add_transaction API
   Future<SuccessModel> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode, orderStatus, orderId) async {
+      currencyCode, couponCode, orderStatus, orderId ,purchesVia) async {
     debugPrint('addTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addTransaction packageId ==>>> $packageId');
     debugPrint('addTransaction description ==>>> $description');
@@ -853,6 +854,7 @@ class ApiService {
     debugPrint('addTransaction couponCode ==>>> $couponCode');
     debugPrint('addTransaction order_status ==>>> $orderStatus');
     debugPrint('addTransaction orderId ==>>> $orderId');
+      debugPrint('addTransaction purchesVia ==>>> $purchesVia');
 
     SuccessModel successModel;
     String transaction = "add_transaction";
@@ -868,7 +870,8 @@ class ApiService {
         'currency_code': currencyCode,
         'unique_id': couponCode,
         'order_status': orderStatus,
-        'order_id': orderId
+        'order_id': orderId,
+        'purchase_from': purchesVia
       },
     );
     successModel = SuccessModel.fromJson(response.data);
@@ -1087,44 +1090,36 @@ Future<bool> addCoinTransaction({
   }
 }
 
+//rent via coin api ---
+  Future<PurchaseFromCoinResponse> purchaseFromCoin({
+    required String userId,
+    required String videoId,
+    required String showId,
+    required String tokenFrom,
+    required String noOfToken,
+  }) async {
+    try {
+      final response = await dio.post(
+        'https://stage.ottsnap.com/api/purchase-from-coin',
+        data: {
+          "user_id": userId,
+          "video_id": videoId,
+          "show_id": showId,
+          "token_from": tokenFrom,
+          "no_of_token": noOfToken,
+        },
+      );
 
-// Future<void> addCoinTransaction({
-//   required String userId,
-//   required int coinPackageId,
-//   required dynamic amount,
-//   required String paymentId,
-//   required String currencyCode,
-//   required String orderStatus,
-//   required String orderId,
-//   required String paymentMethod,
-// }) async {
-//   try {
-//     final response = await dio.post(
-//       'https://stage.ottsnap.com/api/add-coin-transaction',
-//       data: {
-//         "user_id": userId,
-//         "coin_package_id": coinPackageId,
-//         "amount": amount,
-//         "payment_id": paymentId,
-//         "currency_code": currencyCode,
-//         "unique_id": "",
-//         "order_status": orderStatus,
-//         "order_id": orderId,
-//         "payment_method": paymentMethod,
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       print("Coin transaction added successfully: ${response.data}");
-//     } else {
-//       throw Exception("Failed to add coin transaction: ${response.statusCode}");
-//     }
-//   } catch (e) {
-//     print("Error in addCoinTransaction: $e");
-//     rethrow;
-//   }
-// }
-
+      if (response.statusCode == 200) {
+        return PurchaseFromCoinResponse.fromJson(response.data);
+      } else {
+        throw Exception("Failed to purchase via coin");
+      }
+    } catch (e) {
+      print("Error in purchaseFromCoin API: $e");
+      rethrow;
+    }
+  }
 
 
 }

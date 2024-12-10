@@ -48,6 +48,7 @@ class Result {
   String? iosProductPackage;
   List<Datum>? data;
   int? isBuy;
+  dynamic coinAmount;
 
   Result({
     this.id,
@@ -60,6 +61,7 @@ class Result {
     this.iosProductPackage,
     this.data,
     this.isBuy,
+    this.coinAmount
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -74,6 +76,7 @@ class Result {
         data:
             List<Datum>.from(json["data"]?.map((x) => Datum.fromJson(x)) ?? []),
         isBuy: json["is_buy"],
+        coinAmount:json["no_of_coin"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -89,6 +92,7 @@ class Result {
             ? []
             : List<dynamic>.from(data?.map((x) => x.toJson()) ?? []),
         "is_buy": isBuy,
+        "no_of_coin":coinAmount
       };
 }
 

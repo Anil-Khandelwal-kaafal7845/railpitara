@@ -130,7 +130,7 @@ class AllPaymentState extends State<AllPayment>
 
   /* add_transaction API */
   Future addTransaction(packageId, description, amount, paymentId, currencyCode,
-      orderStatus) async {
+      orderStatus,purchesVia ) async {
     final videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     final showDetailsProvider =
@@ -142,7 +142,7 @@ class AllPaymentState extends State<AllPayment>
 
     Utils.showProgress(context, prDialog);
     await paymentProvider.addTransaction(packageId, description, amount,
-        paymentId, currencyCode, strCouponCode, orderStatus, orderId);
+        paymentId, currencyCode, strCouponCode, orderStatus, orderId,purchesVia);
 
     if (!paymentProvider.payLoading) {
       await prDialog.hide();
@@ -293,7 +293,7 @@ class AllPaymentState extends State<AllPayment>
     } else {
       if (widget.payType == "Package") {
         addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency, "success");
+            paymentProvider.finalAmount, paymentId, widget.currency, "success" ,"amount");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
             widget.typeId, widget.videoType, "success");
@@ -833,7 +833,7 @@ class AllPaymentState extends State<AllPayment>
                                     paymentProvider.finalAmount,
                                     paymentId,
                                     widget.currency,
-                                    "success");
+                                    "success","amount");
                               } else if (widget.payType == "Rent") {
                                 addRentTransaction(
                                     widget.itemId,
@@ -1384,7 +1384,7 @@ class AllPaymentState extends State<AllPayment>
     Utils.showSnackbar(context, "fail", "payment_fail", true);
     if (widget.payType == "Package") {
       addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "failed");
+          paymentProvider.finalAmount, paymentId, widget.currency, "failed","amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "failed");
@@ -1420,7 +1420,7 @@ class AllPaymentState extends State<AllPayment>
     Utils.showSnackbar(context, "success", "payment_success", true);
     if (widget.payType == "Package") {
       addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "success");
+          paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "success");
@@ -1431,7 +1431,7 @@ class AllPaymentState extends State<AllPayment>
     debugPrint("============ External Wallet Selected ============");
     if (widget.payType == "Package") {
       addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "external");
+          paymentProvider.finalAmount, paymentId, widget.currency, "external","amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "external");
@@ -1644,7 +1644,7 @@ class AllPaymentState extends State<AllPayment>
                       paymentProvider.finalAmount,
                       params["paymentId"],
                       widget.currency,
-                      "success");
+                      "success","amount");
                 } else if (widget.payType == "Rent") {
                   addRentTransaction(widget.itemId, paymentProvider.finalAmount,
                       widget.typeId, widget.videoType, "success");
@@ -1828,7 +1828,7 @@ class AllPaymentState extends State<AllPayment>
 
       if (widget.payType == "Package") {
         addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency, "success");
+            paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
             widget.typeId, widget.videoType, "success");
@@ -1954,7 +1954,7 @@ class AllPaymentState extends State<AllPayment>
 
     if (widget.payType == "Package") {
       addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "success");
+          paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "success");
@@ -2187,7 +2187,7 @@ class AllPaymentState extends State<AllPayment>
                   paymentProvider.finalAmount,
                   paymentId,
                   widget.currency,
-                  "success");
+                  "success","amount");
             } else if (widget.payType == "Rent") {
               await addRentTransaction(
                   widget.itemId,

@@ -4,7 +4,10 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/model/subscriptionmodel.dart';
+import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/successPrime.dart';
+import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/allpayment.dart';
 import 'package:dtlive/utils/constant.dart';
@@ -31,13 +34,15 @@ class Subscription extends StatefulWidget {
   State<Subscription> createState() => SubscriptionState();
 }
 
-class SubscriptionState extends State<Subscription> {
+class SubscriptionState extends State<Subscription>with RouteAware {
   late SubscriptionProvider subscriptionProvider;
   CarouselController pageController = CarouselController();
   int selectedIndex = 0;
+  late HomeProvider homeProvider;
 
   @override
   void initState() {
+    homeProvider = Provider.of<HomeProvider>(context, listen: false);
     subscriptionProvider =
         Provider.of<SubscriptionProvider>(context, listen: false);
     super.initState();
@@ -51,6 +56,19 @@ class SubscriptionState extends State<Subscription> {
       if (!mounted) return;
       setState(() {});
     });
+  }
+
+
+  void _fetchDataAgain() async {
+     homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    _getData();
+    setState(() {});
+  }
+
+   @override
+  void didPopNext() {
+    _fetchDataAgain();
+    super.didPopNext();
   }
 
   @override
@@ -68,24 +86,24 @@ class SubscriptionState extends State<Subscription> {
         }
       }
 
-      
       if (packageList?[index].isBuy == 0) {
-
-         analytics.logEvent(
-        name: "choose_subscription_plan_pay",
-        parameters: {
-          "package_id": packageList?[index].id,
-          "package_name": packageList?[index].name,
-          "package_price": packageList?[index].price,
-          "user_id": Constant.userID,
-        },
-      );
+        analytics.logEvent(
+          name: "choose_subscription_plan_pay",
+          parameters: {
+            "package_id": packageList?[index].id,
+            "package_name": packageList?[index].name,
+            "package_price": packageList?[index].price,
+            "user_id": Constant.userID,
+          },
+        );
 
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return AllPayment(
+              return
+              
+               AllPayment(
                 payType: 'Package',
                 itemId: packageList?[index].id.toString() ?? '',
                 price: packageList?[index].price.toString() ?? '',
@@ -106,6 +124,8 @@ class SubscriptionState extends State<Subscription> {
             },
           ),
         );
+      
+      
       }
     } else {
       if ((kIsWeb || Constant.isTV)) {
@@ -123,15 +143,346 @@ class SubscriptionState extends State<Subscription> {
     }
   }
 
+// // Function that checks the user's wallet balance and navigates accordingly
+// Future<void> _checkRentViaCoin(
+//     List<Result>? packageList, int index, BuildContext context) async {
+//   try {
+//     // Check if the selected package is already purchased
+//     if (packageList?[index].isBuy == 1) {
+//       debugPrint("<============= Purchaged =============>");
+//       Utils.showSnackbar(context, "info", "already_purchased", true);
+//       return;
+//     }
+
+//     // Access the user balance and the selected package's coin amount
+//     dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+//     dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
+
+//     // Debugging prints to check values
+//     debugPrint("<============= User Balance: $userBalance =============>");
+//     debugPrint("<============= Video Coin Value: $videoCoinValue =============>");
+
+//     // Check if the user has enough balance
+//     if (userBalance >= videoCoinValue) {
+//       debugPrint("<============= Sufficient Balance, Navigating to TransactionStatusScreen =============>");
+//       // If the user has enough balance, navigate to the transaction status screen
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => TransactionStatusScreen(
+//             userId: "${Constant.userID}",
+//             noOfToken: "${packageList?[index].coinAmount}",
+//             packageId: "${packageList?[index].id}",
+//             amount: "${packageList?[index].price}",
+//           ),
+//         ),
+//       );
+//     } else {
+//       debugPrint("<============= Insufficient Balance, Navigating to CoinStoreScreen =============>");
+//       // If the user does not have enough balance, navigate to CoinStoreScreen
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => CoinStoreScreen(),
+//         ),
+//       );
+//     }
+//   } catch (e) {
+//     // Catch any errors and print them for debugging
+//     debugPrint('Error: $e');
+//   }
+// }
+
+Future<void> _checkRentViaCoin (
+    List<Result>? packageList, int index, BuildContext context) async {
+  try {
+    // Check if the selected package is already purchased
+    if (packageList?[index].isBuy == 1) {
+      debugPrint("<============= Purchaged =============>");
+      Utils.showSnackbar(context, "info", "already_purchased", true);
+      return;
+    }
+
+    // Access the user balance and the selected package's coin amount
+    dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+    dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
+
+    debugPrint("<============= User Balance: $userBalance =============>");
+    debugPrint("<============= Video Coin Value: $videoCoinValue =============>");
+
+    // Check if the user has enough balance
+    if (userBalance >= videoCoinValue && userBalance >= 0) {
+      debugPrint("<============= Sufficient Balance, Navigating to TransactionStatusScreen =============>");
+      // If the user has enough balance, navigate to the transaction status screen
+    
+    
+    
+   await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return
+              
+               TransactionStatusScreen(
+            userId: "${Constant.userID}",
+            noOfToken: "${packageList?[index].coinAmount}",
+            packageId: "${packageList?[index].id}",
+            amount: "${packageList?[index].price}",
+          );
+            },
+          ),
+        );
+      
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => TransactionStatusScreen(
+      //       userId: "${Constant.userID}",
+      //       noOfToken: "${packageList?[index].coinAmount}",
+      //       packageId: "${packageList?[index].id}",
+      //       amount: "${packageList?[index].price}",
+      //     ),
+      //   ),
+      // );
+
+
+    } else {
+      debugPrint("<============= Invalid Balance or Insufficient Funds, Navigating to CoinStoreScreen =============>");
+      // If the user does not have enough balance, navigate to CoinStoreScreen
+      
+       await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CoinStoreScreen(),
+          ),
+        );
+      
+    }
+  } catch (e) {
+    debugPrint('Error: $e');
+  }
+}
+
+// Function to show the bottom sheet with payment methods
+void _checkPackageAndShowBottomSheet(
+    List<Result>? packageList, int index, BuildContext context) {
+  // Check if any package in the list has isBuy == 1 (already purchased)
+  bool isAnyPackagePurchased = packageList?.any((package) => package.isBuy == 1) ?? false;
+
+  debugPrint("<============= Package Purchase Check: $isAnyPackagePurchased =============>");
+
+  if (isAnyPackagePurchased) {
+    // Show Snackbar if any package is already purchased
+    debugPrint("<============= Purchased Package Found =============>");
+    Utils.showSnackbar(context, "info", "already_purchased", true);
+  } else {
+    // If no package is purchased, show the bottom sheet
+    debugPrint("<============= No Purchased Packages =============>");
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.black,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                'Select Payment Method',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Divider(color: Colors.grey, thickness: 1),
+
+              // Rent via Payment option
+              ListTile(
+                leading: Image.asset(
+                  'assets/images/rupee.png',
+                  height: 30,
+                  width: 30,
+                ),
+                title: const Text(
+                  'Rent via Payment',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () async {
+                  debugPrint("<============= Rent via Payment Selected =============>");
+                  // Call the payment function here
+                  await _checkAndPay(packageList, index);
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+              ),
+              const Divider(color: Colors.grey, thickness: 1),
+
+              // Rent via Coin option
+              ListTile(
+                leading: Image.asset(
+                  'assets/images/coin.png',
+                  height: 40,
+                  width: 40,
+                ),
+                title: const Text(
+                  'Rent via Coin',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () async {
+                  debugPrint("<============= Rent via Coin Selected =============>");
+                  // Call the function to check wallet balance and make payment via coins
+                  await _checkRentViaCoin(packageList, index, context);
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+// // Function that checks the user's wallet balance and navigates accordingly
+//   Future<void> _checkRentViaCoin(
+//       List<Result>? packageList, int index, BuildContext context) async {
+//     try {
+//       if (packageList?[index].isBuy == 1) {
+//         debugPrint("<============= Purchaged =============>");
+//         Utils.showSnackbar(context, "info", "already_purchased", true);
+//         return;
+//       }
+//       // Access the user balance and the selected package's coin amount
+//       dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+//       dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
+
+//       // Check if the user has enough balance
+//       if (userBalance >= videoCoinValue) {
+//         // If the user has enough balance, navigate to the transaction status screen
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (context) => TransactionStatusScreen(
+//               userId: "${Constant.userID}",
+//               noOfToken: "${packageList?[index].coinAmount}",
+//               packageId: "${packageList?[index].id}",
+//               amount: "${packageList?[index].price}",
+//             ),
+//           ),
+//         );
+//       } else {
+//        Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => CoinStoreScreen(),
+//             ),
+//           );
+        
+//       }
+//     } catch (e) {
+//       debugPrint('Error: $e');
+//     }
+//   }
+
+//   void _checkPackageAndShowBottomSheet(
+//       List<Result>? packageList, int index, BuildContext context) {
+//     // Check if any package in the list has isBuy == 1 (already purchased)
+//     bool isAnyPackagePurchased =
+//         packageList?.any((package) => package.isBuy == 1) ?? false;
+
+//     if (isAnyPackagePurchased) {
+//       // Show Snackbar if any package is already purchased
+//       debugPrint("<============= Purchased Package Found =============>");
+//       Utils.showSnackbar(context, "info", "already_purchased", true);
+//     } else {
+//       // If no package is purchased, show the bottom sheet
+//       debugPrint("<============= No Purchased Packages =============>");
+//        showModalBottomSheet(
+//       context: context,
+//       shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//       ),
+//       backgroundColor: Colors.black,
+//       builder: (context) {
+//         return Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               const SizedBox(height: 10),
+//               Text(
+//                 'Select Payment Method',
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 18,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               const Divider(color: Colors.grey, thickness: 1),
+
+//               // Rent via Payment option
+//               ListTile(
+//                 leading: Image.asset(
+//                   'assets/images/rupee.png',
+//                   height: 30,
+//                   width: 30,
+//                 ),
+//                 title: const Text(
+//                   'Rent via Payment',
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//                 onTap: () async {
+//                   // Call the payment function here
+//                   await _checkAndPay(packageList, index);
+//                   Navigator.pop(context); // Close the bottom sheet
+//                 },
+//               ),
+//               const Divider(color: Colors.grey, thickness: 1),
+
+//               // Rent via Coin option
+//               ListTile(
+//                 leading: Image.asset(
+//                   'assets/images/coin.png',
+//                   height: 40,
+//                   width: 40,
+//                 ),
+//                 title: const Text(
+//                   'Rent via Coin',
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//                 onTap: () async {
+//                   // Call the function to check wallet balance and make payment via coins
+//                   await _checkRentViaCoin(packageList, index, context);
+//                   Navigator.pop(context); // Close the bottom sheet
+//                 },
+//               ),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+  
+//     }
+//   }
+
+
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Subscription Package Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Subscription Package Screen",
+        "user_id": Constant.userID,
+      },
+    );
     if (kIsWeb) {
       return Scaffold(
         backgroundColor: appBgColor,
@@ -214,19 +565,103 @@ class SubscriptionState extends State<Subscription> {
             buildMobileItem(packageList),
             GestureDetector(
               onTap: () {
-                _checkAndPay(packageList, selectedIndex);
+                _checkPackageAndShowBottomSheet(
+                    packageList, selectedIndex, context);
+
+//       showModalBottomSheet(
+//             context: context,
+//             shape: const RoundedRectangleBorder(
+//               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//             ),
+//             backgroundColor: Colors.black,
+//             builder: (context) {
+
+//               return Padding(
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     const SizedBox(height: 10),
+//                     Text(
+//                       'Select Payment Method',
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontSize: 18,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                     const SizedBox(height: 10),
+//                     const Divider(color: Colors.grey, thickness: 1),
+
+//                     // Rent via Payment option
+//                     ListTile(
+//                       leading: Image.asset(
+//                         'assets/images/rupee.png',
+//                         height: 30,
+//                         width: 30,
+//                       ),
+//                       title: const Text(
+//                         'Rent via Payment',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                       onTap: () async {
+//                          _checkAndPay(packageList, selectedIndex);
+
+//                       },
+//                     ),
+//                     const Divider(color: Colors.grey, thickness: 1),
+
+//                     // Rent via Coin option
+
+//                     ListTile(
+//   leading: Image.asset(
+//     'assets/images/coin.png',
+//     height: 40,
+//     width: 40,
+//   ),
+//   title: const Text(
+//     'Rent via Coin',
+//     style: TextStyle(color: Colors.white),
+//   ),
+//   onTap: () async {
+//    await _checkRentViaCoin(packageList, selectedIndex, context);
+//   },
+// )
+
+//                 //  ListTile(
+//                 //           leading: Image.asset(
+//                 //             'assets/images/coin.png',
+//                 //             height: 40,
+//                 //             width: 40,
+//                 //           ),
+//                 //           title: const Text(
+//                 //             'Rent via Coin',
+//                 //             style: TextStyle(color: Colors.white),
+//                 //           ),
+//                 //           onTap: () async {
+
+//                 //           },
+//                 //         ),
+
+//                  ],
+//                 ),
+//               );
+//             },
+//           );
               },
               child: Container(
                 margin: EdgeInsets.only(top: 35, bottom: 25),
                 height: 50,
                 width: 300,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                      color: subscrimain,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                    color: subscridark),
+                  border: Border.all(
+                    color: subscrimain,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                  color: subscridark,
+                ),
                 child: Center(
                   child: MyText(
                     color: white,
@@ -249,7 +684,6 @@ class SubscriptionState extends State<Subscription> {
     }
   }
 
-
   Widget buildMobileItem(List<Result>? packageList) {
     if (packageList != null) {
       return Container(
@@ -261,7 +695,7 @@ class SubscriptionState extends State<Subscription> {
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 4,
           ),
-          shrinkWrap: true, 
+          shrinkWrap: true,
           itemCount: packageList.length,
           itemBuilder: (BuildContext context, int index) {
             bool isSelected = selectedIndex == index;
@@ -273,17 +707,15 @@ class SubscriptionState extends State<Subscription> {
                   selectedIndex = index;
                 });
 
-
-                 analytics.logEvent(
-                name: "package_selected",
-                parameters: {
-                  "package_id": packageList[index].id,
-                  "package_name": packageList[index].name,
-                  "package_price": packageList[index].price,
-                  "user_id": Constant.userID,
-                },
-              );
-
+                analytics.logEvent(
+                  name: "package_selected",
+                  parameters: {
+                    "package_id": packageList[index].id,
+                    "package_name": packageList[index].name,
+                    "package_price": packageList[index].price,
+                    "user_id": Constant.userID,
+                  },
+                );
               },
               child: Container(
                 child: Card(
@@ -329,6 +761,45 @@ class SubscriptionState extends State<Subscription> {
                           fontweight: FontWeight.w600,
                           fontstyle: FontStyle.normal,
                         ),
+                        MyText(
+                          color: isPurchased ? white : subscriblue,
+                          text: "or",
+                          textalign: TextAlign.center,
+                          fontsizeNormal: 13,
+                          fontsizeWeb: 13,
+                          maxline: 1,
+                          multilanguage: false,
+                          overflow: TextOverflow.ellipsis,
+                          fontweight: FontWeight.w600,
+                          fontstyle: FontStyle.normal,
+                        ),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:
+                                    "${packageList[index].coinAmount.toString()} ",
+                                style: TextStyle(
+                                  color: isPurchased ? white : subscriblue,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.normal,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "coin",
+                                style: TextStyle(
+                                  color: isPurchased ? white : subscriblue,
+                                  fontSize:
+                                      25, // Smaller font size for the "coin" text
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -342,85 +813,6 @@ class SubscriptionState extends State<Subscription> {
       return const SizedBox.shrink();
     }
   }
-
-  // Widget buildMobileItem(List<Result>? packageList) {
-  //   if (packageList != null) {
-  //     return Container(
-  //       margin: EdgeInsets.only(top: 30),
-  //       child: GridView.builder(
-  //         physics: NeverScrollableScrollPhysics(),
-  //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 2,
-  //           crossAxisSpacing: 8.0,
-  //           mainAxisSpacing: 4,
-  //         ),
-  //         shrinkWrap: true, // Set shrinkWrap to true
-  //         itemCount: packageList.length,
-  //         itemBuilder: (BuildContext context, int index) {
-  //           bool isSelected = selectedIndex == index;
-  //           return InkWell(
-  //             onTap: () {
-  //               setState(() {
-  //                 selectedIndex = index;
-  //               });
-  //             },
-  //             child: Container(
-  //               child: Card(
-  //                 elevation: 3,
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(10),
-  //                 ),
-  //                 color: isSelected ? subscridark : subscrimain,
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.all(8.0),
-  //                   child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       MyText(
-  //                         color: (packageList[index].isBuy == 1
-  //                             ? subscriblue
-  //                             : subscriblue),
-  //                         text: packageList[index].name ?? "",
-  //                         textalign: TextAlign.start,
-  //                         fontsizeNormal: 16,
-  //                         fontsizeWeb: 24,
-  //                         maxline: 1,
-  //                         multilanguage: false,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         fontweight: FontWeight.w700,
-  //                         fontstyle: FontStyle.normal,
-  //                       ),
-  //                       SizedBox(
-  //                         height: 10,
-  //                       ),
-  //                       MyText(
-  //                         color: (packageList[index].isBuy == 1
-  //                             ? subscriblue
-  //                             : subscriblue),
-  //                         text:
-  //                             "\u{20B9} ${packageList[index].price.toString()}",
-  //                         textalign: TextAlign.center,
-  //                         fontsizeNormal: 30,
-  //                         fontsizeWeb: 22,
-  //                         maxline: 1,
-  //                         multilanguage: false,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         fontweight: FontWeight.w600,
-  //                         fontstyle: FontStyle.normal,
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
-  //   } else {
-  //     return const SizedBox.shrink();
-  //   }
-  // }
 
   Widget _buildBenefits(List<Result>? packageList, int? index) {
     if (packageList?[index ?? 0].data != null &&
@@ -664,190 +1056,3 @@ class SubscriptionState extends State<Subscription> {
     }
   }
 }
-
-
-
-
-
-
-
-  // Widget buildMobileItem(List<Result>? packageList) {
-  //   if (packageList != null) {
-  //     return Container(
-  //         height: MediaQuery.of(context).size.height / 1.2,
-  //         decoration: BoxDecoration(
-  //           color: Colors.grey,
-  //           borderRadius: BorderRadius.circular(15),
-  //         ),
-  //         child: ListView.builder(
-  //             itemCount: packageList.length,
-  //             itemBuilder: (BuildContext context, int index) {
-  //               return Column(
-  //                 children: [
-  //                   _buildBenefits(packageList, index),
-
-  //                 ],
-  //               );
-  //             })
-
-  //         );
-  //   } else {
-  //     return const SizedBox.shrink();
-  //   }
-  // }
-
-  // Widget buildMobileItem(List<Result>? packageList) {
-  //   if (packageList != null) {
-  //     return CarouselSlider.builder(
-  //       itemCount: packageList.length,
-  //       carouselController: pageController,
-  //       options: CarouselOptions(
-  //         initialPage: 0,
-  //         height: MediaQuery.of(context).size.height,
-  //         enlargeCenterPage: packageList.length > 1 ? true : false,
-  //         enlargeFactor: 0.18,
-  //         autoPlay: false,
-  //         autoPlayCurve: Curves.easeInOutQuart,
-  //         enableInfiniteScroll: packageList.length > 1 ? true : false,
-  //         viewportFraction: packageList.length > 1 ? 0.8 : 0.9,
-  //       ),
-  //       itemBuilder: (BuildContext context, int index, int pageViewIndex) {
-  //         return Wrap(
-  //           crossAxisAlignment: WrapCrossAlignment.center,
-  //           alignment: WrapAlignment.center,
-  //           children: [
-
-  //             Container(
-
-  //               decoration: BoxDecoration(
-  //                 color: subscridark,
-  //                 borderRadius: BorderRadius.circular(15),
-  //                 border: Border.all(
-  //         color: subscridark,
-  //         width: 2.0,
-  //       ),
-  //               ),
-  //               child: Card(
-  //                 clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                 elevation: 3,
-  //                 color: (packageList[index].isBuy == 1
-  //                     ? subscridark
-  //                     : subscrimain),
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(15),
-  //                 ),
-  //                 child: Column(
-  //                   children: [
-  //                     Container(
-  //                       width: MediaQuery.of(context).size.width,
-  //                       padding: const EdgeInsets.only(left: 18, right: 18),
-  //                       constraints: const BoxConstraints(minHeight: 55),
-  //                       child: Column(
-  //                         children: [
-  //                           SizedBox(
-  //                             height: 30,
-  //                           ),
-  //                           MyText(
-  //                             color: (packageList[index].isBuy == 1
-  //                                 ? subscriblue
-  //                                 : subscriblue),
-  //                             text: packageList[index].name ?? "",
-  //                             textalign: TextAlign.start,
-  //                             fontsizeNormal: 20,
-  //                             fontsizeWeb: 24,
-  //                             maxline: 1,
-  //                             multilanguage: false,
-  //                             overflow: TextOverflow.ellipsis,
-  //                             fontweight: FontWeight.w700,
-  //                             fontstyle: FontStyle.normal,
-  //                           ),
-  //                           SizedBox(
-  //                             height: 8,
-  //                           ),
-  //                           MyText(
-  //                             color: (packageList[index].isBuy == 1
-  //                                 ? subscriblue
-  //                                 : subscriblue),
-  //                             text:
-  //                                 "\u{20B9} ${packageList[index].price.toString()}",
-  //                             textalign: TextAlign.center,
-  //                             fontsizeNormal: 40,
-  //                             fontsizeWeb: 22,
-  //                             maxline: 1,
-  //                             multilanguage: false,
-  //                             overflow: TextOverflow.ellipsis,
-  //                             fontweight: FontWeight.w600,
-  //                             fontstyle: FontStyle.normal,
-  //                           ),
-  //                           SizedBox(
-  //                             height: 15,
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       margin: const EdgeInsets.fromLTRB(1, 9, 1, 9),
-  //                       constraints: const BoxConstraints(minHeight: 0),
-  //                       child: SingleChildScrollView(
-  //                         child: _buildBenefits(packageList, index),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 20),
-
-  //                     /* Choose Plan */
-  //                  Align(
-  //               alignment: Alignment.bottomCenter,
-  //               child: InkWell(
-  //                 borderRadius: BorderRadius.circular(5),
-  //                 onTap: () async {
-  //                   _checkAndPay(packageList, index);
-  //                 },
-  //                 child: 
-  // Container(
-  //                   height: 45,
-  //                   width: MediaQuery.of(context).size.width * 0.5,
-  //                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-  //                   decoration: BoxDecoration(
-  //                     color: (packageList[index].isBuy == 1 ? subscrimain : subscridark),
-  //                     borderRadius: BorderRadius.circular(20),
-  //                     // Add border here
-  //                     border: Border.all(
-  //                       color: subscrimain, // Set your desired border color
-  //                       width: 2,            // Set your desired border width
-  //                     ),
-  //                   ),
-  //                   alignment: Alignment.center,
-  //                   child: Consumer<SubscriptionProvider>(
-  //                     builder: (context, subscriptionProvider, child) {
-  //                       return MyText(
-  //                         color: subscriblue,
-  //                         text: (packageList[index].isBuy == 1) ? "current" : "chooseplan",
-  //                         textalign: TextAlign.center,
-  //                         fontsizeNormal: 16,
-  //                         fontsizeWeb: 20,
-  //                         fontweight: FontWeight.w700,
-  //                         multilanguage: true,
-  //                         maxline: 1,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         fontstyle: FontStyle.normal,
-  //                       );
-  //                     },
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-
-  //                     const SizedBox(height: 20),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   } else {
-  //     return const SizedBox.shrink();
-  //   }
-  // }

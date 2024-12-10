@@ -76,12 +76,20 @@ class Result {
     int? isBuy;
     String? categoryName;
     int? upcomingType;
+     dynamic iscoinbuy;
+ dynamic isabaletocoinpurches;
+ dynamic coinvalue;
+ 
+    
 
     Result({
         this.id,
         this.showId,
         this.sessionId,
         this.videoType,
+          this.isabaletocoinpurches,
+      this.coinvalue,
+      this.iscoinbuy,
         this.name,
         this.thumbnail,
         this.isadshow,
@@ -130,6 +138,9 @@ class Result {
         videoType: json["video_type"],
         name: json["name"],
         thumbnail: json["thumbnail"],
+          iscoinbuy: json["is_coin_buy"],
+        isabaletocoinpurches: json["is_coin_purchase"],
+        coinvalue: json["no_of_coin_purchase"],
         isadshow: json["is_ads_show"],
         landscape: json["landscape"],
         fullWidth: json["full_width"],
@@ -179,6 +190,9 @@ class Result {
         "is_ads_show":isadshow,
         "landscape": landscape,
         "full_width": fullWidth,
+         "is_coin_buy":iscoinbuy,
+        "is_coin_purchase":isabaletocoinpurches,
+        "no_of_coin_purchase":coinvalue,
         "description": description,
         "is_premium": isPremium,
         "is_title": isTitle,

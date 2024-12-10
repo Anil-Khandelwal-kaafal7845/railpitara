@@ -208,6 +208,7 @@ class Result {
       this.videoSize,
       this.isLiveUrl,
       this.providerId,
+      this.isadshow,
       this.isAstroUrl,
       this.stopTime,
       this.isDownloaded,
@@ -238,6 +239,7 @@ class Result {
   dynamic providerId;
  dynamic isAstroUrl;
  dynamic iscoinbuy;
+ dynamic isadshow;
  dynamic isabaletocoinpurches;
  dynamic coinvalue;
   int? id;
@@ -309,6 +311,7 @@ class Result {
         isabaletocoinpurches: json["is_coin_purchase"],
         coinvalue: json["no_of_coin_purchase"],
         fullWidth: json["full_width"],
+            isadshow: json["is_ads_show"],
         thumbnail1: json["thumbnail_1"],
         landscape1: json["landscape_1"],
         isLiveUrl: json["is_live_url"],
@@ -384,6 +387,7 @@ class Result {
         "trailer_library_id": trailerLibraryId,
         "trailer_video_id": trailerVideoId,
         "provider_id": providerId,
+            "is_ads_show":isadshow,
         "is_astro_url": isAstroUrl,
         "thumbnail_1": thumbnail1,
         "landscape_1": landscape1,

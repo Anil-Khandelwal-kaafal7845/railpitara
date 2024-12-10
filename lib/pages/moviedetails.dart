@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:dtlive/main.dart';
+import 'package:dtlive/model/coinrentmodel.dart';
+import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/mydownloads.dart';
+import 'package:dtlive/pages/successScreen.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/provider/videodownloadprovider.dart';
@@ -109,10 +112,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     super.didPop();
   }
 
+  void _fetchDataAgain() async {
+     homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    _getData();
+    setState(() {});
+  }
+
   /// Called when the top route has been popped off, and the current route
   /// shows up.
   @override
   void didPopNext() {
+    _fetchDataAgain();
+
     debugPrint("didPopNext");
     if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
         "youtube") {
@@ -753,6 +764,60 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           )
                         : const SizedBox.shrink(),
 
+//coin tag--
+                    (videoDetailsProvider.sectionDetailModel.result
+                                    ?.isabaletocoinpurches ??
+                                0) ==
+                            1
+                        ? Container(
+                            margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/coin.png'),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.only(left: 5, right: 5),
+                                  child: Row(
+                                    children: [
+                                      MyText(
+                                        color: white,
+                                        text: "cointag",
+                                        textalign: TextAlign.center,
+                                        fontsizeNormal: 12,
+                                        fontsizeWeb: 13,
+                                        multilanguage: true,
+                                        fontweight: FontWeight.w500,
+                                        maxline: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontstyle: FontStyle.normal,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                     Text(
+                                          "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
+                                          style: TextStyle(
+                                            color: white,
+                                            fontSize:
+                                                18, // Large font size for coin value
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+
                     /* Continue Watching Button */
                     /* Watch Now button */
                     Container(
@@ -775,9 +840,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              /* Rent Button */
-                              _buildRentBtn(),
-                              const SizedBox(width: 5),
+                              // /* Rent Button */
+                              // _buildRentBtn(),
+                              // const SizedBox(width: 5),
 
                               /* Start Over & Trailer */
                               Expanded(
@@ -2115,13 +2180,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                       : _buildWatchNow(),
                   if (widget.videoType != 5) const SizedBox(width: 10),
 
-                  /* Rent Button */
-                  if (widget.videoType != 5)
-                    Container(
-                      constraints: const BoxConstraints(minWidth: 0),
-                      child: _buildRentBtn(),
-                    ),
-                  if (widget.videoType != 5) const SizedBox(width: 10),
+                  // /* Rent Button */
+                  // if (widget.videoType != 5)
+                  //   Container(
+                  //     constraints: const BoxConstraints(minWidth: 0),
+                  //     child: _buildRentBtn(),
+                  //   ),
+                  // if (widget.videoType != 5) const SizedBox(width: 10),
 
                   /* Trailer & StartOver Button */
                   if (widget.videoType != 5)
@@ -2337,44 +2402,54 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
-
           onTap: () async {
-  if (Constant.userID != null) {
-    // Check if the user is a "prime" user
-    bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+            if (Constant.userID != null) {
+              // Check if the user is a "prime" user
+              bool isPrimeUser =
+                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+              bool isPrimeUserCoin = videoDetailsProvider.sectionDetailModel.result?.iscoinbuy == 1;  // Prime user
+   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow ==1 ;
+   bool isRenteBuy = videoDetailsProvider.sectionDetailModel.result?.rentBuy ==1 ;
 
-    if (isPrimeUser) {
-      // Prime user, directly navigate to the player
-      openPlayer("Video");
-    } else {
-   
-      // Non-prime user, show the ad
-      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-        // Handle the logic for adding coins after the ad is dismissed
-        try {
-          await walletProvider.addCoinsAfterWatchAd(
-            Constant.userID!,
-            videoDetailsProvider.sectionDetailModel.result?.id,
-            0,
-            generalProvider.isAdsCoin,
-          );
-          print("Coins added successfully!");
-        } catch (e) {
-          print("Error adding coins: $e");
-        }
-        // Navigate to the player
-        openPlayer("Video");
-      });
-    }
-  } else {
-    // User is not logged in, navigate to login screen
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginSocial(),
-      ),
-    );
-  }
-},
+
+
+              if (isPrimeUser ||isPrimeUserCoin ||isRenteBuy) {
+                // Prime user, directly navigate to the player
+                openPlayer("Video");
+              } else {
+                // Non-prime user, show the ad
+                // openPlayer("Video");
+              if(isAdShow){
+
+                  AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    () async {
+                  // Handle the logic for adding coins after the ad is dismissed
+                  try {
+                    await walletProvider.addCoinsAfterWatchAd(
+                      Constant.userID!,
+                      videoDetailsProvider.sectionDetailModel.result?.id,
+                      0,
+                      generalProvider.isAdsCoin,
+                    );
+                    print("Coins added successfully!");
+                  } catch (e) {
+                    print("Error adding coins: $e");
+                  }
+                  // Navigate to the player
+                  openPlayer("Video");
+                });
+              
+              }
+              }
+            } else {
+              // User is not logged in, navigate to login screen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginSocial(),
+                ),
+              );
+            }
+          },
 
 //          onTap: () async {
 //   if (Constant.userID != null) {
@@ -2533,44 +2608,45 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
+          onTap: () async {
+            if (Constant.userID != null) {
+              // Check if the user is a "prime" user
+              bool isPrimeUser =
+                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
 
-             onTap: () async {
-  if (Constant.userID != null) {
-    // Check if the user is a "prime" user
-    bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-
-    if (isPrimeUser) {
-      // Prime user, directly navigate to the player
-      openPlayer("Video");
-    } else {
-   
-      // Non-prime user, show the ad
-      AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-        // Handle the logic for adding coins after the ad is dismissed
-        try {
-          await walletProvider.addCoinsAfterWatchAd(
-            Constant.userID!,
-            videoDetailsProvider.sectionDetailModel.result?.id,
-            0,
-            generalProvider.isAdsCoin,
-          );
-          print("Coins added successfully!");
-        } catch (e) {
-          print("Error adding coins: $e");
-        }
-        // Navigate to the player
-        openPlayer("Video");
-      });
-    }
-  } else {
-    // User is not logged in, navigate to login screen
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginSocial(),
-      ),
-    );
-  }
-},
+              if (isPrimeUser) {
+                // Prime user, directly navigate to the player
+                openPlayer("Video");
+              } else {
+                // Non-prime user, show the ad
+                // openPlayer("Video");
+                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    () async {
+                  // Handle the logic for adding coins after the ad is dismissed
+                  try {
+                    await walletProvider.addCoinsAfterWatchAd(
+                      Constant.userID!,
+                      videoDetailsProvider.sectionDetailModel.result?.id,
+                      0,
+                      generalProvider.isAdsCoin,
+                    );
+                    print("Coins added successfully!");
+                  } catch (e) {
+                    print("Error adding coins: $e");
+                  }
+                  // Navigate to the player
+                  openPlayer("Video");
+                });
+              }
+            } else {
+              // User is not logged in, navigate to login screen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginSocial(),
+                ),
+              );
+            }
+          },
 
           // onTap: () {
           //   if (Constant.userID != null) {
@@ -2578,7 +2654,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           //     if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
           //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
           //           () async {
-                    
+
           //         // After ad is watched, call the API to add coins
           //         await walletProvider.addCoinsAfterWatchAd(
           //             Constant.userID!,
@@ -2591,8 +2667,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           //     } else {
           //       openPlayer("Video");
           //     }
-
-            
 
           //   } else {
           //     // User is not logged in, navigate to login screen
@@ -2653,160 +2727,160 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     }
   }
 
-  Widget _buildRentBtn() {
-    if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) == 1 &&
-        (videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
-      if ((videoDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
-          (videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
-        return const SizedBox.shrink();
-      } else {
-        return Expanded(
-          child: InkWell(
-            focusColor: white,
-            borderRadius: BorderRadius.circular(5),
-            onTap: () async {
-              if (Constant.userID != null) {
-                dynamic isRented = await Utils.paymentForRent(
-                  context: context,
-                  videoId: videoDetailsProvider.sectionDetailModel.result?.id
-                          .toString() ??
-                      '',
-                  rentPrice: videoDetailsProvider
-                          .sectionDetailModel.result?.rentPrice
-                          .toString() ??
-                      '',
-                  vTitle: videoDetailsProvider.sectionDetailModel.result?.name
-                          .toString() ??
-                      '',
-                  typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
-                          .toString() ??
-                      '',
-                  vType: videoDetailsProvider
-                          .sectionDetailModel.result?.videoType
-                          .toString() ??
-                      '',
-                );
-                if (isRented != null && isRented == true) {
-                  analytics.logEvent(
-                    name: "Watch_Rented_video",
-                    parameters: {
-                      "user_id": Constant.userID,
-                      'video_id':
-                          videoDetailsProvider.sectionDetailModel.result?.id ??
-                              '',
-                      'video_name': videoDetailsProvider
-                              .sectionDetailModel.result?.name ??
-                          '',
-                      'rent_price': videoDetailsProvider
-                              .sectionDetailModel.result?.rentPrice ??
-                          0,
-                    },
-                  );
-                  _getData();
-                }
-              } else {
-                if ((kIsWeb || Constant.isTV)) {
-                  Utils.buildWebAlertDialog(context, "login", "")
-                      .then((value) => _getData());
-                  return;
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LoginSocial();
-                    },
-                  ),
-                );
-              }
-            },
-            child: _buildFeatureBtn(
-              icon: 'ic_store.png',
-              title:
-                  "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
-              multilanguage: false,
-            ),
-          ),
-        );
-      }
-    } else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
-        1) {
-      if ((videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
-        return const SizedBox.shrink();
-      } else {
-        return Expanded(
-          child: InkWell(
-            focusColor: white,
-            borderRadius: BorderRadius.circular(5),
-            onTap: () async {
-              if (Constant.userID != null) {
-                dynamic isRented = await Utils.paymentForRent(
-                  context: context,
-                  videoId: videoDetailsProvider.sectionDetailModel.result?.id
-                          .toString() ??
-                      '',
-                  rentPrice: videoDetailsProvider
-                          .sectionDetailModel.result?.rentPrice
-                          .toString() ??
-                      '',
-                  vTitle: videoDetailsProvider.sectionDetailModel.result?.name
-                          .toString() ??
-                      '',
-                  typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
-                          .toString() ??
-                      '',
-                  vType: videoDetailsProvider
-                          .sectionDetailModel.result?.videoType
-                          .toString() ??
-                      '',
-                );
-                if (isRented != null && isRented == true) {
-                  analytics.logEvent(
-                    name: "Watch_Rented_video",
-                    parameters: {
-                      "user_id": Constant.userID,
-                      'video_id':
-                          videoDetailsProvider.sectionDetailModel.result?.id ??
-                              '',
-                      'video_name': videoDetailsProvider
-                              .sectionDetailModel.result?.name ??
-                          '',
-                      'rent_price': videoDetailsProvider
-                              .sectionDetailModel.result?.rentPrice ??
-                          0,
-                    },
-                  );
-                  _getData();
-                }
-              } else {
-                if ((kIsWeb || Constant.isTV)) {
-                  Utils.buildWebAlertDialog(context, "login", "")
-                      .then((value) => _getData());
-                  return;
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LoginSocial();
-                    },
-                  ),
-                );
-              }
-            },
-            child: _buildFeatureBtn(
-              icon: 'ic_store.png',
-              title:
-                  "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
-              multilanguage: false,
-            ),
-          ),
-        );
-      }
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
+  // Widget _buildRentBtn() {
+  //   if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) == 1 &&
+  //       (videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
+  //     if ((videoDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
+  //         (videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
+  //       return const SizedBox.shrink();
+  //     } else {
+  //       return Expanded(
+  //         child: InkWell(
+  //           focusColor: white,
+  //           borderRadius: BorderRadius.circular(5),
+  //           onTap: () async {
+  //             if (Constant.userID != null) {
+  //               dynamic isRented = await Utils.paymentForRent(
+  //                 context: context,
+  //                 videoId: videoDetailsProvider.sectionDetailModel.result?.id
+  //                         .toString() ??
+  //                     '',
+  //                 rentPrice: videoDetailsProvider
+  //                         .sectionDetailModel.result?.rentPrice
+  //                         .toString() ??
+  //                     '',
+  //                 vTitle: videoDetailsProvider.sectionDetailModel.result?.name
+  //                         .toString() ??
+  //                     '',
+  //                 typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
+  //                         .toString() ??
+  //                     '',
+  //                 vType: videoDetailsProvider
+  //                         .sectionDetailModel.result?.videoType
+  //                         .toString() ??
+  //                     '',
+  //               );
+  //               if (isRented != null && isRented == true) {
+  //                 analytics.logEvent(
+  //                   name: "Watch_Rented_video",
+  //                   parameters: {
+  //                     "user_id": Constant.userID,
+  //                     'video_id':
+  //                         videoDetailsProvider.sectionDetailModel.result?.id ??
+  //                             '',
+  //                     'video_name': videoDetailsProvider
+  //                             .sectionDetailModel.result?.name ??
+  //                         '',
+  //                     'rent_price': videoDetailsProvider
+  //                             .sectionDetailModel.result?.rentPrice ??
+  //                         0,
+  //                   },
+  //                 );
+  //                 _getData();
+  //               }
+  //             } else {
+  //               if ((kIsWeb || Constant.isTV)) {
+  //                 Utils.buildWebAlertDialog(context, "login", "")
+  //                     .then((value) => _getData());
+  //                 return;
+  //               }
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) {
+  //                     return const LoginSocial();
+  //                   },
+  //                 ),
+  //               );
+  //             }
+  //           },
+  //           child: _buildFeatureBtn(
+  //             icon: 'ic_store.png',
+  //             title:
+  //                 "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
+  //             multilanguage: false,
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   } else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
+  //       1) {
+  //     if ((videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
+  //       return const SizedBox.shrink();
+  //     } else {
+  //       return Expanded(
+  //         child: InkWell(
+  //           focusColor: white,
+  //           borderRadius: BorderRadius.circular(5),
+  //           onTap: () async {
+  //             if (Constant.userID != null) {
+  //               dynamic isRented = await Utils.paymentForRent(
+  //                 context: context,
+  //                 videoId: videoDetailsProvider.sectionDetailModel.result?.id
+  //                         .toString() ??
+  //                     '',
+  //                 rentPrice: videoDetailsProvider
+  //                         .sectionDetailModel.result?.rentPrice
+  //                         .toString() ??
+  //                     '',
+  //                 vTitle: videoDetailsProvider.sectionDetailModel.result?.name
+  //                         .toString() ??
+  //                     '',
+  //                 typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
+  //                         .toString() ??
+  //                     '',
+  //                 vType: videoDetailsProvider
+  //                         .sectionDetailModel.result?.videoType
+  //                         .toString() ??
+  //                     '',
+  //               );
+  //               if (isRented != null && isRented == true) {
+  //                 analytics.logEvent(
+  //                   name: "Watch_Rented_video",
+  //                   parameters: {
+  //                     "user_id": Constant.userID,
+  //                     'video_id':
+  //                         videoDetailsProvider.sectionDetailModel.result?.id ??
+  //                             '',
+  //                     'video_name': videoDetailsProvider
+  //                             .sectionDetailModel.result?.name ??
+  //                         '',
+  //                     'rent_price': videoDetailsProvider
+  //                             .sectionDetailModel.result?.rentPrice ??
+  //                         0,
+  //                   },
+  //                 );
+  //                 _getData();
+  //               }
+  //             } else {
+  //               if ((kIsWeb || Constant.isTV)) {
+  //                 Utils.buildWebAlertDialog(context, "login", "")
+  //                     .then((value) => _getData());
+  //                 return;
+  //               }
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) {
+  //                     return const LoginSocial();
+  //                   },
+  //                 ),
+  //               );
+  //             }
+  //           },
+  //           child: _buildFeatureBtn(
+  //             icon: 'ic_store.png',
+  //             title:
+  //                 "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
+  //             multilanguage: false,
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     return const SizedBox.shrink();
+  //   }
+  // }
 
   Widget _buildTabs() {
     return Column(
@@ -4199,32 +4273,42 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       _getData();
     }
   }
+
   /* ========= Open Player ========= */
 
+  /* ========= Open Player ========= */
   Future<bool> _checkSubsRentLogin() async {
     if (Constant.userID != null) {
+      // Case 1: Premium + Rent Video with Coin Option
       if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) ==
               1 &&
-          (videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
+          (videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1 &&
+          (videoDetailsProvider
+                      .sectionDetailModel.result?.isabaletocoinpurches ??
+                  0) ==
+              1) {
         if ((videoDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
             (videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+                1 ||
+            (videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ?? 0) ==
                 1) {
           return true;
         } else {
           dynamic isSubscribed = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) {
-                return const Subscription();
-              },
+              builder: (context) => const Subscription(),
             ),
           );
-          if (isSubscribed != null && isSubscribed == true) {
+          if (isSubscribed == true) {
             _getData();
           }
           return false;
         }
-      } else if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ??
+      }
+
+      // Case 2: Only Premium Video
+      else if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ??
               0) ==
           1) {
         if ((videoDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1) {
@@ -4233,63 +4317,336 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           dynamic isSubscribed = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) {
-                return const Subscription();
-              },
+              builder: (context) => const Subscription(),
             ),
           );
-          if (isSubscribed != null && isSubscribed == true) {
+          if (isSubscribed == true) {
             _getData();
           }
           return false;
         }
-      } else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ??
-              0) ==
-          1) {
-        if ((videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
-            1) {
-          return true;
-        } else {
-          dynamic isRented = await Utils.paymentForRent(
-            context: context,
-            videoId:
-                videoDetailsProvider.sectionDetailModel.result?.id.toString() ??
-                    '',
-            rentPrice: videoDetailsProvider.sectionDetailModel.result?.rentPrice
-                    .toString() ??
-                '',
-            vTitle: videoDetailsProvider.sectionDetailModel.result?.name
-                    .toString() ??
-                '',
-            typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
-                    .toString() ??
-                '',
-            vType: videoDetailsProvider.sectionDetailModel.result?.videoType
-                    .toString() ??
-                '',
-          );
-          if (isRented != null && isRented == true) {
-            _getData();
-          }
-          return false;
-        }
-      } else {
-        return true;
       }
-    } else {
-      if ((kIsWeb || Constant.isTV)) {
-        Utils.buildWebAlertDialog(context, "login", "")
-            .then((value) => _getData());
+
+      // Case 3: Rent Video with Coin Option but isRent == 0
+      else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
+              0 &&
+          (videoDetailsProvider
+                      .sectionDetailModel.result?.isabaletocoinpurches ??
+                  0) ==
+              1) {
+        if ((videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ?? 0) ==
+            1) {
+          return true; // If already bought with coins, return false
+        }
+
+        // Show Bottom Sheet for Rent via Coin
+        await showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          backgroundColor: Colors.black,
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    'Select Payment Method',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(color: Colors.grey, thickness: 1),
+
+              
+// Rent via Coin option
+Consumer<WalletProvider>(
+  builder: (context, walletProvider, child) {
+    return ListTile(
+      leading: Image.asset(
+        'assets/images/coin.png',
+        height: 40,
+        width: 40,
+      ),
+      title: const Text(
+        'Rent via Coin',
+        style: TextStyle(color: Colors.white),
+      ),
+      onTap: () async {
+        Navigator.pop(context); // Close the bottom sheet
+        try {
+          // Retrieve user balance and video coin value
+          dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+          dynamic videoCoinValue = videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? '0';
+
+          if (userBalance >= videoCoinValue) {
+            print("USER COME IN YTHE IF---");
+            // Sufficient balance, proceed with renting via coin
+            String userId = "${Constant.userID}";
+            String videoId = videoDetailsProvider
+                    .sectionDetailModel.result?.id
+                    .toString() ?? '';
+            String noOfToken = videoDetailsProvider
+                    .sectionDetailModel.result?.coinvalue
+                    .toString() ?? '0';
+
+            if (mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SuccessScreen(
+                    userId: userId,
+                    videoId: videoId,
+                    noOfToken: noOfToken,
+                  ),
+                ),
+              );
+            }
+          } else {
+            // Insufficient balance, redirect to Coin Store
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CoinStoreScreen(),
+              ),
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to process your request. Please try again.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
+  },
+),
+     
+                
+              
+              
+                ],
+              ),
+            );
+          },
+        );
+
+        return false; // Continue as the user needs to choose payment
+      }
+
+      // Case 4: Only Rent Video with Coin Option
+      else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
+          1) {
+        // Sub-condition 1: Already rented or purchased with coins
+        if ((videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+                1 ||
+            (videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ?? 0) ==
+                1) {
+          return true;
+        }
+
+        // Sub-condition 2: Not rented/purchased, check payment options
+        if ((videoDetailsProvider
+                    .sectionDetailModel.result?.isabaletocoinpurches ??
+                0) ==
+            1) {
+          await showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            backgroundColor: Colors.black,
+            builder: (context) {
+              final walletProvider =
+                  Provider.of<WalletProvider>(context, listen: false);
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      'Select Payment Method',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(color: Colors.grey, thickness: 1),
+
+                    // Rent via Payment option
+                    ListTile(
+                      leading: Image.asset(
+                        'assets/images/rupee.png',
+                        height: 30,
+                        width: 30,
+                      ),
+                      title: const Text(
+                        'Rent via Payment',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context); // Close the bottom sheet
+                        dynamic isRented = await Utils.paymentForRent(
+                          context: context,
+                          videoId: videoDetailsProvider
+                                  .sectionDetailModel.result?.id
+                                  .toString() ??
+                              '',
+                          rentPrice: videoDetailsProvider
+                                  .sectionDetailModel.result?.rentPrice
+                                  .toString() ??
+                              '',
+                          vTitle: videoDetailsProvider
+                                  .sectionDetailModel.result?.name
+                                  .toString() ??
+                              '',
+                          typeId: videoDetailsProvider
+                                  .sectionDetailModel.result?.typeId
+                                  .toString() ??
+                              '',
+                          vType: videoDetailsProvider
+                                  .sectionDetailModel.result?.videoType
+                                  .toString() ??
+                              '',
+                        );
+                        if (isRented == true) {
+                          _getData();
+                        }
+                      },
+                    ),
+                    const Divider(color: Colors.grey, thickness: 1),
+
+                 
+
+                                      // Rent via Coin option
+// Rent via Coin option
+Consumer<WalletProvider>(
+  builder: (context, walletProvider, child) {
+    return ListTile(
+      leading: Image.asset(
+        'assets/images/coin.png',
+        height: 40,
+        width: 40,
+      ),
+      title: const Text(
+        'Rent via Coin',
+        style: TextStyle(color: Colors.white),
+      ),
+      onTap: () async {
+        Navigator.pop(context); // Close the bottom sheet
+        try {
+          // Retrieve user balance and video coin value
+          dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+          dynamic videoCoinValue = videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? '0';
+
+          if (userBalance >= videoCoinValue) {
+            print("USER COME IN YTHE IF---");
+            // Sufficient balance, proceed with renting via coin
+            String userId = "${Constant.userID}";
+            String videoId = videoDetailsProvider
+                    .sectionDetailModel.result?.id
+                    .toString() ?? '';
+            String noOfToken = videoDetailsProvider
+                    .sectionDetailModel.result?.coinvalue
+                    .toString() ?? '0';
+
+            if (mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SuccessScreen(
+                    userId: userId,
+                    videoId: videoId,
+                    noOfToken: noOfToken,
+                  ),
+                ),
+              );
+            }
+          } else {
+            // Insufficient balance, redirect to Coin Store
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CoinStoreScreen(),
+              ),
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to process your request. Please try again.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
+  },
+),
+     
+                 
+                 
+                  ],
+                ),
+              );
+            },
+          );
+
+          return false;
+        }
+
+        // Sub-condition 3: Redirect to Rent Payment
+        dynamic isRented = await Utils.paymentForRent(
+          context: context,
+          videoId:
+              videoDetailsProvider.sectionDetailModel.result?.id.toString() ??
+                  '',
+          rentPrice: videoDetailsProvider.sectionDetailModel.result?.rentPrice
+                  .toString() ??
+              '',
+          vTitle:
+              videoDetailsProvider.sectionDetailModel.result?.name.toString() ??
+                  '',
+          typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
+                  .toString() ??
+              '',
+          vType: videoDetailsProvider.sectionDetailModel.result?.videoType
+                  .toString() ??
+              '',
+        );
+        if (isRented == true) {
+          _getData();
+        }
         return false;
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const LoginSocial();
-          },
-        ),
-      );
+
+      // General Case: Access allowed by default
+      return true;
+    } else {
+      // User is not logged in
+      if (kIsWeb || Constant.isTV) {
+        Utils.buildWebAlertDialog(context, "login", "")
+            .then((value) => _getData());
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginSocial(),
+          ),
+        );
+      }
       return false;
     }
   }

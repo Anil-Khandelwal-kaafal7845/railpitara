@@ -166,7 +166,6 @@ flutter_launcher_icons:
 flutter:
   assets: 
     - assets/
-    - assets/json/
     - assets/images/
     - assets/locales/en.json
     - assets/locales/af.json
@@ -182,6 +181,9 @@ flutter:
     - assets/locales/sq.json
     - assets/locales/tr.json
     - assets/locales/vi.json
+    - assets/json/success.json
+    - assets/json/
+    - assets/json/error.json
 
 flutter_icons:
   android: true

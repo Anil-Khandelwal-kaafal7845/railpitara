@@ -464,10 +464,20 @@ class HomeState extends State<Home> with RouteAware{
 
           GestureDetector(
             onTap: () {
-              Navigator.push(
+
+                if (Constant.userID != null) {
+                           Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CoinStoreScreen()),
               );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+            
             },
             child: 
             Padding(
@@ -490,7 +500,9 @@ Constant.userID != null
                 fontWeight: FontWeight.bold,
               ),
             )
-          : SizedBox.shrink(),         
+          : SizedBox.shrink(),
+
+
                 ],
               )
             ),

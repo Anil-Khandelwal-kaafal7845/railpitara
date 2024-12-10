@@ -1,4 +1,8 @@
+import 'package:dtlive/pages/coinstorescreen.dart';
+import 'package:dtlive/pages/successCoinShow.dart';
+import 'package:dtlive/pages/successScreen.dart';
 import 'package:dtlive/provider/generalprovider.dart';
+import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
@@ -24,7 +28,7 @@ import 'package:provider/provider.dart';
 class EpisodeBySeason extends StatefulWidget {
   final int? videoId, upcomingType, typeId, seasonPos;
   final List<Session>? seasonList;
-  
+
   final Result? sectionDetails;
   const EpisodeBySeason(this.videoId, this.upcomingType, this.typeId,
       this.seasonPos, this.seasonList, this.sectionDetails,
@@ -35,17 +39,19 @@ class EpisodeBySeason extends StatefulWidget {
   State<EpisodeBySeason> createState() => _EpisodeBySeasonState();
 }
 
-class _EpisodeBySeasonState extends State<EpisodeBySeason> {
+class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   late EpisodeProvider episodeProvider;
   late GeneralProvider generalProvider;
   late ShowDetailsProvider showDetailsProvider;
   late WalletProvider walletProvider;
+  late HomeProvider homeProvider;
   String? finalVUrl = "";
   Map<String, String> qualityUrlList = <String, String>{};
 
   @override
   void initState() {
-   generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
 
@@ -53,6 +59,11 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
         Provider.of<ShowDetailsProvider>(context, listen: false);
     getAllEpisode();
     super.initState();
+  }
+
+  @override
+  void didPopNext() {
+    _fetchDataBalance();
   }
 
   getAllEpisode() async {
@@ -66,6 +77,13 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
       if (!mounted) return;
       setState(() {});
     });
+  }
+
+  void _fetchDataBalance() async {
+    homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
+    episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+    getAllEpisode();
+    setState(() {});
   }
 
   @override
@@ -107,162 +125,111 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
                       children: [
                         Column(
                           children: [
-                         InkWell(
-  borderRadius: BorderRadius.circular(16),
-  focusColor: white.withOpacity(0.5),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              focusColor: white.withOpacity(0.5),
+                              onTap: () async {
+                                // Check if the user is logged in
+                                if (Constant.userID != null) {
+                                  // Extract isBuy and isAdShow values from the episode data
+                                  bool isPrimeUser = episodeProvider
+                                          .episodeBySeasonModel
+                                          .result?[index]
+                                          .isBuy ==
+                                      1;
+                                      bool isPrimeUserCoin = episodeProvider
+                                          .episodeBySeasonModel
+                                          .result?[index]
+                                          .iscoinbuy ==
+                                      1;  // Prime user
+                                  bool isAdShow = episodeProvider
+                                          .episodeBySeasonModel
+                                          .result?[index]
+                                          .isadshow ==
+                                      1; // Ad should be shown
 
-  onTap: () async {
-  // Check if the user is logged in
-  if (Constant.userID != null) {
-    // Extract isBuy and isAdShow values from the episode data
-    bool isPrimeUser = episodeProvider
-            .episodeBySeasonModel
-            .result?[index]
-            .isBuy ==
-        1; // Prime user
-    bool isAdShow = episodeProvider
-            .episodeBySeasonModel
-            .result?[index]
-            .isadshow ==
-        1; // Ad should be shown
-
-    if (isPrimeUser) {
-      // Prime users directly navigate to the player
-      openPlayer(
-        "Show",
-        index,
-        episodeProvider.episodeBySeasonModel.result,
-      );
-    } else {
-      // Normal users (isBuy == 0)
-      if (isAdShow) {
-        // Show ad if isAdShow is true
-        AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-          // After the ad is watched, call the API to add coins
-          await walletProvider.addCoinsAfterWatchAd(
-            Constant.userID!,
-            0,
-            episodeProvider.episodeBySeasonModel.result?[index].showId,
-            generalProvider.isAdsCoin,
-          );
-          // Navigate to the player after adding coins
-          openPlayer(
-            "Show",
-            index,
-            episodeProvider.episodeBySeasonModel.result,
-          );
-        });
-      } else {
-        // If ads are not shown (isAdShow == 0), navigate directly to the player
-        openPlayer(
-          "Show",
-          index,
-          episodeProvider.episodeBySeasonModel.result,
-        );
-      }
-    }
-  } else {
-    // User not logged in, navigate to the login screen
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginSocial(),
-      ),
-    );
-  }
-}
-
-  // onTap: () async {
-  //   // Check if the user is logged in
-  //   if (Constant.userID != null) {
-  //     // Get the values of isadshow and isbuy from the episode data
-  //     bool isAdShow = episodeProvider
-  //             .episodeBySeasonModel
-  //             .result?[index]
-  //             .isadshow ==
-  //         1;
-  //     bool isBuy = episodeProvider
-  //             .episodeBySeasonModel
-  //             .result?[index]
-  //             .isBuy ==
-  //         0;
-
-  //     // If isbuy is 0, proceed to check isadshow
-  //     if (isBuy) {
-  //       if (isAdShow) {
-  //         // If isadshow is 1, show the ad
-  //         AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-  //           // After the ad is watched, call the API to add coins
-  //           await walletProvider.addCoinsAfterWatchAd(
-  //             Constant.userID!,
-  //             0,
-  //             episodeProvider.episodeBySeasonModel.result?[index].showId,
-  //             generalProvider.isAdsCoin,
-  //           );
-  //           // Navigate to player Edit screen after adding coins
-  //           openPlayer(
-  //             "Show",
-  //             index,
-  //             episodeProvider.episodeBySeasonModel.result,
-  //           );
-  //         });
-  //       } else {
-  //         // If isadshow is 0, directly navigate to player Edit screen without ad
-  //         openPlayer(
-  //           "Show",
-  //           index,
-  //           episodeProvider.episodeBySeasonModel.result,
-  //         );
-  //       }
-  //     } else {
-  //       // If isbuy is 1, directly navigate to player Edit screen without ad
-  //       openPlayer(
-  //         "Show",
-  //         index,
-  //         episodeProvider.episodeBySeasonModel.result,
-  //       );
-  //     }
-  //   } else {
-  //     // If the user is not logged in, navigate to the login screen
-  //     Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder: (context) => const LoginSocial(),
-  //       ),
-  //     );
-  //   }
-  // },.
-  ,child: Container(
-    width: 160,
-    height: 100,
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.all(2.0),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(7),
-    ),
-    child: Stack(
-      fit: StackFit.expand,
-      children: [
-        MyNetworkImage(
-          fit: BoxFit.fill,
-          imageUrl: (episodeProvider
-                  .episodeBySeasonModel
-                  .result?[index]
-                  .landscape ??
-              ""),
-        ),
-        Center(
-          child: MyImage(
-            fit: BoxFit.cover,
-            height: 32,
-            width: 32,
-            imagePath: "play.png",
-          ),
-        ),
-      ],
-    ),
-  ),
-),
-
-                            
+                                  if (isPrimeUser || isPrimeUserCoin) {
+                                    // Prime users directly navigate to the player
+                                    openPlayer(
+                                      "Show",
+                                      index,
+                                      episodeProvider
+                                          .episodeBySeasonModel.result,
+                                    );
+                                  } else {
+                                 
+                                    if (isAdShow) {
+                                      
+                                      AdHelper.showFullscreenAd(
+                                          context, Constant.rewardAdType,
+                                          () async {
+                                        // After the ad is watched, call the API to add coins
+                                        await walletProvider
+                                            .addCoinsAfterWatchAd(
+                                          Constant.userID!,
+                                          0,
+                                          episodeProvider.episodeBySeasonModel
+                                              .result?[index].showId,
+                                          generalProvider.isAdsCoin,
+                                        );
+                                        // Navigate to the player after adding coins
+                                        openPlayer(
+                                          "Show",
+                                          index,
+                                          episodeProvider
+                                              .episodeBySeasonModel.result,
+                                        );
+                                      });
+                                    } else {
+                                      // If ads are not shown (isAdShow == 0), navigate directly to the player
+                                      openPlayer(
+                                        "Show",
+                                        index,
+                                        episodeProvider
+                                            .episodeBySeasonModel.result,
+                                      );
+                                    }
+                                  }
+                                } else {
+                                  // User not logged in, navigate to the login screen
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginSocial(),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: 160,
+                                height: 100,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.all(2.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    MyNetworkImage(
+                                      fit: BoxFit.fill,
+                                      imageUrl: (episodeProvider
+                                              .episodeBySeasonModel
+                                              .result?[index]
+                                              .landscape ??
+                                          ""),
+                                    ),
+                                    Center(
+                                      child: MyImage(
+                                        fit: BoxFit.cover,
+                                        height: 32,
+                                        width: 32,
+                                        imagePath: "play.png",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             (episodeProvider.episodeBySeasonModel.result?[index]
                                             .videoDuration !=
                                         null &&
@@ -490,22 +457,37 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
   Future<bool> _checkSubsRentLogin(
       int epiPos, List<episode.Result>? episodeList) async {
     if (Constant.userID != null) {
+      // Case 1: Premium + Rent Video with Coin Option
       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium ??
                   0) ==
               1 &&
-          (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
+          (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1 &&
+          (episodeProvider.episodeBySeasonModel.result?[epiPos]
+                      .isabaletocoinpurches ??
+                  0) ==
+              1) {
+        debugPrint('Case 1: Premium + Rent Video with Coin Option');
+        debugPrint(
+            'isPremium: ${episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium}');
+        debugPrint(
+            'isRent: ${showDetailsProvider.sectionDetailModel.result?.isRent}');
+        debugPrint(
+            'isabaletocoinpurches: ${showDetailsProvider.sectionDetailModel.result?.isabaletocoinpurches}');
         if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
                 1 ||
             (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+                1 ||
+            (episodeProvider.episodeBySeasonModel.result?[epiPos].iscoinbuy ??
+                    0) ==
                 1) {
+          debugPrint('User can access the video');
           return true;
         } else {
+          debugPrint('User needs to subscribe');
           dynamic isSubscribed = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) {
-                return const Subscription();
-              },
+              builder: (context) => const Subscription(),
             ),
           );
           if (isSubscribed != null && isSubscribed == true) {
@@ -513,20 +495,26 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
           }
           return false;
         }
-      } else if ((episodeProvider
+      }
+
+      // Case 2: Only Premium Video
+      else if ((episodeProvider
                   .episodeBySeasonModel.result?[epiPos].isPremium ??
               0) ==
           1) {
+        debugPrint('Case 2: Only Premium Video');
+        debugPrint(
+            'isPremium: ${episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium}');
         if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
             1) {
+          debugPrint('User can access the video');
           return true;
         } else {
+          debugPrint('User needs to subscribe');
           dynamic isSubscribed = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) {
-                return const Subscription();
-              },
+              builder: (context) => const Subscription(),
             ),
           );
           if (isSubscribed != null && isSubscribed == true) {
@@ -534,38 +522,351 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
           }
           return false;
         }
-      } else if ((showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
-          1) {
-        if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+      }
+
+      // Case 3: Rent Video with Coin Option but isRent == 0
+      if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ?? 0) ==
+              0 &&
+          (episodeProvider.episodeBySeasonModel.result?[epiPos]
+                      .isabaletocoinpurches ??
+                  0) ==
+              1) {
+        debugPrint(
+            'Both conditions met: isRent = 0 and isabaletocoinpurches = 1');
+
+        // Check if the video is already purchased with coins
+        if ((episodeProvider.episodeBySeasonModel.result?[epiPos].iscoinbuy ??
+                0) ==
             1) {
+          debugPrint('Video already purchased with coins.');
+          return true; // Grant access
+        }
+
+        // Show bottom sheet to rent via coin
+        await showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          backgroundColor: Colors.black,
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    'Select Payment Method',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(color: Colors.grey, thickness: 1),
+
+                  // Single option: Rent via Coin
+                  ListTile(
+                    leading: Image.asset(
+                      'assets/images/coin.png',
+                      height: 40,
+                      width: 40,
+                    ),
+                    title: const Text(
+                      'Rent via Coin',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context); // Close the bottom sheet
+
+                      try {
+                        // Retrieve user balance and video coin value
+                        dynamic userBalance =
+                            homeProvider.userWalletBalanceModel?.balance ?? 0;
+                        dynamic videoCoinValue = episodeProvider
+                                .episodeBySeasonModel
+                                .result?[epiPos]
+                                .coinvalue ??
+                            '0';
+
+                        if (userBalance >= videoCoinValue) {
+                          print("USER COME IN YTHE IF---");
+                          // Sufficient balance, proceed with renting via coin
+                          String userId = "${Constant.userID}";
+                          String showId = episodeProvider
+                                  .episodeBySeasonModel.result?[epiPos].showId
+                                  .toString() ??
+                              '';
+                          String videoId = episodeProvider
+                                  .episodeBySeasonModel.result?[epiPos].id
+                                  .toString() ??
+                              '';
+                          String noOfToken = episodeProvider
+                                  .episodeBySeasonModel
+                                  .result?[epiPos]
+                                  .coinvalue
+                                  .toString() ??
+                              '0';
+                          debugPrint(
+                              'Rent via Coin: userId=$userId, showId=$showId, noOfToken=$noOfToken');
+
+                          // Navigate to SuccessScreen
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SuccessShowScreen(
+                                  userId: userId,
+                                  videoId: videoId,
+                                  noOfToken: noOfToken,
+                                  showId: showId,
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          // Insufficient balance, redirect to Coin Store
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CoinStoreScreen(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        debugPrint('Error: $e');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Failed to navigate. Please try again.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        return false; // User needs to take an action
+      }
+
+      // Case 4: Only Rent Video with Coin Option
+      else if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ??
+              0) ==
+          1) {
+        debugPrint('Case 4: Only Rent Video with Coin Option');
+        debugPrint(
+            'isRent: ${showDetailsProvider.sectionDetailModel.result?.isRent}');
+        // Sub-condition 1: Already rented or purchased with coins
+        if ((episodeProvider.episodeBySeasonModel.result?[epiPos].rentBuy ??
+                    0) ==
+                1 ||
+            (episodeProvider.episodeBySeasonModel.result?[epiPos].iscoinbuy ??
+                    0) ==
+                1) {
+          debugPrint('Video already rented or purchased');
           return true;
-        } else {
-          dynamic isRented = await Utils.paymentForRent(
+        }
+
+        // Sub-condition 2: Not rented/purchased, check payment options
+        if ((episodeProvider.episodeBySeasonModel.result?[epiPos]
+                    .isabaletocoinpurches ??
+                0) ==
+            1) {
+          debugPrint('Rent via Coin is available');
+          await showModalBottomSheet(
             context: context,
-            videoId:
-                showDetailsProvider.sectionDetailModel.result?.id.toString() ??
-                    '',
-            rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
-                    .toString() ??
-                '',
-            vTitle: showDetailsProvider.sectionDetailModel.result?.name
-                    .toString() ??
-                '',
-            typeId: showDetailsProvider.sectionDetailModel.result?.typeId
-                    .toString() ??
-                '',
-            vType: showDetailsProvider.sectionDetailModel.result?.videoType
-                    .toString() ??
-                '',
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            backgroundColor: Colors.black,
+            builder: (context) {
+              final walletProvider =
+                  Provider.of<WalletProvider>(context, listen: false);
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      'Select Payment Method',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(color: Colors.grey, thickness: 1),
+
+                    // Rent via Payment option
+                    ListTile(
+                      leading: Image.asset(
+                        'assets/images/rupee.png',
+                        height: 30,
+                        width: 30,
+                      ),
+                      title: const Text(
+                        'Rent via Payment',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context); // Close the bottom sheet
+                        dynamic isRented = await Utils.paymentForRent(
+                          context: context,
+                          videoId: showDetailsProvider
+                                  .sectionDetailModel.result?.id
+                                  .toString() ??
+                              '',
+                          rentPrice: showDetailsProvider
+                                  .sectionDetailModel.result?.rentPrice
+                                  .toString() ??
+                              '',
+                          vTitle: showDetailsProvider
+                                  .sectionDetailModel.result?.name
+                                  .toString() ??
+                              '',
+                          typeId: showDetailsProvider
+                                  .sectionDetailModel.result?.typeId
+                                  .toString() ??
+                              '',
+                          vType: showDetailsProvider
+                                  .sectionDetailModel.result?.videoType
+                                  .toString() ??
+                              '',
+                        );
+                        if (isRented == true) {
+                          getAllEpisode();
+                        }
+                      },
+                    ),
+                    const Divider(color: Colors.grey, thickness: 1),
+
+                    // Single option: Rent via Coin
+                    ListTile(
+                      leading: Image.asset(
+                        'assets/images/coin.png',
+                        height: 40,
+                        width: 40,
+                      ),
+                      title: const Text(
+                        'Rent via Coin',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context); // Close the bottom sheet
+
+                        try {
+                          // Retrieve user balance and video coin value
+                          dynamic userBalance =
+                              homeProvider.userWalletBalanceModel?.balance ?? 0;
+                          dynamic videoCoinValue = episodeProvider
+                                  .episodeBySeasonModel
+                                  .result?[epiPos]
+                                  .coinvalue ??
+                              '0';
+
+                          if (userBalance >= videoCoinValue) {
+                            print("USER COME IN YTHE IF---");
+                            // Sufficient balance, proceed with renting via coin
+                            String userId = "${Constant.userID}";
+                            String showId = episodeProvider
+                                    .episodeBySeasonModel.result?[epiPos].showId
+                                    .toString() ??
+                                '';
+                            String videoId = episodeProvider
+                                    .episodeBySeasonModel.result?[epiPos].id
+                                    .toString() ??
+                                '';
+                            String noOfToken = episodeProvider
+                                    .episodeBySeasonModel
+                                    .result?[epiPos]
+                                    .coinvalue
+                                    .toString() ??
+                                '0';
+                            debugPrint(
+                                'Rent via Coin: userId=$userId, showId=$showId, noOfToken=$noOfToken');
+
+                            // Navigate to SuccessScreen
+                            if (mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SuccessShowScreen(
+                                    userId: userId,
+                                    videoId: videoId,
+                                    noOfToken: noOfToken,
+                                    showId: showId,
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            // Insufficient balance, redirect to Coin Store
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CoinStoreScreen(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          debugPrint('Error: $e');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Failed to navigate. Please try again.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                
+                  ],
+                ),
+              );
+            },
           );
-          if (isRented != null && isRented == true) {
-            getAllEpisode();
-          }
           return false;
         }
-      } else {
-        return true;
+
+        // Sub-condition 3: Redirect to Rent Payment
+        dynamic isRented = await Utils.paymentForRent(
+          context: context,
+          videoId:
+              showDetailsProvider.sectionDetailModel.result?.id.toString() ??
+                  '',
+          rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
+                  .toString() ??
+              '',
+          vTitle:
+              showDetailsProvider.sectionDetailModel.result?.name.toString() ??
+                  '',
+          typeId: showDetailsProvider.sectionDetailModel.result?.typeId
+                  .toString() ??
+              '',
+          vType: showDetailsProvider.sectionDetailModel.result?.videoType
+                  .toString() ??
+              '',
+        );
+        if (isRented == true) {
+          getAllEpisode();
+        }
+        return false;
       }
+
+      // General Case: Access allowed by default
+      debugPrint('General Case: Access allowed');
+      return true;
     } else {
       if ((kIsWeb || Constant.isTV)) {
         Utils.buildWebAlertDialog(context, "login", "").then((value) {
@@ -584,5 +885,103 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> {
       return false;
     }
   }
-  /* ========= Open Player ========= */
+
+  // Future<bool> _checkSubsRentLogin(
+  //     int epiPos, List<episode.Result>? episodeList) async {
+  //   if (Constant.userID != null) {
+  //     if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium ??
+  //                 0) ==
+  //             1 &&
+  //         (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
+  //       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
+  //               1 ||
+  //           (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+  //               1) {
+  //         return true;
+  //       } else {
+  //         dynamic isSubscribed = await Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) {
+  //               return const Subscription();
+  //             },
+  //           ),
+  //         );
+  //         if (isSubscribed != null && isSubscribed == true) {
+  //           getAllEpisode();
+  //         }
+  //         return false;
+  //       }
+  //     } else if ((episodeProvider
+  //                 .episodeBySeasonModel.result?[epiPos].isPremium ??
+  //             0) ==
+  //         1) {
+  //       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
+  //           1) {
+  //         return true;
+  //       } else {
+  //         dynamic isSubscribed = await Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) {
+  //               return const Subscription();
+  //             },
+  //           ),
+  //         );
+  //         if (isSubscribed != null && isSubscribed == true) {
+  //           getAllEpisode();
+  //         }
+  //         return false;
+  //       }
+  //     } else if ((showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
+  //         1) {
+  //       if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+  //           1) {
+  //         return true;
+  //       } else {
+  //         dynamic isRented = await Utils.paymentForRent(
+  //           context: context,
+  //           videoId:
+  //               showDetailsProvider.sectionDetailModel.result?.id.toString() ??
+  //                   '',
+  //           rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
+  //                   .toString() ??
+  //               '',
+  //           vTitle: showDetailsProvider.sectionDetailModel.result?.name
+  //                   .toString() ??
+  //               '',
+  //           typeId: showDetailsProvider.sectionDetailModel.result?.typeId
+  //                   .toString() ??
+  //               '',
+  //           vType: showDetailsProvider.sectionDetailModel.result?.videoType
+  //                   .toString() ??
+  //               '',
+  //         );
+  //         if (isRented != null && isRented == true) {
+  //           getAllEpisode();
+  //         }
+  //         return false;
+  //       }
+  //     } else {
+  //       return true;
+  //     }
+  //   } else {
+  //     if ((kIsWeb || Constant.isTV)) {
+  //       Utils.buildWebAlertDialog(context, "login", "").then((value) {
+  //         getAllEpisode();
+  //       });
+  //       return false;
+  //     }
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) {
+  //           return const LoginSocial();
+  //         },
+  //       ),
+  //     );
+  //     return false;
+  //   }
+  // }
+  // /* ========= Open Player ========= */
 }

@@ -79,18 +79,19 @@ class PaymentProvider extends ChangeNotifier {
   }
 
   Future<void> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode,orderStatus,orderId) async {
+      currencyCode, couponCode,orderStatus,orderId ,purchesVia) async {
     debugPrint("addTransaction userID :==> ${Constant.userID}");
     debugPrint("addTransaction packageId :==> $packageId");
     debugPrint("addTransaction couponCode :==> $couponCode");
     payLoading = true;
     successModel = await ApiService().addTransaction(
-        packageId, description, amount, paymentId, currencyCode, couponCode,orderStatus,orderId);
+        packageId, description, amount, paymentId, currencyCode, couponCode,orderStatus,orderId,purchesVia);
     debugPrint("addTransaction status :==> ${successModel.status}");
     debugPrint("addTransaction message :==> ${successModel.message}");
     payLoading = false;
     notifyListeners();
   }
+
 
   Future<void> addRentTransaction(
       videoId, amount, typeId, videoType, couponCode,orderStatus,orderId) async {

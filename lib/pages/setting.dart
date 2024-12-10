@@ -124,8 +124,8 @@ class SettingState extends State<Setting> {
                   titleMultilang: true,
                   subTitleMultilang: true,
                   onClick: () {
-                    AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                        () async {
+                    // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                    //     () async {
                       if (Constant.userID != null) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -139,7 +139,7 @@ class SettingState extends State<Setting> {
                           ),
                         );
                       }
-                    });
+              
                   },
                 ),
                
