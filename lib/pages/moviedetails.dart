@@ -12,6 +12,7 @@ import 'package:dtlive/provider/videodownloadprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/adhelper.dart';
+import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
 import 'package:dtlive/widget/castcrew.dart';
 import 'package:dtlive/widget/moredetails.dart';
@@ -60,6 +61,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   /* Trailer init */
   VideoPlayerController? _trailerNormalController;
   YoutubePlayerController? _trailerYoutubeController;
+  static SharedPre sharePref = SharedPre();
 
   /* Download init */
   late VideoDownloadProvider downloadProvider;
@@ -74,8 +76,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   late WalletProvider walletProvider;
   Map<String, String> qualityUrlList = <String, String>{};
   late DateTime startTime;
+  static var rewardad = "";
+  static var rewardadIos = "";
   @override
   void initState() {
+    print("Rewarded Ad loading...");
+    AdHelper.createRewardedAd();
+    print("Rewarded Ad loaded!");
+
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     print("HEY>>>>>>>>>>>>>>");
     startTime = DateTime.now();
@@ -113,7 +121,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   }
 
   void _fetchDataAgain() async {
-     homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
+    await AdHelper.createRewardedAd();
     _getData();
     setState(() {});
   }
@@ -176,6 +185,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   _getData() async {
     Utils.getCurrencySymbol();
+    //      rewardad = await sharePref.read("reward_ad") ?? "";
+    // rewardadIos = await sharePref.read("ios_reward_ad") ?? "";
+    //    debugPrint("AD ==> ${rewardad}");
+    // debugPrint("AD ==> ${rewardadIos}");
     await videoDetailsProvider.getSectionDetails(
         widget.typeId, widget.videoType, widget.videoId, widget.upcomingType);
 
@@ -205,8 +218,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       }
     }
 
-    Future.delayed(Duration.zero).then((value) {
+    Future.delayed(Duration.zero).then((value) async {
       if (!mounted) return;
+      rewardad = await sharePref.read("reward_ad") ?? "";
+      rewardadIos = await sharePref.read("ios_reward_ad") ?? "";
+      debugPrint("AD ==> ${rewardad}");
+      debugPrint("AD ==> ${rewardadIos}");
+      Utils.loadAds(context);
       setState(() {});
     });
   }
@@ -801,15 +819,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       SizedBox(
                                         width: 5,
                                       ),
-                                     Text(
-                                          "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
-                                          style: TextStyle(
-                                            color: white,
-                                            fontSize:
-                                                18, // Large font size for coin value
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      Text(
+                                        "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
+                                        style: TextStyle(
+                                          color: white,
+                                          fontSize:
+                                              18, // Large font size for coin value
+                                          fontWeight: FontWeight.bold,
                                         ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -2404,55 +2422,72 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         child: InkWell(
           onTap: () async {
             if (Constant.userID != null) {
-              // Check if the user is a "prime" user
+              // Check if the user is a "prime" user or has other access
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-              bool isPrimeUserCoin = videoDetailsProvider.sectionDetailModel.result?.iscoinbuy == 1;  // Prime user
-   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow == 1 ;
-   bool isRenteBuy = videoDetailsProvider.sectionDetailModel.result?.rentBuy ==1 ;
+              bool isPrimeUserCoin =
+                  videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+                      1; // Prime user with coins
+              bool isAdShow =
+                  videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+                      1; // Check if ad should be shown
+              bool isRenteBuy =
+                  videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+                      1; // Rent buy access
 
- print("after show the add--${isPrimeUser}"); print("after show the add--${isPrimeUserCoin}"); print("after show the add--${isAdShow}");
-print("after show the add--${isRenteBuy}");
+              print("Prime User: $isPrimeUser");
+              print("Prime User with Coins: $isPrimeUserCoin");
+              print("Show Ad: $isAdShow");
+              print("Rent Buy: $isRenteBuy");
 
-              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-                // Prime user, directly navigate to the player
+              // Check if rewardad is disabled for Android or iOS
+              if ((Platform.isAndroid && rewardad == "0") ||
+                  (Platform.isIOS && rewardadIos == "0")) {
+                print(
+                    "Rewarded ad is disabled for this platform. Opening player directly.");
                 openPlayer("Video");
-              } else {
-                // Non-prime user, show the ad
-                // openPlayer("Video");
-              if(isAdShow){
-                print("IS AD SHOW--");
-                print("IS AD SHOW--${isAdShow}");
-
-
-                  AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                    () async {
-                          print("after show the add--");
-                  // Handle the logic for adding coins after the ad is dismissed
-                  try {    print("Api call start--");
-                    await walletProvider.addCoinsAfterWatchAd(
-                      Constant.userID!,
-                      videoDetailsProvider.sectionDetailModel.result?.id,
-                      0,
-                      generalProvider.isAdsCoin,
-                    );
-                    print("Coins added successfully!");
-                  } catch (e) {
-                    print("Error adding coins: $e");
-                  }
-                      print("IS AD SHOW-- and video watch");
-                  // Navigate to the player
-                  openPlayer("Video");
-                });
-              
-              }else{
-
-  openPlayer("Video");
-
+                return; // Exit early since the ad logic is bypassed
               }
+
+              if ((Platform.isAndroid && rewardad == "1") ||
+                  (Platform.isIOS && rewardadIos == "1")) {
+                print("Rewarded ad is enable for this platform. Ope.");
+                if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+                  // If the user is prime, directly navigate to the player
+                  openPlayer("Video");
+                } else {
+                  // Non-prime user, show ad if necessary
+                  if (isAdShow) {
+                    print("Ad should be shown");
+
+                    // Show the rewarded ad
+                    AdHelper.showRewardedAd(() async {
+                      print("Rewarded ad dismissed");
+
+                      // Handle the logic for adding coins after the ad is dismissed
+                      try {
+                        print("API call to add coins started...");
+                        await walletProvider.addCoinsAfterWatchAd(
+                          Constant.userID!,
+                          videoDetailsProvider.sectionDetailModel.result?.id,
+                          0,
+                          generalProvider.isAdsCoin,
+                        );
+                        print("Coins added successfully!");
+                        // After adding coins, open the player
+                        openPlayer("Video");
+                      } catch (error) {
+                        print("Error while adding coins: $error");
+                      }
+                    });
+                  } else {
+                    // If the ad shouldn't be shown, directly proceed
+                    openPlayer("Video");
+                  }
+                }
+                return; 
               }
             } else {
-              // User is not logged in, navigate to login screen
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const LoginSocial(),
@@ -2461,40 +2496,61 @@ print("after show the add--${isRenteBuy}");
             }
           },
 
-//          onTap: () async {
-//   if (Constant.userID != null) {
-//     // Check if the user is a "prime" user
-//     bool isPrimeUser = videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+          // onTap: () async {
+          //   if (Constant.userID != null) {
+          //     // Check if the user is a "prime" user or has other access
+          //     bool isPrimeUser =
+          //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+          //     bool isPrimeUserCoin =
+          //         videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+          //             1; // Prime user with coins
+          //     bool isAdShow =
+          //         videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+          //             1; // Check if ad should be shown
+          //     bool isRenteBuy =
+          //         videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+          //             1; // Rent buy access
 
-//     if (isPrimeUser) {
-//       // Prime user, directly navigate to the player
-//       openPlayer("Video");
-//     } else {
-//       print("HIT 1");
-//       // Non-prime user, show the ad
-//       AdHelper.showFullscreenAd(context, Constant.rewardAdType, () async {
-//         // After the ad is watched, call the API to add coins
-//         await walletProvider.addCoinsAfterWatchAd(
-//           Constant.userID!,
-//           videoDetailsProvider.sectionDetailModel.result?.id,
-//           0,
-//           generalProvider.isAdsCoin,
-//         );
+          //     print("Prime User: $isPrimeUser");
+          //     print("Prime User with Coins: $isPrimeUserCoin");
+          //     print("Show Ad: $isAdShow");
+          //     print("Rent Buy: $isRenteBuy");
 
-//         // Navigate to the player after adding coins
-//         openPlayer("Video");
-//       });
-//     }
-//   } else {
-//     // User is not logged in, navigate to login screen
-//     Navigator.of(context).push(
-//       MaterialPageRoute(
-//         builder: (context) => const LoginSocial(),
-//       ),
-//     );
-//   }
-// },
+          //     if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+          //       // If the user is prime, directly navigate to the player
+          //       openPlayer("Video");
+          //     } else {
+          //       // Non-prime user, show ad if necessary
+          //       if (isAdShow) {
+          //         print("Ad should be shown");
 
+          //         // Show the rewarded ad
+          //         AdHelper.showRewardedAd(() async {
+          //           print("Rewarded ad dismissed");
+
+          //           // Handle the logic for adding coins after the ad is dismissed
+          //           try {
+          //             print("API call to add coins started...");
+          //             await walletProvider.addCoinsAfterWatchAd(
+          //               Constant.userID!,
+          //               videoDetailsProvider.sectionDetailModel.result?.id,
+          //               0,
+          //               generalProvider.isAdsCoin,
+          //             );
+          //             print("Coins added successfully!");
+          //             // After adding coins, open the player
+          //             openPlayer("Video");
+          //           } catch (error) {
+          //             print("Error while adding coins: $error");
+          //           }
+          //         });
+          //       } else {
+          //         // If the ad shouldn't be shown, directly proceed
+          //         openPlayer("Video");
+          //       }
+          //     }
+          //   }
+          // },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
@@ -2618,35 +2674,124 @@ print("after show the add--${isRenteBuy}");
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
+          onTap: () async {
+            if (Constant.userID != null) {
+              // Check if the user is a "prime" user or has other access
+              bool isPrimeUser =
+                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+              bool isPrimeUserCoin =
+                  videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+                      1; // Prime user with coins
+              bool isAdShow =
+                  videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+                      1; // Check if ad should be shown
+              bool isRenteBuy =
+                  videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+                      1; // Rent buy access
+
+              print("Prime User: $isPrimeUser");
+              print("Prime User with Coins: $isPrimeUserCoin");
+              print("Show Ad: $isAdShow");
+              print("Rent Buy: $isRenteBuy");
+
+              // Check if rewardad is disabled for Android or iOS
+              if ((Platform.isAndroid && rewardad == "0") ||
+                  (Platform.isIOS && rewardadIos == "0")) {
+                print(
+                    "Rewarded ad is disabled for this platform. Opening player directly.");
+                openPlayer("Video");
+                return; // Exit early since the ad logic is bypassed
+              }
+
+              // Check access conditions
+              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+                // If the user is prime, directly navigate to the player
+                openPlayer("Video");
+              } else {
+                // Non-prime user, show ad if necessary
+                if (isAdShow) {
+                  print("Ad should be shown");
+
+                  // Show the rewarded ad
+                  AdHelper.showRewardedAd(() async {
+                    print("Rewarded ad dismissed");
+
+                    // Handle the logic for adding coins after the ad is dismissed
+                    try {
+                      print("API call to add coins started...");
+                      await walletProvider.addCoinsAfterWatchAd(
+                        Constant.userID!,
+                        videoDetailsProvider.sectionDetailModel.result?.id,
+                        0,
+                        generalProvider.isAdsCoin,
+                      );
+                      print("Coins added successfully!");
+                      // After adding coins, open the player
+                      openPlayer("Video");
+                    } catch (error) {
+                      print("Error while adding coins: $error");
+                    }
+                  });
+                } else {
+                  // If the ad shouldn't be shown, directly proceed
+                  openPlayer("Video");
+                }
+              }
+            }
+          },
+
           // onTap: () async {
           //   if (Constant.userID != null) {
           //     // Check if the user is a "prime" user
           //     bool isPrimeUser =
           //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+          //     bool isPrimeUserCoin =
+          //         videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+          //             1; // Prime user
+          //     bool isAdShow =
+          //         videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
+          //     bool isRenteBuy =
+          //         videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
 
-          //     if (isPrimeUser) {
+          //     print("after show the add--${isPrimeUser}");
+          //     print("after show the add--${isPrimeUserCoin}");
+          //     print("after show the add--${isAdShow}");
+          //     print("after show the add--${isRenteBuy}");
+
+          //     if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
           //       // Prime user, directly navigate to the player
           //       openPlayer("Video");
           //     } else {
-          //       // Non-prime user, show the ad
-          //       // openPlayer("Video");
-          //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-          //           () async {
-          //         // Handle the logic for adding coins after the ad is dismissed
-          //         try {
-          //           await walletProvider.addCoinsAfterWatchAd(
-          //             Constant.userID!,
-          //             videoDetailsProvider.sectionDetailModel.result?.id,
-          //             0,
-          //             generalProvider.isAdsCoin,
-          //           );
-          //           print("Coins added successfully!");
-          //         } catch (e) {
-          //           print("Error adding coins: $e");
-          //         }
-          //         // Navigate to the player
+          //       // Non-prime user, show the ad if necessary
+          //       if (isAdShow) {
+          //         print("IS AD SHOW--");
+          //         print("IS AD SHOW--${isAdShow}");
+
+          //         // Show the rewarded ad
+          //         AdHelper.showRewardedAd(() async {
+          //           print("Rewarded ad dismissed");
+
+          //           // Handle the logic for adding coins after the ad is dismissed
+          //           try {
+          //             print("Api call start--");
+          //             await walletProvider.addCoinsAfterWatchAd(
+          //               Constant.userID!,
+          //               videoDetailsProvider.sectionDetailModel.result?.id,
+          //               0,
+          //               generalProvider.isAdsCoin,
+          //             );
+          //             print("Coins added successfully!");
+          //           } catch (e) {
+          //             print("Error adding coins: $e");
+          //           }
+
+          //           // Navigate to the player after the ad
+          //           openPlayer("Video");
+          //         });
+          //       } else {
+          //         // No ad to show, directly navigate to the player
           //         openPlayer("Video");
-          //       });
+          //       }
           //     }
           //   } else {
           //     // User is not logged in, navigate to login screen
@@ -2656,95 +2801,8 @@ print("after show the add--${isRenteBuy}");
           //       ),
           //     );
           //   }
-          // },
+          // }
 
- onTap: () async {
-            if (Constant.userID != null) {
-              // Check if the user is a "prime" user
-              bool isPrimeUser =
-                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-              bool isPrimeUserCoin = videoDetailsProvider.sectionDetailModel.result?.iscoinbuy == 1;  // Prime user
-   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow == 1 ;
-   bool isRenteBuy = videoDetailsProvider.sectionDetailModel.result?.rentBuy ==1 ;
-
- print("after show the add--${isPrimeUser}"); print("after show the add--${isPrimeUserCoin}"); print("after show the add--${isAdShow}");
-print("after show the add--${isRenteBuy}");
-
-              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-                // Prime user, directly navigate to the player
-                openPlayer("Video");
-              } else {
-                // Non-prime user, show the ad
-                // openPlayer("Video");
-              if(isAdShow){
-                print("IS AD SHOW--");
-                print("IS AD SHOW--${isAdShow}");
-
-
-                  AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                    () async {
-                          print("after show the add--");
-                  // Handle the logic for adding coins after the ad is dismissed
-                  try {    print("Api call start--");
-                    await walletProvider.addCoinsAfterWatchAd(
-                      Constant.userID!,
-                      videoDetailsProvider.sectionDetailModel.result?.id,
-                      0,
-                      generalProvider.isAdsCoin,
-                    );
-                    print("Coins added successfully!");
-                  } catch (e) {
-                    print("Error adding coins: $e");
-                  }
-                      print("IS AD SHOW-- and video watch");
-                  // Navigate to the player
-                  openPlayer("Video");
-                });
-              
-              }else{
-
-  openPlayer("Video");
-
-              }
-              }
-            } else {
-              // User is not logged in, navigate to login screen
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginSocial(),
-                ),
-              );
-            }
-          },
-          // onTap: () {
-          //   if (Constant.userID != null) {
-          //     print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
-          //     if (videoDetailsProvider.sectionDetailModel.result?.isBuy == 0) {
-          //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-          //           () async {
-
-          //         // After ad is watched, call the API to add coins
-          //         await walletProvider.addCoinsAfterWatchAd(
-          //             Constant.userID!,
-          //             videoDetailsProvider.sectionDetailModel.result?.id,
-          //             0,
-          //             generalProvider.isAdsCoin);
-
-          //         openPlayer("Video");
-          //       });
-          //     } else {
-          //       openPlayer("Video");
-          //     }
-
-          //   } else {
-          //     // User is not logged in, navigate to login screen
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) => const LoginSocial(),
-          //       ),
-          //     );
-          //   }
-          // },
           focusColor: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
@@ -4432,75 +4490,77 @@ print("after show the add--${isRenteBuy}");
                   const SizedBox(height: 10),
                   const Divider(color: Colors.grey, thickness: 1),
 
-              
 // Rent via Coin option
-Consumer<WalletProvider>(
-  builder: (context, walletProvider, child) {
-    return ListTile(
-      leading: Image.asset(
-        'assets/images/coin.png',
-        height: 40,
-        width: 40,
-      ),
-      title: const Text(
-        'Rent via Coin',
-        style: TextStyle(color: Colors.white),
-      ),
-      onTap: () async {
-        Navigator.pop(context); // Close the bottom sheet
-        try {
-          // Retrieve user balance and video coin value
-          dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
-          dynamic videoCoinValue = videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? '0';
+                  Consumer<WalletProvider>(
+                    builder: (context, walletProvider, child) {
+                      return ListTile(
+                        leading: Image.asset(
+                          'assets/images/coin.png',
+                          height: 40,
+                          width: 40,
+                        ),
+                        title: const Text(
+                          'Rent via Coin',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onTap: () async {
+                          Navigator.pop(context); // Close the bottom sheet
+                          try {
+                            // Retrieve user balance and video coin value
+                            dynamic userBalance =
+                                homeProvider.userWalletBalanceModel?.balance ??
+                                    0;
+                            dynamic videoCoinValue = videoDetailsProvider
+                                    .sectionDetailModel.result?.coinvalue ??
+                                '0';
 
-          if (userBalance >= videoCoinValue) {
-            print("USER COME IN YTHE IF---");
-            // Sufficient balance, proceed with renting via coin
-            String userId = "${Constant.userID}";
-            String videoId = videoDetailsProvider
-                    .sectionDetailModel.result?.id
-                    .toString() ?? '';
-            String noOfToken = videoDetailsProvider
-                    .sectionDetailModel.result?.coinvalue
-                    .toString() ?? '0';
+                            if (userBalance >= videoCoinValue) {
+                              print("USER COME IN YTHE IF---");
+                              // Sufficient balance, proceed with renting via coin
+                              String userId = "${Constant.userID}";
+                              String videoId = videoDetailsProvider
+                                      .sectionDetailModel.result?.id
+                                      .toString() ??
+                                  '';
+                              String noOfToken = videoDetailsProvider
+                                      .sectionDetailModel.result?.coinvalue
+                                      .toString() ??
+                                  '0';
 
-            if (mounted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SuccessScreen(
-                    userId: userId,
-                    videoId: videoId,
-                    noOfToken: noOfToken,
+                              if (mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SuccessScreen(
+                                      userId: userId,
+                                      videoId: videoId,
+                                      noOfToken: noOfToken,
+                                    ),
+                                  ),
+                                );
+                              }
+                            } else {
+                              // Insufficient balance, redirect to Coin Store
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CoinStoreScreen(),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Failed to process your request. Please try again.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
                   ),
-                ),
-              );
-            }
-          } else {
-            // Insufficient balance, redirect to Coin Store
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CoinStoreScreen(),
-              ),
-            );
-          }
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to process your request. Please try again.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-    );
-  },
-),
-     
-                
-              
-              
                 ],
               ),
             );
@@ -4596,76 +4656,78 @@ Consumer<WalletProvider>(
                     ),
                     const Divider(color: Colors.grey, thickness: 1),
 
-                 
-
-                                      // Rent via Coin option
+                    // Rent via Coin option
 // Rent via Coin option
-Consumer<WalletProvider>(
-  builder: (context, walletProvider, child) {
-    return ListTile(
-      leading: Image.asset(
-        'assets/images/coin.png',
-        height: 40,
-        width: 40,
-      ),
-      title: const Text(
-        'Rent via Coin',
-        style: TextStyle(color: Colors.white),
-      ),
-      onTap: () async {
-        Navigator.pop(context); // Close the bottom sheet
-        try {
-          // Retrieve user balance and video coin value
-          dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
-          dynamic videoCoinValue = videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? '0';
+                    Consumer<WalletProvider>(
+                      builder: (context, walletProvider, child) {
+                        return ListTile(
+                          leading: Image.asset(
+                            'assets/images/coin.png',
+                            height: 40,
+                            width: 40,
+                          ),
+                          title: const Text(
+                            'Rent via Coin',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onTap: () async {
+                            Navigator.pop(context); // Close the bottom sheet
+                            try {
+                              // Retrieve user balance and video coin value
+                              dynamic userBalance = homeProvider
+                                      .userWalletBalanceModel?.balance ??
+                                  0;
+                              dynamic videoCoinValue = videoDetailsProvider
+                                      .sectionDetailModel.result?.coinvalue ??
+                                  '0';
 
-          if (userBalance >= videoCoinValue) {
-            print("USER COME IN YTHE IF---");
-            // Sufficient balance, proceed with renting via coin
-            String userId = "${Constant.userID}";
-            String videoId = videoDetailsProvider
-                    .sectionDetailModel.result?.id
-                    .toString() ?? '';
-            String noOfToken = videoDetailsProvider
-                    .sectionDetailModel.result?.coinvalue
-                    .toString() ?? '0';
+                              if (userBalance >= videoCoinValue) {
+                                print("USER COME IN YTHE IF---");
+                                // Sufficient balance, proceed with renting via coin
+                                String userId = "${Constant.userID}";
+                                String videoId = videoDetailsProvider
+                                        .sectionDetailModel.result?.id
+                                        .toString() ??
+                                    '';
+                                String noOfToken = videoDetailsProvider
+                                        .sectionDetailModel.result?.coinvalue
+                                        .toString() ??
+                                    '0';
 
-            if (mounted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SuccessScreen(
-                    userId: userId,
-                    videoId: videoId,
-                    noOfToken: noOfToken,
-                  ),
-                ),
-              );
-            }
-          } else {
-            // Insufficient balance, redirect to Coin Store
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CoinStoreScreen(),
-              ),
-            );
-          }
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to process your request. Please try again.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-    );
-  },
-),
-     
-                 
-                 
+                                if (mounted) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SuccessScreen(
+                                        userId: userId,
+                                        videoId: videoId,
+                                        noOfToken: noOfToken,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                // Insufficient balance, redirect to Coin Store
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CoinStoreScreen(),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Failed to process your request. Please try again.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               );
@@ -4718,5 +4780,4 @@ Consumer<WalletProvider>(
       return false;
     }
   }
-
 }

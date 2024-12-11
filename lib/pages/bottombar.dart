@@ -82,8 +82,8 @@ class BottombarState extends State<Bottombar> {
                 child: widgetOptions[selectedIndex],
               ),
             ),
-            /* AdMob Banner */
-            // Utils.showBannerAd(context),
+            // // /* AdMob Banner */
+            //  Utils.showBannerAd(context),
           ],
         ),
 

@@ -227,7 +227,7 @@ Future<void> _checkRentViaCoin (
             userId: "${Constant.userID}",
             noOfToken: "${packageList?[index].coinAmount}",
             packageId: "${packageList?[index].id}",
-            amount: "${packageList?[index].price}",
+            amount: "${packageList?[index].coinAmount}",
           );
             },
           ),

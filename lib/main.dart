@@ -51,17 +51,13 @@ Future<void> main() async {
   if (!kIsWeb) {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
-   
-      // Set test device ID
-  RequestConfiguration requestConfiguration = RequestConfiguration(
-    testDeviceIds: ["4B9FD0DF3ADBBA8A14D756230FF45D60"], // Your test device ID
-  );
-
-  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
-
-
-
-
+    await AdHelper.createRewardedAd();
+      print("Google Mobile Ads initialized");
+  //     MobileAds.instance.updateRequestConfiguration(
+  //   RequestConfiguration(
+  //     testDeviceIds: ['F707BCE73FCDC4F761ED40ADF21EB962'], // Replace with your device ID
+  //   ),
+  // );
 
 
   }

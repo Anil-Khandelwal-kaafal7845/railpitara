@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/successCoinShow.dart';
 import 'package:dtlive/pages/successScreen.dart';
@@ -5,6 +7,7 @@ import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/utils/adhelper.dart';
+import 'package:dtlive/utils/sharedpre.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -41,11 +44,14 @@ class EpisodeBySeason extends StatefulWidget {
 
 class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   late EpisodeProvider episodeProvider;
+  static SharedPre sharePref = SharedPre();
   late GeneralProvider generalProvider;
   late ShowDetailsProvider showDetailsProvider;
   late WalletProvider walletProvider;
   late HomeProvider homeProvider;
   String? finalVUrl = "";
+  static var rewardad = "";
+  static var rewardadIos = "";
   Map<String, String> qualityUrlList = <String, String>{};
 
   @override
@@ -54,12 +60,28 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
-
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
+
+    // Call getAllEpisode every time dependencies change (i.e., when the screen comes back)
     getAllEpisode();
+
     super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   homeProvider = Provider.of<HomeProvider>(context, listen: false);
+  //   generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+  //   episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+  //   walletProvider = Provider.of<WalletProvider>(context, listen: false);
+  //   showDetailsProvider =
+  //       Provider.of<ShowDetailsProvider>(context, listen: false);
+
+  //   // Call getAllEpisode every time dependencies change (i.e., when the screen comes back)
+  //   getAllEpisode();
+  // }
 
   @override
   void didPopNext() {
@@ -73,16 +95,24 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         widget.seasonList?[(widget.seasonPos ?? 0)].id ?? 0, widget.videoId);
     await showDetailsProvider
         .setEpisodeBySeason(episodeProvider.episodeBySeasonModel);
-    Future.delayed(Duration.zero).then((value) {
+    Future.delayed(Duration.zero).then((value) async {
       if (!mounted) return;
+      rewardad = await sharePref.read("reward_ad") ?? "";
+      rewardadIos = await sharePref.read("ios_reward_ad") ?? "";
+      debugPrint("AD ==> ${rewardad}");
+      debugPrint("AD ==> ${rewardadIos}");
       setState(() {});
     });
   }
 
   void _fetchDataBalance() async {
     homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
+    print("Rewarded Ad loading...");
+    await AdHelper.createRewardedAd();
+    print("Rewarded Ad loaded!");
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
-    getAllEpisode();
+    await getAllEpisode();
+    print("");
     setState(() {});
   }
 
@@ -128,6 +158,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                             InkWell(
                               borderRadius: BorderRadius.circular(16),
                               focusColor: white.withOpacity(0.5),
+
                               onTap: () async {
                                 // Check if the user is logged in
                                 if (Constant.userID != null) {
@@ -137,58 +168,81 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                           .result?[index]
                                           .isBuy ==
                                       1;
-                                      bool isPrimeUserCoin = episodeProvider
+                                  bool isPrimeUserCoin = episodeProvider
                                           .episodeBySeasonModel
                                           .result?[index]
                                           .iscoinbuy ==
-                                      1;  // Prime user
+                                      1; // Prime user
                                   bool isAdShow = episodeProvider
                                           .episodeBySeasonModel
                                           .result?[index]
                                           .isadshow ==
                                       1; // Ad should be shown
 
-                                  if (isPrimeUser || isPrimeUserCoin) {
-                                    // Prime users directly navigate to the player
+                                  // Check if reward ads are disabled for the platform
+                                  if ((Platform.isAndroid && rewardad == "0") ||
+                                      (Platform.isIOS && rewardadIos == "0")) {
+                                    print(
+                                        "Rewarded ad is disabled for this platform. Opening player directly.");
                                     openPlayer(
                                       "Show",
                                       index,
                                       episodeProvider
                                           .episodeBySeasonModel.result,
                                     );
-                                  } else {
-                                 
-                                    if (isAdShow) {
-                                      
-                                      AdHelper.showFullscreenAd(
-                                          context, Constant.rewardAdType,
-                                          () async {
-                                        // After the ad is watched, call the API to add coins
-                                        await walletProvider
-                                            .addCoinsAfterWatchAd(
-                                          Constant.userID!,
-                                          0,
-                                          episodeProvider.episodeBySeasonModel
-                                              .result?[index].showId,
-                                          generalProvider.isAdsCoin,
-                                        );
-                                        // Navigate to the player after adding coins
-                                        openPlayer(
-                                          "Show",
-                                          index,
-                                          episodeProvider
-                                              .episodeBySeasonModel.result,
-                                        );
-                                      });
-                                    } else {
-                                      // If ads are not shown (isAdShow == 0), navigate directly to the player
+                                    return; // Exit early since ads are skipped
+                                  }
+
+                                  if ((Platform.isAndroid && rewardad == "1") ||
+                                      (Platform.isIOS && rewardadIos == "1")) {
+                                    print(
+                                        "Rewarded ad is disabled for this platform. Opening player directly.");
+                                    if (isPrimeUser || isPrimeUserCoin) {
+                                      // Prime users directly navigate to the player
                                       openPlayer(
                                         "Show",
                                         index,
                                         episodeProvider
                                             .episodeBySeasonModel.result,
                                       );
+                                    } else {
+                                      if (isAdShow) {
+                                        AdHelper.showRewardedAd(() async {
+                                          try {
+                                            print("API call start...");
+                                            await walletProvider
+                                                .addCoinsAfterWatchAd(
+                                              Constant.userID!,
+                                              0,
+                                              episodeProvider
+                                                  .episodeBySeasonModel
+                                                  .result?[index]
+                                                  .showId,
+                                              generalProvider.isAdsCoin,
+                                            );
+                                            print("Coins added successfully!");
+                                          } catch (e) {
+                                            print("Error adding coins: $e");
+                                          }
+                                          // Navigate to the player after adding coins
+                                          openPlayer(
+                                            "Show",
+                                            index,
+                                            episodeProvider
+                                                .episodeBySeasonModel.result,
+                                          );
+                                        });
+                                      } else {
+                                        // If ads are not shown (isAdShow == 0), navigate directly to the player
+                                        openPlayer(
+                                          "Show",
+                                          index,
+                                          episodeProvider
+                                              .episodeBySeasonModel.result,
+                                        );
+                                      }
                                     }
+                                    return; // Exit early since ads are skipped
                                   }
                                 } else {
                                   // User not logged in, navigate to the login screen
@@ -199,6 +253,81 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                   );
                                 }
                               },
+
+                              // onTap: () async {
+                              //   // Check if the user is logged in
+                              //   if (Constant.userID != null) {
+                              //     // Extract isBuy and isAdShow values from the episode data
+                              //     bool isPrimeUser = episodeProvider
+                              //             .episodeBySeasonModel
+                              //             .result?[index]
+                              //             .isBuy ==
+                              //         1;
+                              //     bool isPrimeUserCoin = episodeProvider
+                              //             .episodeBySeasonModel
+                              //             .result?[index]
+                              //             .iscoinbuy ==
+                              //         1; // Prime user
+                              //     bool isAdShow = episodeProvider
+                              //             .episodeBySeasonModel
+                              //             .result?[index]
+                              //             .isadshow ==
+                              //         1; // Ad should be shown
+
+                              //     if (isPrimeUser || isPrimeUserCoin) {
+                              //       // Prime users directly navigate to the player
+                              //       openPlayer(
+                              //         "Show",
+                              //         index,
+                              //         episodeProvider
+                              //             .episodeBySeasonModel.result,
+                              //       );
+                              //     } else {
+                              //       if (isAdShow) {
+                              //         AdHelper.showRewardedAd(() async {
+                              //           try {
+                              //             print("Api call start--");
+                              //             await walletProvider
+                              //                 .addCoinsAfterWatchAd(
+                              //               Constant.userID!,
+                              //               0,
+                              //               episodeProvider.episodeBySeasonModel
+                              //                   .result?[index].showId,
+                              //               generalProvider.isAdsCoin,
+                              //             );
+                              //             print("Coins added successfully!");
+                              //           } catch (e) {
+                              //             print("Error adding coins: $e");
+                              //           }
+                              //           // After the ad is watched, call the API to add coins
+
+                              //           // Navigate to the player after adding coins
+                              //           openPlayer(
+                              //             "Show",
+                              //             index,
+                              //             episodeProvider
+                              //                 .episodeBySeasonModel.result,
+                              //           );
+                              //         });
+                              //       } else {
+                              //         // If ads are not shown (isAdShow == 0), navigate directly to the player
+                              //         openPlayer(
+                              //           "Show",
+                              //           index,
+                              //           episodeProvider
+                              //               .episodeBySeasonModel.result,
+                              //         );
+                              //       }
+                              //     }
+                              //   } else {
+                              //     // User not logged in, navigate to the login screen
+                              //     Navigator.of(context).push(
+                              //       MaterialPageRoute(
+                              //         builder: (context) => const LoginSocial(),
+                              //       ),
+                              //     );
+                              //   }
+                              // },
                               child: Container(
                                 width: 160,
                                 height: 100,
@@ -316,6 +445,39 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                 overflow: TextOverflow.ellipsis,
                                 fontstyle: FontStyle.normal,
                               ),
+                              const SizedBox(width: 5),
+                              Row(
+                                children: [
+                                  MyText(
+                                    color: white,
+                                    text: "cointag",
+                                    textalign: TextAlign.center,
+                                    fontsizeNormal: 12,
+                                    fontsizeWeb: 13,
+                                    multilanguage: true,
+                                    fontweight: FontWeight.w500,
+                                    maxline: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontstyle: FontStyle.normal,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  MyText(
+                                    color: colorPrimary,
+                                    text: episodeProvider.episodeBySeasonModel
+                                            .result?[index].coinvalue
+                                            .toString() ??
+                                        "",
+                                    textalign: TextAlign.start,
+                                    fontsizeNormal: 12,
+                                    fontsizeWeb: 12,
+                                    multilanguage: false,
+                                    fontweight: FontWeight.w400,
+                                    maxline: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontstyle: FontStyle.normal,
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -830,7 +992,6 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                         }
                       },
                     ),
-                
                   ],
                 ),
               );

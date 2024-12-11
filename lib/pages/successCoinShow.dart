@@ -24,7 +24,7 @@ class SuccessShowScreen extends StatefulWidget {
 class _SuccessShowScreenState extends State<SuccessShowScreen> {
   late WalletProvider walletProvider;
   bool _isLoading = true;
-  bool _isSuccess = false;  // Flag to check success/failure
+  bool _isSuccess = false;  
   String _errorMessage = '';
 
   @override
@@ -70,6 +70,7 @@ class _SuccessShowScreenState extends State<SuccessShowScreen> {
       // Show the Lottie animation for 3 seconds and then navigate back
       Future.delayed(Duration(seconds: 2), () {
         if (mounted) {
+          Navigator.pop(context);
           Navigator.pop(context);
         }
       });

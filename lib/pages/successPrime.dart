@@ -1,4 +1,5 @@
 import 'package:dtlive/model/successmodel.dart';
+import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/provider/paymentprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +67,16 @@ class _TransactionStatusScreenState extends State<TransactionStatusScreen> {
         _isLoading = false;
       });
     } finally {
-      Future.delayed(Duration(seconds: 2), () {
-        if (mounted) Navigator.pop(context);
-      });
+     Future.delayed(Duration(seconds: 2), () {
+  if (mounted) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Home(pageName: '')),
+      (Route<dynamic> route) => false, // This removes all previous routes
+    );
+  }
+});
+
     }
   }
 
@@ -106,10 +114,7 @@ class _TransactionStatusScreenState extends State<TransactionStatusScreen> {
         Text('Transaction Successful',
             style: TextStyle(fontSize: 20, color: Colors.green)),
         SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Go Back'),
-        ),
+      
       ],
     );
   }
