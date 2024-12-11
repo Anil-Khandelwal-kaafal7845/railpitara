@@ -2441,16 +2441,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               print("Rent Buy: $isRenteBuy");
 
               // Check if rewardad is disabled for Android or iOS
-              if ((Platform.isAndroid && rewardad == "0") ||
-                  (Platform.isIOS && rewardadIos == "0")) {
+              if ((Platform.isAndroid &&  generalProvider.rewardad == "0") ||
+                  (Platform.isIOS && generalProvider.rewardadIos == "0")) {
                 print(
                     "Rewarded ad is disabled for this platform. Opening player directly.");
                 openPlayer("Video");
                 return; // Exit early since the ad logic is bypassed
               }
 
-              if ((Platform.isAndroid && rewardad == "1") ||
-                  (Platform.isIOS && rewardadIos == "1")) {
+              if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+                  (Platform.isIOS && generalProvider.rewardadIos == "1")) {
                 print("Rewarded ad is enable for this platform. Ope.");
                 if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
                   // If the user is prime, directly navigate to the player

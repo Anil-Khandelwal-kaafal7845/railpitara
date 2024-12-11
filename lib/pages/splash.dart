@@ -36,10 +36,20 @@ class SplashState extends State<Splash> {
   String? seen;
   SharedPre sharedPre = SharedPre();
   bool _initialized = false;
+    late VideoPlayerController _controller;
+
 
   @override
   void initState() {
     super.initState();
+
+     _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+      ..initialize().then((_) {
+        setState(() {
+          _initialized = true;
+        });
+        _controller.play();
+      });
 
     // Simulating a delay of 5 seconds before proceeding to the next screen
     Future.delayed(const Duration(seconds: 3)).then((value) {
@@ -48,10 +58,14 @@ class SplashState extends State<Splash> {
     });
   }
 
-  @override
+    @override
   void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
+    _controller.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +80,25 @@ class SplashState extends State<Splash> {
 
     }
   
-    return Scaffold(
+  return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
-        color: Colors.transparent, // Set to transparent if needed
-        child: MyImage(
-          imagePath: (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
-          fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
-        ),
+        color: Colors
+            .transparent, 
+        child: _initialized
+            ? AspectRatio(
+
+                aspectRatio: _controller.value.aspectRatio,
+
+                child: VideoPlayer(_controller),
+              )
+            : MyImage(
+                imagePath:
+                    (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
+                fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
+              ),
       ),
     );
   }

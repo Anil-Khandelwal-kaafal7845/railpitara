@@ -25,6 +25,8 @@ class GeneralProvider extends ChangeNotifier {
    String? isFbLogin;
    String ? isMobileLogin;
    dynamic isAdsCoin;
+   String? rewardad;
+   String? rewardadIos;
    
 
 
@@ -52,6 +54,9 @@ class GeneralProvider extends ChangeNotifier {
         isFbLogin = await sharedPre.read("is_facebook") ?? "0";  
         isMobileLogin = await sharedPre.read("is_mobile") ?? "0";
         isAdsCoin = await sharedPre.read("no_of_coin_watch_ad") ?? "0";
+           rewardad = await sharedPre.read("reward_ad") ?? "0";
+        rewardadIos = await sharedPre.read("ios_reward_ad") ?? "0";
+
 
         
       

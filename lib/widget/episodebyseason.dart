@@ -193,8 +193,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                     return; // Exit early since ads are skipped
                                   }
 
-                                  if ((Platform.isAndroid && rewardad == "1") ||
-                                      (Platform.isIOS && rewardadIos == "1")) {
+                                  if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+                                      (Platform.isIOS && generalProvider.rewardadIos == "1")) {
                                     print(
                                         "Rewarded ad is disabled for this platform. Opening player directly.");
                                     if (isPrimeUser || isPrimeUserCoin) {
