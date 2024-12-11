@@ -29,6 +29,7 @@ import 'package:dtlive/provider/videobyidprovider.dart';
 import 'package:dtlive/provider/videodetailsprovider.dart';
 import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
+import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -50,6 +51,19 @@ Future<void> main() async {
   if (!kIsWeb) {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
+   
+      // Set test device ID
+  RequestConfiguration requestConfiguration = RequestConfiguration(
+    testDeviceIds: ["4B9FD0DF3ADBBA8A14D756230FF45D60"], // Your test device ID
+  );
+
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+
+
+
+
+
+
   }
   
   await Firebase.initializeApp(

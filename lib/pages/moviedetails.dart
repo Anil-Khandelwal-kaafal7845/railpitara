@@ -2408,23 +2408,28 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
               bool isPrimeUserCoin = videoDetailsProvider.sectionDetailModel.result?.iscoinbuy == 1;  // Prime user
-   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow ==1 ;
+   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow == 1 ;
    bool isRenteBuy = videoDetailsProvider.sectionDetailModel.result?.rentBuy ==1 ;
 
+ print("after show the add--${isPrimeUser}"); print("after show the add--${isPrimeUserCoin}"); print("after show the add--${isAdShow}");
+print("after show the add--${isRenteBuy}");
 
-
-              if (isPrimeUser ||isPrimeUserCoin ||isRenteBuy) {
+              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
                 // Prime user, directly navigate to the player
                 openPlayer("Video");
               } else {
                 // Non-prime user, show the ad
                 // openPlayer("Video");
               if(isAdShow){
+                print("IS AD SHOW--");
+                print("IS AD SHOW--${isAdShow}");
+
 
                   AdHelper.showFullscreenAd(context, Constant.rewardAdType,
                     () async {
+                          print("after show the add--");
                   // Handle the logic for adding coins after the ad is dismissed
-                  try {
+                  try {    print("Api call start--");
                     await walletProvider.addCoinsAfterWatchAd(
                       Constant.userID!,
                       videoDetailsProvider.sectionDetailModel.result?.id,
@@ -2435,10 +2440,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   } catch (e) {
                     print("Error adding coins: $e");
                   }
+                      print("IS AD SHOW-- and video watch");
                   // Navigate to the player
                   openPlayer("Video");
                 });
               
+              }else{
+
+  openPlayer("Video");
+
               }
               }
             } else {
@@ -2608,22 +2618,74 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
-          onTap: () async {
+          // onTap: () async {
+          //   if (Constant.userID != null) {
+          //     // Check if the user is a "prime" user
+          //     bool isPrimeUser =
+          //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+
+          //     if (isPrimeUser) {
+          //       // Prime user, directly navigate to the player
+          //       openPlayer("Video");
+          //     } else {
+          //       // Non-prime user, show the ad
+          //       // openPlayer("Video");
+          //       AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+          //           () async {
+          //         // Handle the logic for adding coins after the ad is dismissed
+          //         try {
+          //           await walletProvider.addCoinsAfterWatchAd(
+          //             Constant.userID!,
+          //             videoDetailsProvider.sectionDetailModel.result?.id,
+          //             0,
+          //             generalProvider.isAdsCoin,
+          //           );
+          //           print("Coins added successfully!");
+          //         } catch (e) {
+          //           print("Error adding coins: $e");
+          //         }
+          //         // Navigate to the player
+          //         openPlayer("Video");
+          //       });
+          //     }
+          //   } else {
+          //     // User is not logged in, navigate to login screen
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) => const LoginSocial(),
+          //       ),
+          //     );
+          //   }
+          // },
+
+ onTap: () async {
             if (Constant.userID != null) {
               // Check if the user is a "prime" user
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+              bool isPrimeUserCoin = videoDetailsProvider.sectionDetailModel.result?.iscoinbuy == 1;  // Prime user
+   bool isAdShow = videoDetailsProvider.sectionDetailModel.result?.isadshow == 1 ;
+   bool isRenteBuy = videoDetailsProvider.sectionDetailModel.result?.rentBuy ==1 ;
 
-              if (isPrimeUser) {
+ print("after show the add--${isPrimeUser}"); print("after show the add--${isPrimeUserCoin}"); print("after show the add--${isAdShow}");
+print("after show the add--${isRenteBuy}");
+
+              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
                 // Prime user, directly navigate to the player
                 openPlayer("Video");
               } else {
                 // Non-prime user, show the ad
                 // openPlayer("Video");
-                AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+              if(isAdShow){
+                print("IS AD SHOW--");
+                print("IS AD SHOW--${isAdShow}");
+
+
+                  AdHelper.showFullscreenAd(context, Constant.rewardAdType,
                     () async {
+                          print("after show the add--");
                   // Handle the logic for adding coins after the ad is dismissed
-                  try {
+                  try {    print("Api call start--");
                     await walletProvider.addCoinsAfterWatchAd(
                       Constant.userID!,
                       videoDetailsProvider.sectionDetailModel.result?.id,
@@ -2634,9 +2696,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   } catch (e) {
                     print("Error adding coins: $e");
                   }
+                      print("IS AD SHOW-- and video watch");
                   // Navigate to the player
                   openPlayer("Video");
                 });
+              
+              }else{
+
+  openPlayer("Video");
+
+              }
               }
             } else {
               // User is not logged in, navigate to login screen
@@ -2647,7 +2716,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               );
             }
           },
-
           // onTap: () {
           //   if (Constant.userID != null) {
           //     print("IS BUY OR NO---${videoDetailsProvider.sectionDetailModel.result?.isBuy}");
