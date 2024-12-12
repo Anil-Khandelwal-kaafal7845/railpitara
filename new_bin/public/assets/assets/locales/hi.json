@@ -72,6 +72,8 @@
     "no_purchases_note": "अपने किसी भी डिवाइस पर खरीदारी और रेंटल देखें।",
     "coin":"Coin Store",
     "Wallet_history":"Wallet History",
+    "rent_store": "Rent Store",
+    "view_your_rentvideo": "View your rent videos",
     "view_your_coin":"Coin Store",
     "copy_link": "लिंक की प्रतिलिपि करें",
     "sms": "एसएमएस",
@@ -127,6 +129,7 @@
     "addphoto": "तस्वीर जोड़ो!",
     "downloads": "डाउनलोड",
     "wallet_history":"Wallet History",
+    
     "watchlist": "ध्यानसूची",
     "purchases": "खरीद",
     "view_your_watchlist": "अपना वॉचलिस्ट वीडियो देखें",

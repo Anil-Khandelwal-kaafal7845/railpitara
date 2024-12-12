@@ -170,7 +170,7 @@ class TVChannelsState extends State<TVChannels> {
               itemBuilder:
                   (BuildContext context, int index, int pageViewIndex) {
                 return InkWell(
-                  focusColor: white,
+                  //focusColor:: white,
                   borderRadius: BorderRadius.circular(0),
                   onTap: () async {
                     debugPrint("Clicked on index ==> $index");
@@ -264,7 +264,7 @@ class TVChannelsState extends State<TVChannels> {
           ),
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () async {
                 debugPrint("Clicked on index ==> $index");
@@ -505,7 +505,7 @@ class TVChannelsState extends State<TVChannels> {
                 typeId: sectionDataList?[index].typeId ?? 0,
               );
             },
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
               width: Dimens.widthLand,
@@ -558,7 +558,7 @@ class TVChannelsState extends State<TVChannels> {
                 typeId: sectionDataList?[index].typeId ?? 0,
               );
             },
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
               width: Dimens.widthPort,
@@ -609,7 +609,7 @@ class TVChannelsState extends State<TVChannels> {
                 typeId: sectionDataList?[index].typeId ?? 0,
               );
             },
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             child: Container(
               width: Dimens.widthSquare,

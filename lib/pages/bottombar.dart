@@ -3,6 +3,8 @@ import 'package:bottom_bar/bottom_bar.dart';
 import 'package:dtlive/pages/channels.dart';
 import 'package:dtlive/pages/find.dart';
 import 'package:dtlive/pages/home.dart';
+import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/mywatchlist.dart';
 import 'package:dtlive/pages/rentstore.dart';
 import 'package:dtlive/pages/setting.dart';
 import 'package:dtlive/provider/generalprovider.dart';
@@ -33,7 +35,8 @@ class BottombarState extends State<Bottombar> {
     const Home(pageName: ""),
     const Find(),
     const NewLivePlayer(),
-    const RentStore(),
+    // const RentStore(),
+    const MyWatchlist(),
     const Setting(),
   ];
 
@@ -63,10 +66,26 @@ class BottombarState extends State<Bottombar> {
     });
   }
 
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //       selectedIndex = index;
+  //     });
+  // }
   void _onItemTapped(int index) {
-    setState(() {
+
+      setState(() {
         selectedIndex = index;
       });
+
+      if (index == 3) {
+        if (Constant.userID == null) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginSocial()),
+            (Route<dynamic> route) => false,
+          );
+        }
+      }
+
   }
 
   @override
@@ -127,14 +146,30 @@ bottomNavigationBar: SalomonBottomBar(
             selectedColor: Colors.blue,
               //activeTitleColor: Colors.blue.shade600,
             ),
-           SalomonBottomBarItem(
+          //  SalomonBottomBarItem(
+          //     icon: Image.asset(
+          //       "assets/images/ic_store.png",
+          //       width: 15,
+          //       height: 15,
+          //       color: white,
+          //     ),
+          //     title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+          //     selectedColor: Colors.blue,
+          //     //activeTitleColor: Colors.blue.shade600,
+          //   ),
+          SalomonBottomBarItem(
               icon: Image.asset(
-                "assets/images/ic_store.png",
+                "assets/images/ic_plus.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+              title: Text(
+                'Watchlist',
+                // 'Store',
+                style:
+                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
+              ),
               selectedColor: Colors.blue,
               //activeTitleColor: Colors.blue.shade600,
             ),

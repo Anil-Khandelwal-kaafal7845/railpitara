@@ -10,6 +10,7 @@ import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/pages/profileedit.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/mywatchlist.dart';
+import 'package:dtlive/pages/rentstore.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/profileprovider.dart';
@@ -146,7 +147,36 @@ class SettingState extends State<Setting> {
                
                 _buildLine(16.0, 16.0),
 
-               
+                  Visibility(
+                  visible: forceUpdateData!.result!.showPackage == 1,
+                  child: _buildSettingButton(
+                    title: 'rent_store',
+                    subTitle: 'view_your_rentvideo',
+                    // title: 'watchlist',
+                    // subTitle: 'view_your_watchlist',
+                    titleMultilang: true,
+                    subTitleMultilang: true,
+                    onClick: () {
+                
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RentStore(),
+                              // builder: (context) => const MyWatchlist(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+             
+                    },
+                  ),
+                ),
+                _buildLine(16.0, 16.0),
 
                 /* Watchlist */
                 _buildSettingButton(

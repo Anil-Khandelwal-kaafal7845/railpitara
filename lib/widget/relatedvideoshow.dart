@@ -87,7 +87,7 @@ class _RelatedVideoShowState extends State<RelatedVideoShow> {
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           borderRadius: BorderRadius.circular(4),
-          focusColor: white,
+          //focusColor:: white,
           onTap: () async {
             debugPrint("Clicked on index ==> $index");
             if ((relatedDataList?[index].videoType ?? 0) == 5) {

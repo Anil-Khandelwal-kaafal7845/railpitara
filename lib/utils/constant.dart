@@ -5,13 +5,13 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-  static const String baseurl = 'https://stage.ottsnap.com/api/';
+  static const String baseurl = 'https://omtv.ottsnap.in/api/';
   static const String dynamicBaseUrl = 'https://omtvlive.in/';
   static const String baseurlwithoutapi = 'https://omtv.ottsnap.in';
   static String appName = "OM TV";
   static String appPackageName = "com.blackboardfilms.omtv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 45;
+  static double curentAppVersion = 46;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -29,11 +29,11 @@ class Constant {
       "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
   static String fbLink =
-      "";
+      "https://www.facebook.com/omtvofficial";
 
-  static String InstaLink = "";
-  static String youtubeLink = "";
-  static String twitterLink = "";
+  static String InstaLink = "https://www.instagram.com/omtvofficial/";
+  static String youtubeLink = "https://www.youtube.com/channel/UCi_wS6Abn0-dXYwD7ek3slA";
+  static String twitterLink = "https://x.com/omtvofficial";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];

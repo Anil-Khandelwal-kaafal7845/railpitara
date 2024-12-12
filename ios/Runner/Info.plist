@@ -39,7 +39,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.151680591442-ifc0k6h6k7btm59kvbdvbag45k0aseds</string>
+				<string>com.googleusercontent.apps.151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako</string>
 			</array>
 		</dict>
 	</array>
@@ -50,7 +50,7 @@
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>5</integer>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-4372710050540239~5478455365</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-beta</string>

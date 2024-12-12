@@ -259,7 +259,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
           InkWell(
             splashColor: transparentColor,
             highlightColor: transparentColor,
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(8),
             onTap: () async {
               if (kIsWeb || Constant.isTV) _onItemTapped("");
@@ -345,7 +345,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                   builder: (context, searchProvider, child) {
                     if (searchController.text.toString().isNotEmpty) {
                       return InkWell(
-                        focusColor: white,
+                        //focusColor:: white,
                         borderRadius: BorderRadius.circular(5),
                         onTap: () async {
                           debugPrint("Click on Clear!");
@@ -371,7 +371,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                       );
                     } else {
                       return InkWell(
-                        focusColor: white,
+                        //focusColor:: white,
                         borderRadius: BorderRadius.circular(5),
                         onTap: () async {
                           debugPrint("Click on Search!");
@@ -407,7 +407,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
           /* Channels */
           InkWell(
-            focusColor: white,
+            //focusColor:: white,
             onTap: () async {
               _onItemTapped("channel");
             },
@@ -437,7 +437,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
           /* Rent */
           InkWell(
-            focusColor: white,
+            //focusColor:: white,
             onTap: () async {
               _onItemTapped("store");
             },
@@ -467,7 +467,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
           /* Login / MyProfile */
           InkWell(
-            focusColor: white,
+            //focusColor:: white,
             onTap: () async {
               if (Constant.userID != null) {
                 Utils.buildWebAlertDialog(context, "profile", "");
@@ -506,7 +506,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
             builder: (context, homeProvider, child) {
               if (Constant.userID != null) {
                 return InkWell(
-                  focusColor: white,
+                  //focusColor:: white,
                   onTap: () async {
                     if (Constant.userID != null) {
                       _buildLogoutDialog();
@@ -551,7 +551,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
         return Consumer<HomeProvider>(
           builder: (context, homeProvider, child) {
             return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(25),
               onTap: () async {
                 debugPrint("index ===========> $index");

@@ -92,7 +92,7 @@ class _SearchWebState extends State<SearchWeb> {
                 child: Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: gray.withOpacity(0.5),
+                    //focusColor:: gray.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(5),
                     onTap: () async {
                       searchProvider.setDataVisibility(true, false);
@@ -138,7 +138,7 @@ class _SearchWebState extends State<SearchWeb> {
                 child: Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: gray.withOpacity(0.5),
+                    //focusColor:: gray.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(5),
                     onTap: () async {
                       searchProvider.setDataVisibility(false, true);
@@ -212,7 +212,7 @@ class _SearchWebState extends State<SearchWeb> {
                     return Material(
                       type: MaterialType.transparency,
                       child: InkWell(
-                        focusColor: white,
+                        //focusColor:: white,
                         borderRadius: BorderRadius.circular(4),
                         onTap: () {
                           debugPrint("Clicked on position ==> $position");
@@ -288,7 +288,7 @@ class _SearchWebState extends State<SearchWeb> {
                     return Material(
                       type: MaterialType.transparency,
                       child: InkWell(
-                        focusColor: white,
+                        //focusColor:: white,
                         onTap: () {
                           debugPrint("Clicked on position ==> $position");
                           Utils.openDetails(

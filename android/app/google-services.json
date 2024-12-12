@@ -1,160 +1,36 @@
 {
   "project_info": {
-    "project_number": "38978885550",
-    "project_id": "captain-tv-ott",
-    "storage_bucket": "captain-tv-ott.appspot.com"
+    "project_number": "151680591442",
+    "project_id": "omtv-32b09",
+    "storage_bucket": "omtv-32b09.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:38978885550:android:38365a78742e4f44d3da3f",
-        "android_client_info": {
-          "package_name": "ccom.blackboardfilms.omtv"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "38978885550-2mcs17odrl9nc97i4hl5do1qo2g4flrr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.release.aryanews"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:38978885550:android:a6a345fca1af939fd3da3f",
-        "android_client_info": {
-          "package_name": "com.captain.tvott"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "38978885550-g8a2tid5pas90tofndrsllpjvro9puq0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.captain.tvott",
-            "certificate_hash": "1d2343deaaeae04e5c0f3878cd078d23c333d739"
-          }
-        },
-        {
-          "client_id": "38978885550-uqsurd44sh3grjh11trlmko14s3ld06f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.captain.tvott",
-            "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
-          }
-        },
-        {
-          "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "38978885550-2mcs17odrl9nc97i4hl5do1qo2g4flrr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.release.aryanews"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:38978885550:android:3b4da2a99e5d82ded3da3f",
-        "android_client_info": {
-          "package_name": "com.ott.captaintv"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "38978885550-2mcs17odrl9nc97i4hl5do1qo2g4flrr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.release.aryanews"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:38978885550:android:9b4e7ae5652d51f5d3da3f",
+        "mobilesdk_app_id": "1:151680591442:android:9bf7d041290af0ae08e18b",
         "android_client_info": {
           "package_name": "com.blackboardfilms.omtv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "38978885550-8n8322uhapj9u0unj5clonehuinjdkm3.apps.googleusercontent.com",
+          "client_id": "151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.blackboardfilms.omtv",
-            "certificate_hash": "a9b75a29fbbea557344f2f6341873c8b3e8bbc84"
+            "certificate_hash": "a586d5ad0867c0a2f8a1539abeea3d2a2f7af563"
           }
         },
         {
-          "client_id": "38978885550-advncmket1isn16k03pbkelm8kas2kld.apps.googleusercontent.com",
+          "client_id": "151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.blackboardfilms.omtv",
-            "certificate_hash": "1d2343deaaeae04e5c0f3878cd078d23c333d739"
+            "certificate_hash": "84bf9f4eedbb0b02c889815ddf0a19a3e3e77286"
           }
         },
         {
-          "client_id": "38978885550-p8amqfhetkhoorss43i3fb50vsq2gvjp.apps.googleusercontent.com",
+          "client_id": "151680591442-vjupitiamr3p27kttm30cmkifps9lgrd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.blackboardfilms.omtv",
@@ -162,27 +38,107 @@
           }
         },
         {
-          "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
+          "client_id": "151680591442-rq6gv0b7odgula7haqt3b11nec0qivcv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCR0Q9WkWG2MvS4JUrEw_7l_hYsrLAm4mU"
+          "current_key": "AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "38978885550-g6fq9lcmounobli23lc5f3aq8jc9uc35.apps.googleusercontent.com",
+              "client_id": "151680591442-j25ap0fu8f133s9v5fcn0o2ld5jisakm.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "38978885550-2mcs17odrl9nc97i4hl5do1qo2g4flrr.apps.googleusercontent.com",
+              "client_id": "151680591442-02fhihanbivurf02mk316sgcnj2lq62p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.release.aryanews"
+                "bundle_id": "com.ott.omtvapp.ott"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151680591442:android:3a405afbd55f222f08e18b",
+        "android_client_info": {
+          "package_name": "com.omtvott"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151680591442-rq6gv0b7odgula7haqt3b11nec0qivcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151680591442-j25ap0fu8f133s9v5fcn0o2ld5jisakm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "151680591442-02fhihanbivurf02mk316sgcnj2lq62p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ott.omtvapp.ott"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151680591442:android:4b413fb786f96b6c08e18b",
+        "android_client_info": {
+          "package_name": "com.ott.omtvapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151680591442-oaavks90sith8982r7qqdjvv860fopdc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ott.omtvapp",
+            "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
+          }
+        },
+        {
+          "client_id": "151680591442-rq6gv0b7odgula7haqt3b11nec0qivcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151680591442-j25ap0fu8f133s9v5fcn0o2ld5jisakm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "151680591442-02fhihanbivurf02mk316sgcnj2lq62p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ott.omtvapp.ott"
               }
             }
           ]

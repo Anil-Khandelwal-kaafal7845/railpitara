@@ -84,7 +84,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
               alignment: Alignment.centerLeft,
               child: InkWell(
                 borderRadius: BorderRadius.circular(25),
-                focusColor: white.withOpacity(0.5),
+                //focusColor:: white.withOpacity(0.5),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -172,7 +172,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
             /* Confirm Button */
             InkWell(
               borderRadius: BorderRadius.circular(26),
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               onTap: () {
                 debugPrint("Clicked sms Code =====> ${pinPutController.text}");
                 if (pinPutController.text.toString().isEmpty) {
@@ -220,7 +220,7 @@ class _OTPVerifyWebState extends State<OTPVerifyWeb> {
             /* Resend */
             InkWell(
               borderRadius: BorderRadius.circular(10),
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               onTap: () {
                 if (!codeResended) {
                   codeSend(true);

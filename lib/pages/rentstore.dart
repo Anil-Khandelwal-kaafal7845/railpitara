@@ -232,7 +232,7 @@ class RentStoreState extends State<RentStore> {
                   return Material(
                     type: MaterialType.transparency,
                     child: InkWell(
-                      focusColor: white,
+                      //focusColor:: white,
                       borderRadius: BorderRadius.circular(4),
                       onTap: () {
                         debugPrint("Clicked on position ==> $position");
@@ -437,7 +437,7 @@ class RentStoreState extends State<RentStore> {
                   return Material(
                     type: MaterialType.transparency,
                     child: InkWell(
-                      focusColor: white,
+                      //focusColor:: white,
                       borderRadius: BorderRadius.circular(4),
                       onTap: () {
                         debugPrint("Clicked on position ==> $position");

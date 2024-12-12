@@ -77,7 +77,7 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                focusColor: white.withOpacity(0.5),
+                //focusColor:: white.withOpacity(0.5),
                 child: Container(
                   width: 30,
                   height: 30,
@@ -132,7 +132,7 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
             //     onTap: () {
             //       getFromGallery();
             //     },
-            //     focusColor: white.withOpacity(0.5),
+            //     //focusColor:: white.withOpacity(0.5),
             //     child: Container(
             //       constraints: const BoxConstraints(
             //         minHeight: 35,
@@ -183,7 +183,7 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
               constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
               child: InkWell(
                 borderRadius: BorderRadius.circular(5),
-                focusColor: white.withOpacity(0.5),
+                //focusColor:: white.withOpacity(0.5),
                 onTap: () async {
                   debugPrint(
                       "nameController Name ==> ${nameController.text.toString()}");

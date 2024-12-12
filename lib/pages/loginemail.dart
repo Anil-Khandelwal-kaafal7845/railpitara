@@ -485,17 +485,13 @@ class LoginSocialState extends State<LoginSocialEmail> {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
-
-  Future<User?> signInWithApple() async {
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
+Future<User?> signInWithApple() async {
+    // Generate a nonce to prevent replay attacks
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
 
     try {
-      // Request credential for the currently signed in Apple account.
+      // Request credentials for the signed-in Apple account
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -504,48 +500,51 @@ class LoginSocialState extends State<LoginSocialEmail> {
         nonce: nonce,
       );
 
-      debugPrint(appleCredential.authorizationCode);
+      debugPrint(
+          "Apple Authorization Code: ${appleCredential.authorizationCode}");
 
-      // Create an `OAuthCredential` from the credential returned by Apple.
+      // Create an OAuth credential from the Apple credential
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
 
-      // Sign in the user with Firebase. If the nonce we generated earlier does
-      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+      // Sign in the user with Firebase
       final authResult = await _auth.signInWithCredential(oauthCredential);
-
-      String? displayName =
-          '${appleCredential.givenName} ${appleCredential.familyName}';
-      userEmail = authResult.user?.email.toString() ?? "";
-      debugPrint("===>userEmail $userEmail");
-      debugPrint("===>displayName $displayName");
 
       final firebaseUser = authResult.user;
 
-      dynamic firebasedId;
-      if (userEmail.isNotEmpty || userEmail != 'null') {
-        await firebaseUser?.updateDisplayName(displayName);
-        await firebaseUser
-            ?.updateEmail(authResult.user?.email.toString() ?? "");
+      // Initialize variables
+      String? displayName =
+          '${appleCredential.givenName ?? ""} ${appleCredential.familyName ?? ""}'
+              .trim();
+      String userEmail = firebaseUser?.email ?? "";
+      String? firebasedId = firebaseUser?.uid;
+
+      debugPrint("Firebase User UID: $firebasedId");
+
+      if (userEmail.isEmpty) {
+        // If the email is not available from Apple, use Firebase data
+        userEmail = firebaseUser?.email ?? "";
+        displayName = firebaseUser?.displayName ?? displayName;
       } else {
-        userEmail = firebaseUser?.email.toString() ?? "";
-        firebasedId = firebaseUser?.uid.toString();
-        displayName = firebaseUser?.displayName.toString();
-        debugPrint("===>userEmail-else $userEmail");
-        debugPrint("===>displayName-else $displayName");
+        // Update Firebase user's profile with name and email
+        await firebaseUser?.updateDisplayName(displayName);
+        await firebaseUser?.updateEmail(userEmail);
       }
 
-      debugPrint("userEmail =====FINAL==> $userEmail");
-      debugPrint("firebasedId ===FINAL==> $firebasedId");
-      debugPrint("displayName ===FINAL==> $displayName");
+      // Final debug prints
+      debugPrint("Final User Email: $userEmail");
+      debugPrint("Final Display Name: $displayName");
+      debugPrint("Final Firebase ID: $firebasedId");
 
-      checkAndNavigate(userEmail, displayName ?? "", "5");
+      // Navigate based on user details
+      checkAndNavigate(userEmail, displayName, "5");
+      return firebaseUser;
     } catch (exception) {
-      debugPrint("Apple Login exception =====> $exception");
+      debugPrint("Apple Login Exception: $exception");
+      return null;
     }
-    return null;
   }
 
   checkAndNavigate(String mail, String displayName, String type) async {

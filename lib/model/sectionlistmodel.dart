@@ -83,7 +83,7 @@ class ContinueWatching {
   int? isRent;
   int? rentPrice;
   String? languageId;
-  int? channelId;
+  dynamic channelId;
   String? categoryId;
   String? categoryName;
   int? typeId;

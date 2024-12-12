@@ -99,7 +99,7 @@ class PlayerVimeoState extends State<PlayerVimeo> {
                   child: SafeArea(
                     child: InkWell(
                       onTap: onBackPressed,
-                      focusColor: gray.withOpacity(0.5),
+                      //focusColor:: gray.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(20),
                       child: Utils.buildBackBtnDesign(context),
                     ),

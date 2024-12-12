@@ -310,7 +310,7 @@ class TVHomeState extends State<TVHome> {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               borderRadius: BorderRadius.circular(8),
               onTap: () async {
                 if (Constant.isTV) _onItemTapped("");
@@ -334,7 +334,7 @@ class TVHomeState extends State<TVHome> {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               borderRadius: BorderRadius.circular(5),
               onTap: () {
                 debugPrint("isSearchEnable ====> $isSearchEnable");
@@ -419,7 +419,7 @@ class TVHomeState extends State<TVHome> {
                           return Material(
                             type: MaterialType.transparency,
                             child: InkWell(
-                              focusColor: white.withOpacity(0.5),
+                              //focusColor:: white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(5),
                               onTap: () async {
                                 debugPrint("Click on Clear!");
@@ -453,7 +453,7 @@ class TVHomeState extends State<TVHome> {
                           return Material(
                             type: MaterialType.transparency,
                             child: InkWell(
-                              focusColor: white.withOpacity(0.5),
+                              //focusColor:: white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(5),
                               onTap: () async {
                                 debugPrint("Click on Search!");
@@ -503,7 +503,7 @@ class TVHomeState extends State<TVHome> {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               onTap: () async {
                 _onItemTapped("channel");
               },
@@ -536,7 +536,7 @@ class TVHomeState extends State<TVHome> {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              focusColor: white.withOpacity(0.5),
+              //focusColor:: white.withOpacity(0.5),
               onTap: () async {
                 _onItemTapped("store");
               },
@@ -572,7 +572,7 @@ class TVHomeState extends State<TVHome> {
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: white.withOpacity(0.5),
+                    //focusColor:: white.withOpacity(0.5),
                     onTap: () {
                       Utils.buildWebAlertDialog(context, "profile", "");
                     },
@@ -600,7 +600,7 @@ class TVHomeState extends State<TVHome> {
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: white.withOpacity(0.5),
+                    //focusColor:: white.withOpacity(0.5),
                     onTap: () async {
                       Utils.buildWebAlertDialog(context, "login", "")
                           .then((value) => _getData());
@@ -636,7 +636,7 @@ class TVHomeState extends State<TVHome> {
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: white.withOpacity(0.5),
+                    //focusColor:: white.withOpacity(0.5),
                     onTap: () async {
                       if (Constant.userID != null) {
                         _buildLogoutDialog();
@@ -684,14 +684,14 @@ class TVHomeState extends State<TVHome> {
             return Material(
               type: MaterialType.transparency,
               child: InkWell(
-                autofocus: true,
-                focusColor: kIsWeb
-                    ? homeProvider.selectedIndex == index
-                        ? colorPrimary
-                        : transparentColor
-                    : (homeProvider.selectedIndex == index
-                        ? colorPrimary
-                        : white.withOpacity(0.5)),
+                // autofocus: true,
+                // focusColor:kIsWeb
+                //     ? homeProvider.selectedIndex == index
+                //         ? colorPrimary
+                //         : transparentColor
+                //     : (homeProvider.selectedIndex == index
+                //         ? colorPrimary
+                //         : white.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(25),
                 onTap: () async {
                   debugPrint("index ===========> $index");
@@ -925,7 +925,7 @@ class TVHomeState extends State<TVHome> {
           ),
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked on index ==> $index");
@@ -1097,7 +1097,7 @@ class TVHomeState extends State<TVHome> {
               itemBuilder:
                   (BuildContext context, int index, int pageViewIndex) {
                 return InkWell(
-                  focusColor: white,
+                  //focusColor:: white,
                   borderRadius: BorderRadius.circular(0),
                   onTap: () {
                     debugPrint("Clicked on index ==> $index");
@@ -1214,7 +1214,7 @@ class TVHomeState extends State<TVHome> {
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
-                    focusColor: white,
+                    //focusColor:: white,
                     borderRadius: BorderRadius.circular(4),
                     onTap: () async {
                       openPlayer("ContinueWatch", index, continueWatchingList);
@@ -1459,7 +1459,7 @@ class TVHomeState extends State<TVHome> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             onTap: () {
               debugPrint("Clicked on index ==> $index");
@@ -1509,7 +1509,7 @@ class TVHomeState extends State<TVHome> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             onTap: () {
               debugPrint("Clicked on index ==> $index");
@@ -1559,7 +1559,7 @@ class TVHomeState extends State<TVHome> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(4),
             onTap: () {
               debugPrint("Clicked on index ==> $index");
@@ -1612,7 +1612,7 @@ class TVHomeState extends State<TVHome> {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -1709,7 +1709,7 @@ class TVHomeState extends State<TVHome> {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -1854,7 +1854,7 @@ class TVHomeState extends State<TVHome> {
                       Material(
                         type: MaterialType.transparency,
                         child: InkWell(
-                          focusColor: white.withOpacity(0.5),
+                          //focusColor:: white.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(5),
                           onTap: () {
                             Navigator.pop(context);
@@ -1894,7 +1894,7 @@ class TVHomeState extends State<TVHome> {
                       Material(
                         type: MaterialType.transparency,
                         child: InkWell(
-                          focusColor: white.withOpacity(0.5),
+                          //focusColor:: white.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(5),
                           onTap: () async {
                             // Firebase Signout

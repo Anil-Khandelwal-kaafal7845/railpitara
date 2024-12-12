@@ -46,6 +46,8 @@ import 'package:social_share/social_share.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+import '../model/force_update_model.dart';
+
 class MovieDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
   const MovieDetails(
@@ -67,6 +69,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   late VideoDownloadProvider downloadProvider;
   // late bool _permissionReady;
   final ReceivePort _port = ReceivePort();
+  ForceUpdatemodel? forceUpdateData;
 
   String? audioLanguages;
   List<Cast>? directorList;
@@ -191,6 +194,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     // debugPrint("AD ==> ${rewardadIos}");
     await videoDetailsProvider.getSectionDetails(
         widget.typeId, widget.videoType, widget.videoId, widget.upcomingType);
+        await generalProvider.getGeneralsetting(context);
 
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.result != null) {
@@ -507,10 +511,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           child: Column(
             children: [
               /* Poster */
+
+            Platform.isAndroid?
               ((videoDetailsProvider.sectionDetailModel.result?.trailerUrl ??
                           "")
                       .isNotEmpty)
                   ? setUpTrailerView()
+                  : _buildMobilePoster():((videoDetailsProvider.sectionDetailModel.result?.trailerUrl ??
+                          "")
+                      .isNotEmpty)
+                  ? _buildMobilePoster()
                   : _buildMobilePoster(),
 
               /* Other Details */
@@ -783,6 +793,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         : const SizedBox.shrink(),
 
 //coin tag--
+                    forceUpdateData?.result?.showPackage == 1 ?  
                     (videoDetailsProvider.sectionDetailModel.result
                                     ?.isabaletocoinpurches ??
                                 0) ==
@@ -834,7 +845,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ],
                             ),
                           )
-                        : const SizedBox.shrink(),
+                        : const SizedBox.shrink():const SizedBox.shrink(),
 
                     /* Continue Watching Button */
                     /* Watch Now button */
@@ -877,7 +888,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       /* Start Over */
                                       return InkWell(
                                         borderRadius: BorderRadius.circular(5),
-                                        focusColor: gray.withOpacity(0.5),
+                                        //focusColor:: gray.withOpacity(0.5),
                                         onTap: () async {
                                           analytics.logEvent(
                                             name: 'watch_from_start',
@@ -902,7 +913,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       /* Trailer */
                                       return InkWell(
                                         borderRadius: BorderRadius.circular(5),
-                                        focusColor: gray.withOpacity(0.5),
+                                        //focusColor:: gray.withOpacity(0.5),
                                         onTap: () {
                                           analytics.logEvent(
                                             name: 'watch_trailer',
@@ -940,7 +951,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               /* Watchlist */
                               Expanded(
                                 child: InkWell(
-                                  focusColor: gray.withOpacity(0.5),
+                                  //focusColor:: gray.withOpacity(0.5),
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
@@ -1019,7 +1030,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               if (!(kIsWeb) || !(Constant.isTV))
                                 Expanded(
                                   child: InkWell(
-                                    focusColor: gray.withOpacity(0.5),
+                                    //focusColor:: gray.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(5),
                                     onTap: () {
                                       buildMoreDialog(videoDetailsProvider
@@ -1507,7 +1518,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         ),
         InkWell(
           borderRadius: BorderRadius.circular(30),
-          focusColor: white,
+          //focusColor:: white,
           onTap: () {
             openPlayer("Trailer");
           },
@@ -2221,7 +2232,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                   null) {
                             /* Start Over */
                             return InkWell(
-                              focusColor: gray.withOpacity(0.5),
+                              //focusColor:: gray.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(5),
                               onTap: () async {
                                 openPlayer("startOver");
@@ -2235,7 +2246,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           } else {
                             /* Trailer */
                             return InkWell(
-                              focusColor: gray.withOpacity(0.5),
+                              //focusColor:: gray.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(5),
                               onTap: () {
                                 openPlayer("Trailer");
@@ -2257,7 +2268,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     Container(
                       constraints: const BoxConstraints(minWidth: 50),
                       child: InkWell(
-                        focusColor: gray.withOpacity(0.5),
+                        //focusColor:: gray.withOpacity(0.5),
                         onTap: () async {
                           debugPrint(
                               "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
@@ -2366,7 +2377,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         onTap: () {
           openPlayer("Trailer");
         },
-        focusColor: white,
+        //focusColor:: white,
         borderRadius: BorderRadius.circular(5),
         child: Padding(
           padding: const EdgeInsets.all(2.0),
@@ -2551,7 +2562,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           //     }
           //   }
           // },
-          focusColor: white,
+          //focusColor:: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -2738,6 +2749,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 }
               }
             }
+            else{
+               Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginSocial(),
+                ),
+              );
+
+
+            }
           },
 
           // onTap: () async {
@@ -2803,7 +2823,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           //   }
           // }
 
-          focusColor: white,
+          //focusColor:: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -2862,7 +2882,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //     } else {
   //       return Expanded(
   //         child: InkWell(
-  //           focusColor: white,
+  //           //focusColor:: white,
   //           borderRadius: BorderRadius.circular(5),
   //           onTap: () async {
   //             if (Constant.userID != null) {
@@ -2936,7 +2956,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //     } else {
   //       return Expanded(
   //         child: InkWell(
-  //           focusColor: white,
+  //           //focusColor:: white,
   //           borderRadius: BorderRadius.circular(5),
   //           onTap: () async {
   //             if (Constant.userID != null) {
@@ -3024,7 +3044,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               Expanded(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(5),
-                  focusColor: Colors.grey.withOpacity(0.5),
+                  //focusColor:: Colors.grey.withOpacity(0.5),
                   onTap: () async {
                     await videoDetailsProvider.setTabClick("related");
                   },
@@ -3070,7 +3090,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               Expanded(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(5),
-                  focusColor: Colors.grey.withOpacity(0.5),
+                  //focusColor:: Colors.grey.withOpacity(0.5),
                   onTap: () async {
                     await videoDetailsProvider.setTabClick("moredetails");
                   },
@@ -3169,7 +3189,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           children: [
             InkWell(
               borderRadius: BorderRadius.circular(Dimens.cardRadius),
-              focusColor: white,
+              //focusColor:: white,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -3377,7 +3397,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return Expanded(
         child: InkWell(
           borderRadius: BorderRadius.circular(5),
-          focusColor: gray.withOpacity(0.5),
+          //focusColor:: gray.withOpacity(0.5),
           onTap: () {
             if (Constant.userID != null) {
               if (videoDetailsProvider
@@ -3583,7 +3603,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* To Download */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () async {
                       Navigator.pop(context);
                       if (Constant.userID != null) {
@@ -3642,7 +3662,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* Delete */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () async {
                       Navigator.pop(context);
                       await videoDetailsProvider.setDownloadComplete(
@@ -3839,7 +3859,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* Share */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () {
                       Navigator.pop(context);
                       analytics.logEvent(
@@ -3867,7 +3887,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   stopTime > 0
                       ? InkWell(
                           borderRadius: BorderRadius.circular(5),
-                          focusColor: white,
+                          //focusColor:: white,
                           onTap: () {
                             Navigator.pop(context);
                             analytics.logEvent(
@@ -3974,7 +3994,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* SMS */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () {
                       Navigator.pop(context);
                       analytics.logEvent(
@@ -4008,7 +4028,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   // /* Instgram Stories */
                   // InkWell(
                   //   borderRadius: BorderRadius.circular(5),
-                  //   focusColor: white,
+                  //   //focusColor:: white,
                   //   onTap: () {
                   //     Navigator.pop(context);
                   //     Utils.shareApp(Platform.isIOS
@@ -4026,7 +4046,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* Copy Link */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () {
                       Navigator.pop(context);
                       analytics.logEvent(
@@ -4062,7 +4082,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   /* More */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
@@ -4161,7 +4181,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                 /* SMS */
   //                 InkWell(
   //                   borderRadius: BorderRadius.circular(5),
-  //                   focusColor: white,
+  //                   //focusColor:: white,
   //                   onTap: () {
   //                     Navigator.pop(context);
   //                     if (Platform.isAndroid) {
@@ -4184,7 +4204,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                 /* Instgram Stories */
   //                 InkWell(
   //                   borderRadius: BorderRadius.circular(5),
-  //                   focusColor: white,
+  //                   //focusColor:: white,
   //                   onTap: () {
   //                     Navigator.pop(context);
   //                     Utils.shareApp(Platform.isIOS
@@ -4202,7 +4222,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                 /* Copy Link */
   //                 InkWell(
   //                   borderRadius: BorderRadius.circular(5),
-  //                   focusColor: white,
+  //                   //focusColor:: white,
   //                   onTap: () {
   //                     Navigator.pop(context);
   //                     SocialShare.copyToClipboard(
@@ -4227,7 +4247,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                 /* More */
   //                 InkWell(
   //                   borderRadius: BorderRadius.circular(5),
-  //                   focusColor: white,
+  //                   //focusColor:: white,
   //                   onTap: () {
   //                     Navigator.pop(context);
   //                     Utils.shareApp(Platform.isIOS

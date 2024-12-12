@@ -83,10 +83,20 @@ class FindState extends State<Find> {
       },
     );
 
+    // Start listening to speech input
     await _speechToText.listen(
         onResult: _onSpeechResult, listenMode: ListenMode.dictation);
+
     setState(() {
       _isListening = true;
+    });
+
+    // Delay logic to check if speech input is available
+    Future.delayed(const Duration(seconds: 5), () {
+      if (_isListening && searchController.text.toString().isEmpty) {
+        Utils.showSnackbar(context, "info", "speechnotavailable", true);
+        _stopListening();
+      }
     });
   }
 
@@ -178,13 +188,13 @@ class FindState extends State<Find> {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Find Screen",
-    "user_id": Constant.userID, 
-  },
-);
+//         analytics.logEvent(
+//   name: "screen_view",
+//   parameters: {
+//     "screen_name": "Find Screen",
+//     "user_id": Constant.userID,
+//   },
+// );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: appBgColor,

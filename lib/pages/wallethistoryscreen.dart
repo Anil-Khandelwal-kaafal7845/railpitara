@@ -54,9 +54,9 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                     SizedBox(width: 10),
                     Image.asset(
                       'assets/images/wallet.png',
-                      width: 50,
-                      height: 50,
-                      color: white,
+                      width: 60,
+                      height: 60,
+                      // color: white,
                     ),
                     SizedBox(width: 10),
                     Column(
@@ -144,6 +144,22 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
+
+                                 Row(
+                                  children: [
+                                     transaction.tokenType == 'credit'?Text("-",style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: transaction.tokenType == 'credit'
+                                            ? Colors.green
+                                            : Colors.red),):Text("+",style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: transaction.tokenType == 'credit'
+                                            ? Colors.green
+                                            : Colors.red),),
+                          
+                                 SizedBox(width: 2,) ,
                                   Text(
                                     '${transaction.noOfTokens}',
                                     style: TextStyle(
@@ -153,6 +169,9 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                                             ? Colors.green
                                             : Colors.red),
                                   ),
+                                  ],
+                                 ),
+                                 
                                   SizedBox(height: 5),
                                   Text(
                                     transaction.date,

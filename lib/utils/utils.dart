@@ -820,7 +820,7 @@ class Utils {
   static Widget buildBackBtn(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(30),
-      focusColor: gray.withOpacity(0.5),
+      //focusColor:: gray.withOpacity(0.5),
       onTap: () {
         Navigator.pop(context);
       },
@@ -879,8 +879,8 @@ class Utils {
       backgroundColor: appBgColor,
       centerTitle: true,
       leading: IconButton(
-        autofocus: true,
-        focusColor: white.withOpacity(0.5),
+        // autofocus: true,
+        //focusColor:: white.withOpacity(0.5),
         onPressed: () {
           Navigator.pop(context);
         },

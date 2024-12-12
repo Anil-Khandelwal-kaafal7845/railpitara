@@ -133,7 +133,7 @@ class TVVideosByIDState extends State<TVVideosByID> {
               type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.circular(4),
-                focusColor: white,
+                //focusColor:: white,
                 onTap: () {
                   debugPrint("Clicked on position ==> $position");
                   Utils.openDetails(

@@ -1,4 +1,5 @@
 import 'package:dtlive/model/successmodel.dart';
+import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/provider/paymentprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
@@ -71,7 +72,7 @@ class _TransactionStatusScreenState extends State<TransactionStatusScreen> {
   if (mounted) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => Home(pageName: '')),
+      MaterialPageRoute(builder: (context) => Bottombar()),
       (Route<dynamic> route) => false, // This removes all previous routes
     );
   }

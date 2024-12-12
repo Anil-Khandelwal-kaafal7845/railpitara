@@ -39,6 +39,7 @@ import 'package:dtlive/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class API {
   final Dio _dio = Dio();
@@ -80,7 +81,7 @@ class HomeScreenRepo {
 
 class ApiService {
   String baseUrl = Constant.baseurl;
-  String StagebaseUrl = "https://stage.ottsnap.com/api/" ;
+  String StagebaseUrl = "https://stage.ottsnap.com/api/";
 
   late Dio dio;
 
@@ -99,6 +100,21 @@ class ApiService {
         compact: false,
       ),
     );
+  }
+
+  // Helper method to get the token and set it in headers
+  Future<Options> _getAuthHeaders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) {
+      throw Exception("Auth token not found. Please log in again.");
+    }
+
+    return Options(headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
   }
 
   // general_setting API
@@ -211,6 +227,31 @@ class ApiService {
   }
 
   // verify whatsapp login API
+  // Future<bool> verifyLoginWithWhatsapp(
+  //     String mobile, String otp, String email) async {
+  //   debugPrint("mobile :==> $mobile");
+  //   debugPrint("email :==> $email");
+
+  //   String doctorLogin = "verifyotp?mobile=$mobile&email=$email&token=$otp";
+  //   try {
+  //     Response response = await dio.post(
+  //       '$baseUrl$doctorLogin',
+  //       options: optHeaders,
+  //       data: {'mobile': mobile, 'token': otp, 'email': email},
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       return true; // Authentication successful
+  //     } else {
+  //       return false; // Authentication failed for some other reason
+  //     }
+  //   } catch (e) {
+  //     // Handle DioException or other exceptions here
+  //     print("Error: $e");
+  //     return false; // Authentication failed due to an error
+  //   }
+  // }
+
   Future<bool> verifyLoginWithWhatsapp(
       String mobile, String otp, String email) async {
     debugPrint("mobile :==> $mobile");
@@ -224,14 +265,22 @@ class ApiService {
         data: {'mobile': mobile, 'token': otp, 'email': email},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data['status'] == 200) {
+        // Extract the API token from the response
+        final token = response.data['result']['api_token'];
+
+        // Save the token to shared preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authToken', token);
+
+        debugPrint("API Token saved: $token");
         return true; // Authentication successful
       } else {
-        return false; // Authentication failed for some other reason
+        debugPrint("Authentication failed: ${response.data['message']}");
+        return false; // Authentication failed
       }
     } catch (e) {
-      // Handle DioException or other exceptions here
-      print("Error: $e");
+      debugPrint("Error: $e");
       return false; // Authentication failed due to an error
     }
   }
@@ -701,14 +750,12 @@ class ApiService {
   Future<VideoByartist?> videoByArtistApi(
       BuildContext context, castId, typeId) async {
     try {
-      Response response = await dio.post(
-          "${baseUrl}video_by_artist",
-          options: optHeaders,
-          data: {
-            'user_id': Constant.userID,
-            'cast_id': castId,
-            'type_id': typeId,
-          });
+      Response response = await dio
+          .post("${baseUrl}video_by_artist", options: optHeaders, data: {
+        'user_id': Constant.userID,
+        'cast_id': castId,
+        'type_id': typeId,
+      });
       if (response.statusCode == 200 || response.statusCode == 201) {
         VideoByartist subscribeData = VideoByartist.fromJson(response.data);
         return subscribeData;
@@ -844,7 +891,7 @@ class ApiService {
 
   // add_transaction API
   Future<SuccessModel> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode, orderStatus, orderId ,purchesVia) async {
+      currencyCode, couponCode, orderStatus, orderId, purchesVia) async {
     debugPrint('addTransaction userID ==>>> ${Constant.userID}');
     debugPrint('addTransaction packageId ==>>> $packageId');
     debugPrint('addTransaction description ==>>> $description');
@@ -854,7 +901,7 @@ class ApiService {
     debugPrint('addTransaction couponCode ==>>> $couponCode');
     debugPrint('addTransaction order_status ==>>> $orderStatus');
     debugPrint('addTransaction orderId ==>>> $orderId');
-      debugPrint('addTransaction purchesVia ==>>> $purchesVia');
+    debugPrint('addTransaction purchesVia ==>>> $purchesVia');
 
     SuccessModel successModel;
     String transaction = "add_transaction";
@@ -936,62 +983,87 @@ class ApiService {
     return historyModel;
   }
 
-// //get user wallet balance----API
+//coin system ----
 
+// Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
+//   String endpoint = "get-user-wallet-balance";
 
-// get user wallet balance----API
-Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
-  String endpoint = "get-user-wallet-balance";
-  
-  try {
-    Response response = await dio.post(
-      '$StagebaseUrl$endpoint',
-      data: {
-        'user_id': userId,
-      },
-    );
+//   try {
+//     Response response = await dio.post(
+//       '$StagebaseUrl$endpoint',
+//       data: {
+//         'user_id': userId,
+//       },
+//     );
 
-    // Print the full response data
-    print("Response Data: ${response.data}");
+//     // Print the full response data
+//     print("Response Data: ${response.data}");
 
-    if (response.statusCode == 200) {
-      // Assuming UserWalletBalanceModel has a 'balance' field
-      var walletBalance = UserWalletBalanceModel.fromJson(response.data);
-      
-      // Print the wallet balance
-      print("Wallet Balance: ${walletBalance.balance}");
+//     if (response.statusCode == 200) {
+//       // Assuming UserWalletBalanceModel has a 'balance' field
+//       var walletBalance = UserWalletBalanceModel.fromJson(response.data);
 
-      return walletBalance;
-    } else {
-      throw Exception("Failed to fetch wallet balance");
-    }
-  } catch (e) {
-    print("Error fetching wallet balance: $e");
-    rethrow; // Re-throw the error after logging
-  }
-}
+//       // Print the wallet balance
+//       print("Wallet Balance: ${walletBalance.balance}");
 
+//       return walletBalance;
+//     } else {
+//       throw Exception("Failed to fetch wallet balance");
+//     }
+//   } catch (e) {
+//     print("Error fetching wallet balance: $e");
+//     rethrow; // Re-throw the error after logging
+//   }
+// }
 
-//get the coin after watch full ads--
-Future<UserWalletBalanceModel> addCoinsAfterWatchAd(String userId, dynamic videoId ,dynamic showId ,dynamic tokenValue) async {
-    String endpoint = "add-coin-on-watch-ads";
-    
+// Get User Wallet Balance API
+  Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
+    String endpoint = "get-user-wallet-balance";
+
     try {
+      final headers = await _getAuthHeaders();
       Response response = await dio.post(
         '$StagebaseUrl$endpoint',
+        options: headers,
+        data: {'user_id': userId},
+      );
+
+      if (response.statusCode == 200) {
+        return UserWalletBalanceModel.fromJson(response.data);
+      } else {
+        throw Exception("Failed to fetch wallet balance");
+      }
+    } catch (e) {
+      print("Error fetching wallet balance: $e");
+      rethrow;
+    }
+  }
+
+// Add Coins After Watching Ad
+  Future<UserWalletBalanceModel> addCoinsAfterWatchAd(
+    String userId,
+    dynamic videoId,
+    dynamic showId,
+    dynamic tokenValue,
+  ) async {
+    String endpoint = "add-coin-on-watch-ads";
+
+    try {
+      final headers = await _getAuthHeaders();
+      Response response = await dio.post(
+        '$StagebaseUrl$endpoint',
+        options: headers,
         data: {
           'user_id': userId,
           'video_id': videoId,
           'show_id': showId,
           'token_from': 'watch_ads',
           'ad_url': 'test.com',
-          'no_of_token': tokenValue, 
+          'no_of_token': tokenValue,
         },
       );
-      print("Response Data: ${response.data}");
 
       if (response.statusCode == 200) {
-        // Handle the response and update the wallet balance
         var walletBalance = UserWalletBalanceModel.fromJson(response.data);
         print("New Wallet Balance: ${walletBalance.balance}");
         return walletBalance;
@@ -1000,20 +1072,22 @@ Future<UserWalletBalanceModel> addCoinsAfterWatchAd(String userId, dynamic video
       }
     } catch (e) {
       print("Error adding coins after watching ad: $e");
-      rethrow; // Re-throw the error after logging
+      rethrow;
     }
   }
 
+// Get Coin Packages
+  Future<List<CoinPackage>> getCoinPackages() async {
+    String endpoint = "get-coin-package";
 
-//get coin poackages ----
-Future<List<CoinPackage>> getCoinPackages() async {
     try {
+      final headers = await _getAuthHeaders();
       final response = await dio.post(
-        'https://stage.ottsnap.com/api/get-coin-package',
+        '$StagebaseUrl$endpoint',
+        options: headers,
       );
 
       if (response.statusCode == 200) {
-        // Parse the response data and map it to the model
         List<dynamic> data = response.data['result'];
         return data.map((coin) => CoinPackage.fromJson(coin)).toList();
       } else {
@@ -1025,11 +1099,15 @@ Future<List<CoinPackage>> getCoinPackages() async {
     }
   }
 
-//wallet transctions----
-Future<List<WalletTransaction>> getWalletHistory(String userId) async {
+// Get Wallet History
+  Future<List<WalletTransaction>> getWalletHistory(String userId) async {
+    String endpoint = "user-wallet-history";
+
     try {
+      final headers = await _getAuthHeaders();
       final response = await dio.post(
-        'https://stage.ottsnap.com/api/user-wallet-history',
+        '$StagebaseUrl$endpoint',
+        options: headers,
         data: {'user_id': userId},
       );
 
@@ -1047,50 +1125,51 @@ Future<List<WalletTransaction>> getWalletHistory(String userId) async {
     }
   }
 
-//purches coin and update the coin api ----
-// ApiService class
+// Add Coin Transaction
+  Future<bool> addCoinTransaction({
+    required String userId,
+    required int coinPackageId,
+    required dynamic amount,
+    required String paymentId,
+    required String currencyCode,
+    required String orderStatus,
+    required String orderId,
+    required String paymentMethod,
+  }) async {
+    String endpoint = "add-coin-transaction";
 
-Future<bool> addCoinTransaction({
-  required String userId,
-  required int coinPackageId,
-  required dynamic amount,
-  required String paymentId,
-  required String currencyCode,
-  required String orderStatus,
-  required String orderId,
-  required String paymentMethod,
-}) async {
-  try {
-    final response = await dio.post(
-      'https://stage.ottsnap.com/api/add-coin-transaction',
-      data: {
-        "user_id": userId,
-        "coin_package_id": coinPackageId,
-        "amount": amount,
-        "payment_id": paymentId,
-        "currency_code": currencyCode,
-        "unique_id": "",
-        "order_status": orderStatus,
-        "order_id": orderId,
-        "payment_method": paymentMethod,
-      },
-    );
-  print("Response Data: ${response.data}");
-    // If status code is 200, return true (success)
-    if (response.statusCode == 200) {
-      print("Coin transaction added successfully: ${response.data}");
-      return true;
-    } else {
-      print("Failed to add coin transaction: ${response.statusCode}");
+    try {
+      final headers = await _getAuthHeaders();
+      final response = await dio.post(
+        '$StagebaseUrl$endpoint',
+        options: headers,
+        data: {
+          "user_id": userId,
+          "coin_package_id": coinPackageId,
+          "amount": amount,
+          "payment_id": paymentId,
+          "currency_code": currencyCode,
+          "unique_id": "",
+          "order_status": orderStatus,
+          "order_id": orderId,
+          "payment_method": paymentMethod,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("Coin transaction added successfully: ${response.data}");
+        return true;
+      } else {
+        print("Failed to add coin transaction: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("Error in addCoinTransaction: $e");
       return false;
     }
-  } catch (e) {
-    print("Error in addCoinTransaction: $e");
-    return false; // Return false in case of error
   }
-}
 
-//rent via coin api ---
+// Rent via Coin API
   Future<PurchaseFromCoinResponse> purchaseFromCoin({
     required String userId,
     required String videoId,
@@ -1098,9 +1177,13 @@ Future<bool> addCoinTransaction({
     required String tokenFrom,
     required String noOfToken,
   }) async {
+    String endpoint = "purchase-from-coin";
+
     try {
+      final headers = await _getAuthHeaders();
       final response = await dio.post(
-        'https://stage.ottsnap.com/api/purchase-from-coin',
+        '$StagebaseUrl$endpoint',
+        options: headers,
         data: {
           "user_id": userId,
           "video_id": videoId,
@@ -1120,6 +1203,4 @@ Future<bool> addCoinTransaction({
       rethrow;
     }
   }
-
-
 }

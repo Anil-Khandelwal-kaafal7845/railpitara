@@ -794,7 +794,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               /* Trailer */
                               Expanded(
                                 child: InkWell(
-                                  focusColor: gray.withOpacity(0.5),
+                                  //focusColor:: gray.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(5),
                                   onTap: () {
                                     openPlayer("Trailer");
@@ -825,7 +825,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               /* Watchlist */
                               Expanded(
                                 child: InkWell(
-                                  focusColor: gray.withOpacity(0.5),
+                                  //focusColor:: gray.withOpacity(0.5),
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
@@ -885,7 +885,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               if (!(kIsWeb) || !(Constant.isTV))
                                 Expanded(
                                   child: InkWell(
-                                    focusColor: gray.withOpacity(0.5),
+                                    //focusColor:: gray.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(5),
                                     onTap: () {
                                       _buildShareWithDialog();
@@ -1759,7 +1759,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     Container(
                       constraints: const BoxConstraints(minWidth: 50),
                       child: InkWell(
-                        focusColor: gray.withOpacity(0.5),
+                        //focusColor:: gray.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(5),
                         onTap: () {
                           openPlayer("Trailer");
@@ -1804,7 +1804,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                             );
                           }
                         },
-                        focusColor: gray.withOpacity(0.5),
+                        //focusColor:: gray.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(5),
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
@@ -2075,7 +2075,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       } else {
         return Expanded(
           child: InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(5),
             onTap: () async {
               if (Constant.userID != null) {
@@ -2134,7 +2134,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       } else {
         return Expanded(
           child: InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(5),
             onTap: () async {
               if (Constant.userID != null) {
@@ -2416,7 +2416,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         ),
         InkWell(
           borderRadius: BorderRadius.circular(30),
-          focusColor: white,
+          //focusColor:: white,
           onTap: () {
             openPlayer("Trailer");
           },
@@ -2447,7 +2447,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         onTap: () {
           openPlayer("Trailer");
         },
-        focusColor: white,
+        //focusColor:: white,
         borderRadius: BorderRadius.circular(5),
         child: Padding(
           padding: const EdgeInsets.all(2.0),
@@ -2514,7 +2514,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
               onTap: () {
                 openPlayer("Show");
               },
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(5),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -2650,7 +2650,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
               onTap: () {
                 openPlayer("Show");
               },
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(5),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -2921,7 +2921,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(Dimens.cardRadius),
               onTap: () {
                 Navigator.of(context).push(
@@ -3128,7 +3128,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.circular(5),
-        focusColor: white,
+        //focusColor:: white,
         onTap: () async {
           if (Constant.userID != null) {
             if (showDetailsProvider.sectionDetailModel
@@ -3317,7 +3317,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   /* To Download */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () async {
                       Navigator.pop(context);
                       if (Constant.userID != null) {
@@ -3376,7 +3376,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   /* Delete */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: white,
+                    //focusColor:: white,
                     onTap: () async {
                       Navigator.pop(context);
                       await showDetailsProvider.setDownloadComplete(

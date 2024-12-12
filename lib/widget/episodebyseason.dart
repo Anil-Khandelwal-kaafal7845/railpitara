@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dtlive/pages/coinstorescreen.dart';
+import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/successCoinShow.dart';
 import 'package:dtlive/pages/successScreen.dart';
 import 'package:dtlive/provider/generalprovider.dart';
@@ -45,6 +46,7 @@ class EpisodeBySeason extends StatefulWidget {
 class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   late EpisodeProvider episodeProvider;
   static SharedPre sharePref = SharedPre();
+
   late GeneralProvider generalProvider;
   late ShowDetailsProvider showDetailsProvider;
   late WalletProvider walletProvider;
@@ -95,6 +97,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         widget.seasonList?[(widget.seasonPos ?? 0)].id ?? 0, widget.videoId);
     await showDetailsProvider
         .setEpisodeBySeason(episodeProvider.episodeBySeasonModel);
+         await generalProvider.getGeneralsetting(context);
     Future.delayed(Duration.zero).then((value) async {
       if (!mounted) return;
       rewardad = await sharePref.read("reward_ad") ?? "";
@@ -157,7 +160,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                           children: [
                             InkWell(
                               borderRadius: BorderRadius.circular(16),
-                              focusColor: white.withOpacity(0.5),
+                              //focusColor:: white.withOpacity(0.5),
 
                               onTap: () async {
                                 // Check if the user is logged in
@@ -446,6 +449,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                 fontstyle: FontStyle.normal,
                               ),
                               const SizedBox(width: 5),
+                            
+                             forceUpdateData?.result?.showPackage == 1 ?  
                               Row(
                                 children: [
                                   MyText(
@@ -477,7 +482,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                     fontstyle: FontStyle.normal,
                                   ),
                                 ],
-                              )
+                              ):SizedBox.shrink(),
+                            
                             ],
                           ),
                         ),
@@ -506,7 +512,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             borderRadius: BorderRadius.circular(4),
-            focusColor: white,
+            //focusColor:: white,
             onTap: () {
               debugPrint("===> index $index");
               openPlayer(

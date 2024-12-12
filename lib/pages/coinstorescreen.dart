@@ -22,6 +22,7 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
   late HomeProvider homeProvider;
   late WalletProvider walletProvider;
   late Razorpay _razorpay;
+  late PaymentProvider paymentProvider;
 
   SharedPre sharedPref = SharedPre();
   String? userId, userName, userEmail, userMobileNo, paymentId;
@@ -32,9 +33,55 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
   @override
   void initState() {
     super.initState();
+    _getData();
     _initializeRazorpay();
     _initializeData();
   }
+
+    _getData() async {
+
+      paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getPaymentOption();
+  
+    }
+
+      bool checkKeysAndContinue({
+    required String isLive,
+    required bool isBothKeyReq,
+    required String liveKey1,
+    required String liveKey2,
+    required String testKey1,
+    required String testKey2,
+  }) {
+    if (isLive == "1") {
+      if (isBothKeyReq) {
+        if (liveKey1 == "" || liveKey2 == "") {
+          Utils.showSnackbar(context, "", "payment_not_processed", true);
+          return false;
+        }
+      } else {
+        if (liveKey1 == "") {
+          Utils.showSnackbar(context, "", "payment_not_processed", true);
+          return false;
+        }
+      }
+      return true;
+    } else {
+      if (isBothKeyReq) {
+        if (testKey1 == "" || testKey2 == "") {
+          Utils.showSnackbar(context, "", "payment_not_processed", true);
+          return false;
+        }
+      } else {
+        if (testKey1 == "") {
+          Utils.showSnackbar(context, "", "payment_not_processed", true);
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
 
   void _initializeRazorpay() {
     _razorpay = Razorpay();
@@ -158,10 +205,52 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
     print('External Wallet: ${response.walletName}');
   }
 
-  void _openRazorpayPaymentGateway(dynamic amount, dynamic orderId) {
+  // void _openRazorpayPaymentGateway(dynamic amount, dynamic orderId) {
+  //   try {
+  //     var options = {
+  //       'key': 'rzp_test_E7TfP2p9bA9q75',
+  //       'amount': (amount * 100).toString(),
+  //       'name': 'Coin Purchase',
+  //       'prefill': {'contact': userMobileNo, 'email': userEmail},
+  //       'order_id': orderId,
+  //       'theme': {'color': '#F37254'},
+  //     };
+
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     print('Error in opening Razorpay: $e');
+  //     Utils.showSnackbar(context, "fail", "payment_error", true);
+  //   }
+  // }
+
+    void _openRazorpayPaymentGateway(dynamic amount, dynamic orderId) {
+
+       bool isContinue = checkKeysAndContinue(
+        isLive:
+            (paymentProvider.paymentOptionModel.result?.razorpay?.isLive ?? ""),
+        isBothKeyReq: false,
+        liveKey1:
+            (paymentProvider.paymentOptionModel.result?.razorpay?.liveKey1 ??
+                ""),
+        liveKey2: "",
+        testKey1:
+            (paymentProvider.paymentOptionModel.result?.razorpay?.testKey1 ??
+                ""),
+        testKey2: "",
+      );
+      if (!isContinue) return;
     try {
       var options = {
-        'key': 'rzp_test_E7TfP2p9bA9q75',
+        'key':
+                (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.isLive ==
+                        "1")
+                    ? (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.liveKey1 ??
+                        "")
+                    : (paymentProvider
+                            .paymentOptionModel.result?.razorpay?.testKey1 ??
+                        ""),
         'amount': (amount * 100).toString(),
         'name': 'Coin Purchase',
         'prefill': {'contact': userMobileNo, 'email': userEmail},
@@ -175,6 +264,7 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
       Utils.showSnackbar(context, "fail", "payment_error", true);
     }
   }
+
 
 
 @override
@@ -207,8 +297,8 @@ Widget build(BuildContext context) {
                         children: [
                           SizedBox(width: 10),
                           Image.asset('assets/images/coin.png',
-                              width: 35, height: 35),
-                          SizedBox(width: 10),
+                              width: 50, height: 50),
+                          SizedBox(width: 5),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,

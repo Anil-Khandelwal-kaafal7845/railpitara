@@ -65,7 +65,7 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  focusColor: white.withOpacity(0.5),
+                  //focusColor:: white.withOpacity(0.5),
                   child: Container(
                     width: 30,
                     height: 30,
@@ -179,7 +179,7 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
                   Utils.buildWebAlertDialog(context, "otp", mobileNumber);
                 }
               },
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(18),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -254,7 +254,7 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
                 // _gmailLogin();
                 signInWithGoogle();
               },
-              focusColor: colorPrimary,
+              //focusColor:: colorPrimary,
               borderRadius: BorderRadius.circular(18),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),

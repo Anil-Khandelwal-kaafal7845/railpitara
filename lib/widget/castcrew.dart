@@ -123,7 +123,7 @@ class _CastCrewState extends State<CastCrew> {
             (position) {
               return InkWell(
                 borderRadius: BorderRadius.circular(8),
-                focusColor: white,
+                //focusColor:: white,
                 onTap: () {
                   debugPrint("Item Clicked! => $position");
                   if (kIsWeb || Constant.isTV) return;

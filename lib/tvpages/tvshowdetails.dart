@@ -230,8 +230,8 @@ class TVShowDetailsState extends State<TVShowDetails> {
                               Container(
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: InkWell(
-                                  autofocus: true,
-                                  focusColor: gray.withOpacity(0.6),
+                                  // autofocus: true,
+                                  //focusColor:: gray.withOpacity(0.6),
                                   borderRadius: BorderRadius.circular(25),
                                   onTap: () {
                                     Navigator.pop(context);
@@ -895,7 +895,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                 );
                               }
                             },
-                            focusColor: gray.withOpacity(0.5),
+                            //focusColor:: gray.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(5),
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
@@ -1390,7 +1390,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                     );
                                   }
                                 },
-                                focusColor: gray.withOpacity(0.5),
+                                //focusColor:: gray.withOpacity(0.5),
                                 borderRadius: BorderRadius.circular(5),
                                 child: Padding(
                                   padding: const EdgeInsets.all(2.0),
@@ -1821,7 +1821,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         return const SizedBox.shrink();
       } else {
         return InkWell(
-          focusColor: gray.withOpacity(0.5),
+          //focusColor:: gray.withOpacity(0.5),
           borderRadius: BorderRadius.circular(5),
           onTap: () async {
             if (Constant.userID != null) {
@@ -1877,7 +1877,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         return const SizedBox.shrink();
       } else {
         return InkWell(
-          focusColor: gray.withOpacity(0.5),
+          //focusColor:: gray.withOpacity(0.5),
           borderRadius: BorderRadius.circular(5),
           onTap: () async {
             if (Constant.userID != null) {
@@ -2007,7 +2007,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         onTap: () {
           openPlayer("Trailer");
         },
-        focusColor: white,
+        //focusColor:: white,
         borderRadius: BorderRadius.circular(5),
         child: Container(
           padding: const EdgeInsets.all(2.0),
@@ -2074,7 +2074,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
               onTap: () {
                 openPlayer("Show");
               },
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(5),
               child: Container(
                 padding: const EdgeInsets.all(2.0),
@@ -2210,7 +2210,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
               onTap: () {
                 openPlayer("Show");
               },
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(5),
               child: Container(
                 padding: const EdgeInsets.all(2.0),
@@ -2285,7 +2285,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: gray.withOpacity(0.5),
+                    //focusColor:: gray.withOpacity(0.5),
                     onTap: () async {
                       await showDetailsProvider.setTabClick("related");
                     },
@@ -2334,7 +2334,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    focusColor: gray.withOpacity(0.5),
+                    //focusColor:: gray.withOpacity(0.5),
                     onTap: () async {
                       await showDetailsProvider.setTabClick("moredetails");
                     },
@@ -2591,7 +2591,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
             type: MaterialType.transparency,
             child: InkWell(
               borderRadius: BorderRadius.circular(4),
-              focusColor: white,
+              //focusColor:: white,
               onTap: () async {
                 debugPrint("Clicked on index ==> $index");
                 if ((relatedDataList?[index].videoType ?? 0) == 5) {
@@ -2745,7 +2745,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
-                  focusColor: white,
+                  //focusColor:: white,
                   onTap: () {
                     debugPrint("Item Clicked! => $position");
                     if (kIsWeb || Constant.isTV) return;
@@ -2843,7 +2843,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
               type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.circular(Dimens.cardRadius),
-                focusColor: white,
+                //focusColor:: white,
                 onTap: () {
                   if (kIsWeb || Constant.isTV) return;
                   Navigator.of(context).push(

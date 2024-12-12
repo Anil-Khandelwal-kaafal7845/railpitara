@@ -555,7 +555,7 @@ class SectionByTypeState extends State<SectionByType> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(6),
 
             onTap: () {
@@ -800,7 +800,7 @@ class SectionByTypeState extends State<SectionByType> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(6),
             onTap: () {
               debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -1041,7 +1041,7 @@ class SectionByTypeState extends State<SectionByType> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               // onTap: () {
               //   debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -1281,7 +1281,7 @@ class SectionByTypeState extends State<SectionByType> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -1521,7 +1521,7 @@ class SectionByTypeState extends State<SectionByType> {
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -1764,7 +1764,7 @@ class SectionByTypeState extends State<SectionByType> {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -1845,7 +1845,7 @@ class SectionByTypeState extends State<SectionByType> {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -1926,7 +1926,7 @@ class SectionByTypeState extends State<SectionByType> {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -2031,7 +2031,7 @@ class SectionByTypeState extends State<SectionByType> {
           return Stack(
             children: [
               InkWell(
-                  focusColor: white,
+                  //focusColor:: white,
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
                     debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -2237,7 +2237,7 @@ class SectionByTypeState extends State<SectionByType> {
             // alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");

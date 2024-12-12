@@ -460,7 +460,7 @@ class HomeState extends State<Home> with RouteAware{
         actions: [
 
 
-
+  forceUpdateData?.result?.showPackage == 1?  
 
           GestureDetector(
             onTap: () {
@@ -479,6 +479,8 @@ class HomeState extends State<Home> with RouteAware{
                         }
             
             },
+
+            
             child: 
             Padding(
               padding: const EdgeInsets.only(right: 15),
@@ -486,11 +488,13 @@ class HomeState extends State<Home> with RouteAware{
                 children: [
                   Image.asset(
                 "assets/images/coin.png",
-                width: 40,
-                height: 40,
+                width: 45,
+                height: 42,
                 // color: white,
               ),
+
               
+          
 Constant.userID != null
           ? Text(
               "${homeProvider.userWalletBalanceModel?.balance ?? ''}",
@@ -500,13 +504,13 @@ Constant.userID != null
                 fontWeight: FontWeight.bold,
               ),
             )
-          : SizedBox.shrink(),
+          : SizedBox.shrink()
 
 
                 ],
               )
             ),
-          ),
+          ):SizedBox.shrink(),
 
 
           // Padding(
@@ -2205,7 +2209,7 @@ Constant.userID != null
                   (BuildContext context, int index, int pageViewIndex) {
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  // focusColor: white,
+                  // //focusColor:: white,
                   // borderRadius: BorderRadius.circular(0),
                   onTap: () {
                     debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -2448,7 +2452,7 @@ Constant.userID != null
           ),
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return InkWell(
-              focusColor: white,
+              // //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked on index ==> $index");
@@ -2629,7 +2633,7 @@ Constant.userID != null
                   alignment: AlignmentDirectional.bottomStart,
                   children: [
                     InkWell(
-                      focusColor: white,
+                      //focusColor:: white,
                       borderRadius: BorderRadius.circular(4),
                       onTap: () {
                         debugPrint("Clicked on index ==> $index");
@@ -3035,7 +3039,7 @@ Constant.userID != null
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(6),
 
             onTap: () {
@@ -3282,7 +3286,7 @@ Constant.userID != null
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            focusColor: white,
+            //focusColor:: white,
             borderRadius: BorderRadius.circular(6),
             onTap: () {
               debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -3525,7 +3529,7 @@ Constant.userID != null
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               // onTap: () {
               //   debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -3760,7 +3764,7 @@ Constant.userID != null
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -4002,7 +4006,7 @@ Constant.userID != null
         separatorBuilder: (context, index) => const SizedBox(width: 5),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              focusColor: white,
+              //focusColor:: white,
               borderRadius: BorderRadius.circular(4),
               onTap: () {
                 debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -4247,7 +4251,7 @@ Constant.userID != null
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -4328,7 +4332,7 @@ Constant.userID != null
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -4409,7 +4413,7 @@ Constant.userID != null
             alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");
@@ -4514,7 +4518,7 @@ Constant.userID != null
           return Stack(
             children: [
               InkWell(
-                  focusColor: white,
+                  //focusColor:: white,
                   borderRadius: BorderRadius.circular(4),
                   onTap: () {
                     debugPrint("Clicked userid ==> ${Constant.userID}");
@@ -4722,7 +4726,7 @@ Constant.userID != null
             // alignment: AlignmentDirectional.bottomStart,
             children: [
               InkWell(
-                focusColor: white,
+                //focusColor:: white,
                 borderRadius: BorderRadius.circular(4),
                 onTap: () {
                   debugPrint("Clicked on index ==> $index");

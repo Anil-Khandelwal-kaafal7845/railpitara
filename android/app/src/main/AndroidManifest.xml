@@ -84,7 +84,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="captainplay.in"/>
+                <data android:scheme="http" android:host="omtv.ottsnap.in"/>
                 <data android:scheme="https"/>
             </intent-filter>
            
@@ -107,7 +107,7 @@
       <!-- AdMob App ID -->
     <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713"/> <!-- Test App ID -->
+        android:value="ca-app-pub-4372710050540239~7104094895"/> <!-- Real -->
         
 
         <!-- Facebook Login START -->

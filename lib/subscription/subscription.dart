@@ -52,6 +52,7 @@ class SubscriptionState extends State<Subscription>with RouteAware {
   _getData() async {
     Utils.getCurrencySymbol();
     await subscriptionProvider.getPackages();
+    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
