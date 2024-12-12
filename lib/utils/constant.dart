@@ -11,7 +11,7 @@ class Constant {
   static String appName = "OM TV";
   static String appPackageName = "com.blackboardfilms.omtv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 46;
+  static double curentAppVersion = 47;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
