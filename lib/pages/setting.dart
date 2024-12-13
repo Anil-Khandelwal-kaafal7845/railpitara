@@ -51,8 +51,10 @@ class SettingState extends State<Setting> {
 
   @override
   void initState() {
+  
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
+      generalProvider.getGeneralsetting(context);
     getUserData();
     super.initState();
   }
@@ -85,13 +87,17 @@ class SettingState extends State<Setting> {
     debugPrint('getUserData userName ==> $userName');
     debugPrint('getUserData userType ==> $userType');
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
+       debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
+     
 
     await generalProvider.getPages();
+   
 
     isSwitched = await sharedPref.readBool("PUSH");
     debugPrint('getUserData isSwitched ==> $isSwitched');
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
+      
       setState(() {});
     });
   }
@@ -145,7 +151,10 @@ class SettingState extends State<Setting> {
                 ),
                
                
-                _buildLine(16.0, 16.0),
+               Visibility(
+                    visible: forceUpdateData!.result!.showPackage == 1,
+                    child: _buildLine(16.0, 16.0)),
+
 
                   Visibility(
                   visible: forceUpdateData!.result!.showPackage == 1,
@@ -238,9 +247,9 @@ class SettingState extends State<Setting> {
                     child: _buildLine(16.0, 16.0)),
 
                 /* Coin--- */
-                Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
-                  child: _buildSettingButton(
+             
+                  generalProvider.isCoinShow == "1"?
+                  _buildSettingButton(
                     title: 'coin',
                     subTitle: 'view_your_coin',
                     titleMultilang: true,
@@ -263,13 +272,11 @@ class SettingState extends State<Setting> {
                         }
                  
                     },
-                  ),
-                ),
+                  )
+                :SizedBox.shrink(),
 
-                Visibility(
-                    visible: forceUpdateData!.result!.showPackage == 1,
-                    child: _buildLine(16.0, 16.0)),
-
+ generalProvider.isCoinShow == "1"?_buildLine(16.0, 16.0):SizedBox.shrink(),
+               
 
                 /* Subscription */
                 Visibility(

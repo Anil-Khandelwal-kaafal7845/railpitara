@@ -287,7 +287,7 @@ Widget build(BuildContext context) {
                     // Coin Balance Section
                     Container(
                       padding: EdgeInsets.only(top: 10, bottom: 5),
-                      height: 55,
+                      height: 60,
                       decoration: BoxDecoration(
                         color: shimmerColor,
                         borderRadius: BorderRadius.circular(8),
@@ -310,7 +310,7 @@ Widget build(BuildContext context) {
                                     fontWeight: FontWeight.w300,
                                     color: lightGray),
                               ),
-                              SizedBox(height: 5),
+                              SizedBox(height: 2),
                               Text(
                                 '${homeProvider.userWalletBalanceModel?.balance} Coins',
                                 style: TextStyle(

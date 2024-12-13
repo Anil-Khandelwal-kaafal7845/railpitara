@@ -27,7 +27,7 @@ class GeneralProvider extends ChangeNotifier {
    dynamic isAdsCoin;
    String? rewardad;
    String? rewardadIos;
-   
+   dynamic isCoinShow;
 
 
   SharedPre sharedPre = SharedPre();
@@ -56,6 +56,8 @@ class GeneralProvider extends ChangeNotifier {
         isAdsCoin = await sharedPre.read("no_of_coin_watch_ad") ?? "0";
            rewardad = await sharedPre.read("reward_ad") ?? "0";
         rewardadIos = await sharedPre.read("ios_reward_ad") ?? "0";
+        isCoinShow = await sharedPre.read("is_coin_show") ?? "0";
+
 
 
         
@@ -66,6 +68,8 @@ class GeneralProvider extends ChangeNotifier {
       debugPrint("isFbLogin ===========> $isFbLogin");
       debugPrint("isMobileLogin ===========> $isMobileLogin");
             debugPrint("isAdsCoin ===========> $isAdsCoin");
+            debugPrint("isCoinShow ===========> $isCoinShow");
+
 
         debugPrint("appDescription ===========> $appDescription");
         /* Get Ads Init */

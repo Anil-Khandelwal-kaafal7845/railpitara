@@ -81,6 +81,7 @@ class HomeState extends State<Home> with RouteAware{
   late FindProvider findProvider = FindProvider();
   List<String> selectedLanguageIds = ["0"];
 
+
 //drawer
   bool? isSwitched;
   String? userName, userType, userMobileNo;
@@ -139,7 +140,11 @@ class HomeState extends State<Home> with RouteAware{
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
 
     await generalProvider.getPages();
+    await generalProvider.getGeneralsetting(context);
     await homeProvider.fetchUserWalletBalance(Constant.userID??"");
+
+       debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
+
 
     isSwitched = await sharedPref.readBool("PUSH");
     debugPrint('getUserData isSwitched ==> $isSwitched');
@@ -152,6 +157,7 @@ class HomeState extends State<Home> with RouteAware{
   @override
   void initState() {
     print("-----${Constant.userID}");
+
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     getUserData();
     
@@ -192,66 +198,128 @@ class HomeState extends State<Home> with RouteAware{
   }
 
   checkForUpdate() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    if ((Platform.isAndroid
-            ? forceUpdateData!.result!.appVersion!
-            : forceUpdateData!.result!.appVersionIos!) >
-        num.parse(packageInfo.buildNumber)) {
-      showDialog(
-        barrierDismissible:
-            forceUpdateData!.result!.forceUpdateAndroid == 1 ? false : true,
-        context: context,
-        builder: (context) {
-          return WillPopScope(
-            onWillPop: () async =>
-                false, // prevent dialog from dismissing on back button press
-            child: AlertDialog(
-              contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-              surfaceTintColor: Theme.of(context).colorScheme.background,
-              title: const Text("New Update Available!!"),
-              content: const Text("A new app update is available"),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Visibility(
-                      visible: forceUpdateData!.result!.forceUpdateAndroid == 0
-                          ? true
-                          : false,
-                      child: TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel")),
+  // Get current app version from API response
+  final int apiAppVersion = forceUpdateData!.result!.appVersion!;
+  final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
+
+  // Compare app versions
+  if (apiAppVersion > num.parse(packageInfo.buildNumber)) {
+    showDialog(
+      barrierDismissible: !isForceUpdate, // Disable dismiss if force update
+      context: context,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async => false, // Prevent dialog dismissal on back
+          child: AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+            surfaceTintColor: Theme.of(context).colorScheme.background,
+            title: const Text("New Update Available!!"),
+            content: const Text("A new app update is available"),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Visibility(
+                    visible: !isForceUpdate, // Show Cancel button if not forced
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Cancel"),
                     ),
-                    TextButton(
-                        onPressed: () {
-                          if (Platform.isAndroid || Platform.isIOS) {
-                            final appId = Platform.isAndroid
-                                ? Constant.appPackageName
-                                : Constant.appleAppId;
-                            final url = Uri.parse(
-                              Platform.isAndroid
-                                  ? "market://details?id=$appId"
-                                  : "https://apps.apple.com/app/id$appId",
-                            );
-                            launchUrl(
-                              url,
-                              mode: LaunchMode.externalApplication,
-                            );
-                          }
-                        },
-                        child: const Text("UPDATE")),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (Platform.isAndroid || Platform.isIOS) {
+                        final url = Uri.parse(
+                          Platform.isAndroid
+                              ? "https://play.google.com/store/apps/details?id=com.blackboardfilms.omtv&hl=en_IN"
+                              : "https://apps.apple.com/in/app/om-tv/id1584477559",
+                        );
+                        launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                    child: const Text("UPDATE"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
+}
+
+
+  // checkForUpdate() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  //   if ((Platform.isAndroid
+  //           ? forceUpdateData!.result!.appVersion!
+  //           : forceUpdateData!.result!.appVersion!) >
+  //       num.parse(packageInfo.buildNumber)) {
+  //     showDialog(
+  //       barrierDismissible:
+  //           forceUpdateData!.result!.forceUpdateAndroid == 1 ? false : true,
+  //       context: context,
+  //       builder: (context) {
+  //         return WillPopScope(
+  //           onWillPop: () async =>
+  //               false, // prevent dialog from dismissing on back button press
+  //           child: AlertDialog(
+  //             contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+  //             surfaceTintColor: Theme.of(context).colorScheme.background,
+  //             title: const Text("New Update Available!!"),
+  //             content: const Text("A new app update is available"),
+  //             actions: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                 children: [
+  //                   Visibility(
+  //                     visible: forceUpdateData!.result!.forceUpdateAndroid == 0
+  //                         ? true
+  //                         : false,
+  //                     child: TextButton(
+  //                         onPressed: () {
+  //                           Navigator.pop(context);
+  //                         },
+  //                         child: const Text("Cancel")),
+  //                   ),
+  //                   TextButton(
+  //                       onPressed: () {
+  //                         if (Platform.isAndroid || Platform.isIOS) {
+  //                           final appId = Platform.isAndroid
+  //                               ? Constant.appPackageName
+  //                               : Constant.appleAppId;
+  //                           final url = Uri.parse(
+  //                             Platform.isAndroid
+  //                                 ? "market://details?id=$appId"
+  //                                 : "https://apps.apple.com/app/id$appId",
+  //                           );
+  //                           launchUrl(
+  //                             url,
+  //                             mode: LaunchMode.externalApplication,
+  //                           );
+  //                         }
+  //                       },
+  //                       child: const Text("UPDATE")),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
+
+
 
   // What to do when the user opens/taps on a notification
   _handleNotificationOpened(OSNotificationClickEvent result) {
@@ -296,6 +364,7 @@ class HomeState extends State<Home> with RouteAware{
   }
 
   _getData() async {
+    await generalProvider.getGeneralsetting(context);
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
     await homeProvider.fetchUserWalletBalance(Constant.userID??"");
@@ -460,7 +529,8 @@ class HomeState extends State<Home> with RouteAware{
         actions: [
 
 
-  forceUpdateData?.result?.showPackage == 1?  
+  generalProvider.isCoinShow =="1"?  
+
 
           GestureDetector(
             onTap: () {
@@ -510,7 +580,8 @@ Constant.userID != null
                 ],
               )
             ),
-          ):SizedBox.shrink(),
+          )
+          :SizedBox.shrink(),
 
 
           // Padding(
@@ -762,7 +833,7 @@ Constant.userID != null
 
                     /* Coin--- */
                 Visibility(
-                  visible: forceUpdateData?.result?.showPackage == 1,
+                  visible: generalProvider.isCoinShow == "1",
                   child: _buildSettingButton(
                     title: 'coin',
                    

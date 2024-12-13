@@ -147,12 +147,12 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
 
                                  Row(
                                   children: [
-                                     transaction.tokenType == 'credit'?Text("-",style: TextStyle(
+                                     transaction.tokenType == 'credit'?Text("+",style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: transaction.tokenType == 'credit'
                                             ? Colors.green
-                                            : Colors.red),):Text("+",style: TextStyle(
+                                            : Colors.red),):Text("-",style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: transaction.tokenType == 'credit'

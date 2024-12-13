@@ -1,6 +1,5 @@
-// To parse this JSON data, do
-//
-//     final forceUpdatemodel = forceUpdatemodelFromJson(jsonString);
+// To parse this JSON data, do:
+// final forceUpdatemodel = forceUpdatemodelFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -36,39 +35,25 @@ class ForceUpdatemodel {
 }
 
 class Result {
+  int? appVersion;
+  int? forceUpdate;
+  int? showPackage;
 
-    int? appVersion;
-    int? forceUpdateAndroid;
-    int? showPackage;
-    int? forceUpdateIos;
-    int? appVersionIos;
-
-    Result({
-        this.appVersion,
-        this.forceUpdateAndroid,
-        this.showPackage,
-        this.forceUpdateIos,
-        this.appVersionIos,
-    });
-
+  Result({
+    this.appVersion,
+    this.forceUpdate,
+    this.showPackage,
+  });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         appVersion: json["app_version"],
-
-        forceUpdateAndroid: json["force_update_android"],
+        forceUpdate: json["force_update"],
         showPackage: json["show_package"],
-        forceUpdateIos: json["force_update_ios"],
-        appVersionIos: json["app_version_ios"],
-    );
-
+      );
 
   Map<String, dynamic> toJson() => {
         "app_version": appVersion,
-
-        "force_update_android": forceUpdateAndroid,
+        "force_update": forceUpdate,
         "show_package": showPackage,
-        "force_update_ios": forceUpdateIos,
-        "app_version_ios": appVersionIos,
-    };
-
+      };
 }
