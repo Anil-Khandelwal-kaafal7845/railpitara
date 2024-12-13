@@ -81,7 +81,7 @@ class HomeScreenRepo {
 
 class ApiService {
   String baseUrl = Constant.baseurl;
-  String StagebaseUrl = "https://stage.ottsnap.com/api/";
+  // String StagebaseUrl = "https://stage.ottsnap.com/api/";
 
   late Dio dio;
 
@@ -1023,7 +1023,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       Response response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
         data: {'user_id': userId},
       );
@@ -1051,7 +1051,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       Response response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
         data: {
           'user_id': userId,
@@ -1083,7 +1083,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       final response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
       );
 
@@ -1106,7 +1106,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       final response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
         data: {'user_id': userId},
       );
@@ -1141,7 +1141,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       final response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
         data: {
           "user_id": userId,
@@ -1182,7 +1182,7 @@ class ApiService {
     try {
       final headers = await _getAuthHeaders();
       final response = await dio.post(
-        '$StagebaseUrl$endpoint',
+        '$baseUrl$endpoint',
         options: headers,
         data: {
           "user_id": userId,
