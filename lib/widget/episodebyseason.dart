@@ -450,7 +450,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                               ),
                               const SizedBox(width: 5),
                             
-                             forceUpdateData?.result?.showPackage == 1 ?  
+                             generalProvider.isCoinShow == "1" ?  
                               Row(
                                 children: [
                                   MyText(

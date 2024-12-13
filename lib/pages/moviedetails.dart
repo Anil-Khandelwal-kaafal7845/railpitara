@@ -793,7 +793,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         : const SizedBox.shrink(),
 
 //coin tag--
-                    forceUpdateData?.result?.showPackage == 1 ?  
+                    generalProvider.isCoinShow == "1" ?  
                     (videoDetailsProvider.sectionDetailModel.result
                                     ?.isabaletocoinpurches ??
                                 0) ==

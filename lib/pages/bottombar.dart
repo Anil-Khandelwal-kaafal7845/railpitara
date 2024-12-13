@@ -26,9 +26,12 @@ class Bottombar extends StatefulWidget {
   State<Bottombar> createState() => BottombarState();
 }
 
+  int selectedIndex = 0;
+
+
 class BottombarState extends State<Bottombar> {
   SharedPre sharedPre = SharedPre();
-  int selectedIndex = 0;
+  // int selectedIndex = 0;
   DateTime? currentBackPressTime;
 
   static List<Widget> widgetOptions = <Widget>[

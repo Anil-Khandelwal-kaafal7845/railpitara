@@ -905,6 +905,41 @@ class Utils {
     );
   }
 
+static AppBar myAppBarWithBackBottomBar(
+      BuildContext context, String appBarTitle, bool showBackButton) {
+    return AppBar(
+      elevation: 5,
+      backgroundColor: appBgColor,
+      centerTitle: true,
+      leading: showBackButton
+          ? IconButton(
+              autofocus: true,
+              focusColor: white.withOpacity(0.5),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: MyImage(
+                imagePath: "back.png",
+                fit: BoxFit.contain,
+                height: 17,
+                width: 17,
+                color: white,
+              ),
+            )
+          : null, // No back button if showBackButton is false
+      title: MyText(
+        text: appBarTitle,
+        multilanguage: true,
+        fontsizeNormal: 16,
+        fontsizeWeb: 18,
+        fontstyle: FontStyle.normal,
+        fontweight: FontWeight.bold,
+        textalign: TextAlign.center,
+        color: colorPrimary,
+      ),
+    );
+  }
+
   static Widget pageLoader() {
     return const Align(
       alignment: Alignment.center,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dtlive/main.dart';
+import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
@@ -59,7 +60,8 @@ class _MyWatchlistState extends State<MyWatchlist> {
 );
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: Utils.myAppBarWithBack(context, "watchlist", true),
+      appBar: Utils.myAppBarWithBackBottomBar(
+          context, "watchlist", selectedIndex != 3),
       body: SafeArea(
         child: Column(
           children: [
