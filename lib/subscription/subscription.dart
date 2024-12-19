@@ -330,6 +330,7 @@ void _checkPackageAndShowBottomSheet(
                   'assets/images/coin.png',
                   height: 40,
                   width: 40,
+    
                 ),
                 title: const Text(
                   'Rent via Coin',

@@ -741,6 +741,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                       'assets/images/coin.png',
                       height: 40,
                       width: 40,
+                
                     ),
                     title: const Text(
                       'Rent via Coin',
@@ -924,6 +925,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                         'assets/images/coin.png',
                         height: 40,
                         width: 40,
+                      
                       ),
                       title: const Text(
                         'Rent via Coin',

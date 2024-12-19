@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -55,16 +58,5 @@ class DefaultFirebaseOptions {
     messagingSenderId: '151680591442',
     projectId: 'omtv-32b09',
     storageBucket: 'omtv-32b09.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
-    appId: '1:151680591442:ios:9988a0ff6b7d58f308e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.firebasestorage.app',
-    androidClientId: '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
-    iosClientId: '151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako.apps.googleusercontent.com',
-    iosBundleId: 'com.blackboardfilms.omtv',
   );
 }

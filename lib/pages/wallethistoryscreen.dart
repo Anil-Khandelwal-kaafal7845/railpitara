@@ -56,7 +56,7 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                       'assets/images/wallet.png',
                       width: 60,
                       height: 60,
-                      // color: white,
+                      color: white,
                     ),
                     SizedBox(width: 10),
                     Column(

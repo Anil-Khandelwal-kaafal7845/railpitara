@@ -808,7 +808,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                   width: 25,
                                   height: 25,
                                   alignment: Alignment.center,
-                                  child: Image.asset('assets/images/coin.png'),
+                                  child: Image.asset('assets/images/coin.png' ,),
                                 ),
                                 Container(
                                   margin:
@@ -4518,6 +4518,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           'assets/images/coin.png',
                           height: 40,
                           width: 40,
+
                         ),
                         title: const Text(
                           'Rent via Coin',
@@ -4685,6 +4686,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             'assets/images/coin.png',
                             height: 40,
                             width: 40,
+                    
                           ),
                           title: const Text(
                             'Rent via Coin',

@@ -296,9 +296,9 @@ Widget build(BuildContext context) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(width: 10),
-                          Image.asset('assets/images/coin.png',
-                              width: 50, height: 50),
-                          SizedBox(width: 5),
+                          Image.asset('assets/images/wallet.png',
+                              width: 35, height: 35,color: white,),
+                          SizedBox(width: 15),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,

@@ -557,11 +557,14 @@ class HomeState extends State<Home> with RouteAware{
               child: Row(
                 children: [
                   Image.asset(
-                "assets/images/coin.png",
-                width: 45,
-                height: 42,
-                // color: white,
+                "assets/images/wallet.png",
+                width: 30,
+                height: 30,
+                color: white,
+     
               ),
+              SizedBox(width: 8,),
+              
 
               
           
