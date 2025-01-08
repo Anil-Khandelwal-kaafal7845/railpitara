@@ -77,6 +77,8 @@ class LoginSocialState extends State<LoginSocialEmail> {
     debugPrint("===>strDeviceType $strDeviceType");
   }
 
+  String baseUrl = Constant.baseurlwithoutapi;
+
   _getData() async {
     String? privacyUrl, termsConditionUrl;
     await generalProvider.getPages();
@@ -90,27 +92,66 @@ class LoginSocialState extends State<LoginSocialEmail> {
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("privacy")) {
-              privacyUrl = generalProvider.pagesModel.result?[i].url;
+              privacyUrl =
+                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("terms")) {
-              termsConditionUrl = generalProvider.pagesModel.result?[i].url;
+              termsConditionUrl =
+                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
           }
         }
       }
     }
+
     debugPrint('privacyUrl ==> $privacyUrl');
     debugPrint('termsConditionUrl ==> $termsConditionUrl');
 
     strPrivacyAndTNC = await Utils.getPrivacyTandCText(
         privacyUrl ?? "", termsConditionUrl ?? "");
+
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
     });
   }
+
+  // _getData() async {
+  //   String? privacyUrl, termsConditionUrl;
+  //   await generalProvider.getPages();
+  //   if (!generalProvider.loading) {
+  //     if (generalProvider.pagesModel.status == 200 &&
+  //         generalProvider.pagesModel.result != null) {
+  //       if ((generalProvider.pagesModel.result?.length ?? 0) > 0) {
+  //         for (var i = 0;
+  //             i < (generalProvider.pagesModel.result?.length ?? 0);
+  //             i++) {
+  //           if ((generalProvider.pagesModel.result?[i].pageName ?? "")
+  //               .toLowerCase()
+  //               .contains("privacy")) {
+  //             privacyUrl = generalProvider.pagesModel.result?[i].url;
+  //           }
+  //           if ((generalProvider.pagesModel.result?[i].pageName ?? "")
+  //               .toLowerCase()
+  //               .contains("terms")) {
+  //             termsConditionUrl = generalProvider.pagesModel.result?[i].url;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   debugPrint('privacyUrl ==> $privacyUrl');
+  //   debugPrint('termsConditionUrl ==> $termsConditionUrl');
+
+  //   strPrivacyAndTNC = await Utils.getPrivacyTandCText(
+  //       privacyUrl ?? "", termsConditionUrl ?? "");
+  //   Future.delayed(Duration.zero).then((value) {
+  //     if (!mounted) return;
+  //     setState(() {});
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -120,13 +161,13 @@ class LoginSocialState extends State<LoginSocialEmail> {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Login Email",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Login Email",
+        "user_id": Constant.userID,
+      },
+    );
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -161,8 +202,6 @@ class LoginSocialState extends State<LoginSocialEmail> {
                     style: TextStyle(color: otherColor, fontSize: 19),
                   ),
                   const SizedBox(height: 30),
-
-                
                   Container(
                     padding: EdgeInsets.only(left: 12),
                     width: MediaQuery.of(context).size.width,
@@ -197,41 +236,38 @@ class LoginSocialState extends State<LoginSocialEmail> {
                         hintText: 'Enter your email',
                         // Placeholder text for the email input
                       ),
-
-                      
-             
                     ),
                   ),
-
                   const SizedBox(height: 25),
 
                   /* Login Button */
                   InkWell(
-                 onTap: () {
-              String email = emailController.text.toString();
-              if (email.isEmpty) {
-                // Show snackbar if the email is empty
-              Utils.showSnackbar(
-                            context, "info", "login_with_email_note", true);
-              } else {
-                // Email regex pattern
-                String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$';
-                RegExp regex = RegExp(emailPattern);
-                if (!regex.hasMatch(email)) {
-                  // Show snackbar if the email is invalid
-                Utils.showSnackbar(
+                    onTap: () {
+                      String email = emailController.text.toString();
+                      if (email.isEmpty) {
+                        // Show snackbar if the email is empty
+                        Utils.showSnackbar(
                             context, "info", "login_with_email_note", true);
                       } else {
-                  // Proceed to OTPVerify screen if email is valid
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          OTPVerify("", "email", emailController.text),
-                    ),
-                  );
-                }
-              }
-            },
+                        // Email regex pattern
+                        String emailPattern =
+                            r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$';
+                        RegExp regex = RegExp(emailPattern);
+                        if (!regex.hasMatch(email)) {
+                          // Show snackbar if the email is invalid
+                          Utils.showSnackbar(
+                              context, "info", "login_with_email_note", true);
+                        } else {
+                          // Proceed to OTPVerify screen if email is valid
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  OTPVerify("", "email", emailController.text),
+                            ),
+                          );
+                        }
+                      }
+                    },
                     // onTap: () {
                     //   print("EMAIL enter ${emailController.text.toString()}");
                     //   //  debugPrint("Click mobileNumber ==> $mobileNumber");
@@ -282,13 +318,10 @@ class LoginSocialState extends State<LoginSocialEmail> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-                  
 
                   /* Privacy & TermsCondition link */
                   if (strPrivacyAndTNC != null)
-               
                     Utils.htmlTexts(strPrivacyAndTNC),
                   const SizedBox(height: 10),
 
@@ -372,53 +405,52 @@ class LoginSocialState extends State<LoginSocialEmail> {
                   ),
                   const SizedBox(height: 5),
 
-
-   /* Google Login Button */
-              generalProvider.isGoogleLogin == "1"
-                  ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 52,
-                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                      margin: const EdgeInsets.only(bottom: 15),
-                      decoration: BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      alignment: Alignment.center,
-                      child: InkWell(
-                        onTap: () {
-                          debugPrint("Clicked on : ====> loginWith Google");
-                          _gmailLogin();
-                        },
-                        borderRadius: BorderRadius.circular(26),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            MyImage(
-                              width: 30,
-                              height: 30,
-                              imagePath: "ic_google.png",
-                              fit: BoxFit.contain,
+                  /* Google Login Button */
+                  generalProvider.isGoogleLogin == "1"
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 52,
+                          padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                          alignment: Alignment.center,
+                          child: InkWell(
+                            onTap: () {
+                              debugPrint("Clicked on : ====> loginWith Google");
+                              _gmailLogin();
+                            },
+                            borderRadius: BorderRadius.circular(26),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                MyImage(
+                                  width: 30,
+                                  height: 30,
+                                  imagePath: "ic_google.png",
+                                  fit: BoxFit.contain,
+                                ),
+                                const SizedBox(width: 30),
+                                MyText(
+                                  color: black,
+                                  text: "loginwithgoogle",
+                                  fontsizeNormal: 14,
+                                  fontsizeWeb: 16,
+                                  multilanguage: true,
+                                  fontweight: FontWeight.w600,
+                                  maxline: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textalign: TextAlign.center,
+                                  fontstyle: FontStyle.normal,
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 30),
-                            MyText(
-                              color: black,
-                              text: "loginwithgoogle",
-                              fontsizeNormal: 14,
-                              fontsizeWeb: 16,
-                              multilanguage: true,
-                              fontweight: FontWeight.w600,
-                              maxline: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textalign: TextAlign.center,
-                              fontstyle: FontStyle.normal,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              const SizedBox(height: 5),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  const SizedBox(height: 5),
                   /* Apple Login Button */
                   if (Platform.isIOS)
                     Container(
@@ -469,7 +501,6 @@ class LoginSocialState extends State<LoginSocialEmail> {
       ),
     );
   }
-
 
   /* Google Login */
   Future<void> _gmailLogin() async {
@@ -533,7 +564,8 @@ class LoginSocialState extends State<LoginSocialEmail> {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
-Future<User?> signInWithApple() async {
+
+  Future<User?> signInWithApple() async {
     // Generate a nonce to prevent replay attacks
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);

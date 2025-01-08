@@ -80,7 +80,9 @@ class LoginSocialState extends State<LoginSocial> {
     debugPrint("===>strDeviceType $strDeviceType");
   }
 
-  _getData() async {
+  String baseUrl = Constant.baseurlwithoutapi;
+
+_getData() async {
     String? privacyUrl, termsConditionUrl;
     await generalProvider.getPages();
     if (!generalProvider.loading) {
@@ -93,27 +95,67 @@ class LoginSocialState extends State<LoginSocial> {
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("privacy")) {
-              privacyUrl = generalProvider.pagesModel.result?[i].url;
+              privacyUrl =
+                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("terms")) {
-              termsConditionUrl = generalProvider.pagesModel.result?[i].url;
+              termsConditionUrl =
+                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
           }
         }
       }
     }
+
     debugPrint('privacyUrl ==> $privacyUrl');
     debugPrint('termsConditionUrl ==> $termsConditionUrl');
 
     strPrivacyAndTNC = await Utils.getPrivacyTandCText(
         privacyUrl ?? "", termsConditionUrl ?? "");
+
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
     });
   }
+
+
+  // _getData() async {
+  //   String? privacyUrl, termsConditionUrl;
+  //   await generalProvider.getPages();
+  //   if (!generalProvider.loading) {
+  //     if (generalProvider.pagesModel.status == 200 &&
+  //         generalProvider.pagesModel.result != null) {
+  //       if ((generalProvider.pagesModel.result?.length ?? 0) > 0) {
+  //         for (var i = 0;
+  //             i < (generalProvider.pagesModel.result?.length ?? 0);
+  //             i++) {
+  //           if ((generalProvider.pagesModel.result?[i].pageName ?? "")
+  //               .toLowerCase()
+  //               .contains("privacy")) {
+  //             privacyUrl = generalProvider.pagesModel.result?[i].url;
+  //           }
+  //           if ((generalProvider.pagesModel.result?[i].pageName ?? "")
+  //               .toLowerCase()
+  //               .contains("terms")) {
+  //             termsConditionUrl = generalProvider.pagesModel.result?[i].url;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   debugPrint('privacyUrl ==> $privacyUrl');
+  //   debugPrint('termsConditionUrl ==> $termsConditionUrl');
+
+  //   strPrivacyAndTNC = await Utils.getPrivacyTandCText(
+  //       privacyUrl ?? "", termsConditionUrl ?? "");
+  //   Future.delayed(Duration.zero).then((value) {
+  //     if (!mounted) return;
+  //     setState(() {});
+  //   });
+  // }
 
   void validateAndProceed() {
     if (phoneRegExp.hasMatch(mobileNumber!)) {
