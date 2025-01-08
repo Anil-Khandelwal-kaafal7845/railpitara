@@ -13,12 +13,15 @@ class Constant {
   static String appleAppId = "1584477559";
   static double curentAppVersion = 50;
   static double iosAppVersion = 35;
+  static String curentiosAppVersion = "1";
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
 
   /* Constant for TV check */
   static bool isTV = false;
+
+  static String deviceType = "";
 
   static String? userID;
   static String currencySymbol = "";

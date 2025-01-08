@@ -343,13 +343,19 @@ final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(an
   }
 
   _getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
     if (Platform.isAndroid) {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       Constant.isTV =
           androidInfo.systemFeatures.contains('android.software.leanback');
+      Constant.deviceType = "android_app"; // Set device type to Android
       debugPrint("isTV =======================> ${Constant.isTV}");
+    } else if (Platform.isIOS) {
+      Constant.deviceType = "ios_app"; // Set device type to iOS
     }
+
+    debugPrint("Device Type =======================> ${Constant.deviceType}");
   }
 }
 

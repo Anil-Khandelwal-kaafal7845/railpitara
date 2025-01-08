@@ -419,6 +419,9 @@ class ApiService {
     debugPrint('sectionBanner isHomePage ==>>> $isHomePage');
     SectionBannerModel sectionBannerModel;
     String sectionBanner = "get_banner";
+    Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
     Response response = await dio.post(
       '$baseUrl$sectionBanner',
       options: optHeaders,
@@ -426,6 +429,8 @@ class ApiService {
         'user_id': Constant.userID,
         'type_id': typeId,
         'is_home_page': isHomePage,
+        'version': appVersion,
+        'device': Constant.deviceType
       },
     );
     sectionBannerModel = SectionBannerModel.fromJson(response.data);
@@ -436,6 +441,10 @@ class ApiService {
   Future<SectionListModel> sectionList(typeId, isHomePage, languageId) async {
     SectionListModel sectionListModel;
     String sectionList = "section_list";
+    Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
+
     Response response = await dio.post(
       '$baseUrl$sectionList',
       options: optHeaders,
@@ -443,7 +452,9 @@ class ApiService {
         'user_id': Constant.userID,
         'type_id': typeId,
         'is_home_page': isHomePage,
-        'language_id': languageId
+        'language_id': languageId,
+        'version': appVersion,
+        'device': Constant.deviceType
       },
     );
     sectionListModel = SectionListModel.fromJson(response.data);
@@ -475,6 +486,9 @@ class ApiService {
       typeId, videoType, videoId, upcomingType) async {
     SectionDetailModel sectionDetailModel;
     String sectionList = "section_detail";
+    Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
     Response response = await dio.post(
       '$baseUrl$sectionList',
       options: optHeaders,
@@ -484,6 +498,8 @@ class ApiService {
         'video_type': videoType,
         'video_id': videoId,
         'upcoming_type': upcomingType,
+        'version': appVersion,
+        'device': Constant.deviceType
       },
     );
     sectionDetailModel = SectionDetailModel.fromJson(response.data);
@@ -651,12 +667,17 @@ class ApiService {
     debugPrint('searchVideo searchText ==>>> $searchText');
     SearchModel searchModel;
     String search = "search_video";
+    Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
     Response response = await dio.post(
       '$baseUrl$search',
       options: optHeaders,
       data: {
         'name': searchText,
         'user_id': Constant.userID,
+        'version': appVersion,
+        'device': Constant.deviceType
       },
     );
     searchModel = SearchModel.fromJson(response.data);
@@ -682,11 +703,16 @@ class ApiService {
   Future<RentModel> rentVideoList() async {
     RentModel rentModel;
     String rentList = "rent_video_list";
+    Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
     Response response = await dio.post(
       '$baseUrl$rentList',
       options: optHeaders,
       data: {
         'user_id': Constant.userID,
+        'version': appVersion,
+        'device': Constant.deviceType
       },
     );
     rentModel = RentModel.fromJson(response.data);
