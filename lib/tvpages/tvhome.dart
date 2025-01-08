@@ -377,7 +377,7 @@ class TVHomeState extends State<TVHome> {
                               debugPrint("mSearchText ====> $mSearchText");
                               _onItemTapped("search");
                               await searchProvider.setLoading(true);
-                              await searchProvider.getSearchVideo(mSearchText);
+                              await searchProvider.getSearchVideo(context,mSearchText!);
                             }
                           },
                           textInputAction: TextInputAction.done,
@@ -470,7 +470,7 @@ class TVHomeState extends State<TVHome> {
                                   _onItemTapped("search");
                                   await searchProvider.setLoading(true);
                                   await searchProvider
-                                      .getSearchVideo(mSearchText);
+                                      .getSearchVideo(context,mSearchText!);
                                   setState(() {});
                                 }
                               },

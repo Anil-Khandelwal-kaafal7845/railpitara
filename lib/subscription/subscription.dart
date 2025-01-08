@@ -13,6 +13,7 @@ import 'package:dtlive/subscription/allpayment.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:dtlive/widget/nodata.dart';
 import 'package:dtlive/provider/subscriptionprovider.dart';
 import 'package:dtlive/utils/color.dart';
@@ -34,7 +35,7 @@ class Subscription extends StatefulWidget {
   State<Subscription> createState() => SubscriptionState();
 }
 
-class SubscriptionState extends State<Subscription>with RouteAware {
+class SubscriptionState extends State<Subscription> with RouteAware {
   late SubscriptionProvider subscriptionProvider;
   CarouselController pageController = CarouselController();
   int selectedIndex = 0;
@@ -52,21 +53,20 @@ class SubscriptionState extends State<Subscription>with RouteAware {
   _getData() async {
     Utils.getCurrencySymbol();
     await subscriptionProvider.getPackages();
-    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    await homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
     });
   }
 
-
   void _fetchDataAgain() async {
-     homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
     _getData();
     setState(() {});
   }
 
-   @override
+  @override
   void didPopNext() {
     _fetchDataAgain();
     super.didPopNext();
@@ -102,9 +102,7 @@ class SubscriptionState extends State<Subscription>with RouteAware {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return
-              
-               AllPayment(
+              return AllPayment(
                 payType: 'Package',
                 itemId: packageList?[index].id.toString() ?? '',
                 price: packageList?[index].price.toString() ?? '',
@@ -125,8 +123,6 @@ class SubscriptionState extends State<Subscription>with RouteAware {
             },
           ),
         );
-      
-      
       }
     } else {
       if ((kIsWeb || Constant.isTV)) {
@@ -144,213 +140,144 @@ class SubscriptionState extends State<Subscription>with RouteAware {
     }
   }
 
-// // Function that checks the user's wallet balance and navigates accordingly
-// Future<void> _checkRentViaCoin(
-//     List<Result>? packageList, int index, BuildContext context) async {
-//   try {
-//     // Check if the selected package is already purchased
-//     if (packageList?[index].isBuy == 1) {
-//       debugPrint("<============= Purchaged =============>");
-//       Utils.showSnackbar(context, "info", "already_purchased", true);
-//       return;
-//     }
+  Future<void> _checkRentViaCoin(
+      List<Result>? packageList, int index, BuildContext context) async {
+    try {
+      // Check if the selected package is already purchased
+      if (packageList?[index].isBuy == 1) {
+        debugPrint("<============= Purchaged =============>");
+        Utils.showSnackbar(context, "info", "already_purchased", true);
+        return;
+      }
 
-//     // Access the user balance and the selected package's coin amount
-//     dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
-//     dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
+      // Access the user balance and the selected package's coin amount
+      dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
+      dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
 
-//     // Debugging prints to check values
-//     debugPrint("<============= User Balance: $userBalance =============>");
-//     debugPrint("<============= Video Coin Value: $videoCoinValue =============>");
+      debugPrint("<============= User Balance: $userBalance =============>");
+      debugPrint(
+          "<============= Video Coin Value: $videoCoinValue =============>");
 
-//     // Check if the user has enough balance
-//     if (userBalance >= videoCoinValue) {
-//       debugPrint("<============= Sufficient Balance, Navigating to TransactionStatusScreen =============>");
-//       // If the user has enough balance, navigate to the transaction status screen
-//       Navigator.push(
-//         context,
-//         MaterialPageRoute(
-//           builder: (context) => TransactionStatusScreen(
-//             userId: "${Constant.userID}",
-//             noOfToken: "${packageList?[index].coinAmount}",
-//             packageId: "${packageList?[index].id}",
-//             amount: "${packageList?[index].price}",
-//           ),
-//         ),
-//       );
-//     } else {
-//       debugPrint("<============= Insufficient Balance, Navigating to CoinStoreScreen =============>");
-//       // If the user does not have enough balance, navigate to CoinStoreScreen
-//       Navigator.push(
-//         context,
-//         MaterialPageRoute(
-//           builder: (context) => CoinStoreScreen(),
-//         ),
-//       );
-//     }
-//   } catch (e) {
-//     // Catch any errors and print them for debugging
-//     debugPrint('Error: $e');
-//   }
-// }
+      // Check if the user has enough balance
+      if (userBalance >= videoCoinValue && userBalance >= 0) {
+        debugPrint(
+            "<============= Sufficient Balance, Navigating to TransactionStatusScreen =============>");
+        // If the user has enough balance, navigate to the transaction status screen
 
-Future<void> _checkRentViaCoin (
-    List<Result>? packageList, int index, BuildContext context) async {
-  try {
-    // Check if the selected package is already purchased
-    if (packageList?[index].isBuy == 1) {
-      debugPrint("<============= Purchaged =============>");
-      Utils.showSnackbar(context, "info", "already_purchased", true);
-      return;
-    }
-
-    // Access the user balance and the selected package's coin amount
-    dynamic userBalance = homeProvider.userWalletBalanceModel?.balance ?? 0;
-    dynamic videoCoinValue = packageList?[index].coinAmount ?? '0';
-
-    debugPrint("<============= User Balance: $userBalance =============>");
-    debugPrint("<============= Video Coin Value: $videoCoinValue =============>");
-
-    // Check if the user has enough balance
-    if (userBalance >= videoCoinValue && userBalance >= 0) {
-      debugPrint("<============= Sufficient Balance, Navigating to TransactionStatusScreen =============>");
-      // If the user has enough balance, navigate to the transaction status screen
-    
-    
-    
-   await Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return
-              
-               TransactionStatusScreen(
-            userId: "${Constant.userID}",
-            noOfToken: "${packageList?[index].coinAmount}",
-            packageId: "${packageList?[index].id}",
-            amount: "${packageList?[index].coinAmount}",
-          );
+              return TransactionStatusScreen(
+                userId: "${Constant.userID}",
+                noOfToken: "${packageList?[index].coinAmount}",
+                packageId: "${packageList?[index].id}",
+                amount: "${packageList?[index].coinAmount}",
+              );
             },
           ),
         );
-      
+      } else {
+        debugPrint(
+            "<============= Invalid Balance or Insufficient Funds, Navigating to CoinStoreScreen =============>");
+        // If the user does not have enough balance, navigate to CoinStoreScreen
 
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => TransactionStatusScreen(
-      //       userId: "${Constant.userID}",
-      //       noOfToken: "${packageList?[index].coinAmount}",
-      //       packageId: "${packageList?[index].id}",
-      //       amount: "${packageList?[index].price}",
-      //     ),
-      //   ),
-      // );
-
-
-    } else {
-      debugPrint("<============= Invalid Balance or Insufficient Funds, Navigating to CoinStoreScreen =============>");
-      // If the user does not have enough balance, navigate to CoinStoreScreen
-      
-       await Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CoinStoreScreen(),
           ),
         );
-      
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
     }
-  } catch (e) {
-    debugPrint('Error: $e');
   }
-}
 
 // Function to show the bottom sheet with payment methods
-void _checkPackageAndShowBottomSheet(
-    List<Result>? packageList, int index, BuildContext context) {
-  // Check if any package in the list has isBuy == 1 (already purchased)
-  bool isAnyPackagePurchased = packageList?.any((package) => package.isBuy == 1) ?? false;
+  void _checkPackageAndShowBottomSheet(
+      List<Result>? packageList, int index, BuildContext context) {
+    // Check if any package in the list has isBuy == 1 (already purchased)
+    bool isAnyPackagePurchased =
+        packageList?.any((package) => package.isBuy == 1) ?? false;
 
-  debugPrint("<============= Package Purchase Check: $isAnyPackagePurchased =============>");
+    debugPrint(
+        "<============= Package Purchase Check: $isAnyPackagePurchased =============>");
 
-  if (isAnyPackagePurchased) {
-    // Show Snackbar if any package is already purchased
-    debugPrint("<============= Purchased Package Found =============>");
-    Utils.showSnackbar(context, "info", "already_purchased", true);
-  } else {
-    // If no package is purchased, show the bottom sheet
-    debugPrint("<============= No Purchased Packages =============>");
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      backgroundColor: Colors.black,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                'Select Payment Method',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+    if (isAnyPackagePurchased) {
+      // Show Snackbar if any package is already purchased
+      debugPrint("<============= Purchased Package Found =============>");
+      Utils.showSnackbar(context, "info", "already_purchased", true);
+    } else {
+      // If no package is purchased, show the bottom sheet
+      debugPrint("<============= No Purchased Packages =============>");
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        backgroundColor: Colors.black,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  'Select Payment Method',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Divider(color: Colors.grey, thickness: 1),
+                const SizedBox(height: 10),
+                const Divider(color: Colors.grey, thickness: 1),
 
-              // Rent via Payment option
-              ListTile(
-                leading: Image.asset(
-                  'assets/images/rupee.png',
-                  height: 30,
-                  width: 30,
+                // Rent via Payment option
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/rupee.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                  title: const Text(
+                    'Rent via Payment',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () async {
+                    debugPrint(
+                        "<============= Rent via Payment Selected =============>");
+                    // Call the payment function here
+                    await _checkAndPay(packageList, index);
+                    Navigator.pop(context); // Close the bottom sheet
+                  },
                 ),
-                title: const Text(
-                  'Rent via Payment',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () async {
-                  debugPrint("<============= Rent via Payment Selected =============>");
-                  // Call the payment function here
-                  await _checkAndPay(packageList, index);
-                  Navigator.pop(context); // Close the bottom sheet
-                },
-              ),
-              const Divider(color: Colors.grey, thickness: 1),
+                const Divider(color: Colors.grey, thickness: 1),
 
-              // Rent via Coin option
-              ListTile(
-                leading: Image.asset(
-                  'assets/images/coin.png',
-                  height: 40,
-                  width: 40,
-    
+                // Rent via Coin option
+                ListTile(
+                  leading: AnimatedGifWidget(width: 60, height: 60),
+                  title: const Text(
+                    'Rent via Coin',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () async {
+                    debugPrint(
+                        "<============= Rent via Coin Selected =============>");
+                    // Call the function to check wallet balance and make payment via coins
+                    await _checkRentViaCoin(packageList, index, context);
+                    Navigator.pop(context); // Close the bottom sheet
+                  },
                 ),
-                title: const Text(
-                  'Rent via Coin',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () async {
-                  debugPrint("<============= Rent via Coin Selected =============>");
-                  // Call the function to check wallet balance and make payment via coins
-                  await _checkRentViaCoin(packageList, index, context);
-                  Navigator.pop(context); // Close the bottom sheet
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
-}
-
 
 // // Function that checks the user's wallet balance and navigates accordingly
 //   Future<void> _checkRentViaCoin(
@@ -386,7 +313,7 @@ void _checkPackageAndShowBottomSheet(
 //               builder: (context) => CoinStoreScreen(),
 //             ),
 //           );
-        
+
 //       }
 //     } catch (e) {
 //       debugPrint('Error: $e');
@@ -471,10 +398,9 @@ void _checkPackageAndShowBottomSheet(
 //         );
 //       },
 //     );
-  
+
 //     }
 //   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -504,9 +430,9 @@ void _checkPackageAndShowBottomSheet(
               ),
             ),
             /* AdMob Banner */
-            // Container(
-            //   child: Utils.showBannerAd(context),
-            // ),
+            Container(
+              child: Utils.showBannerAd(context),
+            ),
           ],
         ),
       );
@@ -565,95 +491,14 @@ void _checkPackageAndShowBottomSheet(
           children: [
             _buildBenefits(packageList, selectedIndex),
             buildMobileItem(packageList),
+            SizedBox(height: 10,) ,
             GestureDetector(
               onTap: () {
                 _checkPackageAndShowBottomSheet(
                     packageList, selectedIndex, context);
-
-//       showModalBottomSheet(
-//             context: context,
-//             shape: const RoundedRectangleBorder(
-//               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//             ),
-//             backgroundColor: Colors.black,
-//             builder: (context) {
-
-//               return Padding(
-//                 padding:
-//                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     const SizedBox(height: 10),
-//                     Text(
-//                       'Select Payment Method',
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 10),
-//                     const Divider(color: Colors.grey, thickness: 1),
-
-//                     // Rent via Payment option
-//                     ListTile(
-//                       leading: Image.asset(
-//                         'assets/images/rupee.png',
-//                         height: 30,
-//                         width: 30,
-//                       ),
-//                       title: const Text(
-//                         'Rent via Payment',
-//                         style: TextStyle(color: Colors.white),
-//                       ),
-//                       onTap: () async {
-//                          _checkAndPay(packageList, selectedIndex);
-
-//                       },
-//                     ),
-//                     const Divider(color: Colors.grey, thickness: 1),
-
-//                     // Rent via Coin option
-
-//                     ListTile(
-//   leading: Image.asset(
-//     'assets/images/coin.png',
-//     height: 40,
-//     width: 40,
-//   ),
-//   title: const Text(
-//     'Rent via Coin',
-//     style: TextStyle(color: Colors.white),
-//   ),
-//   onTap: () async {
-//    await _checkRentViaCoin(packageList, selectedIndex, context);
-//   },
-// )
-
-//                 //  ListTile(
-//                 //           leading: Image.asset(
-//                 //             'assets/images/coin.png',
-//                 //             height: 40,
-//                 //             width: 40,
-//                 //           ),
-//                 //           title: const Text(
-//                 //             'Rent via Coin',
-//                 //             style: TextStyle(color: Colors.white),
-//                 //           ),
-//                 //           onTap: () async {
-
-//                 //           },
-//                 //         ),
-
-//                  ],
-//                 ),
-//               );
-//             },
-//           );
               },
               child: Container(
-                margin: EdgeInsets.only(top: 35, bottom: 25),
+                margin: EdgeInsets.only(top: 0, bottom: 20),
                 height: 50,
                 width: 300,
                 decoration: BoxDecoration(
@@ -689,13 +534,13 @@ void _checkPackageAndShowBottomSheet(
   Widget buildMobileItem(List<Result>? packageList) {
     if (packageList != null) {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 10),
         child: GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8.0,
-            mainAxisSpacing: 4,
+            mainAxisSpacing: 2,
           ),
           shrinkWrap: true,
           itemCount: packageList.length,
@@ -739,7 +584,7 @@ void _checkPackageAndShowBottomSheet(
                           color: isPurchased ? white : subscriblue,
                           text: packageList[index].name ?? "",
                           textalign: TextAlign.start,
-                          fontsizeNormal: 16,
+                          fontsizeNormal: 15,
                           fontsizeWeb: 24,
                           maxline: 1,
                           multilanguage: false,
@@ -748,14 +593,14 @@ void _checkPackageAndShowBottomSheet(
                           fontstyle: FontStyle.normal,
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         MyText(
                           color: isPurchased ? white : subscriblue,
                           text:
                               "\u{20B9} ${packageList[index].price.toString()}",
                           textalign: TextAlign.center,
-                          fontsizeNormal: 30,
+                          fontsizeNormal: 20,
                           fontsizeWeb: 22,
                           maxline: 1,
                           multilanguage: false,
@@ -821,14 +666,14 @@ void _checkPackageAndShowBottomSheet(
         (packageList?[index ?? 0].data?.length ?? 0) > 0) {
       return Container(
         constraints: BoxConstraints(
-          minHeight: 15,
+          minHeight: 12,
         ),
         width: MediaQuery.of(context).size.width,
         child: AlignedGridView.count(
           shrinkWrap: true,
           crossAxisCount: 1,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 25,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 20,
           padding: const EdgeInsets.fromLTRB(15, 2, 15, 5),
           itemCount: (packageList?[index ?? 0].data?.length ?? 0),
           physics: const NeverScrollableScrollPhysics(),
@@ -851,15 +696,15 @@ void _checkPackageAndShowBottomSheet(
                               "",
                           textalign: TextAlign.start,
                           multilanguage: false,
-                          fontsizeNormal: 15,
+                          fontsizeNormal: 10,
                           fontsizeWeb: 18,
-                          maxline: 3,
+                          maxline: 2,
                           overflow: TextOverflow.ellipsis,
                           fontweight: FontWeight.w600,
                           fontstyle: FontStyle.normal,
                         ),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 2),
                       ((packageList?[index ?? 0].data?[position].packageValue ??
                                       "") ==
                                   "1" ||
@@ -869,8 +714,8 @@ void _checkPackageAndShowBottomSheet(
                                       "") ==
                                   "0")
                           ? MyImage(
-                              width: 23,
-                              height: 23,
+                              width: 20,
+                              height: 20,
                               color: (packageList?[index ?? 0]
                                               .data?[position]
                                               .packageValue ??
@@ -897,8 +742,8 @@ void _checkPackageAndShowBottomSheet(
                                       .packageValue ??
                                   "",
                               textalign: TextAlign.center,
-                              fontsizeNormal: 16,
-                              fontsizeWeb: 24,
+                              fontsizeNormal: 10,
+                              fontsizeWeb: 10,
                               multilanguage: false,
                               maxline: 1,
                               overflow: TextOverflow.ellipsis,
@@ -988,20 +833,20 @@ void _checkPackageAndShowBottomSheet(
                         ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 0.5,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      color: otherColor,
-                    ),
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   height: 0.5,
+                    //   margin: const EdgeInsets.only(bottom: 12),
+                    //   color: otherColor,
+                    // ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(1, 9, 1, 9),
-                      height: 300,
+                      height: 200,
                       child: SingleChildScrollView(
                         child: _buildBenefits(packageList, index),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
                     /* Choose Plan */
                     Align(
@@ -1014,7 +859,7 @@ void _checkPackageAndShowBottomSheet(
                             _checkAndPay(packageList, index);
                           },
                           child: Container(
-                            height: 45,
+                            height: 30,
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             decoration: BoxDecoration(
                               color: (packageList[index].isBuy == 1
@@ -1045,7 +890,7 @@ void _checkPackageAndShowBottomSheet(
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                   ],
                 ),
               );

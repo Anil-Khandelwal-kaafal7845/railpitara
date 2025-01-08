@@ -41,7 +41,7 @@ class _SearchWebState extends State<SearchWeb> {
     if ((widget.searchText ?? "").isNotEmpty) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
-      await searchProvider.getSearchVideo(widget.searchText ?? "");
+      await searchProvider.getSearchVideo(context,widget.searchText ?? "");
     }
   }
 

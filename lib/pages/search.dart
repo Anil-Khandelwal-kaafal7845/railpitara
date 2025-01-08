@@ -1,5 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:dtlive/main.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
@@ -36,6 +37,7 @@ class SearchState extends State<Search> {
 
   @override
   void initState() {
+
     _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
     searchController.text = widget.searchText ?? "";
@@ -113,7 +115,7 @@ class SearchState extends State<Search> {
       searchController.text = _lastWords.toString();
 
       // Perform the search after closing the dialog
-      await searchProvider.getSearchVideo(_lastWords.toString());
+      await searchProvider.getSearchVideo(context,_lastWords.toString());
 
       // Navigate to the search page with the result
       await Navigator.push(
@@ -175,7 +177,7 @@ class SearchState extends State<Search> {
     if ((widget.searchText ?? "").isNotEmpty) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
-      await searchProvider.getSearchVideo(widget.searchText ?? "");
+      await searchProvider.getSearchVideo(context,widget.searchText ?? "");
     }
   }
 
@@ -361,7 +363,7 @@ class SearchState extends State<Search> {
                 onChanged: (value) async {
                   if (value.isNotEmpty) {
                     await searchProvider.setLoading(true);
-                    await searchProvider.getSearchVideo(value);
+                    await searchProvider.getSearchVideo(context,value);
                   }
                 },
                 textInputAction: TextInputAction.done,

@@ -137,6 +137,7 @@ dependencies:
   email_validator: ^2.1.17
   flutter_facebook_auth: ^6.0.4
   salomon_bottom_bar: ^3.3.2
+  flutter_gif: ^0.0.4
   #test
 
 
@@ -184,6 +185,8 @@ flutter:
     - assets/json/success.json
     - assets/json/
     - assets/json/error.json
+    - assets/images/coin.gif
+
 
 flutter_icons:
   android: true

@@ -10,6 +10,7 @@ import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/morescreen.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
 import 'package:dtlive/pages/profileedit.dart';
+
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/provider/findprovider.dart';
@@ -25,6 +26,7 @@ import 'package:dtlive/model/sectionlistmodel.dart' as list;
 import 'package:dtlive/model/sectionbannermodel.dart' as banner;
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:dtlive/widget/nodata.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
@@ -40,12 +42,13 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import '../model/force_update_model.dart';
 import '../webservice/apiservices.dart';
@@ -53,7 +56,7 @@ import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
 import '../utils/strings.dart';
 import 'aboutprivacyterms.dart';
-import 'mydownloads.dart';
+
 import 'mywatchlist.dart';
 import 'pip_web_player.dart';
 
@@ -67,7 +70,7 @@ class Home extends StatefulWidget {
 
 ForceUpdatemodel? forceUpdateData;
 
-class HomeState extends State<Home> with RouteAware{
+class HomeState extends State<Home> with RouteAware {
   // final JSHelper _jsHelper = JSHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
@@ -80,7 +83,6 @@ class HomeState extends State<Home> with RouteAware{
   int? videoId, videoType, typeId;
   late FindProvider findProvider = FindProvider();
   List<String> selectedLanguageIds = ["0"];
-
 
 //drawer
   bool? isSwitched;
@@ -141,10 +143,9 @@ class HomeState extends State<Home> with RouteAware{
 
     await generalProvider.getPages();
     await generalProvider.getGeneralsetting(context);
-    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    await homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
 
-       debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
-
+    debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
 
     isSwitched = await sharedPref.readBool("PUSH");
     debugPrint('getUserData isSwitched ==> $isSwitched');
@@ -157,10 +158,10 @@ class HomeState extends State<Home> with RouteAware{
   @override
   void initState() {
     print("-----${Constant.userID}");
-
+    Provider.of<GeneralProvider>(context, listen: false);
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+
     getUserData();
-    
 
     fetchForceUpdateData();
 
@@ -186,26 +187,37 @@ class HomeState extends State<Home> with RouteAware{
         forceUpdateData = value;
         updateLoading = false;
       });
-      checkForUpdate();
+      checkForUpdate(context);
     });
   }
 
-   @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Register this route with the RouteObserver
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
-  checkForUpdate() async {
+
+Future<void> checkForUpdate(BuildContext context) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
   // Get current app version from API response
-  final int apiAppVersion = forceUpdateData!.result!.appVersion!;
+  final int apiAppVersion = forceUpdateData!.result!.appVersion!; // Android
+  final int iosAppVersion = forceUpdateData!.result!.iosappVersion!; // iOS
   final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
 
-  // Compare app versions
-  if (apiAppVersion > num.parse(packageInfo.buildNumber)) {
+  // Get the current build number based on platform
+  num currentVersion = Platform.isAndroid
+      ? int.parse(packageInfo.buildNumber) // Android
+      : Constant.iosAppVersion; // iOS
+
+  // Determine if an update is needed based on platform
+  bool needsUpdate = Platform.isAndroid
+      ? apiAppVersion > currentVersion // Android
+      : iosAppVersion > currentVersion; // iOS
+
+  if (needsUpdate) {
     showDialog(
       barrierDismissible: !isForceUpdate, // Disable dismiss if force update
       context: context,
@@ -236,7 +248,7 @@ class HomeState extends State<Home> with RouteAware{
                         final url = Uri.parse(
                           Platform.isAndroid
                               ? "https://play.google.com/store/apps/details?id=com.blackboardfilms.omtv&hl=en_IN"
-                              : "https://apps.apple.com/in/app/om-tv/id1584477559",
+                              : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
                         );
                         launchUrl(
                           url,
@@ -255,6 +267,70 @@ class HomeState extends State<Home> with RouteAware{
     );
   }
 }
+
+
+  // checkForUpdate() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  //   // Get current app version from API response
+  //   final int apiAppVersion = forceUpdateData!.result!.appVersion!;
+  //   final int iosAppVersion = forceUpdateData!.result!.iosappVersion!;
+  //   final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
+
+  //   // Compare app versions
+  //   if (apiAppVersion > num.parse(packageInfo.buildNumber)) {
+  //     showDialog(
+  //       barrierDismissible: !isForceUpdate, // Disable dismiss if force update
+  //       context: context,
+  //       builder: (context) {
+  //         return WillPopScope(
+  //           onWillPop: () async => false, // Prevent dialog dismissal on back
+  //           child: AlertDialog(
+  //             contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+  //             surfaceTintColor: Theme.of(context).colorScheme.background,
+  //             title: const Text("New Update Available!!"),
+  //             content: const Text("A new app update is available"),
+  //             actions: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                 children: [
+  //                   Visibility(
+  //                     visible:
+  //                         !isForceUpdate, // Show Cancel button if not forced
+  //                     child: TextButton(
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: const Text("Cancel"),
+  //                     ),
+  //                   ),
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       if (Platform.isAndroid || Platform.isIOS) {
+  //                         final url = Uri.parse(
+  //                           Platform.isAndroid
+  //                               ? "https://play.google.com/store/apps/details?id=com.blackboardfilms.omtv&hl=en_IN"
+  //                               : "https://apps.apple.com/in/app/om-tv/id1584477559",
+  //                         );
+  //                         launchUrl(
+  //                           url,
+  //                           mode: LaunchMode.externalApplication,
+  //                         );
+  //                       }
+  //                     },
+  //                     child: const Text("UPDATE"),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
+
+
 
 
   // checkForUpdate() async {
@@ -319,8 +395,6 @@ class HomeState extends State<Home> with RouteAware{
   //   }
   // }
 
-
-
   // What to do when the user opens/taps on a notification
   _handleNotificationOpened(OSNotificationClickEvent result) {
     /* id, video_type, type_id */
@@ -367,7 +441,7 @@ class HomeState extends State<Home> with RouteAware{
     await generalProvider.getGeneralsetting(context);
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
-    await homeProvider.fetchUserWalletBalance(Constant.userID??"");
+    await homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
     findProvider = Provider.of<FindProvider>(context, listen: false);
     if (!homeProvider.loading) {
       if (homeProvider.sectionTypeModel.status == 200 &&
@@ -453,16 +527,6 @@ class HomeState extends State<Home> with RouteAware{
     );
   }
 
-  // _redirectToUrl(loadingUrl) async {
-  //   debugPrint("loadingUrl -----------> $loadingUrl");
-  //   /*
-  //     _blank => open new Tab
-  //     _self => open in current Tab
-  //   */
-  //   String dataFromJS = await _jsHelper.callOpenTab(loadingUrl, '_blank');
-  //   debugPrint("dataFromJS -----------> $dataFromJS");
-  // }
-
   Future<void> _redirectToUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -473,12 +537,12 @@ class HomeState extends State<Home> with RouteAware{
 
   @override
   void dispose() {
-        routeObserver.unsubscribe(this);
+    routeObserver.unsubscribe(this);
 
     super.dispose();
   }
 
-   @override
+  @override
   void didPopNext() {
     // Called when returning to this screen
     _fetchWalletBalance();
@@ -501,15 +565,14 @@ class HomeState extends State<Home> with RouteAware{
 
   @override
   Widget build(BuildContext context) {
-      analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "HomePage",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "HomePage",
+        "user_id": Constant.userID,
+      },
+    );
     return Scaffold(
-      
       key: _scaffoldKey,
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -527,65 +590,44 @@ class HomeState extends State<Home> with RouteAware{
           },
         ),
         actions: [
-
-
-  generalProvider.isCoinShow =="1"?  
-
-
-          GestureDetector(
-            onTap: () {
-
-                if (Constant.userID != null) {
-                           Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CoinStoreScreen()),
-              );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-            
-            },
-
-            
-            child: 
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Row(
-                children: [
-                  Image.asset(
-                "assets/images/wallet.png",
-                width: 30,
-                height: 30,
-                color: white,
-     
-              ),
-              SizedBox(width: 8,),
-              
-
-              
-          
-Constant.userID != null
-          ? Text(
-              "${homeProvider.userWalletBalanceModel?.balance ?? ''}",
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          : SizedBox.shrink()
-
-
-                ],
-              )
-            ),
-          )
-          :SizedBox.shrink(),
-
+          generalProvider.isCoinShow == "1"
+              ? GestureDetector(
+                  onTap: () {
+                    if (Constant.userID != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CoinStoreScreen()),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginSocial(),
+                        ),
+                      );
+                    }
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Row(
+                        children: [
+                         
+                           AnimatedGifWidget(height:65 ,width: 60,),
+                         
+                          Constant.userID != null
+                              ? Text(
+                                  "${homeProvider.userWalletBalanceModel?.balance ?? ''}",
+                                  style: TextStyle(
+                                    fontSize: 23,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : SizedBox.shrink()
+                        ],
+                      )),
+                )
+              : SizedBox.shrink(),
 
           // Padding(
           //   padding: const EdgeInsets.only(right: 10),
@@ -687,21 +729,18 @@ Constant.userID != null
           //     ),
           //   ),
           // )
-
         ],
         title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
         backgroundColor: Colors.black,
       ),
-       
       drawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor:
               appBgColor, //This will change the drawer background to blue.
           //other styles
         ),
-        child: 
-        Drawer(
-          backgroundColor:  appBgColor,
+        child: Drawer(
+          backgroundColor: appBgColor,
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
@@ -723,8 +762,6 @@ Constant.userID != null
               ListTile(
                 title: Column(
                   children: [
-               
-
                     /* Account Details */
                     _buildSettingButton(
                       title: 'accountdetails',
@@ -732,25 +769,22 @@ Constant.userID != null
                       titleMultilang: true,
                       subTitleMultilang: true,
                       onClick: () {
-                  
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileEdit(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                 
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileEdit(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
                       },
                     ),
-                   
-                   
+
                     // _buildLine(),
                     // _buildLine(16.0, 16.0),
 
@@ -788,11 +822,35 @@ Constant.userID != null
                       titleMultilang: true,
                       subTitleMultilang: true,
                       onClick: () {
-                      
+                        if (Constant.userID != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MyWatchlist(),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    // _buildLine(),
+
+                    /* Purchases */
+                    Visibility(
+                      visible: forceUpdateData?.result?.showPackage == 1,
+                      child: _buildSettingButton(
+                        title: 'purchases',
+                        titleMultilang: true,
+                        subTitleMultilang: true,
+                        onClick: () {
                           if (Constant.userID != null) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const MyWatchlist(),
+                                builder: (context) => const MyPurchaselist(),
                               ),
                             );
                           } else {
@@ -802,98 +860,62 @@ Constant.userID != null
                               ),
                             );
                           }
-                      
-                      },
+                        },
+                      ),
                     ),
-                    // _buildLine(),
-
-                    /* Purchases */
-                    Visibility(
-                 visible: forceUpdateData?.result?.showPackage == 1,
-                  child: _buildSettingButton(
-                    title: 'purchases',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () {
-                    
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const MyPurchaselist(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                     
-                    },
-                  ),
-                ),
 
                     /* Coin--- */
-                Visibility(
-                  visible: generalProvider.isCoinShow == "1",
-                  child: _buildSettingButton(
-                    title: 'coin',
-                   
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () {
-                     
-           
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CoinStoreScreen(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                 
-                    },
-                  ),
-                ),
+                    Visibility(
+                      visible: generalProvider.isCoinShow == "1",
+                      child: _buildSettingButton(
+                        title: 'coin',
+                        titleMultilang: true,
+                        subTitleMultilang: true,
+                        onClick: () {
+                          if (Constant.userID != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CoinStoreScreen(),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginSocial(),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
 
-              
-                    
                     // _buildLine(),
 
                     /* Subscription */
-                        Visibility(
-                  visible: forceUpdateData?.result?.showPackage == 1,
-                  child: _buildSettingButton(
-                    title: 'subsciption',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () {
-                    
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const Subscription(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                   
-                    },
-                  ),
-                ),
-               
+                    Visibility(
+                      visible: forceUpdateData?.result?.showPackage == 1,
+                      child: _buildSettingButton(
+                        title: 'subsciption',
+                        titleMultilang: true,
+                        subTitleMultilang: true,
+                        onClick: () {
+                          if (Constant.userID != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const Subscription(),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginSocial(),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+
                     // _buildLine(),
 
                     // /* Transactions */
@@ -994,66 +1016,64 @@ Constant.userID != null
                     // if (!Platform.isIOS)
                     //   //  _buildLine(),
 
-              //       /* SignIn / SignOut */
-              //       _buildSettingButton(
-              //   title: Constant.userID == null
-              //       ? youAreNotSignIn
-              //       : (userType == "3" && (userName ?? "").isEmpty)
-              //           ? ("$signedInAs ${userMobileNo ?? ""}")
-              //           : ("$signedInAs ${userName ?? ""}"),
-              //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-              //   titleMultilang: false,
-              //   subTitleMultilang: true,
-              //   onClick: () async {
-              //     if (Constant.userID != null) {
-              //       final updatedUserName = await Navigator.of(context).push(
-              //         MaterialPageRoute(
-              //           builder: (context) => const ProfileEdit(),
-              //         ),
-              //       );
+                    //       /* SignIn / SignOut */
+                    //       _buildSettingButton(
+                    //   title: Constant.userID == null
+                    //       ? youAreNotSignIn
+                    //       : (userType == "3" && (userName ?? "").isEmpty)
+                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
+                    //           : ("$signedInAs ${userName ?? ""}"),
+                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                    //   titleMultilang: false,
+                    //   subTitleMultilang: true,
+                    //   onClick: () async {
+                    //     if (Constant.userID != null) {
+                    //       final updatedUserName = await Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const ProfileEdit(),
+                    //         ),
+                    //       );
 
-              //       if (updatedUserName != null && updatedUserName is String) {
-              //         setState(() {
-              //           userName = updatedUserName;
-              //         });
-              //       }
-              //     } else {
-              //       await Navigator.of(context).push(
-              //         MaterialPageRoute(
-              //           builder: (context) => const LoginSocial(),
-              //         ),
-              //       );
-              //       setState(() {});
-              //     }
-              //   },
-              // ),
+                    //       if (updatedUserName != null && updatedUserName is String) {
+                    //         setState(() {
+                    //           userName = updatedUserName;
+                    //         });
+                    //       }
+                    //     } else {
+                    //       await Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const LoginSocial(),
+                    //         ),
+                    //       );
+                    //       setState(() {});
+                    //     }
+                    //   },
+                    // ),
 
+                    /* SignIn / SignOut */
+                    _buildSettingButton(
+                      title: Constant.userID == null
+                          ? youAreNotSignIn
+                          : (userType == "3" && (userName ?? "").isEmpty)
+                              ? ("$signedInAs ${userMobileNo ?? ""}")
+                              : ("$signedInAs ${userName ?? ""}"),
+                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                      titleMultilang: false,
+                      subTitleMultilang: true,
+                      onClick: () async {
+                        if (Constant.userID != null) {
+                          logoutConfirmDialog();
+                        } else {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginSocial(),
+                            ),
+                          );
+                          setState(() {});
+                        }
+                      },
+                    ),
 
-                 /* SignIn / SignOut */
-                _buildSettingButton(
-                  title: Constant.userID == null
-                      ? youAreNotSignIn
-                      : (userType == "3" && (userName ?? "").isEmpty)
-                          ? ("$signedInAs ${userMobileNo ?? ""}")
-                          : ("$signedInAs ${userName ?? ""}"),
-                  // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                  titleMultilang: false,
-                  subTitleMultilang: true,
-                  onClick: () async {
-                    if (Constant.userID != null) {
-                      logoutConfirmDialog();
-                    } else {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
-                        ),
-                      );
-                      setState(() {});
-                    }
-                  },
-                ),
-              
-                   
                     // _buildSettingButton(
                     //   title: Constant.userID == null
                     //       ? youAreNotSignIn
@@ -1076,7 +1096,7 @@ Constant.userID != null
                     //     }
                     //   },
                     // ),
-                 
+
                     // _buildLine(),
 
                     // /* Rate App */
@@ -1182,8 +1202,6 @@ Constant.userID != null
           ),
         ),
       ),
-     
-      
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
             ? _webAppBarWithDetails()
@@ -1959,11 +1977,10 @@ Constant.userID != null
                   borderRadius: BorderRadius.circular(25),
                   onTap: () async {
                     debugPrint("index ===========> $index");
-                  
-                      if (kIsWeb) _onItemTapped("");
-                      await getTabData(
-                          index, homeProvider.sectionTypeModel.result);
-                 
+
+                    if (kIsWeb) _onItemTapped("");
+                    await getTabData(
+                        index, homeProvider.sectionTypeModel.result);
                   },
                   child: Stack(
                     children: [
@@ -2052,8 +2069,10 @@ Constant.userID != null
                 },
               ),
 
-              /* AdMob Banner */
-         
+              const SizedBox(height: 5.5),
+              // /* AdMob Banner */
+              Utils.showBannerAd(context),
+
               const SizedBox(height: 5.5),
 
               /* Continue Watching & Remaining Sections */
@@ -2072,26 +2091,29 @@ Constant.userID != null
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
-                            SizedBox(height: 100,)
- ,                            MyImage(
-                height: 100,
-                fit: BoxFit.contain,
-                imagePath: "nodata.png",
-              ),
-              SizedBox(height: 100,)
+                            SizedBox(
+                              height: 100,
+                            ),
+                            MyImage(
+                              height: 100,
+                              fit: BoxFit.contain,
+                              imagePath: "nodata.png",
+                            ),
+                            SizedBox(
+                              height: 100,
+                            )
                           ],
                         );
                       } else {
                         return Column(
                           children: [
                             /* Continue Watching */
-                            sectionDataProvider
-                                        .sectionListModel.continueWatching !=
-                                    null
-                                ? continueWatchingLayout(sectionDataProvider
-                                    .sectionListModel.continueWatching)
-                                : const SizedBox.shrink(),
+                            // sectionDataProvider
+                            //             .sectionListModel.continueWatching !=
+                            //         null
+                            //     ? continueWatchingLayout(sectionDataProvider
+                            //         .sectionListModel.continueWatching)
+                            //     : const SizedBox.shrink(),
 
                             /* Remaining Sections */
                             setSectionByType(
@@ -2172,7 +2194,7 @@ Constant.userID != null
 
   //             /* AdMob Banner */
 
-  //           
+  //
   //             const SizedBox(height: 5.5),
 
   //             /* Continue Watching & Remaining Sections */
@@ -2297,7 +2319,6 @@ Constant.userID != null
                               builder: (context) => LoginSocial()),
                         );
                       } else {
-                       
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => TestPlayerWeb(
                                 loadURL: sectionBannerList?[index].videoUrl!)));
@@ -2493,7 +2514,6 @@ Constant.userID != null
           //     },
           //   ),
           // ),
-       
         ],
       );
     } else {
@@ -2850,21 +2870,20 @@ Constant.userID != null
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 9, 20, 7),
-                          child: MyTextTWO(
-                            maxline:2 ,
-                            color: white,
-                            text: sectionList[index].title.toString(),
-                            textalign: TextAlign.left,
-                            fontsizeNormal: 14,
-                            fontweight: FontWeight.w600,
-                            fontsizeWeb: 16,
-                            multilanguage: false,
-                            overflow: TextOverflow.ellipsis,
-                            fontstyle: FontStyle.normal,
-                           
-                          ),
-                        ),
+                    padding: const EdgeInsets.fromLTRB(20, 9, 20, 7),
+                    child: MyTextTWO(
+                      maxline: 2,
+                      color: white,
+                      text: sectionList[index].title.toString(),
+                      textalign: TextAlign.left,
+                      fontsizeNormal: 14,
+                      fontweight: FontWeight.w600,
+                      fontsizeWeb: 16,
+                      multilanguage: false,
+                      overflow: TextOverflow.ellipsis,
+                      fontstyle: FontStyle.normal,
+                    ),
+                  ),
                   if (!isGenreOrLanguage)
                     GestureDetector(
                       onTap: () {
@@ -2973,8 +2992,6 @@ Constant.userID != null
               //       ),
               //     ],
               //   ),
-           
-           
             ],
           );
         } else {
@@ -4903,33 +4920,31 @@ Constant.userID != null
     );
 
     if (!mounted) return;
-   
-        dynamic isContinue = await Utils.openPlayer(
-          context: context,
-          playType: (continueWatchingList?[index].videoType ?? 0) == 2
-              ? "Show"
-              : "Video",
-          videoId: (continueWatchingList?[index].videoType ?? 0) == 2
-              ? (continueWatchingList?[index].showId ?? 0)
-              : (continueWatchingList?[index].id ?? 0),
-          videoType: continueWatchingList?[index].videoType ?? 0,
-          typeId: continueWatchingList?[index].typeId ?? 0,
-          otherId: continueWatchingList?[index].typeId ?? 0,
-          videoUrl: continueWatchingList?[index].video320 ?? "",
-          trailerUrl: continueWatchingList?[index].trailerUrl ?? "",
-          uploadType: continueWatchingList?[index].videoUploadType ?? "",
-          videoThumb: continueWatchingList?[index].landscape ?? "",
-          vStopTime: continueWatchingList?[index].stopTime ?? 0,
-        );
-        debugPrint("isContinue ===> $isContinue");
-        if (isContinue != null && isContinue == true) {
-          getTabData(0, homeProvider.sectionTypeModel.result);
-          Future.delayed(Duration.zero).then((value) {
-            if (!mounted) return;
-            setState(() {});
-          });
-        }
-     
+
+    dynamic isContinue = await Utils.openPlayer(
+      context: context,
+      playType:
+          (continueWatchingList?[index].videoType ?? 0) == 2 ? "Show" : "Video",
+      videoId: (continueWatchingList?[index].videoType ?? 0) == 2
+          ? (continueWatchingList?[index].showId ?? 0)
+          : (continueWatchingList?[index].id ?? 0),
+      videoType: continueWatchingList?[index].videoType ?? 0,
+      typeId: continueWatchingList?[index].typeId ?? 0,
+      otherId: continueWatchingList?[index].typeId ?? 0,
+      videoUrl: continueWatchingList?[index].video320 ?? "",
+      trailerUrl: continueWatchingList?[index].trailerUrl ?? "",
+      uploadType: continueWatchingList?[index].videoUploadType ?? "",
+      videoThumb: continueWatchingList?[index].landscape ?? "",
+      vStopTime: continueWatchingList?[index].stopTime ?? 0,
+    );
+    debugPrint("isContinue ===> $isContinue");
+    if (isContinue != null && isContinue == true) {
+      getTabData(0, homeProvider.sectionTypeModel.result);
+      Future.delayed(Duration.zero).then((value) {
+        if (!mounted) return;
+        setState(() {});
+      });
+    }
   }
 
   Future<bool> _checkSubsRentLogin(

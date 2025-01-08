@@ -3,6 +3,7 @@ import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/search.dart';
 import 'package:dtlive/pages/sectionbytype.dart';
 import 'package:dtlive/provider/findprovider.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
@@ -34,6 +35,7 @@ class FindState extends State<Find> {
 
   @override
   void initState() {
+
     super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
@@ -253,7 +255,7 @@ class FindState extends State<Find> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              AlignedGridView.count(
+                               AlignedGridView.count(
                                 shrinkWrap: true,
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 8,
@@ -310,6 +312,7 @@ class FindState extends State<Find> {
                                   );
                                 },
                               ),
+
                               /* Browse by END */
                             ],
                           );

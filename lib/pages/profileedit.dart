@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/profileavatar.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:go_router/go_router.dart';
@@ -194,10 +195,10 @@ class ProfileEditState extends State<ProfileEdit> {
         await prDialog.hide();
 
         // Navigate to home screen and clear all previous routes
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => Bottombar()),
-          (Route<dynamic> route) => false,
-        );
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Bottombar()),
+                          (Route<dynamic> route) => false,
+                        );
       },
       child: Container(
         height: 50,
@@ -225,6 +226,11 @@ class ProfileEditState extends State<ProfileEdit> {
   ),
 ),
 
+    SizedBox(height: 5,),
+       // /* AdMob Banner */
+             Utils.showBannerAd(context),
+
+             SizedBox(height: 5,)
             ],
           ),
         ),

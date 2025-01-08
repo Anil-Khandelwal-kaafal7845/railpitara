@@ -122,9 +122,9 @@ class _MyWatchlistState extends State<MyWatchlist> {
               ),
             ),
             /* AdMob Banner */
-            // Container(
-            //   child: Utils.showBannerAd(context),
-            // ),
+            Container(
+              child: Utils.showBannerAd(context),
+            ),
           ],
         ),
       ),

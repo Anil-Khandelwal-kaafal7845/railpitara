@@ -84,9 +84,9 @@ class _SubscriptionHistoryState extends State<SubscriptionHistory> {
               ),
             ),
             /* AdMob Banner */
-            // Container(
-            //   child: Utils.showBannerAd(context),
-            // ),
+            Container(
+              child: Utils.showBannerAd(context),
+            ),
           ],
         ),
       ),

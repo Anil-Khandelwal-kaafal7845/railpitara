@@ -103,9 +103,9 @@ class _MyDownloadsState extends State<MyDownloads> {
               ),
             ),
             /* AdMob Banner */
-            // Container(
-            //   child: Utils.showBannerAd(context),
-            // ),
+            Container(
+              child: Utils.showBannerAd(context),
+            ),
           ],
         ),
       ),

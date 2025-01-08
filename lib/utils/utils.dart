@@ -39,20 +39,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
 
-  // static Widget showBannerAd(BuildContext context) {
-  //   if (!kIsWeb) {
-  //     return Container(
-  //       constraints: BoxConstraints(
-  //         minHeight: 0,
-  //         minWidth: 0,
-  //         maxWidth: MediaQuery.of(context).size.width,
-  //       ),
-  //       child: AdHelper.bannerAd(context),
-  //     );
-  //   } else {
-  //     return const SizedBox.shrink();
-  //   }
-  // }
+  static Widget showBannerAd(BuildContext context) {
+    if (!kIsWeb) {
+      return Container(
+        constraints: BoxConstraints(
+          minHeight: 0,
+          minWidth: 0,
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: AdHelper.bannerAd(context),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
 
   static loadAds(BuildContext context) async {
     bool? isPremiumBuy = await Utils.checkPremiumUser();

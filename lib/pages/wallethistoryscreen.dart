@@ -3,6 +3,7 @@ import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/utils.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,12 +53,13 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(width: 10),
-                    Image.asset(
-                      'assets/images/wallet.png',
-                      width: 60,
-                      height: 60,
-                      color: white,
-                    ),
+                    // Image.asset(
+                    //   'assets/images/wallet.png',
+                    //   width: 60,
+                    //   height: 60,
+                    //   // color: white,
+                    // ),
+                             AnimatedGifWidget(height:65 ,width: 65,),
                     SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +84,8 @@ class _WalletHistodyScreenState extends State<WalletHistodyScreen> {
                   ],
                 ),
               ),
+    SizedBox(height: 10),
+               Utils.showBannerAd(context),
 
               SizedBox(height: 20),
 

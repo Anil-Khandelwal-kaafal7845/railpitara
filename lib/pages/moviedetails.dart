@@ -14,6 +14,7 @@ import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:dtlive/widget/castcrew.dart';
 import 'package:dtlive/widget/moredetails.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
@@ -136,30 +137,30 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   void didPopNext() {
     _fetchDataAgain();
 
-    debugPrint("didPopNext");
-    if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
-        "youtube") {
-      if (_trailerYoutubeController == null) {
-        loadTrailer(
-            videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-            videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-      } else {
-        if (_trailerYoutubeController != null) {
-          _trailerYoutubeController?.seekTo(seconds: 0.0);
-          _trailerYoutubeController?.playVideo();
-        }
-      }
-    } else {
-      if (_trailerNormalController == null) {
-        loadTrailer(
-            videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-            videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-      } else {
-        if (_trailerNormalController != null) {
-          _trailerNormalController?.play();
-        }
-      }
-    }
+    // debugPrint("didPopNext");
+    // if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
+    //     "youtube") {
+    //   if (_trailerYoutubeController == null) {
+    //     loadTrailer(
+    //         videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+    //         videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+    //   } else {
+    //     if (_trailerYoutubeController != null) {
+    //       _trailerYoutubeController?.seekTo(seconds: 0.0);
+    //       _trailerYoutubeController?.playVideo();
+    //     }
+    //   }
+    // } else {
+    //   if (_trailerNormalController == null) {
+    //     loadTrailer(
+    //         videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+    //         videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+    //   } else {
+    //     if (_trailerNormalController != null) {
+    //       _trailerNormalController?.play();
+    //     }
+    //   }
+    // }
     super.didPopNext();
   }
 
@@ -199,7 +200,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.result != null) {
         /* Trailer set-up */
-        _setUpTrailer();
+        // _setUpTrailer();
 
         /* Set-up Subtitle URLs */
         Utils.setSubtitleURLs(
@@ -233,81 +234,82 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     });
   }
 
-  /* Trailer Set-Up & Loading START */
-  _setUpTrailer() {
-    debugPrint(
-        "trailerUrl ===========> ${videoDetailsProvider.sectionDetailModel.result?.trailerUrl}");
-    debugPrint(
-        "trailerType ==========> ${videoDetailsProvider.sectionDetailModel.result?.trailerType}");
-    if (videoDetailsProvider.sectionDetailModel.result?.trailerUrl != null ||
-        videoDetailsProvider.sectionDetailModel.result?.trailerUrl != "") {
-      if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
-          "youtube") {
-        if (_trailerYoutubeController == null) {
-          loadTrailer(
-              videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-              videoDetailsProvider.sectionDetailModel.result?.trailerType ??
-                  "");
-        } else {
-          _trailerYoutubeController?.seekTo(seconds: 0.0);
-        }
-      } else {
-        if (_trailerNormalController == null) {
-          loadTrailer(
-              videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-              videoDetailsProvider.sectionDetailModel.result?.trailerType ??
-                  "");
-        } else {
-          _trailerNormalController?.seekTo(Duration.zero);
-        }
-      }
-    }
-  }
+  // /* Trailer Set-Up & Loading START */
+  // _setUpTrailer() {
+  //   debugPrint(
+  //       "trailerUrl ===========> ${videoDetailsProvider.sectionDetailModel.result?.trailerUrl}");
+  //   debugPrint(
+  //       "trailerType ==========> ${videoDetailsProvider.sectionDetailModel.result?.trailerType}");
+  //   if (videoDetailsProvider.sectionDetailModel.result?.trailerUrl != null ||
+  //       videoDetailsProvider.sectionDetailModel.result?.trailerUrl != "") {
+  //     if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
+  //         "youtube") {
+  //       if (_trailerYoutubeController == null) {
+  //         loadTrailer(
+  //             videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+  //             videoDetailsProvider.sectionDetailModel.result?.trailerType ??
+  //                 "");
+  //       } else {
+  //         _trailerYoutubeController?.seekTo(seconds: 0.0);
+  //       }
+  //     } else {
+  //       if (_trailerNormalController == null) {
+  //         loadTrailer(
+  //             videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+  //             videoDetailsProvider.sectionDetailModel.result?.trailerType ??
+  //                 "");
+  //       } else {
+  //         _trailerNormalController?.seekTo(Duration.zero);
+  //       }
+  //     }
+  //   }
+  // }
 
-  Future<void> loadTrailer(trailerUrl, trailerType) async {
-    debugPrint("loadTrailer URL ==========> $trailerUrl");
-    debugPrint("loadTrailer Type =========> $trailerType");
-    if (trailerType == "youtube") {
-      var videoId = YoutubePlayerController.convertUrlToId(trailerUrl ?? "");
-      debugPrint("Youtube Trailer videoId :====> $videoId");
-      _trailerYoutubeController = YoutubePlayerController.fromVideoId(
-        videoId: videoId ?? '',
-        autoPlay: true,
-        params: const YoutubePlayerParams(
-          showControls: false,
-          showVideoAnnotations: false,
-          playsInline: false,
-          mute: false,
-          showFullscreenButton: false,
-          loop: false,
-        ),
-      );
-      _trailerYoutubeController?.playVideo();
-      Future.delayed(Duration.zero).then((value) {
-        if (!mounted) return;
-        setState(() {});
-      });
-    } else {
-      _trailerNormalController =
-          VideoPlayerController.networkUrl(Uri.parse(trailerUrl ?? ""))
-            ..initialize().then((value) {
-              if (!mounted) return;
-              setState(() {
-                debugPrint(
-                    "isPlaying =========> ${_trailerNormalController?.value.isPlaying}");
-                _trailerNormalController?.play();
-              });
-            });
-      _trailerNormalController?.setLooping(true);
-      _trailerNormalController?.addListener(() async {
-        if (_trailerNormalController?.value.hasError ?? false) {
-          debugPrint(
-              "VideoScreen errorDescription ====> ${_trailerNormalController?.value.errorDescription}");
-        }
-      });
-    }
-  }
-  /* Trailer Set-Up & Loading END */
+  // Future<void> loadTrailer(trailerUrl, trailerType) async {
+  //   debugPrint("loadTrailer URL ==========> $trailerUrl");
+  //   debugPrint("loadTrailer Type =========> $trailerType");
+  //   if (trailerType == "youtube") {
+  //     var videoId = YoutubePlayerController.convertUrlToId(trailerUrl ?? "");
+  //     debugPrint("Youtube Trailer videoId :====> $videoId");
+  //     _trailerYoutubeController = YoutubePlayerController.fromVideoId(
+  //       videoId: videoId ?? '',
+  //       autoPlay: true,
+  //       params: const YoutubePlayerParams(
+  //         showControls: false,
+  //         showVideoAnnotations: false,
+  //         playsInline: false,
+  //         mute: false,
+  //         showFullscreenButton: false,
+  //         loop: false,
+  //       ),
+  //     );
+  //     _trailerYoutubeController?.playVideo();
+  //     Future.delayed(Duration.zero).then((value) {
+  //       if (!mounted) return;
+  //       setState(() {});
+  //     });
+  //   } else {
+  //     _trailerNormalController =
+  //         VideoPlayerController.networkUrl(Uri.parse(trailerUrl ?? ""))
+  //           ..initialize().then((value) {
+  //             if (!mounted) return;
+  //             setState(() {
+  //               debugPrint(
+  //                   "isPlaying =========> ${_trailerNormalController?.value.isPlaying}");
+  //               _trailerNormalController?.play();
+  //             });
+  //           });
+  //     _trailerNormalController?.setLooping(true);
+  //     _trailerNormalController?.addListener(() async {
+  //       if (_trailerNormalController?.value.hasError ?? false) {
+  //         debugPrint(
+  //             "VideoScreen errorDescription ====> ${_trailerNormalController?.value.errorDescription}");
+  //       }
+  //     });
+  //   }
+  // }
+  // /* Trailer Set-Up & Loading END */
+
 
   void _bindBackgroundIsolate() {
     final isSuccess = IsolateNameServer.registerPortWithName(
@@ -511,17 +513,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           child: Column(
             children: [
               /* Poster */
+              _buildMobilePoster(),
 
-            Platform.isAndroid?
-              ((videoDetailsProvider.sectionDetailModel.result?.trailerUrl ??
-                          "")
-                      .isNotEmpty)
-                  ? setUpTrailerView()
-                  : _buildMobilePoster():((videoDetailsProvider.sectionDetailModel.result?.trailerUrl ??
-                          "")
-                      .isNotEmpty)
-                  ? _buildMobilePoster()
-                  : _buildMobilePoster(),
+            // Platform.isAndroid?
+            //   ((videoDetailsProvider.sectionDetailModel.result?.trailerUrl ??
+            //               "")
+            //           .isNotEmpty)
+            //       ? _buildMobilePoster()
+            //       : _buildMobilePoster()
+                      
+            
+        
 
               /* Other Details */
               Container(
@@ -804,12 +806,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Container(
-                                  width: 25,
-                                  height: 25,
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/coin.png' ,),
-                                ),
+                                    AnimatedGifWidget(height:50 ,width: 50,),
                                 Container(
                                   margin:
                                       const EdgeInsets.only(left: 5, right: 5),
@@ -1265,7 +1262,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     ),
 
                     /* AdMob Banner */
-                    // Utils.showBannerAd(context),
+
+                    Utils.showBannerAd(context),
                     const SizedBox(height: 10),
 
                     /* Related ~ More Details */
@@ -1532,6 +1530,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
             ),
           ),
         ),
+       
+       
         if (!kIsWeb)
           Positioned(
             top: 15,
@@ -2472,25 +2472,51 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     print("Ad should be shown");
 
                     // Show the rewarded ad
-                    AdHelper.showRewardedAd(() async {
-                      print("Rewarded ad dismissed");
 
-                      // Handle the logic for adding coins after the ad is dismissed
-                      try {
-                        print("API call to add coins started...");
-                        await walletProvider.addCoinsAfterWatchAd(
-                          Constant.userID!,
-                          videoDetailsProvider.sectionDetailModel.result?.id,
-                          0,
-                          generalProvider.isAdsCoin,
-                        );
-                        print("Coins added successfully!");
-                        // After adding coins, open the player
-                        openPlayer("Video");
-                      } catch (error) {
-                        print("Error while adding coins: $error");
-                      }
-                    });
+                  // Show the rewarded ad
+AdHelper.showRewardedAd(
+  onAdCompleted: () async {
+    print("Rewarded ad completed. Proceeding with API call...");
+
+    try {
+      print("API call to add coins started...");
+      await walletProvider.addCoinsAfterWatchAd(
+        Constant.userID!,
+        videoDetailsProvider.sectionDetailModel.result?.id ?? '',
+        0,
+        generalProvider.isAdsCoin,
+      );
+      print("Coins added successfully!");
+      // Open the player after coins are added
+      openPlayer("Video");
+    } catch (error) {
+      print("Error while adding coins: $error");
+    }
+  },
+  onAdFailed: () {
+    print("Ad failed or was not completed. Skipping API call.");
+  },
+);
+
+                    // AdHelper.showRewardedAd(() async {
+                    //   print("Rewarded ad dismissed");
+
+                    //   // Handle the logic for adding coins after the ad is dismissed
+                    //   try {
+                    //     print("API call to add coins started...");
+                    //     await walletProvider.addCoinsAfterWatchAd(
+                    //       Constant.userID!,
+                    //       videoDetailsProvider.sectionDetailModel.result?.id,
+                    //       0,
+                    //       generalProvider.isAdsCoin,
+                    //     );
+                    //     print("Coins added successfully!");
+                    //     // After adding coins, open the player
+                    //     openPlayer("Video");
+                    //   } catch (error) {
+                    //     print("Error while adding coins: $error");
+                    //   }
+                    // });
                   } else {
                     // If the ad shouldn't be shown, directly proceed
                     openPlayer("Video");
@@ -2724,25 +2750,52 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   print("Ad should be shown");
 
                   // Show the rewarded ad
-                  AdHelper.showRewardedAd(() async {
-                    print("Rewarded ad dismissed");
+                // Show the rewarded ad
+AdHelper.showRewardedAd(
+  onAdCompleted: () async {
+    print("Rewarded ad completed. Proceeding with API call...");
 
-                    // Handle the logic for adding coins after the ad is dismissed
-                    try {
-                      print("API call to add coins started...");
-                      await walletProvider.addCoinsAfterWatchAd(
-                        Constant.userID!,
-                        videoDetailsProvider.sectionDetailModel.result?.id,
-                        0,
-                        generalProvider.isAdsCoin,
-                      );
-                      print("Coins added successfully!");
-                      // After adding coins, open the player
-                      openPlayer("Video");
-                    } catch (error) {
-                      print("Error while adding coins: $error");
-                    }
-                  });
+    try {
+      print("API call to add coins started...");
+      await walletProvider.addCoinsAfterWatchAd(
+        Constant.userID!,
+        videoDetailsProvider.sectionDetailModel.result?.id ?? '',
+        0,
+        generalProvider.isAdsCoin,
+      );
+      print("Coins added successfully!");
+      // Open the player after coins are added
+      openPlayer("Video");
+    } catch (error) {
+      print("Error while adding coins: $error");
+    }
+  },
+  onAdFailed: () {
+    print("Ad failed or was not completed. Skipping API call.");
+      openPlayer("Video");
+  },
+);
+
+
+                  // AdHelper.showRewardedAd(() async {
+                  //   print("Rewarded ad dismissed");
+
+                  //   // Handle the logic for adding coins after the ad is dismissed
+                  //   try {
+                  //     print("API call to add coins started...");
+                  //     await walletProvider.addCoinsAfterWatchAd(
+                  //       Constant.userID!,
+                  //       videoDetailsProvider.sectionDetailModel.result?.id,
+                  //       0,
+                  //       generalProvider.isAdsCoin,
+                  //     );
+                  //     print("Coins added successfully!");
+                  //     // After adding coins, open the player
+                  //     openPlayer("Video");
+                  //   } catch (error) {
+                  //     print("Error while adding coins: $error");
+                  //   }
+                  // });
                 } else {
                   // If the ad shouldn't be shown, directly proceed
                   openPlayer("Video");
@@ -4514,12 +4567,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   Consumer<WalletProvider>(
                     builder: (context, walletProvider, child) {
                       return ListTile(
-                        leading: Image.asset(
-                          'assets/images/coin.png',
-                          height: 40,
-                          width: 40,
-
-                        ),
+                        leading:      AnimatedGifWidget(height:50 ,width: 50,),
                         title: const Text(
                           'Rent via Coin',
                           style: TextStyle(color: Colors.white),
@@ -4682,12 +4730,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     Consumer<WalletProvider>(
                       builder: (context, walletProvider, child) {
                         return ListTile(
-                          leading: Image.asset(
-                            'assets/images/coin.png',
-                            height: 40,
-                            width: 40,
-                    
-                          ),
+                          leading:      AnimatedGifWidget(height:50 ,width: 50,),
                           title: const Text(
                             'Rent via Coin',
                             style: TextStyle(color: Colors.white),

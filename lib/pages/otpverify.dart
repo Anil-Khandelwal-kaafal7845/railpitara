@@ -499,12 +499,12 @@ class OTPVerifyState extends State<OTPVerify> {
 
         await prDialog.hide();
         if (!mounted) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const Bottombar()),
-          (Route<dynamic> route) => false,
-        );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => const Bottombar()),
+            (Route<dynamic> route) => false,
+          );
       } else {
         await prDialog.hide();
         if (!mounted) return;

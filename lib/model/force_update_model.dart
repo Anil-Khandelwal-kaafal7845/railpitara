@@ -38,22 +38,26 @@ class Result {
   int? appVersion;
   int? forceUpdate;
   int? showPackage;
+  dynamic iosappVersion;
 
   Result({
     this.appVersion,
     this.forceUpdate,
     this.showPackage,
+    this.iosappVersion
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         appVersion: json["app_version"],
         forceUpdate: json["force_update"],
         showPackage: json["show_package"],
+        iosappVersion:json["ios_app_version"]
       );
 
   Map<String, dynamic> toJson() => {
         "app_version": appVersion,
         "force_update": forceUpdate,
         "show_package": showPackage,
+        "ios_app_version":iosappVersion
       };
 }

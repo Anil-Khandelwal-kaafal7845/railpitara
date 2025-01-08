@@ -116,9 +116,9 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                     ),
                   ),
                   /* AdMob Banner */
-                  // Container(
-                  //   child: Utils.showBannerAd(context),
-                  // ),
+                  Container(
+                    child: Utils.showBannerAd(context),
+                  ),
                 ],
               ),
             ),

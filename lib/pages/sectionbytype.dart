@@ -112,7 +112,7 @@ class SectionByTypeState extends State<SectionByType> {
 
               /* AdMob Banner */
               const SizedBox(height: 10),
-              // Utils.showBannerAd(context),
+              Utils.showBannerAd(context),
 
               /* Remaining Sections */
               Consumer<SectionByTypeProvider>(
@@ -137,7 +137,7 @@ class SectionByTypeState extends State<SectionByType> {
               const SizedBox(height: 20),
 
               /* AdMob Banner */
-              // Utils.showBannerAd(context),
+              Utils.showBannerAd(context),
             ],
           ),
         ),

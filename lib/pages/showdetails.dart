@@ -161,7 +161,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.result != null) {
         /* Trailer set-up */
-        _setUpTrailer();
+        // _setUpTrailer();
       }
     }
     Future.delayed(Duration.zero).then((value) {
@@ -173,34 +173,34 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     });
   }
 
-  /* Trailer Set-Up & Loading START */
-  _setUpTrailer() {
-    debugPrint(
-        "trailerUrl ===========> ${showDetailsProvider.sectionDetailModel.result?.trailerUrl}");
-    debugPrint(
-        "trailerType ==========> ${showDetailsProvider.sectionDetailModel.result?.trailerType}");
-    if (showDetailsProvider.sectionDetailModel.result?.trailerUrl != null ||
-        showDetailsProvider.sectionDetailModel.result?.trailerUrl != "") {
-      if (showDetailsProvider.sectionDetailModel.result?.trailerType ==
-          "youtube") {
-        if (_trailerYoutubeController == null) {
-          loadTrailer(
-              showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-              showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-        } else {
-          _trailerYoutubeController?.seekTo(seconds: 0.0);
-        }
-      } else {
-        if (_trailerNormalController == null) {
-          loadTrailer(
-              showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-              showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-        } else {
-          _trailerNormalController?.seekTo(Duration.zero);
-        }
-      }
-    }
-  }
+  // /* Trailer Set-Up & Loading START */
+  // _setUpTrailer() {
+  //   debugPrint(
+  //       "trailerUrl ===========> ${showDetailsProvider.sectionDetailModel.result?.trailerUrl}");
+  //   debugPrint(
+  //       "trailerType ==========> ${showDetailsProvider.sectionDetailModel.result?.trailerType}");
+  //   if (showDetailsProvider.sectionDetailModel.result?.trailerUrl != null ||
+  //       showDetailsProvider.sectionDetailModel.result?.trailerUrl != "") {
+  //     if (showDetailsProvider.sectionDetailModel.result?.trailerType ==
+  //         "youtube") {
+  //       if (_trailerYoutubeController == null) {
+  //         loadTrailer(
+  //             showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+  //             showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+  //       } else {
+  //         _trailerYoutubeController?.seekTo(seconds: 0.0);
+  //       }
+  //     } else {
+  //       if (_trailerNormalController == null) {
+  //         loadTrailer(
+  //             showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+  //             showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+  //       } else {
+  //         _trailerNormalController?.seekTo(Duration.zero);
+  //       }
+  //     }
+  //   }
+  // }
 
   Future<void> loadTrailer(trailerUrl, trailerType) async {
     debugPrint("loadTrailer URL ==========> $trailerUrl");
@@ -431,7 +431,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
               /* Poster */
               ((showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "")
                       .isNotEmpty)
-                  ? setUpTrailerView()
+                  ? _buildMobilePoster()
                   : _buildMobilePoster(),
 
               /* Other Details */
@@ -1116,7 +1116,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     ),
 
                     /* AdMob Banner */
-                    // Utils.showBannerAd(context),
+                    Utils.showBannerAd(context),
                     const SizedBox(height: 10),
                     // /* Related ~ More Details */
                     Consumer<ShowDetailsProvider>(
@@ -2264,16 +2264,14 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     if ((showDetailsProvider.sectionDetailModel.result?.trailerType ?? "") ==
         "youtube") {
       if (_trailerYoutubeController != null) {
-        return _buildTrailerView(
-            showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+        return _buildMobilePoster();
       } else {
         return _buildMobilePoster();
       }
     } else {
       if (_trailerNormalController != null &&
           (_trailerNormalController?.value.isInitialized ?? false)) {
-        return _buildTrailerView(
-            showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+        return _buildMobilePoster();
       } else {
         return _buildMobilePoster();
       }

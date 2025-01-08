@@ -311,7 +311,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                           debugPrint("mSearchText ====> $mSearchText");
                           _onItemTapped("search");
                           await searchProvider.setLoading(true);
-                          await searchProvider.getSearchVideo(mSearchText);
+                          await searchProvider.getSearchVideo(context,mSearchText!);
                         }
                       },
                       textInputAction: TextInputAction.done,
@@ -380,7 +380,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                             debugPrint("mSearchText ====> $mSearchText");
                             _onItemTapped("search");
                             await searchProvider.setLoading(true);
-                            await searchProvider.getSearchVideo(mSearchText);
+                            await searchProvider.getSearchVideo(context,mSearchText!);
                           }
                         },
                         child: Container(

@@ -9,6 +9,7 @@ import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/pages/loginsocial.dart';
@@ -210,31 +211,65 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                       );
                                     } else {
                                       if (isAdShow) {
-                                        AdHelper.showRewardedAd(() async {
-                                          try {
-                                            print("API call start...");
-                                            await walletProvider
-                                                .addCoinsAfterWatchAd(
-                                              Constant.userID!,
-                                              0,
-                                              episodeProvider
-                                                  .episodeBySeasonModel
-                                                  .result?[index]
-                                                  .showId,
-                                              generalProvider.isAdsCoin,
-                                            );
-                                            print("Coins added successfully!");
-                                          } catch (e) {
-                                            print("Error adding coins: $e");
-                                          }
-                                          // Navigate to the player after adding coins
-                                          openPlayer(
-                                            "Show",
-                                            index,
-                                            episodeProvider
-                                                .episodeBySeasonModel.result,
-                                          );
-                                        });
+                                       AdHelper.showRewardedAd(
+  onAdCompleted: () async {
+    // Callback when the ad is completed successfully
+    try {
+      print("API call start...");
+      await walletProvider.addCoinsAfterWatchAd(
+        Constant.userID!,
+        0,
+        episodeProvider.episodeBySeasonModel.result?[index].showId,
+        generalProvider.isAdsCoin,
+      );
+      print("Coins added successfully!");
+    } catch (e) {
+      print("Error adding coins: $e");
+    }
+    // Navigate to the player after adding coins
+    openPlayer(
+      "Show",
+      index,
+      episodeProvider.episodeBySeasonModel.result,
+    );
+  },
+  onAdFailed: () {
+    // Callback when the ad fails to show
+    print("Ad failed to show. Navigating to the player without rewarding.");
+    // Navigate to the player without adding coins
+    openPlayer(
+      "Show",
+      index,
+      episodeProvider.episodeBySeasonModel.result,
+    );
+  },
+);
+
+                                        // AdHelper.showRewardedAd(() async {
+                                        //   try {
+                                        //     print("API call start...");
+                                        //     await walletProvider
+                                        //         .addCoinsAfterWatchAd(
+                                        //       Constant.userID!,
+                                        //       0,
+                                        //       episodeProvider
+                                        //           .episodeBySeasonModel
+                                        //           .result?[index]
+                                        //           .showId,
+                                        //       generalProvider.isAdsCoin,
+                                        //     );
+                                        //     print("Coins added successfully!");
+                                        //   } catch (e) {
+                                        //     print("Error adding coins: $e");
+                                        //   }
+                                        //   // Navigate to the player after adding coins
+                                        //   openPlayer(
+                                        //     "Show",
+                                        //     index,
+                                        //     episodeProvider
+                                        //         .episodeBySeasonModel.result,
+                                        //   );
+                                        // });
                                       } else {
                                         // If ads are not shown (isAdShow == 0), navigate directly to the player
                                         openPlayer(
@@ -737,12 +772,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
                   // Single option: Rent via Coin
                   ListTile(
-                    leading: Image.asset(
-                      'assets/images/coin.png',
-                      height: 40,
-                      width: 40,
-                
-                    ),
+                    leading:      AnimatedGifWidget(height:60 ,width: 60,),
                     title: const Text(
                       'Rent via Coin',
                       style: TextStyle(color: Colors.white),
@@ -921,12 +951,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
                     // Single option: Rent via Coin
                     ListTile(
-                      leading: Image.asset(
-                        'assets/images/coin.png',
-                        height: 40,
-                        width: 40,
-                      
-                      ),
+                      leading:       AnimatedGifWidget(height:50 ,width: 50,),
                       title: const Text(
                         'Rent via Coin',
                         style: TextStyle(color: Colors.white),

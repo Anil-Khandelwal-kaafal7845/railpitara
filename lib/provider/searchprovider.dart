@@ -1,15 +1,17 @@
 
 
 import 'package:dtlive/model/searchmodel.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchProvider extends ChangeNotifier {
   SearchModel searchModel = SearchModel();
 
   bool loading = false, isVideoClick = true, isShowClick = false;
 
-  Future<void> getSearchVideo(searchText) async {
+  Future<void> getSearchVideo(searchText, String value) async {
     debugPrint("getSearchVideos searchText :==> $searchText");
     loading = true;
     searchModel = await ApiService().searchVideo(searchText);

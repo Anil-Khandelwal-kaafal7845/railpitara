@@ -7,6 +7,7 @@ import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/utils/utils.dart';
+import 'package:dtlive/widget/animatedgif.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -296,9 +297,10 @@ Widget build(BuildContext context) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(width: 10),
-                          Image.asset('assets/images/wallet.png',
-                              width: 35, height: 35,color: white,),
-                          SizedBox(width: 15),
+                            AnimatedGifWidget(height:100 ,width: 50,),
+                          // Image.asset('assets/images/wallet.png',
+                          //     width: 35, height: 35,),
+                          SizedBox(width: 10),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,7 +336,14 @@ Widget build(BuildContext context) {
                         ],
                       ),
                     ),
-                    SizedBox(height: 35),
+                
+
+                      SizedBox(height: 5,),
+       // /* AdMob Banner */
+             Utils.showBannerAd(context),
+
+   
+                 SizedBox(height: 35),
 
                     // Coin Packs Text
                     Text(
@@ -358,8 +367,7 @@ Widget build(BuildContext context) {
                                 padding: EdgeInsets.all(10),
                                 child: Row(
                                   children: [
-                                    Image.asset('assets/images/coin.png',
-                                        width: 30, height: 30),
+                                        AnimatedGifWidget(height:45 ,width: 45,),
                                     SizedBox(width: 10),
                                     Column(
                                       crossAxisAlignment:

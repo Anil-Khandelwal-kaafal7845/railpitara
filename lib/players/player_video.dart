@@ -165,15 +165,26 @@ class _PlayerVideoState extends State<PlayerVideo> {
     ),
     Positioned(
       top: 40.0,
-      left: 16.0,
+      left: 20.0,
       child: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
-        child: Icon(
-          CupertinoIcons.back,
-          color: Colors.white,
-        ),
+        child: Container(
+  width: 45, // Diameter of the circle
+  height: 45, // Diameter of the circle
+  decoration: BoxDecoration(
+    color: Colors.white, // Background color of the container
+    shape: BoxShape.circle, // Makes the container circular
+  ),
+  child: Center(
+    child: Icon(
+      CupertinoIcons.back, // Icon to display
+      color: Colors.black, // Icon color
+      size: 25, // Icon size
+    ),
+  ),
+),
       ),
     ),
   ],
@@ -272,15 +283,27 @@ class _PlayerVideoState extends State<PlayerVideo> {
     ),
     Positioned(
       top: 40.0,
-      left: 16.0,
+      left: 20.0,
       child: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
-        child: Icon(
-          CupertinoIcons.back,
-          color: Colors.white,
-        ),
+        child:Container(
+  width: 45, // Diameter of the circle
+  height: 45, // Diameter of the circle
+  decoration: BoxDecoration(
+    color: Colors.white, // Background color of the container
+    shape: BoxShape.circle, // Makes the container circular
+  ),
+  child: Center(
+    child: Icon(
+      CupertinoIcons.back, // Icon to display
+      color: Colors.black, // Icon color
+      size: 25, // Icon size
+    ),
+  ),
+),
+
       ),
     ),
   ],

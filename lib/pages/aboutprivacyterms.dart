@@ -73,10 +73,10 @@ class _AboutPrivacyTermsState extends State<AboutPrivacyTerms> {
         appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),
         body: Column(
           children: [
-            /* AdMob Banner */
-            // Container(
-            //   child: Utils.showBannerAd(context),
-            // ),
+            // /* AdMob Banner */
+            // // Container(
+            // //   child: Utils.showBannerAd(context),
+            // // ),
             Expanded(
               child: setWebView(),
             ),
