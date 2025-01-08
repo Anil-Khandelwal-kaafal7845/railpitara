@@ -465,11 +465,17 @@ class ApiService {
 
   Future<List<VideoData>> viewAll(String sectionId) async {
     String viewAllEndpoint = "view-all";
+     Object appVersion = Platform.isAndroid
+        ? Constant.curentAppVersion
+        : Constant.curentiosAppVersion;
     Response response = await dio.post(
       '$baseUrl$viewAllEndpoint',
       options: optHeaders,
       data: {
         'section_id': sectionId,
+         'version': appVersion,
+        'device': Constant.deviceType
+        
       },
     );
 

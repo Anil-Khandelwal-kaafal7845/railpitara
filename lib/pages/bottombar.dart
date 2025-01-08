@@ -1,4 +1,3 @@
-
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:dtlive/pages/channels.dart';
 import 'package:dtlive/pages/find.dart';
@@ -26,8 +25,7 @@ class Bottombar extends StatefulWidget {
   State<Bottombar> createState() => BottombarState();
 }
 
-  int selectedIndex = 0;
-
+int selectedIndex = 0;
 
 class BottombarState extends State<Bottombar> {
   SharedPre sharedPre = SharedPre();
@@ -38,8 +36,7 @@ class BottombarState extends State<Bottombar> {
     const Home(pageName: ""),
     const Find(),
     const NewLivePlayer(),
-    // const RentStore(),
-    const MyWatchlist(),
+    // const MyWatchlist(),
     const Setting(),
   ];
 
@@ -75,20 +72,18 @@ class BottombarState extends State<Bottombar> {
   //     });
   // }
   void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
 
-      setState(() {
-        selectedIndex = index;
-      });
-
-      if (index == 3) {
-        if (Constant.userID == null) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const LoginSocial()),
-            (Route<dynamic> route) => false,
-          );
-        }
+    if (index == 3) {
+      if (Constant.userID == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginSocial()),
+          (Route<dynamic> route) => false,
+        );
       }
-
+    }
   }
 
   @override
@@ -105,15 +100,13 @@ class BottombarState extends State<Bottombar> {
               ),
             ),
             // /* AdMob Banner */
-             Utils.showBannerAd(context),
+            Utils.showBannerAd(context),
           ],
         ),
-
-bottomNavigationBar: SalomonBottomBar(
-
+        bottomNavigationBar: SalomonBottomBar(
           currentIndex: selectedIndex,
           onTap: _onItemTapped,
-          items:[
+          items: [
             SalomonBottomBarItem(
               icon: Image.asset(
                 "assets/images/ic_home.png",
@@ -121,76 +114,90 @@ bottomNavigationBar: SalomonBottomBar(
                 height: 15,
                 color: white,
               ),
-              title:Text('Home' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+              title: Text(
+                'Home',
+                style:
+                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
+              ),
               selectedColor: Color.fromRGBO(33, 150, 243, 1),
               //activeTitleColor: Colors.blue.shade600,
             ),
-             SalomonBottomBarItem(
+            SalomonBottomBarItem(
               icon: Image.asset(
                 "assets/images/ic_find.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title:Text('Search' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+              title: Text(
+                'Search',
+                style:
+                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
+              ),
               selectedColor: Color.fromRGBO(33, 150, 243, 1),
               //activeTitleColor: Colors.blue.shade600,
             ),
-           
+
             SalomonBottomBarItem(
-              icon:Image.asset(
+              icon: Image.asset(
                 "assets/images/ic_channels.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
-              title: Text('Channels' ,style: TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),),
-             // backgroundColorOpacity: 0.1,
-            selectedColor: Colors.blue,
+              title: Text(
+                'Channels',
+                style:
+                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
+              ),
+              // backgroundColorOpacity: 0.1,
+              selectedColor: Colors.blue,
               //activeTitleColor: Colors.blue.shade600,
             ),
-          //  SalomonBottomBarItem(
-          //     icon: Image.asset(
-          //       "assets/images/ic_store.png",
-          //       width: 15,
-          //       height: 15,
-          //       color: white,
-          //     ),
-          //     title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
-          //     selectedColor: Colors.blue,
-          //     //activeTitleColor: Colors.blue.shade600,
-          //   ),
-          SalomonBottomBarItem(
+            //  SalomonBottomBarItem(
+            //     icon: Image.asset(
+            //       "assets/images/ic_store.png",
+            //       width: 15,
+            //       height: 15,
+            //       color: white,
+            //     ),
+            //     title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
+            //     selectedColor: Colors.blue,
+            //     //activeTitleColor: Colors.blue.shade600,
+            //   ),
+            // SalomonBottomBarItem(
+            //   icon: Image.asset(
+            //     "assets/images/ic_plus.png",
+            //     width: 15,
+            //     height: 15,
+            //     color: white,
+            //   ),
+            //   title: Text(
+            //     'Watchlist',
+            //     // 'Store',
+            //     style:
+            //         TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
+            //   ),
+            //   selectedColor: Colors.blue,
+            //   //activeTitleColor: Colors.blue.shade600,
+            // ),
+            SalomonBottomBarItem(
               icon: Image.asset(
-                "assets/images/ic_plus.png",
+                "assets/images/ic_stuff.png",
                 width: 15,
                 height: 15,
                 color: white,
               ),
               title: Text(
-                'Watchlist',
-                // 'Store',
+                'My Stuff',
                 style:
                     TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
               ),
               selectedColor: Colors.blue,
               //activeTitleColor: Colors.blue.shade600,
             ),
-            SalomonBottomBarItem(
-              icon:Image.asset(
-                "assets/images/ic_stuff.png",
-                width: 15,
-                height: 15,
-                color: white,
-              ),
-              title: Text('My Stuff' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
-               selectedColor: Colors.blue,
-              //activeTitleColor: Colors.blue.shade600,
-            ),
-
           ],
         ),
-
       ),
     );
   }
@@ -210,83 +217,88 @@ bottomNavigationBar: SalomonBottomBar(
       ),
     );
   }
-Future<bool> onBackPressed() async {
-  if (selectedIndex == 0) {
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      // Show bottom sheet instead of snackbar
-      return await _showExitBottomSheet();
+
+  Future<bool> onBackPressed() async {
+    if (selectedIndex == 0) {
+      DateTime now = DateTime.now();
+      if (currentBackPressTime == null ||
+          now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+        currentBackPressTime = now;
+        // Show bottom sheet instead of snackbar
+        return await _showExitBottomSheet();
+      } else {
+        SystemNavigator.pop();
+        return true; // Allow the back operation
+      }
     } else {
-      SystemNavigator.pop();
-      return true; // Allow the back operation
+      _onItemTapped(0);
+      return false; // Do not allow the back operation
     }
-  } else {
-    _onItemTapped(0);
-    return false; // Do not allow the back operation
+  }
+
+  Future<bool> _showExitBottomSheet() async {
+    bool? result = await showModalBottomSheet<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.black, // Set background color to black
+            // borderRadius: BorderRadius.circular(15),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 15),
+              Text(
+                'Are you sure you want to exit ?',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white), // Set text color to white
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context,
+                      false); // Close bottom sheet and indicate not to exit app
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: colorPrimary, // Set button color to primaryDark
+                  onPrimary: Colors.white, // Set text color to white
+                  minimumSize: Size(
+                      double.infinity, 50), // Set button width to full width
+                ),
+                child: Text(
+                  'No',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context,
+                      true); // Close bottom sheet and indicate to exit app
+                },
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      Colors.transparent, // Set button color to transparent
+                  onPrimary: Colors.white, // Set text color to white
+                  side: BorderSide(
+                      color: Colors.white), // Set border color to white
+                  minimumSize: Size(
+                      double.infinity, 50), // Set button width to full width
+                ),
+                child: Text('Yes', style: TextStyle(fontSize: 18)),
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+
+    return result ?? false; // Return false if result is null
   }
 }
-Future<bool> _showExitBottomSheet() async {
-  bool? result = await showModalBottomSheet<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.black, // Set background color to black
-          // borderRadius: BorderRadius.circular(15),
-        ),
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-               SizedBox(height: 15),
-
-            Text(
-              'Are you sure you want to exit ?',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white), // Set text color to white
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, false); // Close bottom sheet and indicate not to exit app
-              },
-              style: ElevatedButton.styleFrom(
-                primary: colorPrimary, // Set button color to primaryDark
-                onPrimary: Colors.white, // Set text color to white
-                minimumSize: Size(double.infinity, 50), // Set button width to full width
-              ),
-              child: Text('No' ,style: TextStyle(fontSize: 18),),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, true); // Close bottom sheet and indicate to exit app
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent, // Set button color to transparent
-                onPrimary: Colors.white, // Set text color to white
-                side: BorderSide(color: Colors.white), // Set border color to white
-                minimumSize: Size(double.infinity, 50), // Set button width to full width
-              ),
-              child: Text('Yes' ,style: TextStyle(fontSize: 18)),
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
-      );
-    },
-  );
-
-  return result ?? false; // Return false if result is null
-}
-
-
-
-}
-
-
-
-
-

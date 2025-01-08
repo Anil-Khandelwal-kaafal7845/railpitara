@@ -210,7 +210,7 @@ Future<void> checkForUpdate(BuildContext context) async {
   // Get the current build number based on platform
   num currentVersion = Platform.isAndroid
       ? int.parse(packageInfo.buildNumber) // Android
-      : Constant.iosAppVersion; // iOS
+      : Constant.curentiosAppVersion; // iOS
 
   // Determine if an update is needed based on platform
   bool needsUpdate = Platform.isAndroid

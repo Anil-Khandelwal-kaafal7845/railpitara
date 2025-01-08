@@ -43,7 +43,6 @@ class Utils {
     if (!kIsWeb) {
       return Container(
         constraints: BoxConstraints(
-          minHeight: 0,
           minWidth: 0,
           maxWidth: MediaQuery.of(context).size.width,
         ),
@@ -913,8 +912,8 @@ static AppBar myAppBarWithBackBottomBar(
       centerTitle: true,
       leading: showBackButton
           ? IconButton(
-              autofocus: true,
-              focusColor: white.withOpacity(0.5),
+              // autofocus: true,
+              // focusColor: white.withOpacity(0.5),
               onPressed: () {
                 Navigator.pop(context);
               },
