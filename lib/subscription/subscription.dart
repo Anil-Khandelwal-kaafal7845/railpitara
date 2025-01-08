@@ -491,7 +491,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
           children: [
             _buildBenefits(packageList, selectedIndex),
             buildMobileItem(packageList),
-            SizedBox(height: 10,) ,
+            SizedBox(height: 5,) ,
             GestureDetector(
               onTap: () {
                 _checkPackageAndShowBottomSheet(

@@ -353,12 +353,12 @@ class LoginSocialState extends State<LoginSocialEmail> {
                             size: 28, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          const SizedBox(width: 30),
+                          const SizedBox(width: 20),
                           MyText(
                             color: black,
                             text: "loginwithphone",
-                            fontsizeNormal: 14,
-                            fontsizeWeb: 16,
+                            fontsizeNormal: 12,
+                            fontsizeWeb: 12,
                             multilanguage: true,
                             fontweight: FontWeight.w600,
                             maxline: 1,
@@ -372,6 +372,53 @@ class LoginSocialState extends State<LoginSocialEmail> {
                   ),
                   const SizedBox(height: 5),
 
+
+   /* Google Login Button */
+              generalProvider.isGoogleLogin == "1"
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 52,
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          debugPrint("Clicked on : ====> loginWith Google");
+                          _gmailLogin();
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyImage(
+                              width: 30,
+                              height: 30,
+                              imagePath: "ic_google.png",
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 30),
+                            MyText(
+                              color: black,
+                              text: "loginwithgoogle",
+                              fontsizeNormal: 14,
+                              fontsizeWeb: 16,
+                              multilanguage: true,
+                              fontweight: FontWeight.w600,
+                              maxline: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textalign: TextAlign.center,
+                              fontstyle: FontStyle.normal,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink(),
+              const SizedBox(height: 5),
                   /* Apple Login Button */
                   if (Platform.isIOS)
                     Container(
@@ -422,6 +469,7 @@ class LoginSocialState extends State<LoginSocialEmail> {
       ),
     );
   }
+
 
   /* Google Login */
   Future<void> _gmailLogin() async {
