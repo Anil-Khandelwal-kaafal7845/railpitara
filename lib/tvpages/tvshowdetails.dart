@@ -1,6 +1,7 @@
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/moviedetails.dart';
 import 'package:dtlive/pages/showdetails.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
@@ -47,12 +48,16 @@ class TVShowDetailsState extends State<TVShowDetails> {
   List<Cast>? directorList;
   late ShowDetailsProvider showDetailsProvider;
   late EpisodeProvider episodeProvider;
+    late GeneralProvider generalProvider;
+
 
   @override
   void initState() {
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+        generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+          generalProvider.getGeneralsetting(context);
     super.initState();
     debugPrint("initState videoId ==> ${widget.videoId}");
     debugPrint("initState videoType ==> ${widget.videoType}");
@@ -3020,7 +3025,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
 
     /* CHECK SUBSCRIPTION */
     if (playType != "Trailer") {
-      bool? isPrimiumUser = await _checkSubsRentLogin();
+      bool? isPrimiumUser = await checkAndCallFunction();
       debugPrint("isPrimiumUser =============> $isPrimiumUser");
       if (!isPrimiumUser) return;
     }
@@ -3253,6 +3258,111 @@ class TVShowDetailsState extends State<TVShowDetails> {
         ),
       );
       return false;
+    }
+  }
+
+
+
+  Future<bool> _checkSubsRentLoginWithoutCoin() async {
+    if (Constant.userID != null) {
+      if ((showDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) ==
+              1 &&
+          (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
+            (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+                1) {
+          return true;
+        } else {
+          dynamic isSubscribed = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const Subscription();
+              },
+            ),
+          );
+          if (isSubscribed != null && isSubscribed == true) {
+            _getData();
+          }
+          return false;
+        }
+      } else if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
+              0) ==
+          1) {
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1) {
+          return true;
+        } else {
+          dynamic isSubscribed = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const Subscription();
+              },
+            ),
+          );
+          if (isSubscribed != null && isSubscribed == true) {
+            _getData();
+          }
+          return false;
+        }
+      } else if ((showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
+          1) {
+        if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+            1) {
+          return true;
+        } else {
+          dynamic isRented = await Utils.paymentForRent(
+            context: context,
+            videoId:
+                showDetailsProvider.sectionDetailModel.result?.id.toString() ??
+                    '',
+            rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
+                    .toString() ??
+                '',
+            vTitle: showDetailsProvider.sectionDetailModel.result?.name
+                    .toString() ??
+                '',
+            typeId: showDetailsProvider.sectionDetailModel.result?.typeId
+                    .toString() ??
+                '',
+            vType: showDetailsProvider.sectionDetailModel.result?.videoType
+                    .toString() ??
+                '',
+          );
+          if (isRented != null && isRented == true) {
+            _getData();
+          }
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      if ((kIsWeb || Constant.isTV)) {
+        Utils.buildWebAlertDialog(context, "login", "")
+            .then((value) => _getData());
+        return false;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const LoginSocial();
+          },
+        ),
+      );
+      return false;
+    }
+  }
+
+
+ Future<bool> checkAndCallFunction() async {
+    if (generalProvider.isCoinShow == "0") {
+      // Call the second method when `isCoinShow` is  "0"
+      return await _checkSubsRentLoginWithoutCoin();
+    } else {
+      // Call the first method when `isCoinShow` is not "0"
+      return await _checkSubsRentLogin();
     }
   }
 }

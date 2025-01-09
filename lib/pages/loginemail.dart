@@ -196,11 +196,12 @@ class LoginSocialState extends State<LoginSocialEmail> {
                     "Login with Email",
                     style: TextStyle(color: white, fontSize: 21),
                   ),
-                  const SizedBox(height: 7),
-                  Text(
-                    "Enter your Email to login",
-                    style: TextStyle(color: otherColor, fontSize: 19),
-                  ),
+                  // const SizedBox(height: 7),
+                  // Text(
+                  //   "Enter your Email to login",
+                  //   style: TextStyle(color: otherColor, fontSize: 19),
+                  // ),
+                 
                   const SizedBox(height: 30),
                   Container(
                     padding: EdgeInsets.only(left: 12),
@@ -358,6 +359,7 @@ class LoginSocialState extends State<LoginSocialEmail> {
                   const SizedBox(height: 25),
 
                   /* Mobile Login Button */
+                   generalProvider.isMobileLogin == "1"?
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 52,
@@ -402,7 +404,7 @@ class LoginSocialState extends State<LoginSocialEmail> {
                         ],
                       ),
                     ),
-                  ),
+                  ):SizedBox.shrink(),
                   const SizedBox(height: 5),
 
                   /* Google Login Button */

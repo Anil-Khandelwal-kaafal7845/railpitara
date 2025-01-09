@@ -177,7 +177,8 @@ class SearchState extends State<Search> {
     if ((widget.searchText ?? "").isNotEmpty) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
-      await searchProvider.getSearchVideo(context,widget.searchText ?? "");
+      await searchProvider.getSearchVideo(searchController.text, "");
+      // await searchProvider.getSearchVideo(context,widget.searchText ?? "");
     }
   }
 

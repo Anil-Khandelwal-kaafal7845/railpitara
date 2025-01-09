@@ -7,6 +7,7 @@ import 'package:dtlive/model/subscriptionmodel.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/pages/successPrime.dart';
+import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/allpayment.dart';
@@ -40,12 +41,16 @@ class SubscriptionState extends State<Subscription> with RouteAware {
   CarouselController pageController = CarouselController();
   int selectedIndex = 0;
   late HomeProvider homeProvider;
+    late GeneralProvider generalProvider;
 
   @override
   void initState() {
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     subscriptionProvider =
         Provider.of<SubscriptionProvider>(context, listen: false);
+    generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+
+           generalProvider.getGeneralsetting(context);
     super.initState();
     _getData();
   }
@@ -404,6 +409,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    print("COIN---${generalProvider.isCoinShow}");
     analytics.logEvent(
       name: "screen_view",
       parameters: {
@@ -608,6 +614,8 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                           fontweight: FontWeight.w600,
                           fontstyle: FontStyle.normal,
                         ),
+
+                          generalProvider.isCoinShow == "1"?
                         MyText(
                           color: isPurchased ? white : subscriblue,
                           text: "or",
@@ -619,7 +627,9 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                           overflow: TextOverflow.ellipsis,
                           fontweight: FontWeight.w600,
                           fontstyle: FontStyle.normal,
-                        ),
+                        )   :SizedBox.shrink(),
+
+                        generalProvider.isCoinShow == "1"?
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -646,7 +656,9 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                               ),
                             ],
                           ),
-                        ),
+                        )
+                   
+                   :SizedBox.shrink(),
                       ],
                     ),
                   ),

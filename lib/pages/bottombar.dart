@@ -36,7 +36,6 @@ class BottombarState extends State<Bottombar> {
     const Home(pageName: ""),
     const Find(),
     const NewLivePlayer(),
-    // const MyWatchlist(),
     const Setting(),
   ];
 
@@ -75,15 +74,6 @@ class BottombarState extends State<Bottombar> {
     setState(() {
       selectedIndex = index;
     });
-
-    if (index == 3) {
-      if (Constant.userID == null) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginSocial()),
-          (Route<dynamic> route) => false,
-        );
-      }
-    }
   }
 
   @override
@@ -100,7 +90,7 @@ class BottombarState extends State<Bottombar> {
               ),
             ),
             // /* AdMob Banner */
-            Utils.showBannerAd(context),
+            // Utils.showBannerAd(context),
           ],
         ),
         bottomNavigationBar: SalomonBottomBar(

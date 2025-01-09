@@ -58,39 +58,37 @@ class OTPVerifyState extends State<OTPVerify> {
     // codeSend(false);
   }
 
-    void startResendTimer() {
-    _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_resendCountdown > 0) {
-          _resendCountdown--;
-        } else {
-          _resendTimer.cancel(); // Stop the timer when it reaches 0
-        }
-      });
+  void startResendTimer() {
+  _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    setState(() {
+      if (_resendCountdown > 0) {
+        _resendCountdown--;
+      } else {
+        _resendTimer.cancel(); // Stop the timer when it reaches 0
+      }
     });
-  }
+  });
+}
+
+
+  //   void startResendTimer() {
+  //   _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+  //     setState(() {
+  //       if (_resendCountdown > 0) {
+  //         _resendCountdown--;
+  //       } else {
+  //         _resendTimer.cancel(); // Stop the timer when it reaches 0
+  //       }
+  //     });
+  //   });
+  // }
 
 
   _sendWhatsappOTP() async {
     await ApiService().loginWithWhatsapp(widget.mobileNumber ,widget.type ,widget.email);
   }
 
-  // _getDeviceToken() async {
-  //   try {
-  //       strDeviceType = "1";
-  //       strDeviceToken = await FirebaseMessaging.instance.getToken();
-  //     } else {
-  //       strDeviceType = "2";
-  //       // final status = await OneSignal.shared.getDeviceState();
-  //       // strDeviceToken = status?.userId;
-  //     }
-  //   } catch (e) {
-  //     debugPrint("_getDeviceToken Exception ===> $e");
-  //   }
-  //   debugPrint("===>strDeviceToken $strDeviceToken");
-  //   debugPrint("===>strDeviceType $strDeviceType");
-  // }
-
+ 
   @override
   void dispose() {
   _resendTimer.cancel();
@@ -305,33 +303,66 @@ class OTPVerifyState extends State<OTPVerify> {
                 //   ),
                 // ),
 
-                    InkWell(
-                  borderRadius: BorderRadius.circular(10),
-                   onTap: _resendCountdown == 0 ? () {
-                    _sendWhatsappOTP();
-                    setState(() {
-                      _resendCountdown = 30; // Reset the countdown
-                    });
-                    startResendTimer(); // Start the countdown again
-                  } : null, 
-                  child: Container(
-                    constraints: const BoxConstraints(minWidth: 70),
-                    padding: const EdgeInsets.all(5),
-                    child: _resendCountdown == 0
-                        ? Text(
-                            "Resend",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500  ,
-                                fontSize: 20),
-                          )
-                        : Text("Resend OTP in 00:${_resendCountdown} second" ,style: TextStyle(
-                                color: whiteLight,
-                                fontWeight: FontWeight.w400  ,
-                                fontSize: 14)),
+InkWell(
+  borderRadius: BorderRadius.circular(10),
+  onTap: _resendCountdown == 0
+      ? () {
+          _sendWhatsappOTP();
+          setState(() {
+            _resendCountdown = 30; // Reset the countdown
+          });
+          startResendTimer(); // Start the countdown again
+        }
+      : null,
+  child: Container(
+    constraints: const BoxConstraints(minWidth: 70),
+    padding: const EdgeInsets.all(5),
+    child: _resendCountdown == 0
+        ? Text(
+            "Resend",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 20),
+          )
+        : Text(
+            "Resend OTP in 00:${_resendCountdown.toString().padLeft(2, '0')} second",
+            style: TextStyle(
+                color: whiteLight,
+                fontWeight: FontWeight.w400,
+                fontSize: 14),
+          ),
+  ),
+),
+
+
+                //     InkWell(
+                //   borderRadius: BorderRadius.circular(10),
+                //    onTap: _resendCountdown == 0 ? () {
+                //     _sendWhatsappOTP();
+                //     setState(() {
+                //       _resendCountdown = 30; // Reset the countdown
+                //     });
+                //     startResendTimer(); // Start the countdown again
+                //   } : null, 
+                //   child: Container(
+                //     constraints: const BoxConstraints(minWidth: 70),
+                //     padding: const EdgeInsets.all(5),
+                //     child: _resendCountdown == 0
+                //         ? Text(
+                //             "Resend",
+                //             style: TextStyle(
+                //                 color: Colors.white,
+                //                 fontWeight: FontWeight.w500  ,
+                //                 fontSize: 20),
+                //           )
+                //         : Text("Resend OTP in 00:${_resendCountdown} second" ,style: TextStyle(
+                //                 color: whiteLight,
+                //                 fontWeight: FontWeight.w400  ,
+                //                 fontSize: 14)),
                     
-                  ),
-                ),
+                //   ),
+                // ),
             
               
               

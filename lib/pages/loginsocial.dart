@@ -220,7 +220,7 @@ _getData() async {
                           Row(
                             children: [
                               Text(
-                                "Login with mobile number",
+                                "Log In with Mobile Number",
                                 style: TextStyle(color: white, fontSize: 21),
                               ),
                               SizedBox(
@@ -236,19 +236,19 @@ _getData() async {
                               //     )),
                             ],
                           ),
-                          const SizedBox(height: 7),
-                          MyText(
-                            color: otherColor,
-                            text: "login_with_mobile_note",
-                            fontsizeNormal: 14,
-                            fontsizeWeb: 15,
-                            multilanguage: true,
-                            fontweight: FontWeight.w500,
-                            maxline: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textalign: TextAlign.center,
-                            fontstyle: FontStyle.normal,
-                          ),
+                          // const SizedBox(height: 7),
+                          // MyText(
+                          //   color: otherColor,
+                          //   text: "login_with_mobile_note",
+                          //   fontsizeNormal: 14,
+                          //   fontsizeWeb: 15,
+                          //   multilanguage: true,
+                          //   fontweight: FontWeight.w500,
+                          //   maxline: 2,
+                          //   overflow: TextOverflow.ellipsis,
+                          //   textalign: TextAlign.center,
+                          //   fontstyle: FontStyle.normal,
+                          // ),
                         
                           const SizedBox(height: 30),
 
