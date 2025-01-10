@@ -11,8 +11,8 @@ class Constant {
   static String appName = "OM TV";
   static String appPackageName = "com.blackboardfilms.omtv";
   static String appleAppId = "1584477559";
-  static double curentAppVersion = 50;
-  static dynamic curentiosAppVersion = 36;
+  static double curentAppVersion = 51;
+  static dynamic curentiosAppVersion = 38;
 
 
   /* OneSignal App ID */
