@@ -160,9 +160,11 @@ class AllPaymentState extends State<AllPayment>
 
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
+          Navigator.pop(context);
         } else {
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
+          Navigator.pop(context);
         }
       } else {
         isPaymentDone = false;

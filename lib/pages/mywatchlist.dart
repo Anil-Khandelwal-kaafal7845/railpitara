@@ -60,8 +60,10 @@ class _MyWatchlistState extends State<MyWatchlist> {
 );
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: Utils.myAppBarWithBackBottomBar(
-          context, "watchlist", selectedIndex != 3),
+      // appBar: Utils.myAppBarWithBack(
+      //     context, "watchlist", selectedIndex != 3),
+
+           appBar: Utils.myAppBarWithBack(context, "watchlist", true),
       body: SafeArea(
         child: Column(
           children: [
