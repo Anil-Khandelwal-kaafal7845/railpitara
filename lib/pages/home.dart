@@ -198,76 +198,75 @@ class HomeState extends State<Home> with RouteAware {
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
+  Future<void> checkForUpdate(BuildContext context) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-Future<void> checkForUpdate(BuildContext context) async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    // Get current app version from API response
+    final int apiAppVersion = forceUpdateData!.result!.appVersion!; // Android
+    final int iosAppVersion = forceUpdateData!.result!.iosappVersion!; // iOS
+    final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
 
-  // Get current app version from API response
-  final int apiAppVersion = forceUpdateData!.result!.appVersion!; // Android
-  final int iosAppVersion = forceUpdateData!.result!.iosappVersion!; // iOS
-  final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
+    // Get the current build number based on platform
+    num currentVersion = Platform.isAndroid
+        ? int.parse(packageInfo.buildNumber) // Android
+        : Constant.curentiosAppVersion; // iOS
 
-  // Get the current build number based on platform
-  num currentVersion = Platform.isAndroid
-      ? int.parse(packageInfo.buildNumber) // Android
-      : Constant.curentiosAppVersion; // iOS
+    // Determine if an update is needed based on platform
+    bool needsUpdate = Platform.isAndroid
+        ? apiAppVersion > currentVersion // Android
+        : iosAppVersion > currentVersion; // iOS
 
-  // Determine if an update is needed based on platform
-  bool needsUpdate = Platform.isAndroid
-      ? apiAppVersion > currentVersion // Android
-      : iosAppVersion > currentVersion; // iOS
-
-  if (needsUpdate) {
-    showDialog(
-      barrierDismissible: !isForceUpdate, // Disable dismiss if force update
-      context: context,
-      builder: (context) {
-        return WillPopScope(
-          onWillPop: () async => false, // Prevent dialog dismissal on back
-          child: AlertDialog(
-            contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-            surfaceTintColor: Theme.of(context).colorScheme.background,
-            title: const Text("New Update Available!!"),
-            content: const Text("A new app update is available"),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Visibility(
-                    visible: !isForceUpdate, // Show Cancel button if not forced
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Cancel"),
+    if (needsUpdate) {
+      showDialog(
+        barrierDismissible: !isForceUpdate, // Disable dismiss if force update
+        context: context,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async => false, // Prevent dialog dismissal on back
+            child: AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+              surfaceTintColor: Theme.of(context).colorScheme.background,
+              title: const Text("New Update Available!!"),
+              content: const Text("A new app update is available"),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Visibility(
+                      visible:
+                          !isForceUpdate, // Show Cancel button if not forced
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (Platform.isAndroid || Platform.isIOS) {
-                        final url = Uri.parse(
-                          Platform.isAndroid
-                              ? "https://play.google.com/store/apps/details?id=com.blackboardfilms.omtv&hl=en_IN"
-                              : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
-                        );
-                        launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    },
-                    child: const Text("UPDATE"),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                    TextButton(
+                      onPressed: () {
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          final url = Uri.parse(
+                            Platform.isAndroid
+                                ? "https://play.google.com/store/apps/details?id=com.ott.chulltvott&hl=en_IN"
+                                : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
+                          );
+                          launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
+                      },
+                      child: const Text("UPDATE"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
-}
-
 
   // checkForUpdate() async {
   //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -309,7 +308,7 @@ Future<void> checkForUpdate(BuildContext context) async {
   //                       if (Platform.isAndroid || Platform.isIOS) {
   //                         final url = Uri.parse(
   //                           Platform.isAndroid
-  //                               ? "https://play.google.com/store/apps/details?id=com.blackboardfilms.omtv&hl=en_IN"
+  //                               ? "https://play.google.com/store/apps/details?id=com.ott.chulltvott&hl=en_IN"
   //                               : "https://apps.apple.com/in/app/om-tv/id1584477559",
   //                         );
   //                         launchUrl(
@@ -329,9 +328,6 @@ Future<void> checkForUpdate(BuildContext context) async {
   //     );
   //   }
   // }
-
-
-
 
   // checkForUpdate() async {
   //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -611,9 +607,10 @@ Future<void> checkForUpdate(BuildContext context) async {
                       padding: const EdgeInsets.only(right: 15),
                       child: Row(
                         children: [
-                         
-                           AnimatedGifWidget(height:65 ,width: 60,),
-                         
+                          AnimatedGifWidget(
+                            height: 65,
+                            width: 60,
+                          ),
                           Constant.userID != null
                               ? Text(
                                   "${homeProvider.userWalletBalanceModel?.balance ?? ''}",

@@ -1,97 +1,101 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <base href="/" />
 
-<head>
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="Best OTT for your daily entertainment" />
 
-  <base href="/">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="CHULL TV" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Best OTT for your daily entertainment">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="OM TV">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <title>CHULL TV</title>
+    <link rel="manifest" href="manifest.json" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+    <script>
+      // The value below is injected by flutter build, do not touch.
+      const serviceWorkerVersion = "1740447559";
+    </script>
+    <!-- This script adds the flutter initialization JS code -->
+    <script src="flutter.js" defer></script>
 
-  <title>OM TV</title>
-  <link rel="manifest" href="manifest.json">
+    <!-- iOS Apple login -->
+    <script
+      type="text/javascript"
+      src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+    ></script>
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "1740447559";
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+    <!-- Google login -->
+    <meta
+      name="google-signin-client_id"
+      content="346606981660-juds0qd8k9p651md7gv38bd1bn9jq66v.apps.googleusercontent.com"
+    />
 
-  <!-- iOS Apple login -->
-  <script type="text/javascript"
-    src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+    <!-- Open new Tab -->
+    <script src="script.js" type="application/javascript"></script>
 
-  <!-- Google login -->
-  <meta name="google-signin-client_id"
-    content="346606981660-juds0qd8k9p651md7gv38bd1bn9jq66v.apps.googleusercontent.com">
+    <style>
+      .container {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        /* Default Axis is X*/
+        justify-content: center;
+        /* Main Axis */
+        align-items: center;
+        /* Cross Axis */
+      }
 
-  <!-- Open new Tab -->
-  <script src="script.js" type="application/javascript"></script>
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
 
-  <style>
-    .container {
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      /* Default Axis is X*/
-      justify-content: center;
-      /* Main Axis */
-      align-items: center;
-      /* Cross Axis */
-    }
+      .indicator {
+        width: 50vw;
+      }
+    </style>
+  </head>
 
-    body {
-      width: 100%;
-      height: 100%;
-      background-color: black;
-    }
+  <body style="overflow: hidden">
+    <div id="loading_indicator" class="container">
+      <img class="indicator" src="./assets/loading.gif" />
+    </div>
 
-    .indicator {
-      width: 50vw;
-    }
-  </style>
-</head>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
-<body style="overflow: hidden">
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDyugNhMh9OLugoGGdwEWgdSCZ_RS7EIO4",
+        authDomain: "mitwatv-3c8bf.firebaseapp.com",
+        projectId: "mitwatv-3c8bf",
+        storageBucket: "mitwatv-3c8bf.appspot.com",
+        messagingSenderId: "663533434843",
+        appId: "1:663533434843:web:c6ae9531d361de38fe99fe",
+        measurementId: "G-8V44NX4CJH",
+      };
 
-  <div id="loading_indicator" class="container">
-    <img class="indicator" src="./assets/loading.gif" />
-  </div>
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/hls.js@latest"
+      type="application/javascript"
+    ></script>
 
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyugNhMh9OLugoGGdwEWgdSCZ_RS7EIO4",
-      authDomain: "mitwatv-3c8bf.firebaseapp.com",
-      projectId: "mitwatv-3c8bf",
-      storageBucket: "mitwatv-3c8bf.appspot.com",
-      messagingSenderId: "663533434843",
-      appId: "1:663533434843:web:c6ae9531d361de38fe99fe",
-      measurementId: "G-8V44NX4CJH"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest" type="application/javascript"></script>
-
-  <!-- <script>
+    <!-- <script>
     window.addEventListener('load', function (ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
@@ -105,24 +109,24 @@
       });
     });
   </script> -->
-  <script>
-    window.addEventListener('load', function (ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function (engineInitializer) {
-          engineInitializer.initializeEngine().then(function (appRunner) {
-            appRunner.runApp();
-          });
-        }
+    <script>
+      window.addEventListener("load", function (ev) {
+        // Download main.dart.js
+        _flutter.loader.loadEntrypoint({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer.initializeEngine().then(function (appRunner) {
+              appRunner.runApp();
+            });
+          },
+        });
       });
-    });
-  </script>
+    </script>
 
-  <script type="text/javascript">window.flutterWebRenderer = "html";</script>
-
-</body>
-
+    <script type="text/javascript">
+      window.flutterWebRenderer = "html";
+    </script>
+  </body>
 </html>

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.blackboardfilms.omtv">
+    package="com.ott.chulltvott">
 
     <uses-feature
         android:name="android.hardware.camera2.full"
@@ -42,7 +42,7 @@
         android:required="false"/>
 
    <application
-        android:label="OM TV"
+        android:label="CHULL TV"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:keepScreenOn="true"

@@ -5,15 +5,14 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-  static const String baseurl = 'https://omtv.ottsnap.in/api/';
-  static const String dynamicBaseUrl = 'https://omtvlive.in/';
-  static const String baseurlwithoutapi = 'https://omtv.ottsnap.in';
-  static String appName = "OM TV";
-  static String appPackageName = "com.blackboardfilms.omtv";
-  static String appleAppId = "1584477559";
-  static double curentAppVersion = 51;
-  static dynamic curentiosAppVersion = 38;
-
+  static const String baseurl = 'https://chull.ottsnap.in/api/';
+  static const String dynamicBaseUrl = 'https://chull.tv/';
+  static const String baseurlwithoutapi = 'https://chull.ottsnap.in';
+  static String appName = "CHULL TV";
+  static String appPackageName = "com.ott.chulltvott";
+  static String appleAppId = "";
+  static double curentAppVersion = 1;
+  static dynamic curentiosAppVersion = 1;
 
   /* OneSignal App ID */
   static const String oneSignalAppId = "";
@@ -32,12 +31,10 @@ class Constant {
   static String iosAppUrl =
       "https://apps.apple.com/in/app/id${Constant.appleAppId}";
 
-  static String fbLink =
-      "https://www.facebook.com/omtvofficial";
-
-  static String InstaLink = "https://www.instagram.com/omtvofficial/";
-  static String youtubeLink = "https://www.youtube.com/channel/UCi_wS6Abn0-dXYwD7ek3slA";
-  static String twitterLink = "https://x.com/omtvofficial";
+  static String fbLink = "";
+  static String InstaLink = "";
+  static String youtubeLink = "";
+  static String twitterLink = "";
 
   static List<QualityModel> resolutionsUrls = [];
   static List<SubTitleModel> subtitleUrls = [];

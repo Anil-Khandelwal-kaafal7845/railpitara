@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '151680591442',
     projectId: 'omtv-32b09',
     storageBucket: 'omtv-32b09.firebasestorage.app',
-    androidClientId: '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
-    iosClientId: '151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako.apps.googleusercontent.com',
-    iosBundleId: 'com.blackboardfilms.omtv',
+    androidClientId:
+        '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
+    iosClientId:
+        '151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako.apps.googleusercontent.com',
+    iosBundleId: 'com.ott.chulltvott',
   );
 }

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:151680591442:android:9bf7d041290af0ae08e18b",
         "android_client_info": {
-          "package_name": "com.blackboardfilms.omtv"
+          "package_name": "com.ott.chulltvott"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blackboardfilms.omtv",
+            "package_name": "com.ott.chulltvott",
             "certificate_hash": "a586d5ad0867c0a2f8a1539abeea3d2a2f7af563"
           }
         },
@@ -25,7 +25,7 @@
           "client_id": "151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blackboardfilms.omtv",
+            "package_name": "com.ott.chulltvott",
             "certificate_hash": "84bf9f4eedbb0b02c889815ddf0a19a3e3e77286"
           }
         },
@@ -33,7 +33,7 @@
           "client_id": "151680591442-vjupitiamr3p27kttm30cmkifps9lgrd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blackboardfilms.omtv",
+            "package_name": "com.ott.chulltvott",
             "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
           }
         },

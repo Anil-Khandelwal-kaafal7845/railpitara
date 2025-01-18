@@ -141,7 +141,7 @@ class ProfileEditState extends State<ProfileEdit> {
                     fontweight: FontWeight.w500,
                     fontstyle: FontStyle.normal,
                     textalign: TextAlign.center,
-                    color: otherColor,
+                    color: yellowButton,
                   ),
                 ),
               ),

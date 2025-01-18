@@ -26,7 +26,7 @@ class AdHelper {
   static RewardedAd? _rewardedAd;
 
   static AdRequest request = AdRequest(
-    keywords: <String>[Constant.appName, 'OM TV'],
+    keywords: <String>[Constant.appName, 'CHULL TV'],
     contentUrl: 'https://flutter.io',
     nonPersonalizedAds: true,
   );
@@ -75,7 +75,6 @@ class AdHelper {
       AdHelper.createRewardedAd();
     }
   }
-
 
   // Banner Ad
   static Widget bannerAd(BuildContext context) {
@@ -217,30 +216,29 @@ class AdHelper {
   //   }
   // }
 
-static void rewardedAd(BuildContext context, VoidCallback callAction) {
-  if ((rewardad == "1" && Platform.isAndroid) || 
-      (rewardadIos == "1" && Platform.isIOS)) {
-    debugPrint("rewardedAd add");
+  static void rewardedAd(BuildContext context, VoidCallback callAction) {
+    if ((rewardad == "1" && Platform.isAndroid) ||
+        (rewardadIos == "1" && Platform.isIOS)) {
+      debugPrint("rewardedAd add");
 
-    // Provide both the onAdCompleted and onAdFailed callbacks using named parameters
-    showRewardedAd(
-      onAdCompleted: () {
-        // Ad completed successfully, perform the desired action
-        debugPrint("Ad completed successfully");
-        callAction();
-      },
-      onAdFailed: () {
-        // Ad failed to show, fallback to the action
-        debugPrint("Ad failed to show");
-        callAction();
-      },
-    );
-  } else {
-    debugPrint("rewardedAd action Device");
-    callAction();
+      // Provide both the onAdCompleted and onAdFailed callbacks using named parameters
+      showRewardedAd(
+        onAdCompleted: () {
+          // Ad completed successfully, perform the desired action
+          debugPrint("Ad completed successfully");
+          callAction();
+        },
+        onAdFailed: () {
+          // Ad failed to show, fallback to the action
+          debugPrint("Ad failed to show");
+          callAction();
+        },
+      );
+    } else {
+      debugPrint("rewardedAd action Device");
+      callAction();
+    }
   }
-}
-
 
 //new ----
 
@@ -275,45 +273,44 @@ static void rewardedAd(BuildContext context, VoidCallback callAction) {
 
 //   _rewardedAd = null; // Set the ad to null once shown to ensure it's only shown once
 // }
-static void showRewardedAd({
-  required VoidCallback onAdCompleted, 
-  required VoidCallback onAdFailed
-}) {
-  if (_rewardedAd == null) {
-    print("Rewarded ad is not ready yet.");
-    onAdFailed(); // Ad is not ready, invoke failure callback
-    return;
+  static void showRewardedAd(
+      {required VoidCallback onAdCompleted, required VoidCallback onAdFailed}) {
+    if (_rewardedAd == null) {
+      print("Rewarded ad is not ready yet.");
+      onAdFailed(); // Ad is not ready, invoke failure callback
+      return;
+    }
+
+    print("Showing rewarded ad...");
+
+    _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) {
+        print("Ad is now showing...");
+      },
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        print("Ad dismissed by the user.");
+        ad.dispose();
+        createRewardedAd(); // Reload the ad for future use
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        print("Failed to show ad: $error");
+        onAdFailed();
+        ad.dispose();
+        createRewardedAd(); // Reload the ad for future use
+      },
+    );
+
+    _rewardedAd?.setImmersiveMode(true);
+
+    // Reward the user only if they complete the ad
+    _rewardedAd?.show(
+        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+      print("User earned reward: ${reward.amount} ${reward.type}");
+      onAdCompleted(); // Trigger logic only when reward is earned
+    });
+
+    _rewardedAd = null; // Reset the ad reference
   }
-
-  print("Showing rewarded ad...");
-
-  _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
-    onAdShowedFullScreenContent: (RewardedAd ad) {
-      print("Ad is now showing...");
-    },
-    onAdDismissedFullScreenContent: (RewardedAd ad) {
-      print("Ad dismissed by the user.");
-      ad.dispose();
-      createRewardedAd(); // Reload the ad for future use
-    },
-    onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-      print("Failed to show ad: $error");
-      onAdFailed();
-      ad.dispose();
-      createRewardedAd(); // Reload the ad for future use
-    },
-  );
-
-  _rewardedAd?.setImmersiveMode(true);
-
-  // Reward the user only if they complete the ad
-  _rewardedAd?.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-    print("User earned reward: ${reward.amount} ${reward.type}");
-    onAdCompleted(); // Trigger logic only when reward is earned
-  });
-
-  _rewardedAd = null; // Reset the ad reference
-}
 
   // static void showRewardedAd(VoidCallback callAction) {
   //   if (_rewardedAd == null) {
@@ -348,7 +345,4 @@ static void showRewardedAd({
   //   _rewardedAd =
   //       null; // Set the ad to null once shown to ensure it's only shown once
   // }
-
-
-
 }
