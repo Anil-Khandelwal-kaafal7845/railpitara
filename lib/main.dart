@@ -63,7 +63,7 @@ Future<void> main() async {
   }
   
   await Firebase.initializeApp(
-      name: 'omtv-32b09', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako.apps.googleusercontent.com</string>
+	<string>188395223241-icetli8fdrkfnd6790jui6dr60fnjeqs.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako</string>
+	<string>com.googleusercontent.apps.188395223241-icetli8fdrkfnd6790jui6dr60fnjeqs</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com</string>
+	<string>188395223241-fgfqaqmjvkl35bvc6ft1h6jlrukrkggp.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s</string>
+	<string>AIzaSyC3xbbflZr438bgFI7yp329OPpEoAmY7kI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>151680591442</string>
+	<string>188395223241</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ott.chulltvott</string>
 	<key>PROJECT_ID</key>
-	<string>omtv-32b09</string>
+	<string>chulltv</string>
 	<key>STORAGE_BUCKET</key>
-	<string>omtv-32b09.firebasestorage.app</string>
+	<string>chulltv.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:151680591442:ios:9988a0ff6b7d58f308e18b</string>
+	<string>1:188395223241:ios:00578283d1467c2f62b518</string>
 </dict>
 </plist>

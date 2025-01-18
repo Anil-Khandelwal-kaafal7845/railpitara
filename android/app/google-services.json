@@ -1,64 +1,48 @@
 {
   "project_info": {
-    "project_number": "151680591442",
-    "project_id": "omtv-32b09",
-    "storage_bucket": "omtv-32b09.firebasestorage.app"
+    "project_number": "188395223241",
+    "project_id": "chulltv",
+    "storage_bucket": "chulltv.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:151680591442:android:9bf7d041290af0ae08e18b",
+        "mobilesdk_app_id": "1:188395223241:android:ae57c1a5fa5ab1cf62b518",
         "android_client_info": {
           "package_name": "com.ott.chulltvott"
         }
       },
       "oauth_client": [
         {
-          "client_id": "151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com",
+          "client_id": "188395223241-fgfqaqmjvkl35bvc6ft1h6jlrukrkggp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ott.chulltvott",
-            "certificate_hash": "a586d5ad0867c0a2f8a1539abeea3d2a2f7af563"
+            "certificate_hash": "2865ed11bc80266a7b243e1247fff41954f7a337"
           }
         },
         {
-          "client_id": "151680591442-fqf0ai2mv5d75j6lr1nu9b3hg8m4d1et.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ott.chulltvott",
-            "certificate_hash": "84bf9f4eedbb0b02c889815ddf0a19a3e3e77286"
-          }
-        },
-        {
-          "client_id": "151680591442-vjupitiamr3p27kttm30cmkifps9lgrd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ott.chulltvott",
-            "certificate_hash": "f22588b102afbdd2fb8215ff92d0c070980bbd22"
-          }
-        },
-        {
-          "client_id": "151680591442-rq6gv0b7odgula7haqt3b11nec0qivcv.apps.googleusercontent.com",
+          "client_id": "188395223241-4cg0vg6bvss6la2e8ckm8musv0j87b52.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0"
+          "current_key": "AIzaSyAQDNHTjU12AF6b68AKyYSDj6wOhQh8PvY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "151680591442-j25ap0fu8f133s9v5fcn0o2ld5jisakm.apps.googleusercontent.com",
+              "client_id": "188395223241-4cg0vg6bvss6la2e8ckm8musv0j87b52.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "151680591442-02fhihanbivurf02mk316sgcnj2lq62p.apps.googleusercontent.com",
+              "client_id": "188395223241-icetli8fdrkfnd6790jui6dr60fnjeqs.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.ott.omtvapp.ott"
+                "bundle_id": "com.ott.chulltvott"
               }
             }
           ]

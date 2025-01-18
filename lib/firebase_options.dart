@@ -50,23 +50,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAC7DiHnMvE0UreF6EzIvWTs3Ngpk-1tY0',
-    appId: '1:151680591442:android:9bf7d041290af0ae08e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.firebasestorage.app',
+    apiKey: 'AIzaSyAQDNHTjU12AF6b68AKyYSDj6wOhQh8PvY',
+    appId: '1:188395223241:android:ae57c1a5fa5ab1cf62b518',
+    messagingSenderId: '188395223241',
+    projectId: 'chulltv',
+    storageBucket: 'chulltv.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCjMMc6MEdaWKFd0BItzZA3WicBzW_CG3s',
-    appId: '1:151680591442:ios:9988a0ff6b7d58f308e18b',
-    messagingSenderId: '151680591442',
-    projectId: 'omtv-32b09',
-    storageBucket: 'omtv-32b09.firebasestorage.app',
-    androidClientId:
-        '151680591442-45clk6nkkb3pm2jvmb7958ohvbvrbbvr.apps.googleusercontent.com',
-    iosClientId:
-        '151680591442-6nhlg9gl0noacg2mkb2bmflqkpv90ako.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC3xbbflZr438bgFI7yp329OPpEoAmY7kI',
+    appId: '1:188395223241:ios:00578283d1467c2f62b518',
+    messagingSenderId: '188395223241',
+    projectId: 'chulltv',
+    storageBucket: 'chulltv.firebasestorage.app',
+    androidClientId: '188395223241-fgfqaqmjvkl35bvc6ft1h6jlrukrkggp.apps.googleusercontent.com',
+    iosClientId: '188395223241-icetli8fdrkfnd6790jui6dr60fnjeqs.apps.googleusercontent.com',
     iosBundleId: 'com.ott.chulltvott',
   );
+
 }
