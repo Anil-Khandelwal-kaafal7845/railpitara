@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dtlive/utils/utils.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:video_player/video_player.dart';
 
 class Splash extends StatefulWidget {
@@ -37,14 +38,13 @@ class SplashState extends State<Splash> {
   String? seen;
   SharedPre sharedPre = SharedPre();
   bool _initialized = false;
-    late VideoPlayerController _controller;
-
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
 
-     _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+    _controller = VideoPlayerController.asset("assets/images/splash.mp4")
       ..initialize().then((_) {
         setState(() {
           _initialized = true;
@@ -59,7 +59,7 @@ class SplashState extends State<Splash> {
     });
   }
 
-    @override
+  @override
   void dispose() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
@@ -67,32 +67,31 @@ class SplashState extends State<Splash> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-   if (Constant.userID != null){
+    if (Constant.userID != null) {
       analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Splash Screen",
-     "user_id": Constant.userID, 
-  },
-);
-
+        name: "screen_view",
+        parameters: {
+          "screen_name": "Splash Screen",
+          "user_id": Constant.userID,
+        },
+      );
     }
-  
-  return Scaffold(
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Splash Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
+    return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
-        color: Colors
-            .transparent, 
+        color: Colors.transparent,
         child: _initialized
             ? AspectRatio(
-
                 aspectRatio: _controller.value.aspectRatio,
-
                 child: VideoPlayer(_controller),
               )
             : MyImage(

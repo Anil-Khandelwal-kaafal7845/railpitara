@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/utils/color.dart';
@@ -7,6 +5,7 @@ import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../provider/channelsectionprovider.dart';
@@ -21,7 +20,7 @@ class NewLivePlayer extends StatefulWidget {
 }
 
 class _NewLivePlayerState extends State<NewLivePlayer>
-  with TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String? videoId;
   late ChannelSectionProvider channelSectionProvider;
   bool isLoading = true;
@@ -48,7 +47,8 @@ class _NewLivePlayerState extends State<NewLivePlayer>
       if (channelSectionProvider.channelSectionModel.result != null) {
         _tabController = TabController(
           length: channelSectionProvider.channelSectionModel.result!
-              .where((section) => section.data != null && section.data!.isNotEmpty)
+              .where(
+                  (section) => section.data != null && section.data!.isNotEmpty)
               .length,
           vsync: this,
         );
@@ -141,13 +141,21 @@ class _NewLivePlayerState extends State<NewLivePlayer>
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Live Channels Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Live Channels Screen",
+        "user_id": Constant.userID,
+      },
+    );
+
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Live Channels Screen',
+      'user_id': Constant.userID.toString(),
+    };
+
+    Singular.eventWithArgs('screen_view', screenViewEvent);
+
     log("LENGTHHH ${channelSectionProvider.channelSectionModel.result?.length}");
     final List<Result>? validResults = channelSectionProvider
         .channelSectionModel.result
@@ -213,8 +221,8 @@ class _NewLivePlayerState extends State<NewLivePlayer>
                                       AspectRatio(
                                         aspectRatio: _liveNormalController!
                                             .value.aspectRatio,
-                                        child: VideoPlayer(
-                                            _liveNormalController!),
+                                        child:
+                                            VideoPlayer(_liveNormalController!),
                                       ),
                                       IconButton(
                                         icon: Icon(
@@ -335,9 +343,12 @@ class _NewLivePlayerState extends State<NewLivePlayer>
                                                                 .name ??
                                                             "no name",
                                                         style: TextStyle(
-                                                            color: isTileSelected
-                                                                ? Colors.black
-                                                                : Colors.white,
+                                                            color:
+                                                                isTileSelected
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors
+                                                                        .white,
                                                             fontSize: 13,
                                                             overflow:
                                                                 TextOverflow
@@ -363,4 +374,3 @@ class _NewLivePlayerState extends State<NewLivePlayer>
               );
   }
 }
-

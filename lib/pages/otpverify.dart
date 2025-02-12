@@ -17,6 +17,7 @@ import 'package:pinput/pinput.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 import '../webservice/apiservices.dart';
 
@@ -25,7 +26,8 @@ class OTPVerify extends StatefulWidget {
   final String type;
   final String email;
 
-  const OTPVerify(this.mobileNumber ,this.type,this.email , {Key? key}) : super(key: key);
+  const OTPVerify(this.mobileNumber, this.type, this.email, {Key? key})
+      : super(key: key);
 
   @override
   State<OTPVerify> createState() => OTPVerifyState();
@@ -42,10 +44,8 @@ class OTPVerifyState extends State<OTPVerify> {
   int? forceResendingToken;
   bool codeResended = false;
 
-
   late Timer _resendTimer;
   int _resendCountdown = 30;
-
 
   @override
   void initState() {
@@ -59,17 +59,16 @@ class OTPVerifyState extends State<OTPVerify> {
   }
 
   void startResendTimer() {
-  _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-    setState(() {
-      if (_resendCountdown > 0) {
-        _resendCountdown--;
-      } else {
-        _resendTimer.cancel(); // Stop the timer when it reaches 0
-      }
+    _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_resendCountdown > 0) {
+          _resendCountdown--;
+        } else {
+          _resendTimer.cancel(); // Stop the timer when it reaches 0
+        }
+      });
     });
-  });
-}
-
+  }
 
   //   void startResendTimer() {
   //   _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -83,15 +82,14 @@ class OTPVerifyState extends State<OTPVerify> {
   //   });
   // }
 
-
   _sendWhatsappOTP() async {
-    await ApiService().loginWithWhatsapp(widget.mobileNumber ,widget.type ,widget.email);
+    await ApiService()
+        .loginWithWhatsapp(widget.mobileNumber, widget.type, widget.email);
   }
 
- 
   @override
   void dispose() {
-  _resendTimer.cancel();
+    _resendTimer.cancel();
     FocusManager.instance.primaryFocus?.unfocus();
     numberController.dispose();
     super.dispose();
@@ -99,6 +97,11 @@ class OTPVerifyState extends State<OTPVerify> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'OTP Verify Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       backgroundColor: appBgColor,
       body: SafeArea(
@@ -132,61 +135,61 @@ class OTPVerifyState extends State<OTPVerify> {
                 ),
                 const SizedBox(height: 30),
 
-                widget.mobileNumber.isNotEmpty?
-                MyText(
-                  color: white,
-                  text: "verifyphonenumber",
-                  fontsizeNormal: 22,
-                  multilanguage: true,
-                  fontweight: FontWeight.bold,
-                  maxline: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textalign: TextAlign.center,
-                  fontstyle: FontStyle.normal,
-                ):  MyText(
-                  color: white,
-                  text: "verifyemailid",
-                  fontsizeNormal: 22,
-                  multilanguage: true,
-                  fontweight: FontWeight.bold,
-                  maxline: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textalign: TextAlign.center,
-                  fontstyle: FontStyle.normal,
-                ),
-             
+                widget.mobileNumber.isNotEmpty
+                    ? MyText(
+                        color: white,
+                        text: "verifyphonenumber",
+                        fontsizeNormal: 22,
+                        multilanguage: true,
+                        fontweight: FontWeight.bold,
+                        maxline: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        fontstyle: FontStyle.normal,
+                      )
+                    : MyText(
+                        color: white,
+                        text: "verifyemailid",
+                        fontsizeNormal: 22,
+                        multilanguage: true,
+                        fontweight: FontWeight.bold,
+                        maxline: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        fontstyle: FontStyle.normal,
+                      ),
 
-
-             
-             
                 const SizedBox(height: 8),
 
-                 widget.mobileNumber.isNotEmpty?
-                MyText(
-                  color: otherColor,
-                  text: "code_sent_desc",
-                  fontsizeNormal: 15,
-                  fontweight: FontWeight.w500,
-                  maxline: 3,
-                  overflow: TextOverflow.ellipsis,
-                  textalign: TextAlign.center,
-                  multilanguage: true,
-                  fontstyle: FontStyle.normal,
-                ): MyText(
-                  color: otherColor,
-                  text: "code_sent_desc_email",
-                  fontsizeNormal: 15,
-                  fontweight: FontWeight.w500,
-                  maxline: 3,
-                  overflow: TextOverflow.ellipsis,
-                  textalign: TextAlign.center,
-                  multilanguage: true,
-                  fontstyle: FontStyle.normal,
-                ),
+                widget.mobileNumber.isNotEmpty
+                    ? MyText(
+                        color: otherColor,
+                        text: "code_sent_desc",
+                        fontsizeNormal: 15,
+                        fontweight: FontWeight.w500,
+                        maxline: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        multilanguage: true,
+                        fontstyle: FontStyle.normal,
+                      )
+                    : MyText(
+                        color: otherColor,
+                        text: "code_sent_desc_email",
+                        fontsizeNormal: 15,
+                        fontweight: FontWeight.w500,
+                        maxline: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textalign: TextAlign.center,
+                        multilanguage: true,
+                        fontstyle: FontStyle.normal,
+                      ),
 
                 MyText(
                   color: otherColor,
-                  text: widget.mobileNumber.isNotEmpty ? widget.mobileNumber : widget.email,
+                  text: widget.mobileNumber.isNotEmpty
+                      ? widget.mobileNumber
+                      : widget.email,
                   fontsizeNormal: 15,
                   fontweight: FontWeight.w500,
                   maxline: 3,
@@ -195,7 +198,7 @@ class OTPVerifyState extends State<OTPVerify> {
                   multilanguage: false,
                   fontstyle: FontStyle.normal,
                 ),
-               
+
                 const SizedBox(height: 40),
 
                 /* Enter Received OTP */
@@ -303,38 +306,37 @@ class OTPVerifyState extends State<OTPVerify> {
                 //   ),
                 // ),
 
-InkWell(
-  borderRadius: BorderRadius.circular(10),
-  onTap: _resendCountdown == 0
-      ? () {
-          _sendWhatsappOTP();
-          setState(() {
-            _resendCountdown = 30; // Reset the countdown
-          });
-          startResendTimer(); // Start the countdown again
-        }
-      : null,
-  child: Container(
-    constraints: const BoxConstraints(minWidth: 70),
-    padding: const EdgeInsets.all(5),
-    child: _resendCountdown == 0
-        ? Text(
-            "Resend",
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 20),
-          )
-        : Text(
-            "Resend OTP in 00:${_resendCountdown.toString().padLeft(2, '0')} second",
-            style: TextStyle(
-                color: whiteLight,
-                fontWeight: FontWeight.w400,
-                fontSize: 14),
-          ),
-  ),
-),
-
+                InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: _resendCountdown == 0
+                      ? () {
+                          _sendWhatsappOTP();
+                          setState(() {
+                            _resendCountdown = 30; // Reset the countdown
+                          });
+                          startResendTimer(); // Start the countdown again
+                        }
+                      : null,
+                  child: Container(
+                    constraints: const BoxConstraints(minWidth: 70),
+                    padding: const EdgeInsets.all(5),
+                    child: _resendCountdown == 0
+                        ? Text(
+                            "Resend",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20),
+                          )
+                        : Text(
+                            "Resend OTP in 00:${_resendCountdown.toString().padLeft(2, '0')} second",
+                            style: TextStyle(
+                                color: whiteLight,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14),
+                          ),
+                  ),
+                ),
 
                 //     InkWell(
                 //   borderRadius: BorderRadius.circular(10),
@@ -344,7 +346,7 @@ InkWell(
                 //       _resendCountdown = 30; // Reset the countdown
                 //     });
                 //     startResendTimer(); // Start the countdown again
-                //   } : null, 
+                //   } : null,
                 //   child: Container(
                 //     constraints: const BoxConstraints(minWidth: 70),
                 //     padding: const EdgeInsets.all(5),
@@ -360,12 +362,9 @@ InkWell(
                 //                 color: whiteLight,
                 //                 fontWeight: FontWeight.w400  ,
                 //                 fontSize: 14)),
-                    
+
                 //   ),
                 // ),
-            
-              
-              
               ],
             ),
           ),
@@ -445,10 +444,11 @@ InkWell(
     //     "phoneAuthCredential.verificationId =====> ${phoneAuthCredential.verificationId}");
 
     await ApiService()
-        .verifyLoginWithWhatsapp(widget.mobileNumber, pinPutController.text ,widget.email)
+        .verifyLoginWithWhatsapp(
+            widget.mobileNumber, pinPutController.text, widget.email)
         .then((value) async {
       if (value) {
-        _login(widget.mobileNumber.toString() ,widget.email.toString());
+        _login(widget.mobileNumber.toString(), widget.email.toString());
       } else {
         await prDialog.hide();
         if (!mounted) return;
@@ -489,8 +489,7 @@ InkWell(
     // }
   }
 
-
-  _login(String mobile ,String email) async {
+  _login(String mobile, String email) async {
     debugPrint("click on Submit mobile => $mobile");
     debugPrint("click on Submit mobile => $email");
     var generalProvider = Provider.of<GeneralProvider>(context, listen: false);
@@ -500,7 +499,7 @@ InkWell(
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     final sectionDataProvider =
         Provider.of<SectionDataProvider>(context, listen: false);
-    await generalProvider.loginWithOTP(mobile ,email);
+    await generalProvider.loginWithOTP(mobile, email);
 
     if (!generalProvider.loading) {
       if (generalProvider.loginOTPModel.status == 200) {
@@ -526,16 +525,16 @@ InkWell(
 
         await homeProvider.setLoading(true);
         await sectionDataProvider.getSectionBanner("0", "1");
-        await sectionDataProvider.getSectionList("0", "1","0");
+        await sectionDataProvider.getSectionList("0", "1", "0");
 
         await prDialog.hide();
         if (!mounted) return;
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const Bottombar()),
-            (Route<dynamic> route) => false,
-          );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const Bottombar()),
+          (Route<dynamic> route) => false,
+        );
       } else {
         await prDialog.hide();
         if (!mounted) return;
@@ -544,6 +543,4 @@ InkWell(
       }
     }
   }
-
-
 }

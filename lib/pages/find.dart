@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -35,7 +36,6 @@ class FindState extends State<Find> {
 
   @override
   void initState() {
-
     super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
@@ -197,6 +197,14 @@ class FindState extends State<Find> {
 //     "user_id": Constant.userID,
 //   },
 // );
+
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Search Screen',
+      'user_id': Constant.userID.toString(),
+    };
+
+    Singular.eventWithArgs('screen_view', screenViewEvent);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: appBgColor,
@@ -255,7 +263,7 @@ class FindState extends State<Find> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                               AlignedGridView.count(
+                              AlignedGridView.count(
                                 shrinkWrap: true,
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 8,
@@ -369,6 +377,12 @@ class FindState extends State<Find> {
               child: TextField(
                 onSubmitted: (value) async {
                   if (value.isNotEmpty) {
+                    Map<String, Object> screenViewEvent = {
+                      'screen_name': 'Search_content',
+                      "search_item": value,
+                      'user_id': Constant.userID.toString(),
+                    };
+                    Singular.eventWithArgs('Search_content', screenViewEvent);
                     await Navigator.push(
                       context,
                       MaterialPageRoute(

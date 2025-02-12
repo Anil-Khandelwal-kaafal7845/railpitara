@@ -5,11 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class PlayerVideo extends StatefulWidget {
   final int? videoId, videoType, typeId, otherId, stopTime;
   final String? playType, videoUrl, vUploadType, videoThumb;
-  final dynamic trailerLibraryId, trailerUrlVideoId, videoLibraryId, videoUrlId, isLive;
+  final dynamic trailerLibraryId,
+      trailerUrlVideoId,
+      videoLibraryId,
+      videoUrlId,
+      isLive;
 
   PlayerVideo(
       this.playType,
@@ -21,9 +26,13 @@ class PlayerVideo extends StatefulWidget {
       this.stopTime,
       this.vUploadType,
       this.videoThumb,
-      {Key? key, this.isLive,
-        this.trailerLibraryId, this.videoLibraryId, this.trailerUrlVideoId, this.videoUrlId
-      }) : super(key: key);
+      {Key? key,
+      this.isLive,
+      this.trailerLibraryId,
+      this.videoLibraryId,
+      this.trailerUrlVideoId,
+      this.videoUrlId})
+      : super(key: key);
 
   @override
   State<PlayerVideo> createState() => _PlayerVideoState();
@@ -31,7 +40,7 @@ class PlayerVideo extends StatefulWidget {
 
 class _PlayerVideoState extends State<PlayerVideo> {
   bool backButtonClicked = false;
-    DateTime? videoStartTime; // To track when video starts
+  DateTime? videoStartTime; // To track when video starts
   DateTime? videoEndTime; // To track when video ends
 
   @override
@@ -40,9 +49,9 @@ class _PlayerVideoState extends State<PlayerVideo> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-  
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-     videoStartTime = DateTime.now(); 
+    videoStartTime = DateTime.now();
     super.initState();
   }
 
@@ -58,7 +67,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
-   void _logVideoAnalytics() {
+  void _logVideoAnalytics() {
     if (videoStartTime != null && videoEndTime != null) {
       final watchDuration = videoEndTime!.difference(videoStartTime!).inSeconds;
 
@@ -74,27 +83,42 @@ class _PlayerVideoState extends State<PlayerVideo> {
           "is_live": widget.isLive == 1 ? "yes" : "no",
         },
       );
+      Map<String, Object> screenViewEvent = {
+        'event_name': 'video_watch_event',
+        "video_id": '${widget.videoId}',
+
+        "watch_duration": '${watchDuration}second', // Duration in seconds
+        "play_type": '${widget.playType}',
+        "video_url": '${widget.videoUrl}',
+        "video_type": '${widget.videoType}',
+        "is_live": widget.isLive == 1 ? "yes" : "no",
+        'user_id': Constant.userID.toString(),
+      };
+      Singular.eventWithArgs('video_watch_event', screenViewEvent);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Player Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Player Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Player Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
-      body: widget.playType == "Trailer"
-      
-          ? Stack(
-  children: [
-    InAppWebView(
-      initialData: InAppWebViewInitialData(
-        data: '''
+        body: widget.playType == "Trailer"
+            ? Stack(
+                children: [
+                  InAppWebView(
+                    initialData: InAppWebViewInitialData(
+                      data: '''
           <!DOCTYPE html>
           <html>
           <head>
@@ -150,54 +174,55 @@ class _PlayerVideoState extends State<PlayerVideo> {
           </body>
           </html>
           ''',
-      ),
-      initialOptions: InAppWebViewGroupOptions(
-        crossPlatform: InAppWebViewOptions(
-          disableVerticalScroll: true,
-          disableHorizontalScroll: true,
-          disableContextMenu: true,
-          useOnLoadResource: true,
-          javaScriptEnabled: true,
-          mediaPlaybackRequiresUserGesture: false,
-          userAgent: 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
-        ),
-      ),
-    ),
-    Positioned(
-      top: 40.0,
-      left: 20.0,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-  width: 45, // Diameter of the circle
-  height: 45, // Diameter of the circle
-  decoration: BoxDecoration(
-    color: Colors.white, // Background color of the container
-    shape: BoxShape.circle, // Makes the container circular
-  ),
-  child: Center(
-    child: Icon(
-      CupertinoIcons.back, // Icon to display
-      color: Colors.black, // Icon color
-      size: 25, // Icon size
-    ),
-  ),
-),
-      ),
-    ),
-  ],
-)
-
-          : widget.isLive == 1
-          ?  TestPlayerWeb(loadURL: widget.videoUrl ?? '') : 
-          
-       Stack(
-  children: [
-    InAppWebView(
-      initialData: InAppWebViewInitialData(
-        data: '''
+                    ),
+                    initialOptions: InAppWebViewGroupOptions(
+                      crossPlatform: InAppWebViewOptions(
+                        disableVerticalScroll: true,
+                        disableHorizontalScroll: true,
+                        disableContextMenu: true,
+                        useOnLoadResource: true,
+                        javaScriptEnabled: true,
+                        mediaPlaybackRequiresUserGesture: false,
+                        userAgent:
+                            'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 40.0,
+                    left: 20.0,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 45, // Diameter of the circle
+                        height: 45, // Diameter of the circle
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.white, // Background color of the container
+                          shape:
+                              BoxShape.circle, // Makes the container circular
+                        ),
+                        child: Center(
+                          child: Icon(
+                            CupertinoIcons.back, // Icon to display
+                            color: Colors.black, // Icon color
+                            size: 25, // Icon size
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : widget.isLive == 1
+                ? TestPlayerWeb(loadURL: widget.videoUrl ?? '')
+                : Stack(
+                    children: [
+                      InAppWebView(
+                        initialData: InAppWebViewInitialData(
+                          data: '''
           <!DOCTYPE html>
           <html>
           <head>
@@ -253,25 +278,28 @@ class _PlayerVideoState extends State<PlayerVideo> {
           </body>
           </html>
           ''',
-      ),
-      initialOptions: InAppWebViewGroupOptions(
-        crossPlatform: InAppWebViewOptions(
-          disableVerticalScroll: false,
-          disableHorizontalScroll: false,
-          disableContextMenu: true,
-          useOnLoadResource: true,
-          javaScriptEnabled: true,
-          mediaPlaybackRequiresUserGesture: false,
-          userAgent: 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
-        ),
-      ),
-      onWebViewCreated: (InAppWebViewController controller) {
-        controller.addJavaScriptHandler(handlerName: 'goBack', callback: (args) {
-          Navigator.pop(context);
-        });
-      },
-      onLoadStop: (controller, url) async {
-        await controller.evaluateJavascript(source: '''
+                        ),
+                        initialOptions: InAppWebViewGroupOptions(
+                          crossPlatform: InAppWebViewOptions(
+                            disableVerticalScroll: false,
+                            disableHorizontalScroll: false,
+                            disableContextMenu: true,
+                            useOnLoadResource: true,
+                            javaScriptEnabled: true,
+                            mediaPlaybackRequiresUserGesture: false,
+                            userAgent:
+                                'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+                          ),
+                        ),
+                        onWebViewCreated: (InAppWebViewController controller) {
+                          controller.addJavaScriptHandler(
+                              handlerName: 'goBack',
+                              callback: (args) {
+                                Navigator.pop(context);
+                              });
+                        },
+                        onLoadStop: (controller, url) async {
+                          await controller.evaluateJavascript(source: '''
           document.getElementById('backButton').addEventListener('click', () => {
             if (!window.flutter_inappwebview.backButtonClicked) {
               window.flutter_inappwebview.backButtonClicked = true;
@@ -279,37 +307,35 @@ class _PlayerVideoState extends State<PlayerVideo> {
             }
           });
         ''');
-      },
-    ),
-    Positioned(
-      top: 40.0,
-      left: 20.0,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child:Container(
-  width: 45, // Diameter of the circle
-  height: 45, // Diameter of the circle
-  decoration: BoxDecoration(
-    color: Colors.white, // Background color of the container
-    shape: BoxShape.circle, // Makes the container circular
-  ),
-  child: Center(
-    child: Icon(
-      CupertinoIcons.back, // Icon to display
-      color: Colors.black, // Icon color
-      size: 25, // Icon size
-    ),
-  ),
-),
-
-      ),
-    ),
-  ],
-)
-
-    
-    );
+                        },
+                      ),
+                      Positioned(
+                        top: 40.0,
+                        left: 20.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 45, // Diameter of the circle
+                            height: 45, // Diameter of the circle
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Background color of the container
+                              shape: BoxShape
+                                  .circle, // Makes the container circular
+                            ),
+                            child: Center(
+                              child: Icon(
+                                CupertinoIcons.back, // Icon to display
+                                color: Colors.black, // Icon color
+                                size: 25, // Icon size
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ));
   }
 }

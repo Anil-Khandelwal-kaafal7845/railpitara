@@ -39,6 +39,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:social_share/social_share.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -319,20 +320,24 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       _trailerNormalController?.dispose();
       _trailerNormalController = null;
     }
-  
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Tv Show Details",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Tv Show Details",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Tv Show Details Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -413,7 +418,6 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         color: complimentryColor,
         displacement: 80,
         onRefresh: () async {
-       
           await Future.delayed(const Duration(milliseconds: 1500))
               .then((value) {
             showDetailsProvider.setLoading(true);
@@ -829,30 +833,29 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   onTap: () async {
                                     debugPrint(
                                         "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
-                                  
-                                      if (Constant.userID != null) {
-                                        await showDetailsProvider.setBookMark(
-                                          context,
-                                          widget.typeId,
-                                          widget.videoType,
-                                          widget.videoId,
-                                        );
-                                      } else {
-                                        if ((kIsWeb || Constant.isTV)) {
-                                          Utils.buildWebAlertDialog(
-                                              context, "login", "");
-                                          return;
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return const LoginSocial();
-                                            },
-                                          ),
-                                        );
+
+                                    if (Constant.userID != null) {
+                                      await showDetailsProvider.setBookMark(
+                                        context,
+                                        widget.typeId,
+                                        widget.videoType,
+                                        widget.videoId,
+                                      );
+                                    } else {
+                                      if ((kIsWeb || Constant.isTV)) {
+                                        Utils.buildWebAlertDialog(
+                                            context, "login", "");
+                                        return;
                                       }
-                              
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const LoginSocial();
+                                          },
+                                        ),
+                                      );
+                                    }
                                   },
                                   borderRadius: BorderRadius.circular(5),
                                   child: Consumer<ShowDetailsProvider>(
@@ -3870,32 +3873,31 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         return;
       }
       if (!mounted) return;
-   
-        dynamic isContinue = await Utils.openPlayer(
-            context: context,
-            playType: playType == "Trailer" ? "Trailer" : "Show",
-            videoId: epiID,
-            videoType: vType,
-            typeId: vTypeID,
-            otherId: showID,
-            videoUrl: vUrl,
-            trailerUrl: vUrl,
-            uploadType: vUploadType,
-            videoThumb: videoThumb,
-            vStopTime: stopTime,
-            trailerLibraryId: showTrailerLibraryId,
-            trailerUrlVideoId: showTrailerVideoId,
-            videoLibraryId:showVideoLibraryId ,
-            videoUrlVideoId: showVideoUrlId,
-       );
 
-        debugPrint("isContinue ===> $isContinue");
-        if (isContinue != null && isContinue == true) {
-          await _getData();
-          await getAllEpisode(showDetailsProvider.seasonPos,
-              showDetailsProvider.sectionDetailModel.session);
-        }
+      dynamic isContinue = await Utils.openPlayer(
+        context: context,
+        playType: playType == "Trailer" ? "Trailer" : "Show",
+        videoId: epiID,
+        videoType: vType,
+        typeId: vTypeID,
+        otherId: showID,
+        videoUrl: vUrl,
+        trailerUrl: vUrl,
+        uploadType: vUploadType,
+        videoThumb: videoThumb,
+        vStopTime: stopTime,
+        trailerLibraryId: showTrailerLibraryId,
+        trailerUrlVideoId: showTrailerVideoId,
+        videoLibraryId: showVideoLibraryId,
+        videoUrlVideoId: showVideoUrlId,
+      );
 
+      debugPrint("isContinue ===> $isContinue");
+      if (isContinue != null && isContinue == true) {
+        await _getData();
+        await getAllEpisode(showDetailsProvider.seasonPos,
+            showDetailsProvider.sectionDetailModel.session);
+      }
     } else {
       String? vUrl, vUploadType;
       dynamic showTrailerLibraryId, showTrailerVideoId;
@@ -3925,22 +3927,21 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         }
 
         if (!mounted) return;
-      
-          await Utils.openPlayer(
-              context: context,
-              playType: "Trailer",
-              videoId: 0,
-              videoType: 0,
-              typeId: 0,
-              otherId: 0,
-              videoUrl: vUrl,
-              trailerUrl: vUrl,
-              uploadType: vUploadType,
-              videoThumb: videoThumb,
-              vStopTime: stopTime,
-              trailerLibraryId: showTrailerLibraryId,
-              trailerUrlVideoId: showTrailerVideoId);
 
+        await Utils.openPlayer(
+            context: context,
+            playType: "Trailer",
+            videoId: 0,
+            videoType: 0,
+            typeId: 0,
+            otherId: 0,
+            videoUrl: vUrl,
+            trailerUrl: vUrl,
+            uploadType: vUploadType,
+            videoThumb: videoThumb,
+            vStopTime: stopTime,
+            trailerLibraryId: showTrailerLibraryId,
+            trailerUrlVideoId: showTrailerVideoId);
       } else {
         if (!mounted) return;
         Utils.showSnackbar(context, "info", "episode_not_found", true);

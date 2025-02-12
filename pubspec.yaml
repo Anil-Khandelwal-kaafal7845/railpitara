@@ -138,6 +138,9 @@ dependencies:
   flutter_facebook_auth: ^6.0.4
   salomon_bottom_bar: ^3.3.2
   flutter_gif: ^0.0.4
+  singular_flutter_sdk: ^1.5.1
+  app_tracking_transparency: ^2.0.6+1
+  advertising_id: ^2.7.1
   #test
 
 

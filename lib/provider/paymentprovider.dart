@@ -1,5 +1,3 @@
-
-
 import 'package:dtlive/model/couponmodel.dart';
 import 'package:dtlive/model/paymentoptionmodel.dart';
 import 'package:dtlive/model/paytmmodel.dart';
@@ -7,6 +5,7 @@ import 'package:dtlive/model/successmodel.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class PaymentProvider extends ChangeNotifier {
   PaymentOptionModel paymentOptionModel = PaymentOptionModel();
@@ -31,6 +30,15 @@ class PaymentProvider extends ChangeNotifier {
     debugPrint("applyPackageCouponCode packageId :==> $packageId");
     couponLoading = true;
     couponModel = await ApiService().applyPackageCoupon(couponCode, packageId);
+    Map<String, Object> screenViewEvent = {
+      'event_name': 'Apply Package Coupon',
+      "couponCode": couponCode,
+      "packageId": packageId,
+      "totalAmount": "${couponModel.result?.totalAmount}",
+      "discountAmount": "${couponModel.result?.discountAmount}",
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Apply Package Coupon', screenViewEvent);
     debugPrint("applyPackageCouponCode status :==> ${couponModel.status}");
     debugPrint("applyPackageCouponCode message :==> ${couponModel.message}");
     couponLoading = false;
@@ -47,6 +55,18 @@ class PaymentProvider extends ChangeNotifier {
     couponLoading = true;
     couponModel = await ApiService()
         .applyRentCoupon(couponCode, videoId, typeId, videoType, price);
+    Map<String, Object> screenViewEvent = {
+      'event_name': 'Apply Rent Coupon',
+      "couponCode": couponCode,
+      "videoId": videoId,
+      "typeId": typeId,
+      "videoType": videoType,
+      "price": price,
+      "totalAmount": "${couponModel.result?.totalAmount}",
+      "discountAmount": "${couponModel.result?.discountAmount}",
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Apply Rent Coupon', screenViewEvent);
     debugPrint("applyRentCouponCode status :==> ${couponModel.status}");
     debugPrint("applyRentCouponCode message :==> ${couponModel.message}");
     couponLoading = false;
@@ -79,28 +99,35 @@ class PaymentProvider extends ChangeNotifier {
   }
 
   Future<void> addTransaction(packageId, description, amount, paymentId,
-      currencyCode, couponCode,orderStatus,orderId ,purchesVia) async {
+      currencyCode, couponCode, orderStatus, orderId, purchesVia) async {
     debugPrint("addTransaction userID :==> ${Constant.userID}");
     debugPrint("addTransaction packageId :==> $packageId");
     debugPrint("addTransaction couponCode :==> $couponCode");
     payLoading = true;
     successModel = await ApiService().addTransaction(
-        packageId, description, amount, paymentId, currencyCode, couponCode,orderStatus,orderId,purchesVia);
+        packageId,
+        description,
+        amount,
+        paymentId,
+        currencyCode,
+        couponCode,
+        orderStatus,
+        orderId,
+        purchesVia);
     debugPrint("addTransaction status :==> ${successModel.status}");
     debugPrint("addTransaction message :==> ${successModel.message}");
     payLoading = false;
     notifyListeners();
   }
 
-
-  Future<void> addRentTransaction(
-      videoId, amount, typeId, videoType, couponCode,orderStatus,orderId) async {
+  Future<void> addRentTransaction(videoId, amount, typeId, videoType,
+      couponCode, orderStatus, orderId) async {
     debugPrint("addRentTransaction userID :==> ${Constant.userID}");
     debugPrint("addRentTransaction videoId :==> $videoId");
     debugPrint("addRentTransaction couponCode :==> $couponCode");
     payLoading = true;
-    successModel = await ApiService()
-        .addRentTransaction(videoId, amount, typeId, videoType, couponCode,orderStatus,orderId);
+    successModel = await ApiService().addRentTransaction(
+        videoId, amount, typeId, videoType, couponCode, orderStatus, orderId);
     debugPrint("addRentTransaction status :==> ${successModel.status}");
     debugPrint("addRentTransaction message :==> ${successModel.message}");
     payLoading = false;

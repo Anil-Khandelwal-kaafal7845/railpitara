@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -37,7 +38,6 @@ class SearchState extends State<Search> {
 
   @override
   void initState() {
-
     _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
     searchController.text = widget.searchText ?? "";
@@ -115,7 +115,7 @@ class SearchState extends State<Search> {
       searchController.text = _lastWords.toString();
 
       // Perform the search after closing the dialog
-      await searchProvider.getSearchVideo(context,_lastWords.toString());
+      await searchProvider.getSearchVideo(context, _lastWords.toString());
 
       // Navigate to the search page with the result
       await Navigator.push(
@@ -184,13 +184,18 @@ class SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Search Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Search Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Search Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appBgColor,
@@ -300,8 +305,6 @@ class SearchState extends State<Search> {
                             ],
                           ),
                         ),
-
-                     
                         const SizedBox(height: 22),
                         searchProvider.isVideoClick
                             ? _buildVideoUI()
@@ -364,7 +367,13 @@ class SearchState extends State<Search> {
                 onChanged: (value) async {
                   if (value.isNotEmpty) {
                     await searchProvider.setLoading(true);
-                    await searchProvider.getSearchVideo(context,value);
+                    await searchProvider.getSearchVideo(context, value);
+                    Map<String, Object> screenViewEvent = {
+                      'screen_name': 'Search_content',
+                      "search_item": value,
+                      'user_id': Constant.userID.toString(),
+                    };
+                    Singular.eventWithArgs('search_content', screenViewEvent);
                   }
                 },
                 textInputAction: TextInputAction.done,

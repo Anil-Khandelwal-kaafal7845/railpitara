@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/services.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class TestPlayerWeb extends StatefulWidget {
   final String loadURL;
@@ -49,13 +50,18 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
 
   @override
   Widget build(BuildContext context) {
-         analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Player Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Player Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Player Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     // HTML player code with autoplay and muted settings
     String htmlPlayer = '''
       <!DOCTYPE html>
@@ -135,7 +141,7 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
               },
             ),
           ),
-          
+
           // Black background with a loading indicator while the web view is loading
           if (_isLoading)
             Positioned.fill(
@@ -148,7 +154,7 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
                 ),
               ),
             ),
-          
+
           // Back button positioned on top, even in full-screen mode
           Positioned(
             top: 50.0, // Adjust as per your design
@@ -156,7 +162,7 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
             child: GestureDetector(
               onTap: () {
                 // When the back button is pressed, navigate back
-                Navigator.pop(context);  // Exit the screen
+                Navigator.pop(context); // Exit the screen
               },
               child: Container(
                 padding: EdgeInsets.all(0),
@@ -173,4 +179,3 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
     );
   }
 }
-

@@ -17,6 +17,7 @@
     "verifyemailid": "Verify Email Id", 
     "language_": "Language",
     "category": "Category",
+    "maturityrating": "MaturityRating",
     "accountdetails": "Account details",
     "manageprofile": "Manage your profile",
     "subsciption": "Subscription",

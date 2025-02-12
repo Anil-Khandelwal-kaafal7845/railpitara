@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class RentStore extends StatefulWidget {
   const RentStore({Key? key}) : super(key: key);
@@ -45,13 +46,18 @@ class RentStoreState extends State<RentStore> {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Rent Stor",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Rent Stor",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Rent Stor Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     if (kIsWeb || Constant.isTV) {
       return Scaffold(
         backgroundColor: appBgColor,

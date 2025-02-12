@@ -28,6 +28,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class LoginSocial extends StatefulWidget {
   const LoginSocial({Key? key}) : super(key: key);
@@ -52,7 +53,6 @@ class LoginSocialState extends State<LoginSocial> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String userEmail = "";
   final RegExp phoneRegExp = RegExp(r'^[6-9]\d{9}$');
-
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class LoginSocialState extends State<LoginSocial> {
 
   String baseUrl = Constant.baseurlwithoutapi;
 
-_getData() async {
+  _getData() async {
     String? privacyUrl, termsConditionUrl;
     await generalProvider.getPages();
     if (!generalProvider.loading) {
@@ -120,7 +120,6 @@ _getData() async {
       setState(() {});
     });
   }
-
 
   // _getData() async {
   //   String? privacyUrl, termsConditionUrl;
@@ -182,13 +181,18 @@ _getData() async {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Login Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Login Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Login Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     print("EMAIL KYA H ---${generalProvider.isEmail}");
     return Scaffold(
       backgroundColor: appBgColor,
@@ -249,7 +253,7 @@ _getData() async {
                           //   textalign: TextAlign.center,
                           //   fontstyle: FontStyle.normal,
                           // ),
-                        
+
                           const SizedBox(height: 30),
 
                           Container(
@@ -428,10 +432,9 @@ _getData() async {
 
                           InkWell(
                             onTap: () {
-
                               debugPrint(
                                   "Click mobileNumber ==> $mobileNumber");
-                            
+
                               if (numberController.text.trim().isEmpty ||
                                   numberController.text.length < 10) {
                                 // Show Snackbar if phone number is empty or less than 10 digits
@@ -441,7 +444,7 @@ _getData() async {
                                   .hasMatch(numberController.text.trim())) {
                                 // Check if the entered phone number is valid
                                 String phoneNumberToSend =
-                                    '+91'+numberController.text.trim();
+                                    '+91' + numberController.text.trim();
                                 print(
                                     "NOW NUMBER WITH IS --${phoneNumberToSend}");
                                 Navigator.of(context).push(
@@ -880,6 +883,7 @@ _getData() async {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
+
   Future<User?> signInWithApple() async {
     // Generate a nonce to prevent replay attacks
     final rawNonce = generateNonce();
@@ -941,7 +945,6 @@ _getData() async {
       return null;
     }
   }
-
 
   // Future<User?> signInWithApple() async {
   //   // To prevent replay attacks with the credential returned from Apple, we

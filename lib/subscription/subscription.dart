@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({
@@ -41,7 +42,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
   CarouselController pageController = CarouselController();
   int selectedIndex = 0;
   late HomeProvider homeProvider;
-    late GeneralProvider generalProvider;
+  late GeneralProvider generalProvider;
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
         Provider.of<SubscriptionProvider>(context, listen: false);
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
 
-           generalProvider.getGeneralsetting(context);
+    generalProvider.getGeneralsetting(context);
     super.initState();
     _getData();
   }
@@ -102,7 +103,14 @@ class SubscriptionState extends State<Subscription> with RouteAware {
             "user_id": Constant.userID,
           },
         );
-
+        Map<String, Object> screenViewEvent = {
+          'event_name': 'choose_subscription_plan_pay',
+          'user_id': Constant.userID.toString(),
+          "package_id": '${packageList?[index].id}',
+          "package_name": '${packageList?[index].name}',
+          "package_price": '${packageList?[index].price}',
+        };
+        Singular.eventWithArgs('choose_subscription_plan_pay', screenViewEvent);
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -417,6 +425,11 @@ class SubscriptionState extends State<Subscription> with RouteAware {
         "user_id": Constant.userID,
       },
     );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Subscription Package Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     if (kIsWeb) {
       return Scaffold(
         backgroundColor: appBgColor,
@@ -497,7 +510,9 @@ class SubscriptionState extends State<Subscription> with RouteAware {
           children: [
             _buildBenefits(packageList, selectedIndex),
             buildMobileItem(packageList),
-            SizedBox(height: 5,) ,
+            SizedBox(
+              height: 5,
+            ),
             GestureDetector(
               onTap: () {
                 _checkPackageAndShowBottomSheet(
@@ -569,6 +584,14 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                     "user_id": Constant.userID,
                   },
                 );
+                Map<String, Object> screenViewEvent = {
+                  'event_name': 'package_selected',
+                  'user_id': Constant.userID.toString(),
+                  "package_id": '${packageList?[index].id}',
+                  "package_name": '${packageList?[index].name}',
+                  "package_price": '${packageList?[index].price}',
+                };
+                Singular.eventWithArgs('package_selected', screenViewEvent);
               },
               child: Container(
                 child: Card(
@@ -614,51 +637,51 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                           fontweight: FontWeight.w600,
                           fontstyle: FontStyle.normal,
                         ),
-
-                          generalProvider.isCoinShow == "1"?
-                        MyText(
-                          color: isPurchased ? white : subscriblue,
-                          text: "or",
-                          textalign: TextAlign.center,
-                          fontsizeNormal: 13,
-                          fontsizeWeb: 13,
-                          maxline: 1,
-                          multilanguage: false,
-                          overflow: TextOverflow.ellipsis,
-                          fontweight: FontWeight.w600,
-                          fontstyle: FontStyle.normal,
-                        )   :SizedBox.shrink(),
-
-                        generalProvider.isCoinShow == "1"?
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:
-                                    "${packageList[index].coinAmount.toString()} ",
-                                style: TextStyle(
-                                  color: isPurchased ? white : subscriblue,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.normal,
+                        generalProvider.isCoinShow == "1"
+                            ? MyText(
+                                color: isPurchased ? white : subscriblue,
+                                text: "or",
+                                textalign: TextAlign.center,
+                                fontsizeNormal: 13,
+                                fontsizeWeb: 13,
+                                maxline: 1,
+                                multilanguage: false,
+                                overflow: TextOverflow.ellipsis,
+                                fontweight: FontWeight.w600,
+                                fontstyle: FontStyle.normal,
+                              )
+                            : SizedBox.shrink(),
+                        generalProvider.isCoinShow == "1"
+                            ? RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          "${packageList[index].coinAmount.toString()} ",
+                                      style: TextStyle(
+                                        color:
+                                            isPurchased ? white : subscriblue,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FontStyle.normal,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "coin",
+                                      style: TextStyle(
+                                        color:
+                                            isPurchased ? white : subscriblue,
+                                        fontSize:
+                                            25, // Smaller font size for the "coin" text
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FontStyle.normal,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              TextSpan(
-                                text: "coin",
-                                style: TextStyle(
-                                  color: isPurchased ? white : subscriblue,
-                                  fontSize:
-                                      25, // Smaller font size for the "coin" text
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                   
-                   :SizedBox.shrink(),
+                              )
+                            : SizedBox.shrink(),
                       ],
                     ),
                   ),

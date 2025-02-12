@@ -26,6 +26,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:singular_flutter_sdk/singular.dart';
 
 class LoginSocialEmail extends StatefulWidget {
   const LoginSocialEmail({Key? key}) : super(key: key);
@@ -168,6 +169,11 @@ class LoginSocialState extends State<LoginSocialEmail> {
         "user_id": Constant.userID,
       },
     );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Email Login',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -201,7 +207,7 @@ class LoginSocialState extends State<LoginSocialEmail> {
                   //   "Enter your Email to login",
                   //   style: TextStyle(color: otherColor, fontSize: 19),
                   // ),
-                 
+
                   const SizedBox(height: 30),
                   Container(
                     padding: EdgeInsets.only(left: 12),
@@ -359,52 +365,54 @@ class LoginSocialState extends State<LoginSocialEmail> {
                   const SizedBox(height: 25),
 
                   /* Mobile Login Button */
-                   generalProvider.isMobileLogin == "1"?
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 52,
-                    padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                    margin: const EdgeInsets.only(bottom: 15),
-                    decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    alignment: Alignment.center,
-                    child: InkWell(
-                      onTap: () {
-                        // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginSocial()),
-                            (route) => false);
-                      },
-                      borderRadius: BorderRadius.circular(26),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            CupertinoIcons.phone_fill, // Cupertino icon
-                            size: 28, // Adjust the size as needed
-                            color: Colors.black, // Adjust the color as needed
+                  generalProvider.isMobileLogin == "1"
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 52,
+                          padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(26),
                           ),
-                          const SizedBox(width: 20),
-                          MyText(
-                            color: black,
-                            text: "loginwithphone",
-                            fontsizeNormal: 12,
-                            fontsizeWeb: 12,
-                            multilanguage: true,
-                            fontweight: FontWeight.w600,
-                            maxline: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textalign: TextAlign.center,
-                            fontstyle: FontStyle.normal,
+                          alignment: Alignment.center,
+                          child: InkWell(
+                            onTap: () {
+                              // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginSocial()),
+                                  (route) => false);
+                            },
+                            borderRadius: BorderRadius.circular(26),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.phone_fill, // Cupertino icon
+                                  size: 28, // Adjust the size as needed
+                                  color: Colors
+                                      .black, // Adjust the color as needed
+                                ),
+                                const SizedBox(width: 20),
+                                MyText(
+                                  color: black,
+                                  text: "loginwithphone",
+                                  fontsizeNormal: 12,
+                                  fontsizeWeb: 12,
+                                  multilanguage: true,
+                                  fontweight: FontWeight.w600,
+                                  maxline: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textalign: TextAlign.center,
+                                  fontstyle: FontStyle.normal,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ):SizedBox.shrink(),
+                        )
+                      : SizedBox.shrink(),
                   const SizedBox(height: 5),
 
                   /* Google Login Button */

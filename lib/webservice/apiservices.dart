@@ -40,6 +40,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class API {
   final Dio _dio = Dio();
@@ -197,7 +198,13 @@ class ApiService {
       options: optHeaders,
       data: {'type': '3', 'mobile': mobile, 'email': email},
     );
-
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Login Success',
+      'user_id': Constant.userID.toString(),
+      'mobile': mobile,
+      'email': email
+    };
+    Singular.eventWithArgs('Login Success', screenViewEvent);
     loginModel = LoginRegisterModel.fromJson(response.data);
     return loginModel;
   }
@@ -218,10 +225,16 @@ class ApiService {
         'email': email,
       },
     );
-
     if (response.statusCode == 200) {
       return true;
     } else {
+      Map<String, Object> screenViewEvent = {
+        'screen_name': 'Login Failed',
+        'user_id': Constant.userID.toString(),
+        'mobile': mobile,
+        'email': email
+      };
+      Singular.eventWithArgs('Login Failed', screenViewEvent);
       return false;
     }
   }
@@ -356,7 +369,11 @@ class ApiService {
         'name': name,
       },
     );
-
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Profile Update',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Profile Update', screenViewEvent);
     successModel = SuccessModel.fromJson(response.data);
     return successModel;
   }
@@ -465,7 +482,7 @@ class ApiService {
 
   Future<List<VideoData>> viewAll(String sectionId) async {
     String viewAllEndpoint = "view-all";
-     Object appVersion = Platform.isAndroid
+    Object appVersion = Platform.isAndroid
         ? Constant.curentAppVersion
         : Constant.curentiosAppVersion;
     Response response = await dio.post(
@@ -473,9 +490,8 @@ class ApiService {
       options: optHeaders,
       data: {
         'section_id': sectionId,
-         'version': appVersion,
+        'version': appVersion,
         'device': Constant.deviceType
-        
       },
     );
 

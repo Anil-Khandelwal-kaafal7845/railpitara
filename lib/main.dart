@@ -1,6 +1,7 @@
-
 import 'dart:io';
 import 'dart:ui';
+import 'package:advertising_id/advertising_id.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
 import 'package:dtlive/pages/splash.dart';
@@ -44,6 +45,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:singular_flutter_sdk/singular.dart';
+import 'package:singular_flutter_sdk/singular_config.dart';
 import 'package:wakelock/wakelock.dart';
 
 Future<void> main() async {
@@ -52,16 +55,14 @@ Future<void> main() async {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
     await AdHelper.createRewardedAd();
-      print("Google Mobile Ads initialized");
-  //     MobileAds.instance.updateRequestConfiguration(
-  //   RequestConfiguration(
-  //     testDeviceIds: ['F707BCE73FCDC4F761ED40ADF21EB962'], // Replace with your device ID
-  //   ),
-  // );
-
-
+    print("Google Mobile Ads initialized");
+    //     MobileAds.instance.updateRequestConfiguration(
+    //   RequestConfiguration(
+    //     testDeviceIds: ['F707BCE73FCDC4F761ED40ADF21EB962'], // Replace with your device ID
+    //   ),
+    // );
   }
-  
+
   await Firebase.initializeApp(
       name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
@@ -80,6 +81,30 @@ Future<void> main() async {
     'tr',
     'vi'
   ]);
+
+  // Initialize Singular SDK
+
+  // Request App Tracking Transparency Permission
+  final trackingStatus =
+      await AppTrackingTransparency.requestTrackingAuthorization();
+  debugPrint("Tracking Authorization Status: $trackingStatus");
+
+  SingularConfig config = SingularConfig('ott_snap_37c31355',
+      '127028793bbb28d66296b90aef4eddec'); // Replace with your SDK Key and Secret
+  config.customUserId = "${Constant.userID}"; // Optionally set user ID
+
+  // For iOS (Remove this if you are not displaying an ATT prompt)
+  config.waitForTrackingAuthorizationWithTimeoutInterval = 300;
+
+  // Enable SkAdNetwork Support (optional for iOS)
+  config.skAdNetworkEnabled = true;
+
+  // Start Singular SDK with the configuration
+  Singular.start(config);
+
+  debugPrint("Singular SDK Initialized successfully");
+
+  // Initialize Singular done ---
 
   if (!kIsWeb) {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
@@ -128,8 +153,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => VideoDownloadProvider()),
         ChangeNotifierProvider(create: (_) => WatchlistProvider()),
         ChangeNotifierProvider(create: (_) => WalletProvider()),
-
-
       ],
       child: const MyApp(),
     ),
@@ -141,11 +164,10 @@ Future<void> main() async {
   ]);
 }
 
-final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
-
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
 
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -154,10 +176,9 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
-
+  final FirebaseAnalyticsObserver analyticsObserver =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   // final _noScreenshot = NoScreenshot.instance;
@@ -165,7 +186,9 @@ final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(an
   void initState() {
     // _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
+    Singular.event("session_start_event");
     if (!kIsWeb) _getDeviceInfo();
+    getAdvertisingId();
     super.initState();
   }
 
@@ -180,7 +203,10 @@ final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(an
                   builder: (locale) => MaterialApp(
                     navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
-                    navigatorObservers: [routeObserver ,analyticsObserver], //HERE
+                    navigatorObservers: [
+                      routeObserver,
+                      analyticsObserver
+                    ], //HERE
                     theme: ThemeData(
                       primaryColor: colorPrimary,
                       primaryColorDark: colorPrimaryDark,
@@ -236,7 +262,7 @@ final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(an
                   builder: (locale) => MaterialApp(
                     navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
-                   navigatorObservers: [routeObserver ,analyticsObserver], 
+                    navigatorObservers: [routeObserver, analyticsObserver],
 
                     theme: ThemeData(
                       primaryColor: colorPrimary,
@@ -340,6 +366,46 @@ final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(an
               },
               routerConfig: router),
         ));
+  }
+
+  Future<void> getAdvertisingId() async {
+    try {
+      // Check the platform (Android or iOS)
+      if (kIsWeb) {
+        debugPrint("Web platform does not support advertising ID");
+        return;
+      }
+
+      // For Android
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final advertisingId =
+            await AdvertisingId.id(false); // Pass false to not limit tracking
+        if (advertisingId != null) {
+          debugPrint("Google Advertising ID (GAID): $advertisingId");
+
+          // Pass GAID to Singular SDK
+          Singular.setCustomUserId(advertisingId);
+        } else {
+          debugPrint("Failed to retrieve Google Advertising ID (GAID)");
+        }
+      }
+
+      // For iOS
+      else if (defaultTargetPlatform == TargetPlatform.iOS) {
+        final deviceInfo = DeviceInfoPlugin();
+        final iosInfo = await deviceInfo.iosInfo;
+        final idfv = iosInfo.identifierForVendor;
+        debugPrint("iOS Identifier for Vendor (IDFV): $idfv");
+
+        // If you need to get the IDFA (Advertising Identifier)
+        // Note: IDFA requires user permission starting iOS 14.
+        // You may use the package 'idfa' to get it, or check the permission status.
+      } else {
+        debugPrint("Platform not supported for advertising ID retrieval");
+      }
+    } catch (e) {
+      debugPrint("Error fetching Advertising ID: $e");
+    }
   }
 
   _getDeviceInfo() async {

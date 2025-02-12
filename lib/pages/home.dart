@@ -48,6 +48,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import '../model/force_update_model.dart';
@@ -568,6 +569,11 @@ class HomeState extends State<Home> with RouteAware {
         "user_id": Constant.userID,
       },
     );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Home Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: appBgColor,
@@ -1692,6 +1698,12 @@ class HomeState extends State<Home> with RouteAware {
                             await profileProvider.clearProvider();
                             // Firebase Signout
                             await _auth.signOut();
+                            Map<String, Object> screenViewEvent = {
+                              'screen_name': 'LogOut',
+                              'user_id': Constant.userID.toString(),
+                            };
+
+                            Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
@@ -1809,6 +1821,11 @@ class HomeState extends State<Home> with RouteAware {
                             await profileProvider.clearProvider();
                             // Firebase Signout
                             await _auth.signOut();
+                            Map<String, Object> screenViewEvent = {
+                              'screen_name': 'LogOut',
+                              'user_id': Constant.userID.toString(),
+                            };
+                            Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");

@@ -44,6 +44,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:social_share/social_share.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -414,7 +415,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         "user_id": Constant.userID,
       },
     );
-
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Details Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.cast != null &&
           (videoDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -899,6 +904,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                                   "",
                                             },
                                           );
+                                          Map<String, Object> screenViewEvent =
+                                              {
+                                            'video_id': widget.videoId,
+                                            'video_name': videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.name ??
+                                                "",
+                                            'user_id':
+                                                Constant.userID.toString(),
+                                          };
+                                          Singular.eventWithArgs(
+                                              'watch_from_start',
+                                              screenViewEvent);
                                           openPlayer("startOver");
                                         },
                                         child: _buildFeatureBtn(
@@ -924,6 +943,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                                   "",
                                             },
                                           );
+                                          Map<String, Object> screenViewEvent =
+                                              {
+                                            'video_id': widget.videoId,
+                                            'video_name': videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.name ??
+                                                "",
+                                            'user_id':
+                                                Constant.userID.toString(),
+                                          };
+                                          Singular.eventWithArgs(
+                                              'watch_trailer', screenViewEvent);
                                           openPlayer("Trailer");
                                         },
                                         child: _buildFeatureBtn(
@@ -974,7 +1006,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           "user_id": Constant.userID,
                                         },
                                       );
-
+                                      Map<String, Object> screenViewEvent = {
+                                        'event_name': isCurrentlyBookmarked == 1
+                                            ? "watchlist_removed"
+                                            : "watchlist_added",
+                                        "video_id": widget.videoId,
+                                        "video_type": widget.videoType,
+                                        "type_id": widget.typeId,
+                                        "user_id": Constant.userID.toString(),
+                                      };
+                                      Singular.eventWithArgs(
+                                          'Watchlist', screenViewEvent);
                                       await videoDetailsProvider.setBookMark(
                                         context,
                                         widget.typeId,
@@ -1102,6 +1144,66 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 fontstyle: FontStyle.normal,
                               ),
                             ],
+                          ),
+                          Container(
+                            constraints: const BoxConstraints(minHeight: 0),
+                            margin: const EdgeInsets.only(top: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MyText(
+                                  color: white,
+                                  text: "MaturityRating",
+                                  textalign: TextAlign.center,
+                                  fontsizeNormal: 13,
+                                  fontweight: FontWeight.w500,
+                                  fontsizeWeb: 15,
+                                  maxline: 1,
+                                  multilanguage: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontstyle: FontStyle.normal,
+                                ),
+                                const SizedBox(width: 5),
+                                MyText(
+                                  color: white,
+                                  text: ":",
+                                  textalign: TextAlign.center,
+                                  fontsizeNormal: 13,
+                                  fontweight: FontWeight.w500,
+                                  fontsizeWeb: 15,
+                                  maxline: 1,
+                                  multilanguage: false,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontstyle: FontStyle.normal,
+                                ),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: MyText(
+                                    color: white,
+                                    text: (videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.maturityRating ??
+                                                "")
+                                            .isNotEmpty
+                                        ? videoDetailsProvider
+                                                .sectionDetailModel
+                                                .result
+                                                ?.maturityRating ??
+                                            ""
+                                        : "N/A",
+                                    textalign: TextAlign.start,
+                                    fontsizeNormal: 13,
+                                    fontweight: FontWeight.w500,
+                                    fontsizeWeb: 14,
+                                    multilanguage: false,
+                                    maxline: 5,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontstyle: FontStyle.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Container(
                             constraints: const BoxConstraints(minHeight: 0),
@@ -1767,6 +1869,44 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                                     ),
                                                   )
                                                 : const SizedBox.shrink(),
+
+                                            // /* Release Year */
+                                            // (videoDetailsProvider
+                                            //                 .sectionDetailModel
+                                            //                 .result
+                                            //                 ?.maturityRating !=
+                                            //             null &&
+                                            //         videoDetailsProvider
+                                            //                 .sectionDetailModel
+                                            //                 .result
+                                            //                 ?.maturityRating !=
+                                            //             "")
+                                            //     ? Container(
+                                            //         margin:
+                                            //             const EdgeInsets.only(
+                                            //                 right: 10),
+                                            //         child: MyText(
+                                            //           color: whiteLight,
+                                            //           text: videoDetailsProvider
+                                            //                   .sectionDetailModel
+                                            //                   .result
+                                            //                   ?.maturityRating ??
+                                            //               "",
+                                            //           textalign:
+                                            //               TextAlign.center,
+                                            //           fontsizeNormal: 13,
+                                            //           fontsizeWeb: 13,
+                                            //           fontweight:
+                                            //               FontWeight.w500,
+                                            //           multilanguage: false,
+                                            //           maxline: 1,
+                                            //           overflow:
+                                            //               TextOverflow.ellipsis,
+                                            //           fontstyle:
+                                            //               FontStyle.normal,
+                                            //         ),
+                                            //       )
+                                            //     : const SizedBox.shrink(),
 
                                             /* Duration */
                                             (videoDetailsProvider
@@ -2979,6 +3119,21 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                         0,
   //                   },
   //                 );
+  //                  Map<String, Object> screenViewEvent = {
+  //                   'event_name': 'Watch_Rented_video',
+  //                   'video_id':
+  //                       videoDetailsProvider.sectionDetailModel.result?.id ??
+  //                           '',
+  //                   'video_name':
+  //                       videoDetailsProvider.sectionDetailModel.result?.name ??
+  //                           '',
+  //                   'rent_price': videoDetailsProvider
+  //                           .sectionDetailModel.result?.rentPrice ??
+  //                       0,
+  //                   'user_id': Constant.userID.toString(),
+  //                 };
+
+  //                 Singular.eventWithArgs('Watch_Rented_video', screenViewEvent);
   //                 _getData();
   //               }
   //             } else {
@@ -3053,6 +3208,21 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                         0,
   //                   },
   //                 );
+  // Map<String, Object> screenViewEvent = {
+  //                   'event_name': 'Watch_Rented_video',
+  //                   'video_id':
+  //                       videoDetailsProvider.sectionDetailModel.result?.id ??
+  //                           '',
+  //                   'video_name':
+  //                       videoDetailsProvider.sectionDetailModel.result?.name ??
+  //                           '',
+  //                   'rent_price': videoDetailsProvider
+  //                           .sectionDetailModel.result?.rentPrice ??
+  //                       0,
+  //                   'user_id': Constant.userID.toString(),
+  //                 };
+
+  //                 Singular.eventWithArgs('Watch_Rented_video', screenViewEvent);
   //                 _getData();
   //               }
   //             } else {
@@ -3930,7 +4100,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           'video_type': widget.videoType,
                         },
                       );
-
+                      Map<String, Object> screenViewEvent = {
+                        'event_name': 'share_video',
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider
+                                .sectionDetailModel.result?.name ??
+                            "",
+                        'type_id': widget.typeId,
+                        'user_id': Constant.userID.toString(),
+                      };
+                      Singular.eventWithArgs('share_video', screenViewEvent);
                       buildShareWithDialog();
                     },
                     child: _buildDialogItems(
@@ -3957,6 +4136,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 'stop_time': stopTime,
                               },
                             );
+                            Map<String, Object> screenViewEvent = {
+                              'event_name': 'watch_trailer',
+                              'video_id': widget.videoId,
+                              'video_name': videoDetailsProvider
+                                      .sectionDetailModel.result?.name ??
+                                  "",
+                              'stop_time': stopTime,
+                              'user_id': Constant.userID.toString(),
+                            };
+                            Singular.eventWithArgs(
+                                'watch_trailer', screenViewEvent);
                             openPlayer("Trailer");
                           },
                           child: _buildDialogItems(
@@ -4065,6 +4255,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           'video_type': widget.videoType,
                         },
                       );
+                      Map<String, Object> screenViewEvent = {
+                        'event_name': 'share_video_sms',
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider
+                                .sectionDetailModel.result?.name ??
+                            "",
+                        'type_id': widget.typeId,
+                        'video_type': widget.videoType,
+                        'user_id': Constant.userID.toString(),
+                      };
+                      Singular.eventWithArgs(
+                          'share_video_sms', screenViewEvent);
                       if (Platform.isAndroid) {
                         Utils.redirectToUrl(
                             'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
@@ -4117,6 +4319,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           'video_type': widget.videoType,
                         },
                       );
+                      Map<String, Object> screenViewEvent = {
+                        'event_name': 'share_video_copy_link',
+                        'video_id': widget.videoId,
+                        'video_name': videoDetailsProvider
+                                .sectionDetailModel.result?.name ??
+                            "",
+                        'type_id': widget.typeId,
+                        'video_type': widget.videoType,
+                        'user_id': Constant.userID.toString(),
+                      };
+                      Singular.eventWithArgs(
+                          'share_video_copy_link', screenViewEvent);
                       SocialShare.copyToClipboard(
                         text: Platform.isIOS
                             ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"

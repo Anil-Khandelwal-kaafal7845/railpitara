@@ -9,13 +9,15 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import '../utils/constant.dart';
 
 class MoreScreen extends StatefulWidget {
   final String appBarTitle;
   final String sectionId;
 
-  const MoreScreen(this.appBarTitle, this.sectionId, {Key? key}) : super(key: key);
+  const MoreScreen(this.appBarTitle, this.sectionId, {Key? key})
+      : super(key: key);
 
   @override
   State<MoreScreen> createState() => MoreScreenState();
@@ -25,18 +27,24 @@ class MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<SectionDataProvider>(context, listen: false).getViewAll(widget.sectionId);
+    Provider.of<SectionDataProvider>(context, listen: false)
+        .getViewAll(widget.sectionId);
   }
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "More Section Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "More Section Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'More Section Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: (kIsWeb || Constant.isTV)
@@ -83,7 +91,8 @@ class MoreScreenState extends State<MoreScreen> {
                                   return InkWell(
                                     borderRadius: BorderRadius.circular(4),
                                     onTap: () {
-                                      debugPrint("Clicked on position ==> $position");
+                                      debugPrint(
+                                          "Clicked on position ==> $position");
                                       // Reuse the openDetailPage logic as in landscape
                                       openDetailPage(
                                         (videoData.videoType ?? 0) == 2
@@ -103,17 +112,20 @@ class MoreScreenState extends State<MoreScreen> {
                                           height: Dimens.heightLand,
                                           alignment: Alignment.center,
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                             child: MyNetworkImage(
-                                              imageUrl: videoData.landscape.toString(),
+                                              imageUrl: videoData.landscape
+                                                  .toString(),
                                               fit: BoxFit.cover,
                                               imgHeight: double.infinity,
                                               imgWidth: Dimens.widthLandmore,
                                             ),
                                           ),
                                         ),
-                                         Visibility(
-                                          visible: videoData.isRent == 1 && videoData.isPremium == 0,
+                                        Visibility(
+                                          visible: videoData.isRent == 1 &&
+                                              videoData.isPremium == 0,
                                           child: FittedBox(
                                             child: Container(
                                               constraints: const BoxConstraints(
@@ -127,8 +139,10 @@ class MoreScreenState extends State<MoreScreen> {
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
-                                                  bottomLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(3),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
+                                                  bottomRight:
+                                                      Radius.circular(3),
                                                 ),
                                               ),
                                               child: Row(
@@ -158,8 +172,10 @@ class MoreScreenState extends State<MoreScreen> {
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
-                                                  bottomLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(3),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
+                                                  bottomRight:
+                                                      Radius.circular(3),
                                                 ),
                                               ),
                                               child: Row(
@@ -175,7 +191,8 @@ class MoreScreenState extends State<MoreScreen> {
                                           ),
                                         ),
                                         Visibility(
-                                          visible: videoData.isRent == 1 && videoData.isPremium == 1,
+                                          visible: videoData.isRent == 1 &&
+                                              videoData.isPremium == 1,
                                           child: FittedBox(
                                             child: Container(
                                               constraints: const BoxConstraints(
@@ -189,8 +206,10 @@ class MoreScreenState extends State<MoreScreen> {
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(3),
                                                   topRight: Radius.circular(4),
-                                                  bottomLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(3),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
+                                                  bottomRight:
+                                                      Radius.circular(3),
                                                 ),
                                               ),
                                               child: Row(
@@ -205,7 +224,6 @@ class MoreScreenState extends State<MoreScreen> {
                                             ),
                                           ),
                                         ),
-                                      
                                       ],
                                     ),
                                   );
@@ -227,7 +245,8 @@ class MoreScreenState extends State<MoreScreen> {
   }
 
   // Assuming openDetailPage is a method in the current screen.
-  void openDetailPage(String pageName, int videoId, int upcomingType, int videoType, int typeId) {
+  void openDetailPage(String pageName, int videoId, int upcomingType,
+      int videoType, int typeId) {
     debugPrint("pageName =======> $pageName");
     Utils.openDetails(
       context: context,

@@ -33,6 +33,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -47,14 +48,13 @@ class SettingState extends State<Setting> {
   late GeneralProvider generalProvider;
   SharedPre sharedPref = SharedPre();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-    late WalletProvider walletProvider;
+  late WalletProvider walletProvider;
 
   @override
   void initState() {
-  
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
-      generalProvider.getGeneralsetting(context);
+    generalProvider.getGeneralsetting(context);
     getUserData();
     super.initState();
   }
@@ -87,30 +87,33 @@ class SettingState extends State<Setting> {
     debugPrint('getUserData userName ==> $userName');
     debugPrint('getUserData userType ==> $userType');
     debugPrint('getUserData userMobileNo ==> $userMobileNo');
-       debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
-     
+    debugPrint("isCoinShow ===========> ${generalProvider.isCoinShow}");
 
     await generalProvider.getPages();
-   
 
     isSwitched = await sharedPref.readBool("PUSH");
     debugPrint('getUserData isSwitched ==> $isSwitched');
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
-      
+
       setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Setting screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Setting screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Setting Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBar(context, "setting", true),
@@ -124,7 +127,6 @@ class SettingState extends State<Setting> {
                 /* Account Details */
                 // Account Details Button On Click
 
-
                 _buildSettingButton(
                   title: 'accountdetails',
                   subTitle: 'manageprofile',
@@ -133,30 +135,27 @@ class SettingState extends State<Setting> {
                   onClick: () {
                     // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
                     //     () async {
-                      if (Constant.userID != null) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const ProfileEdit(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                      }
-              
+                    if (Constant.userID != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileEdit(),
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginSocial(),
+                        ),
+                      );
+                    }
                   },
                 ),
-               
-               
-               Visibility(
+
+                Visibility(
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-
-                  Visibility(
+                Visibility(
                   visible: forceUpdateData!.result!.showPackage == 1,
                   child: _buildSettingButton(
                     title: 'rent_store',
@@ -166,22 +165,20 @@ class SettingState extends State<Setting> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const RentStore(),
-                              // builder: (context) => const MyWatchlist(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-             
+                      if (Constant.userID != null) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const RentStore(),
+                            // builder: (context) => const MyWatchlist(),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginSocial(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -194,21 +191,19 @@ class SettingState extends State<Setting> {
                   titleMultilang: true,
                   subTitleMultilang: true,
                   onClick: () {
-               
-                      if (Constant.userID != null) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const MyWatchlist(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                      }
-               
+                    if (Constant.userID != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const MyWatchlist(),
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginSocial(),
+                        ),
+                      );
+                    }
                   },
                 ),
                 _buildLine(16.0, 16.0),
@@ -222,22 +217,19 @@ class SettingState extends State<Setting> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                     
-           
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const MyPurchaselist(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                 
+                      if (Constant.userID != null) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MyPurchaselist(),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginSocial(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -247,36 +239,34 @@ class SettingState extends State<Setting> {
                     child: _buildLine(16.0, 16.0)),
 
                 /* Coin--- */
-             
-                  generalProvider.isCoinShow == "1"?
-                  _buildSettingButton(
-                    title: 'coin',
-                    subTitle: 'view_your_coin',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () {
-                     
-           
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CoinStoreScreen(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                 
-                    },
-                  )
-                :SizedBox.shrink(),
 
- generalProvider.isCoinShow == "1"?_buildLine(16.0, 16.0):SizedBox.shrink(),
-               
+                generalProvider.isCoinShow == "1"
+                    ? _buildSettingButton(
+                        title: 'coin',
+                        subTitle: 'view_your_coin',
+                        titleMultilang: true,
+                        subTitleMultilang: true,
+                        onClick: () {
+                          if (Constant.userID != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CoinStoreScreen(),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginSocial(),
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : SizedBox.shrink(),
+
+                generalProvider.isCoinShow == "1"
+                    ? _buildLine(16.0, 16.0)
+                    : SizedBox.shrink(),
 
                 /* Subscription */
                 Visibility(
@@ -287,22 +277,19 @@ class SettingState extends State<Setting> {
                     titleMultilang: true,
                     subTitleMultilang: true,
                     onClick: () {
-                  
-                       
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const Subscription(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                
+                      if (Constant.userID != null) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const Subscription(),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginSocial(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -311,7 +298,6 @@ class SettingState extends State<Setting> {
                     visible: forceUpdateData!.result!.showPackage == 1,
                     child: _buildLine(16.0, 16.0)),
 
-               
                 /* MaltiLanguage */
                 _buildSettingButton(
                   title: 'change_language',
@@ -426,8 +412,7 @@ class SettingState extends State<Setting> {
                       }
                     },
                   ),
- if (Constant.userID != null)
-                _buildLine(16.0, 16.0),
+                if (Constant.userID != null) _buildLine(16.0, 16.0),
 
                 // /* Rate App */
                 // _buildSettingButton(
@@ -516,6 +501,12 @@ class SettingState extends State<Setting> {
                   titleMultilang: false,
                   subTitleMultilang: false,
                   onClick: () {
+                    Map<String, Object> screenViewEvent = {
+                      'screen_name': 'Open policy Pages',
+                      'user_id': Constant.userID.toString(),
+                    };
+                    Singular.eventWithArgs(
+                        'Open policy Pages', screenViewEvent);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => AboutPrivacyTerms(
@@ -1011,6 +1002,11 @@ class SettingState extends State<Setting> {
                             await profileProvider.clearProvider();
                             // Firebase Signout
                             await _auth.signOut();
+                            Map<String, Object> screenViewEvent = {
+                              'screen_name': 'LogOut',
+                              'user_id': Constant.userID.toString(),
+                            };
+                            Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
@@ -1128,6 +1124,11 @@ class SettingState extends State<Setting> {
                             await profileProvider.clearProvider();
                             // Firebase Signout
                             await _auth.signOut();
+                            Map<String, Object> screenViewEvent = {
+                              'screen_name': 'LogOut',
+                              'user_id': Constant.userID.toString(),
+                            };
+                            Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");

@@ -4,6 +4,7 @@ import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/profileavatar.dart';
 import 'package:dtlive/provider/generalprovider.dart';
+import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +19,7 @@ import 'package:dtlive/widget/mytextformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({Key? key}) : super(key: key);
@@ -60,6 +62,11 @@ class ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Profile Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Profile Screen', screenViewEvent);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     if (!profileProvider.loading) {
@@ -166,71 +173,75 @@ class ProfileEditState extends State<ProfileEdit> {
                 ),
               ),
               /* Save */
-            Expanded(
-  child: Align(
-    alignment: Alignment.bottomCenter,
-    child: InkWell(
-      borderRadius: BorderRadius.circular(5),
-      onTap: () async {
-        debugPrint(
-            "nameController Name ==> ${nameController.text.toString()}");
-        debugPrint(
-            "pickedImageFile ==> ${pickedImageFile?.path ?? "not picked"}");
-        if (nameController.text.toString().isEmpty) {
-          return Utils.showSnackbar(
-              context, "info", enterName, false);
-        }
-        final profileProvider =
-            Provider.of<ProfileProvider>(context, listen: false);
-        Utils.showProgress(context, prDialog);
-        await sharePref.save(
-            "username", nameController.text.toString());
-        if (pickedImageFile != null) {
-          await profileProvider.getImageUpload(pickedImageFile);
-        }
-        await profileProvider
-            .getUpdateProfile(nameController.text.toString());
-        if (!mounted) return;
-        await profileProvider.getProfile(context);
-        await prDialog.hide();
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(5),
+                    onTap: () async {
+                      debugPrint(
+                          "nameController Name ==> ${nameController.text.toString()}");
+                      debugPrint(
+                          "pickedImageFile ==> ${pickedImageFile?.path ?? "not picked"}");
+                      if (nameController.text.toString().isEmpty) {
+                        return Utils.showSnackbar(
+                            context, "info", enterName, false);
+                      }
+                      final profileProvider =
+                          Provider.of<ProfileProvider>(context, listen: false);
+                      Utils.showProgress(context, prDialog);
+                      await sharePref.save(
+                          "username", nameController.text.toString());
+                      if (pickedImageFile != null) {
+                        await profileProvider.getImageUpload(pickedImageFile);
+                      }
+                      await profileProvider
+                          .getUpdateProfile(nameController.text.toString());
+                      if (!mounted) return;
+                      await profileProvider.getProfile(context);
+                      await prDialog.hide();
 
-        // Navigate to home screen and clear all previous routes
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => Bottombar()),
-                          (Route<dynamic> route) => false,
-                        );
-      },
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        decoration: BoxDecoration(
-          color: primaryDark,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        alignment: Alignment.center,
-        child: MyText(
-          color: white,
-          text: "save",
-          multilanguage: true,
-          textalign: TextAlign.center,
-          fontsizeNormal: 15,
-          fontsizeWeb: 15,
-          fontweight: FontWeight.w600,
-          maxline: 1,
-          overflow: TextOverflow.ellipsis,
-          fontstyle: FontStyle.normal,
-        ),
-      ),
-    ),
-  ),
-),
+                      // Navigate to home screen and clear all previous routes
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Bottombar()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      decoration: BoxDecoration(
+                        color: primaryDark,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      alignment: Alignment.center,
+                      child: MyText(
+                        color: white,
+                        text: "save",
+                        multilanguage: true,
+                        textalign: TextAlign.center,
+                        fontsizeNormal: 15,
+                        fontsizeWeb: 15,
+                        fontweight: FontWeight.w600,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        fontstyle: FontStyle.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 
-    SizedBox(height: 5,),
-       // /* AdMob Banner */
-             Utils.showBannerAd(context),
+              SizedBox(
+                height: 5,
+              ),
+              // /* AdMob Banner */
+              Utils.showBannerAd(context),
 
-             SizedBox(height: 5,)
+              SizedBox(
+                height: 5,
+              )
             ],
           ),
         ),

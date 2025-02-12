@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:social_share/social_share.dart';
 
 class MyWatchlist extends StatefulWidget {
@@ -51,19 +52,24 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
   @override
   Widget build(BuildContext context) {
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "WatchList Screen",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "WatchList Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'WatchList Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       backgroundColor: appBgColor,
       // appBar: Utils.myAppBarWithBack(
       //     context, "watchlist", selectedIndex != 3),
 
-           appBar: Utils.myAppBarWithBack(context, "watchlist", true),
+      appBar: Utils.myAppBarWithBack(context, "watchlist", true),
       body: SafeArea(
         child: Column(
           children: [
@@ -136,7 +142,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
   Widget _buildWatchlistItem(position) {
     return Container(
       width: MediaQuery.of(context).size.width,
-       height: Dimens.heightWatchlist ,
+      height: Dimens.heightWatchlist,
       // constraints: BoxConstraints(minHeight: Dimens.heightWatchlist),
       color: lightBlack,
       child: Row(
@@ -150,7 +156,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
   Widget _buildImage(int position) {
     return Container(
-      width:MediaQuery.of(context).size.width * 0.44,
+      width: MediaQuery.of(context).size.width * 0.44,
       height: Dimens.heightWatchlist,
       // constraints: BoxConstraints(
       //   minHeight: Dimens.heightWatchlist,
@@ -369,8 +375,6 @@ class _MyWatchlistState extends State<MyWatchlist> {
       ),
     );
   }
-
-
 
   Widget _buildWatchBtnWithProgress(position) {
     return Column(
@@ -684,31 +688,30 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           onTap: () async {
                             Navigator.pop(context);
                             if (!mounted) return;
-                         
-                              Utils.openPlayer(
-                                  context: context,
-                                  playType: "Trailer",
-                                  videoId: watchlistProvider.watchlistModel
-                                          .result?[position].id ??
-                                      0,
-                                  videoType: watchlistProvider.watchlistModel
-                                          .result?[position].videoType ??
-                                      0,
-                                  typeId: watchlistProvider.watchlistModel
-                                          .result?[position].typeId ??
-                                      0,
-                                  otherId: 0,
-                                  videoUrl: watchlistProvider.watchlistModel
-                                          .result?[position].trailerUrl ??
-                                      "",
-                                  trailerUrl: watchlistProvider.watchlistModel
-                                          .result?[position].trailerUrl ??
-                                      "",
-                                  uploadType:
-                                      watchlistProvider.watchlistModel.result?[position].trailerType ?? "",
-                                  videoThumb: watchlistProvider.watchlistModel.result?[position].landscape ?? "",
-                                  vStopTime: 0);
-                        
+
+                            Utils.openPlayer(
+                                context: context,
+                                playType: "Trailer",
+                                videoId: watchlistProvider
+                                        .watchlistModel.result?[position].id ??
+                                    0,
+                                videoType: watchlistProvider.watchlistModel
+                                        .result?[position].videoType ??
+                                    0,
+                                typeId: watchlistProvider.watchlistModel
+                                        .result?[position].typeId ??
+                                    0,
+                                otherId: 0,
+                                videoUrl: watchlistProvider.watchlistModel
+                                        .result?[position].trailerUrl ??
+                                    "",
+                                trailerUrl: watchlistProvider.watchlistModel
+                                        .result?[position].trailerUrl ??
+                                    "",
+                                uploadType:
+                                    watchlistProvider.watchlistModel.result?[position].trailerType ?? "",
+                                videoThumb: watchlistProvider.watchlistModel.result?[position].landscape ?? "",
+                                vStopTime: 0);
                           },
                           child: _buildDialogItems(
                             icon: "ic_borderplay.png",
@@ -1075,33 +1078,29 @@ class _MyWatchlistState extends State<MyWatchlist> {
     );
 
     if (!mounted) return;
-   
-      dynamic isContinue = await Utils.openPlayer(
-          context: context,
-          playType: playType ?? "",
-          videoId: watchlistProvider.watchlistModel.result?[position].id ?? 0,
-          videoType:
-              watchlistProvider.watchlistModel.result?[position].videoType ?? 0,
-          typeId:
-              watchlistProvider.watchlistModel.result?[position].typeId ?? 0,
-          otherId: 0,
-          videoUrl:
-              watchlistProvider.watchlistModel.result?[position].video320 ?? "",
-          trailerUrl:
-              watchlistProvider.watchlistModel.result?[position].trailerUrl ??
-                  "",
-          uploadType: watchlistProvider
-                  .watchlistModel.result?[position].videoUploadType ??
-              "",
-          videoThumb:
-              watchlistProvider.watchlistModel.result?[position].landscape ??
-                  "",
-          vStopTime:
-              watchlistProvider.watchlistModel.result?[position].stopTime ?? 0);
-      if (isContinue != null && isContinue == true) {
-        await watchlistProvider.getWatchlist();
-      }
-    
+
+    dynamic isContinue = await Utils.openPlayer(
+        context: context,
+        playType: playType ?? "",
+        videoId: watchlistProvider.watchlistModel.result?[position].id ?? 0,
+        videoType:
+            watchlistProvider.watchlistModel.result?[position].videoType ?? 0,
+        typeId: watchlistProvider.watchlistModel.result?[position].typeId ?? 0,
+        otherId: 0,
+        videoUrl:
+            watchlistProvider.watchlistModel.result?[position].video320 ?? "",
+        trailerUrl:
+            watchlistProvider.watchlistModel.result?[position].trailerUrl ?? "",
+        uploadType: watchlistProvider
+                .watchlistModel.result?[position].videoUploadType ??
+            "",
+        videoThumb:
+            watchlistProvider.watchlistModel.result?[position].landscape ?? "",
+        vStopTime:
+            watchlistProvider.watchlistModel.result?[position].stopTime ?? 0);
+    if (isContinue != null && isContinue == true) {
+      await watchlistProvider.getWatchlist();
+    }
   }
   /* ========= Open Player ========= */
 

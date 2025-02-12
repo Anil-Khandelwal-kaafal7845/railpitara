@@ -31,6 +31,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 
 class TVShowDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
@@ -48,16 +49,15 @@ class TVShowDetailsState extends State<TVShowDetails> {
   List<Cast>? directorList;
   late ShowDetailsProvider showDetailsProvider;
   late EpisodeProvider episodeProvider;
-    late GeneralProvider generalProvider;
-
+  late GeneralProvider generalProvider;
 
   @override
   void initState() {
     showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
-        generalProvider = Provider.of<GeneralProvider>(context, listen: false);
-          generalProvider.getGeneralsetting(context);
+    generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    generalProvider.getGeneralsetting(context);
     super.initState();
     debugPrint("initState videoId ==> ${widget.videoId}");
     debugPrint("initState videoType ==> ${widget.videoType}");
@@ -119,14 +119,18 @@ class TVShowDetailsState extends State<TVShowDetails> {
 
   @override
   Widget build(BuildContext context) {
-
-        analytics.logEvent(
-  name: "screen_view",
-  parameters: {
-    "screen_name": "Tv Show",
-    "user_id": Constant.userID, 
-  },
-);
+    analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Tv Show",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Tv Show Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -3261,8 +3265,6 @@ class TVShowDetailsState extends State<TVShowDetails> {
     }
   }
 
-
-
   Future<bool> _checkSubsRentLoginWithoutCoin() async {
     if (Constant.userID != null) {
       if ((showDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) ==
@@ -3355,8 +3357,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
     }
   }
 
-
- Future<bool> checkAndCallFunction() async {
+  Future<bool> checkAndCallFunction() async {
     if (generalProvider.isCoinShow == "0") {
       // Call the second method when `isCoinShow` is  "0"
       return await _checkSubsRentLoginWithoutCoin();

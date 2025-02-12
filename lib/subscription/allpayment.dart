@@ -30,6 +30,7 @@ import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_web/razorpay_web.dart';
+import 'package:singular_flutter_sdk/singular.dart';
 import 'package:uuid/uuid.dart';
 
 class AllPayment extends StatefulWidget {
@@ -130,7 +131,7 @@ class AllPaymentState extends State<AllPayment>
 
   /* add_transaction API */
   Future addTransaction(packageId, description, amount, paymentId, currencyCode,
-      orderStatus,purchesVia ) async {
+      orderStatus, purchesVia) async {
     final videoDetailsProvider =
         Provider.of<VideoDetailsProvider>(context, listen: false);
     final showDetailsProvider =
@@ -141,8 +142,16 @@ class AllPaymentState extends State<AllPayment>
         Provider.of<ProfileProvider>(context, listen: false);
 
     Utils.showProgress(context, prDialog);
-    await paymentProvider.addTransaction(packageId, description, amount,
-        paymentId, currencyCode, strCouponCode, orderStatus, orderId,purchesVia);
+    await paymentProvider.addTransaction(
+        packageId,
+        description,
+        amount,
+        paymentId,
+        currencyCode,
+        strCouponCode,
+        orderStatus,
+        orderId,
+        purchesVia);
 
     if (!paymentProvider.payLoading) {
       await prDialog.hide();
@@ -157,11 +166,36 @@ class AllPaymentState extends State<AllPayment>
           await channelSectionProvider.updatePrimiumPurchase();
           await videoDetailsProvider.updateRentPurchase();
           await showDetailsProvider.updateRentPurchase();
-
+          Singular.eventWithArgs('Razorpay Payment Success', {
+            'event_name': 'Razorpay Payment Success',
+            "packageId": packageId,
+            "description": description,
+            "amount": amount,
+            "paymentId": paymentId,
+            "couponCode": '${strCouponCode}',
+            "orderStatus": orderStatus,
+            "orderId": orderId,
+            'user_id': Constant.userID.toString(),
+            'is_revenue_event': true,
+            'currencyCode': currencyCode
+          });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
           Navigator.pop(context);
         } else {
+          Singular.eventWithArgs('Razorpay Payment Success', {
+            'event_name': 'Razorpay Payment Success',
+            "packageId": packageId,
+            "description": description,
+            "amount": amount,
+            "paymentId": paymentId,
+            "couponCode": '${strCouponCode}',
+            "orderStatus": orderStatus,
+            "orderId": orderId,
+            'user_id': Constant.userID.toString(),
+            'is_revenue_event': true,
+            'currencyCode': currencyCode
+          });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
           Navigator.pop(context);
@@ -198,10 +232,33 @@ class AllPaymentState extends State<AllPayment>
           } else if (videoType == "2") {
             await showDetailsProvider.updateRentPurchase();
           }
-
+          Singular.eventWithArgs('Razorpay Payment Success', {
+            'event_name': 'Razorpay Payment Success',
+            "videoId": videoId,
+            "amount": amount,
+            "typeId": typeId,
+            "videoType": videoType,
+            "couponCode": '${strCouponCode}',
+            "orderStatus": orderStatus,
+            "orderId": orderId,
+            'user_id': Constant.userID.toString(),
+            'is_revenue_event': true,
+          });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         } else {
+          Singular.eventWithArgs('Razorpay Payment Success', {
+            'event_name': 'Razorpay Payment Success',
+            "videoId": videoId,
+            "amount": amount,
+            "typeId": typeId,
+            "videoType": videoType,
+            "couponCode": '${strCouponCode}',
+            "orderStatus": orderStatus,
+            "orderId": orderId,
+            'user_id': Constant.userID.toString(),
+            'is_revenue_event': true,
+          });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         }
@@ -294,8 +351,14 @@ class AllPaymentState extends State<AllPayment>
       }
     } else {
       if (widget.payType == "Package") {
-        addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency, "success" ,"amount");
+        addTransaction(
+            widget.itemId,
+            widget.itemTitle,
+            paymentProvider.finalAmount,
+            paymentId,
+            widget.currency,
+            "success",
+            "amount");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
             widget.typeId, widget.videoType, "success");
@@ -356,39 +419,41 @@ class AllPaymentState extends State<AllPayment>
         "user_id": Constant.userID,
       },
     );
-   return Scaffold(
-  backgroundColor: appBgColor,
-  appBar: AppBar(
-    centerTitle: true,
-    backgroundColor: appBgColor, // Set the app bar background color
-    title: const Text(
-      "Payment Details", // Title of the app bar
-      style: TextStyle(
-        color: colorPrimary, // Title text color
-        fontSize: 18, // Title font size
-        fontWeight: FontWeight.bold, // Title font weight
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Payment screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
+    return Scaffold(
+      backgroundColor: appBgColor,
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: appBgColor, // Set the app bar background color
+        title: const Text(
+          "Payment Details", // Title of the app bar
+          style: TextStyle(
+            color: colorPrimary, // Title text color
+            fontSize: 18, // Title font size
+            fontWeight: FontWeight.bold, // Title font weight
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.back,
+              color: Colors.white), // Cupertino-style back icon
+          onPressed: () async {
+            // Call the onBackPressed event when the back button is pressed
+            await onBackPressed();
+          },
+        ),
+        elevation: 0, // Optional: Removes shadow under the app bar
       ),
-    ),
-     leading: IconButton(
-      icon: const Icon(CupertinoIcons.back, color: Colors.white), // Cupertino-style back icon
-      onPressed: () async {
-        // Call the onBackPressed event when the back button is pressed
-        await onBackPressed();
-      },
-    ),
-    elevation: 0, // Optional: Removes shadow under the app bar
-  ),
-  body: SafeArea(
-    child: Center(
-      child: _buildMobilePage(),
-    ),
-  ),
-);
-
- 
- 
+      body: SafeArea(
+        child: Center(
+          child: _buildMobilePage(),
+        ),
+      ),
+    );
   }
-
 
   Widget _buildMobilePage() {
     return Container(
@@ -835,7 +900,8 @@ class AllPaymentState extends State<AllPayment>
                                     paymentProvider.finalAmount,
                                     paymentId,
                                     widget.currency,
-                                    "success","amount");
+                                    "success",
+                                    "amount");
                               } else if (widget.payType == "Rent") {
                                 addRentTransaction(
                                     widget.itemId,
@@ -1290,7 +1356,6 @@ class AllPaymentState extends State<AllPayment>
     }
   }
 
-
   void _initializeRazorpay() async {
     if (paymentProvider.paymentOptionModel.result?.razorpay != null) {
       /* Check Keys */
@@ -1314,14 +1379,22 @@ class AllPaymentState extends State<AllPayment>
           Utils.showSnackbar(context, "", "order_creation_failed", true);
           return;
         } else {
-           analytics.logEvent(
-        name: "Razorpay open",
-        parameters: {
-          "user_id": Constant.userID,
-          "price":widget.price,
-          "name":widget.itemTitle
-        },
-      );
+          analytics.logEvent(
+            name: "Razorpay open",
+            parameters: {
+              "user_id": Constant.userID,
+              "price": widget.price,
+              "name": widget.itemTitle
+            },
+          );
+          Map<String, Object> screenViewEvent = {
+            'event_name': 'Razorpay Open',
+            "PayType": '${widget.payType}',
+            "price": '${widget.price}',
+            "name": '${widget.itemTitle}',
+            'user_id': Constant.userID.toString(),
+          };
+          Singular.eventWithArgs('Razorpay Open', screenViewEvent);
           Razorpay razorpay = Razorpay();
           var options = {
             'key':
@@ -1365,18 +1438,27 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handlePaymentErrorResponse(PaymentFailureResponse response) async {
-     analytics.logEvent(
-        name: "Razorpay Payment Faild",
-        parameters: {
-          "user_id": Constant.userID,
-          "PayType":widget.payType,
-          "price":widget.price,
-          "final amount":paymentProvider.finalAmount,
-          "name":widget.itemTitle,
-          "VId":widget.itemId
-
-        },
-      );
+    analytics.logEvent(
+      name: "Razorpay Payment Faild",
+      parameters: {
+        "user_id": Constant.userID,
+        "PayType": widget.payType,
+        "price": widget.price,
+        "final amount": paymentProvider.finalAmount,
+        "name": widget.itemTitle,
+        "VId": widget.itemId
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'event_name': 'Razorpay Payment Faield',
+      "PayType": '${widget.payType}',
+      "price": '${widget.price}',
+      "name": '${widget.itemTitle}',
+      "final amount": '${paymentProvider.finalAmount}',
+      "VId": '${widget.itemId}',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Razorpay Payment Faild', screenViewEvent);
     /*
     * PaymentFailureResponse contains three values:
     * 1. Error Code
@@ -1385,8 +1467,14 @@ class AllPaymentState extends State<AllPayment>
     * */
     Utils.showSnackbar(context, "fail", "payment_fail", true);
     if (widget.payType == "Package") {
-      addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "failed","amount");
+      addTransaction(
+          widget.itemId,
+          widget.itemTitle,
+          paymentProvider.finalAmount,
+          paymentId,
+          widget.currency,
+          "failed",
+          "amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "failed");
@@ -1394,23 +1482,18 @@ class AllPaymentState extends State<AllPayment>
     await paymentProvider.setCurrentPayment("");
   }
 
-
-
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
-
-
-
-     analytics.logEvent(
-        name: "Razorpay Payment Success",
-        parameters: {
-          "user_id": Constant.userID,
-          "PayType":widget.payType,
-          "price":widget.price,
-          "final amount":paymentProvider.finalAmount,
-          "name":widget.itemTitle,
-          "VId":widget.itemId
-        },
-      );
+    analytics.logEvent(
+      name: "Razorpay Payment Success",
+      parameters: {
+        "user_id": Constant.userID,
+        "PayType": widget.payType,
+        "price": widget.price,
+        "final amount": paymentProvider.finalAmount,
+        "name": widget.itemTitle,
+        "VId": widget.itemId
+      },
+    );
     /*
     * Payment Success Response contains three values:
     * 1. Order ID
@@ -1421,8 +1504,14 @@ class AllPaymentState extends State<AllPayment>
     debugPrint("paymentId ========> $paymentId");
     Utils.showSnackbar(context, "success", "payment_success", true);
     if (widget.payType == "Package") {
-      addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
+      addTransaction(
+          widget.itemId,
+          widget.itemTitle,
+          paymentProvider.finalAmount,
+          paymentId,
+          widget.currency,
+          "success",
+          "amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "success");
@@ -1432,14 +1521,20 @@ class AllPaymentState extends State<AllPayment>
   void handleExternalWalletSelected(ExternalWalletResponse response) {
     debugPrint("============ External Wallet Selected ============");
     if (widget.payType == "Package") {
-      addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "external","amount");
+      addTransaction(
+          widget.itemId,
+          widget.itemTitle,
+          paymentProvider.finalAmount,
+          paymentId,
+          widget.currency,
+          "external",
+          "amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "external");
     }
   }
-  
+
   /* ********* Razorpay END ********* */
 
   /* ********* Paytm START ********* */
@@ -1646,7 +1741,8 @@ class AllPaymentState extends State<AllPayment>
                       paymentProvider.finalAmount,
                       params["paymentId"],
                       widget.currency,
-                      "success","amount");
+                      "success",
+                      "amount");
                 } else if (widget.payType == "Rent") {
                   addRentTransaction(widget.itemId, paymentProvider.finalAmount,
                       widget.typeId, widget.videoType, "success");
@@ -1829,8 +1925,14 @@ class AllPaymentState extends State<AllPayment>
       Utils.showSnackbar(context, "success", "payment_success", true);
 
       if (widget.payType == "Package") {
-        addTransaction(widget.itemId, widget.itemTitle,
-            paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
+        addTransaction(
+            widget.itemId,
+            widget.itemTitle,
+            paymentProvider.finalAmount,
+            paymentId,
+            widget.currency,
+            "success",
+            "amount");
       } else if (widget.payType == "Rent") {
         addRentTransaction(widget.itemId, paymentProvider.finalAmount,
             widget.typeId, widget.videoType, "success");
@@ -1955,8 +2057,14 @@ class AllPaymentState extends State<AllPayment>
     Utils.showSnackbar(context, "success", "payment_success", true);
 
     if (widget.payType == "Package") {
-      addTransaction(widget.itemId, widget.itemTitle,
-          paymentProvider.finalAmount, paymentId, widget.currency, "success","amount");
+      addTransaction(
+          widget.itemId,
+          widget.itemTitle,
+          paymentProvider.finalAmount,
+          paymentId,
+          widget.currency,
+          "success",
+          "amount");
     } else if (widget.payType == "Rent") {
       addRentTransaction(widget.itemId, paymentProvider.finalAmount,
           widget.typeId, widget.videoType, "success");
@@ -2189,7 +2297,8 @@ class AllPaymentState extends State<AllPayment>
                   paymentProvider.finalAmount,
                   paymentId,
                   widget.currency,
-                  "success","amount");
+                  "success",
+                  "amount");
             } else if (widget.payType == "Rent") {
               await addRentTransaction(
                   widget.itemId,
@@ -2243,6 +2352,17 @@ class AllPaymentState extends State<AllPayment>
               widget.price, // Add the actual package name if available
         },
       );
+      Map<String, Object> screenViewEvent = {
+        'event_name': 'subscription_canceled',
+        "PayType": '${widget.payType}',
+        "price": '${widget.price}',
+        "name": '${widget.itemTitle}',
+        "price": '${widget.price}',
+        "final amount": '${paymentProvider.finalAmount}',
+        "VId": '${widget.itemId}',
+        'user_id': Constant.userID.toString(),
+      };
+      Singular.eventWithArgs('subscription_canceled', screenViewEvent);
     }
     Navigator.pop(context, isPaymentDone);
     return Future.value(isPaymentDone == true ? true : false);
