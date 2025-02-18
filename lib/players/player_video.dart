@@ -14,25 +14,27 @@ class PlayerVideo extends StatefulWidget {
       trailerUrlVideoId,
       videoLibraryId,
       videoUrlId,
-      isLive;
+      isLive,
+      trailerUrl;
 
   PlayerVideo(
-      this.playType,
-      this.videoId,
-      this.videoType,
-      this.typeId,
-      this.otherId,
-      this.videoUrl,
-      this.stopTime,
-      this.vUploadType,
-      this.videoThumb,
-      {Key? key,
-      this.isLive,
-      this.trailerLibraryId,
-      this.videoLibraryId,
-      this.trailerUrlVideoId,
-      this.videoUrlId})
-      : super(key: key);
+    this.playType,
+    this.videoId,
+    this.videoType,
+    this.typeId,
+    this.otherId,
+    this.videoUrl,
+    this.stopTime,
+    this.vUploadType,
+    this.videoThumb, {
+    Key? key,
+    this.isLive,
+    this.trailerLibraryId,
+    this.videoLibraryId,
+    this.trailerUrlVideoId,
+    this.videoUrlId,
+    required this.trailerUrl,
+  }) : super(key: key);
 
   @override
   State<PlayerVideo> createState() => _PlayerVideoState();
@@ -45,6 +47,9 @@ class _PlayerVideoState extends State<PlayerVideo> {
 
   @override
   void initState() {
+    print("---Video Url --${widget.videoUrl}");
+    // print("---Video Url --${widget.trailerUrl}");
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -135,27 +140,44 @@ class _PlayerVideoState extends State<PlayerVideo> {
                 display: block;
                 width: 100%;
                 height: 100%;
-                border: 0;
+                border: none;
+                border-radius: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
               }
 
               #backButton {
                 position: absolute;
                 top: 15px;
                 left: 15px;
-                line-height: 60px;
-                z-index: 1000;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                border-radius: 50%;
+                padding: 10px;
                 cursor: pointer;
+                z-index: 1000;
+              }
+
+              #backButton:hover {
+                background-color: rgba(0, 0, 0, 0.8); /* Darker when hovered */
+              }
+
+              /* Ensure fullscreen button is hidden if fullscreen is active */
+              .fullscreen-active #backButton {
+                display: none;
               }
             </style>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
           </head>
           <body>
             <iframe
-              src="https://iframe.mediadelivery.net/embed/${widget.trailerLibraryId}/${widget.trailerUrlVideoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true"
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+              src="https://chull.tv/unviiplayer.html?url=${widget.trailerUrl}"
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
               allowfullscreen="true">
             </iframe>
+
             <script>
+              // Back button functionality
               document.getElementById('backButton').addEventListener('click', () => {
                 if (!window.flutter_inappwebview.backButtonClicked) {
                   window.flutter_inappwebview.backButtonClicked = true;
@@ -163,22 +185,23 @@ class _PlayerVideoState extends State<PlayerVideo> {
                 }
               });
 
+              // Handle fullscreen change to hide or show the back button
               document.addEventListener("fullscreenchange", function () {
                 if (document.fullscreenElement) {
-                  document.getElementById("backButton").style.display = "none";
+                  document.body.classList.add('fullscreen-active');
                 } else {
-                  document.getElementById("backButton").style.display = "block";
+                  document.body.classList.remove('fullscreen-active');
                 }
               });
             </script>
           </body>
           </html>
-          ''',
+        ''',
                     ),
                     initialOptions: InAppWebViewGroupOptions(
                       crossPlatform: InAppWebViewOptions(
-                        disableVerticalScroll: true,
-                        disableHorizontalScroll: true,
+                        disableVerticalScroll: false,
+                        disableHorizontalScroll: false,
                         disableContextMenu: true,
                         useOnLoadResource: true,
                         javaScriptEnabled: true,
@@ -187,6 +210,24 @@ class _PlayerVideoState extends State<PlayerVideo> {
                             'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
                       ),
                     ),
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      controller.addJavaScriptHandler(
+                        handlerName: 'goBack',
+                        callback: (args) {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                    onLoadStop: (controller, url) async {
+                      await controller.evaluateJavascript(source: '''
+          document.getElementById('backButton').addEventListener('click', () => {
+            if (!window.flutter_inappwebview.backButtonClicked) {
+              window.flutter_inappwebview.backButtonClicked = true;
+              window.flutter_inappwebview.callHandler('goBack');
+            }
+          });
+        ''');
+                    },
                   ),
                   Positioned(
                     top: 40.0,
@@ -218,124 +259,140 @@ class _PlayerVideoState extends State<PlayerVideo> {
               )
             : widget.isLive == 1
                 ? TestPlayerWeb(loadURL: widget.videoUrl ?? '')
-                : Stack(
-                    children: [
-                      InAppWebView(
-                        initialData: InAppWebViewInitialData(
-                          data: '''
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <style>
-              html, body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                height: 100%;
-                background-color: black;
-              }
+                : 
+                
+              Stack(
+  children: [
+    InAppWebView(
+      initialData: InAppWebViewInitialData(
+        data: '''
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    }
 
-              iframe {
-                display: block;
-                width: 100%;
-                height: 100%;
-                border: 0;
-              }
+    iframe {
+    display: flex;
+    justify-content: center;
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-              #backButton {
-                position: absolute;
-                top: 15px;
-                left: 15px;
-                line-height: 60px;
-                z-index: 1000;
-                cursor: pointer;
-              }
-            </style>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-          </head>
-          <body>
-            <iframe
-              src="https://iframe.mediadelivery.net/embed/${widget.videoLibraryId}/${widget.videoUrlId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true"
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-              allowfullscreen="true">
-            </iframe>
-            <script>
-              document.getElementById('backButton').addEventListener('click', () => {
-                if (!window.flutter_inappwebview.backButtonClicked) {
-                  window.flutter_inappwebview.backButtonClicked = true;
-                  window.flutter_inappwebview.callHandler('goBack');
-                }
-              });
+    #my_player {
+    display: flex;
+    justify-content: center;
+      width: 100%;
+      height: 100vh; /* Full viewport height */
+    }
 
-              document.addEventListener("fullscreenchange", function () {
-                if (document.fullscreenElement) {
-                  document.getElementById("backButton").style.display = "none";
-                } else {
-                  document.getElementById("backButton").style.display = "block";
-                }
-              });
-            </script>
-          </body>
-          </html>
-          ''',
-                        ),
-                        initialOptions: InAppWebViewGroupOptions(
-                          crossPlatform: InAppWebViewOptions(
-                            disableVerticalScroll: false,
-                            disableHorizontalScroll: false,
-                            disableContextMenu: true,
-                            useOnLoadResource: true,
-                            javaScriptEnabled: true,
-                            mediaPlaybackRequiresUserGesture: false,
-                            userAgent:
-                                'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
-                          ),
-                        ),
-                        onWebViewCreated: (InAppWebViewController controller) {
-                          controller.addJavaScriptHandler(
-                              handlerName: 'goBack',
-                              callback: (args) {
-                                Navigator.pop(context);
-                              });
-                        },
-                        onLoadStop: (controller, url) async {
-                          await controller.evaluateJavascript(source: '''
-          document.getElementById('backButton').addEventListener('click', () => {
-            if (!window.flutter_inappwebview.backButtonClicked) {
-              window.flutter_inappwebview.backButtonClicked = true;
-              window.flutter_inappwebview.callHandler('goBack');
-            }
-          });
-        ''');
-                        },
-                      ),
-                      Positioned(
-                        top: 40.0,
-                        left: 20.0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 45, // Diameter of the circle
-                            height: 45, // Diameter of the circle
-                            decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Background color of the container
-                              shape: BoxShape
-                                  .circle, // Makes the container circular
-                            ),
-                            child: Center(
-                              child: Icon(
-                                CupertinoIcons.back, // Icon to display
-                                color: Colors.black, // Icon color
-                                size: 25, // Icon size
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ));
+    #backButton {
+    display: none;
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #backButton:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .fullscreen-active #backButton {
+      display: none;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+  <iframe
+    id="my_player"
+    src="https://chull.tv/unviiplayer.html?url=${widget.videoUrl}"
+    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+    allowfullscreen>
+  </iframe>
+
+  <script>
+    document.addEventListener("fullscreenchange", function () {
+      if (document.fullscreenElement) {
+        document.body.classList.add('fullscreen-active');
+      } else {
+        document.body.classList.remove('fullscreen-active');
+      }
+    });
+  </script>
+</body>
+</html>
+        ''',
+      ),
+      initialOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          disableVerticalScroll: false,
+          disableHorizontalScroll: false,
+          disableContextMenu: true,
+          useOnLoadResource: true,
+          javaScriptEnabled: true,
+          mediaPlaybackRequiresUserGesture: false,
+          userAgent:
+              'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+        ),
+      ),
+      // onWebViewCreated: (InAppWebViewController controller) {
+      //   controller.addJavaScriptHandler(
+      //     handlerName: 'goBack',
+      //     callback: (args) {
+      //       Navigator.pop(context);
+      //     },
+      //   );
+      // },
+    ),
+    
+    // Positioned(
+    //   top: 40.0,
+    //   left: 20.0,
+    //   child: GestureDetector(
+    //     onTap: () {
+    //       Navigator.pop(context);
+    //     },
+    //     child: Container(
+    //       width: 45,
+    //       height: 45,
+    //       decoration: BoxDecoration(
+    //         color: Colors.white,
+    //         shape: BoxShape.circle,
+    //       ),
+    //       child: Center(
+    //         child: Icon(
+    //           CupertinoIcons.back,
+    //           color: Colors.black,
+    //           size: 25,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // ),
+  ],
+)
+ 
+                  );
+ 
+ 
   }
 }

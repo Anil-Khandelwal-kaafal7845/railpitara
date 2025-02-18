@@ -369,7 +369,7 @@ class Utils {
                     trailerUrlVideoId: trailerUrlVideoId,
                     videoLibraryId: videoLibraryId,
                     videoUrlId: videoUrlVideoId,
-                    isLive: isLive);
+                    isLive: isLive, trailerUrl: trailerUrl,);
               },
             ),
           );
@@ -397,7 +397,7 @@ class Utils {
                   trailerUrlVideoId: trailerUrlVideoId,
                   videoLibraryId: videoLibraryId,
                   videoUrlId: videoUrlVideoId,
-                  isLive: isLive);
+                  isLive: isLive ,trailerUrl: trailerUrl);
             },
           ),
         );
@@ -497,7 +497,7 @@ class Utils {
                     trailerUrlVideoId: trailerUrlVideoId,
                     videoLibraryId: videoLibraryId,
                     videoUrlId: videoUrlVideoId,
-                    isLive: isLive);
+                    isLive: isLive ,trailerUrl: trailerUrl);
               },
             ),
           );
@@ -525,7 +525,7 @@ class Utils {
                 trailerUrlVideoId: trailerUrlVideoId,
                 videoLibraryId: videoLibraryId,
                 videoUrlId: videoUrlVideoId,
-                isLive: isLive,
+                isLive: isLive,trailerUrl: trailerUrl
               );
             },
           ),

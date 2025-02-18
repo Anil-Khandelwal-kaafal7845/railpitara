@@ -1122,29 +1122,30 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             ),
                           ),
                           const SizedBox(height: 18),
-                          Row(
-                            children: [
-                              MyImage(
-                                width: 50,
-                                height: 23,
-                                imagePath: "imdb.png",
-                              ),
-                              const SizedBox(width: 5),
-                              MyText(
-                                color: otherColor,
-                                text:
-                                    "${videoDetailsProvider.sectionDetailModel.result?.imdbRating ?? 0}",
-                                textalign: TextAlign.start,
-                                fontsizeNormal: 14,
-                                fontsizeWeb: 16,
-                                fontweight: FontWeight.w600,
-                                multilanguage: false,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                fontstyle: FontStyle.normal,
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     MyImage(
+                          //       width: 50,
+                          //       height: 23,
+                          //       imagePath: "imdb.png",
+                          //     ),
+                          //     const SizedBox(width: 5),
+                          //     MyText(
+                          //       color: otherColor,
+                          //       text:
+                          //           "${videoDetailsProvider.sectionDetailModel.result?.imdbRating ?? 0}",
+                          //       textalign: TextAlign.start,
+                          //       fontsizeNormal: 14,
+                          //       fontsizeWeb: 16,
+                          //       fontweight: FontWeight.w600,
+                          //       multilanguage: false,
+                          //       maxline: 1,
+                          //       overflow: TextOverflow.ellipsis,
+                          //       fontstyle: FontStyle.normal,
+                          //     ),
+                          //   ],
+                          // ),
+
                           Container(
                             constraints: const BoxConstraints(minHeight: 0),
                             margin: const EdgeInsets.only(top: 10),
@@ -1205,6 +1206,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ],
                             ),
                           ),
+
                           Container(
                             constraints: const BoxConstraints(minHeight: 0),
                             margin: const EdgeInsets.only(top: 10),
@@ -2565,32 +2567,143 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   }
 
   Widget _buildWatchNow() {
+
     if ((videoDetailsProvider.sectionDetailModel.result?.stopTime ?? 0) > 0 &&
         videoDetailsProvider.sectionDetailModel.result?.videoDuration != null) {
-      return Container(
+      return
+       Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () async {
             if (Constant.userID != null) {
+              // Check if the videoDetailsProvider.sectionDetailModel.result?.maturityRating is "A"
+              // Check if the maturity rating is "A"
+              if (videoDetailsProvider
+                      .sectionDetailModel.result?.maturityRating ==
+                  "A") {
+                // Print statement for maturity rating check
+                print("Maturity Rating is A, showing pop-up");
+
+                // Show the pop-up with details
+              showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: Colors.black,
+      elevation: 5, // Adding shadow
+      title: Column(
+        children: [
+          Image.asset("assets/images/age.png",height: 50 ,width: 50,),
+          SizedBox(height: 10),
+
+
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Age ', 
+                  style: TextStyle(
+                    fontSize: 19, 
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                TextSpan(
+                  text: 'Verification', 
+                  style: TextStyle(
+                    fontSize: 19, 
+                    color:colorPrimary,
+                     fontWeight: FontWeight.w500
+                  ),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 14),
+          Text(
+            'You must be 18+ to access this content.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.w400
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Please verify your age.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  // User confirmed they're over 18, open player screen
+                  openPlayer("Video");
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: colorPrimary,
+                  primary: Colors.black,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: Text('I am over 18'),
+              ),
+              SizedBox(width: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog and do nothing
+                },
+                style: TextButton.styleFrom(
+                  side: BorderSide(color: Colors.white),
+                  primary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        ],
+      ),
+      actionsPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 30), // Increase content height
+    );
+  },
+);
+
+              
+                return; // Skip the rest of the logic as the pop-up is shown
+              }
+
+
+              // Print the maturity rating when not "A"
+              print(
+                  "Maturity Rating is not A, proceeding with regular functionality");
+
               // Check if the user is a "prime" user or has other access
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
               bool isPrimeUserCoin =
                   videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-                      1; // Prime user with coins
+                      1;
               bool isAdShow =
-                  videoDetailsProvider.sectionDetailModel.result?.isadshow ==
-                      1; // Check if ad should be shown
+                  videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
               bool isRenteBuy =
-                  videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
-                      1; // Rent buy access
-
-              bool isCoinFeatureEnable = generalProvider.isCoinShow == "1";
-
-              print("Prime User: $isPrimeUser");
-              print("Prime User with Coins: $isPrimeUserCoin");
-              print("Show Ad: $isAdShow");
-              print("Rent Buy: $isRenteBuy");
+                  videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
 
               // Check if rewardad is disabled for Android or iOS
               if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
@@ -2598,76 +2711,34 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 print(
                     "Rewarded ad is disabled for this platform. Opening player directly.");
                 openPlayer("Video");
-                return; // Exit early since the ad logic is bypassed
+                return;
               }
 
               if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
                   (Platform.isIOS && generalProvider.rewardadIos == "1")) {
-                print("Rewarded ad is enable for this platform. Ope.");
                 if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-                  // If the user is prime, directly navigate to the player
                   openPlayer("Video");
                 } else {
-                  // Non-prime user, show ad if necessary
                   if (isAdShow) {
-                    print("Ad should be shown");
-
-                    // Show the rewarded ad
-
-                    // Show the rewarded ad
                     AdHelper.showRewardedAd(
                       onAdCompleted: () async {
-                        print(
-                            "Rewarded ad completed. Proceeding with API call...");
-
-                        try {
-                          print("API call to add coins started...");
-                          await walletProvider.addCoinsAfterWatchAd(
-                            Constant.userID!,
-                            videoDetailsProvider
-                                    .sectionDetailModel.result?.id ??
-                                '',
-                            0,
-                            generalProvider.isAdsCoin,
-                          );
-                          print("Coins added successfully!");
-                          // Open the player after coins are added
-                          openPlayer("Video");
-                        } catch (error) {
-                          print("Error while adding coins: $error");
-                        }
+                        await walletProvider.addCoinsAfterWatchAd(
+                          Constant.userID!,
+                          videoDetailsProvider.sectionDetailModel.result?.id ??
+                              '',
+                          0,
+                          generalProvider.isAdsCoin,
+                        );
+                        openPlayer("Video");
                       },
                       onAdFailed: () {
-                        print(
-                            "Ad failed or was not completed. Skipping API call.");
+                        openPlayer("Video");
                       },
                     );
-
-                    // AdHelper.showRewardedAd(() async {
-                    //   print("Rewarded ad dismissed");
-
-                    //   // Handle the logic for adding coins after the ad is dismissed
-                    //   try {
-                    //     print("API call to add coins started...");
-                    //     await walletProvider.addCoinsAfterWatchAd(
-                    //       Constant.userID!,
-                    //       videoDetailsProvider.sectionDetailModel.result?.id,
-                    //       0,
-                    //       generalProvider.isAdsCoin,
-                    //     );
-                    //     print("Coins added successfully!");
-                    //     // After adding coins, open the player
-                    //     openPlayer("Video");
-                    //   } catch (error) {
-                    //     print("Error while adding coins: $error");
-                    //   }
-                    // });
                   } else {
-                    // If the ad shouldn't be shown, directly proceed
                     openPlayer("Video");
                   }
                 }
-                return;
               }
             } else {
               Navigator.of(context).push(
@@ -2677,63 +2748,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               );
             }
           },
-
-          // onTap: () async {
-          //   if (Constant.userID != null) {
-          //     // Check if the user is a "prime" user or has other access
-          //     bool isPrimeUser =
-          //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-          //     bool isPrimeUserCoin =
-          //         videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-          //             1; // Prime user with coins
-          //     bool isAdShow =
-          //         videoDetailsProvider.sectionDetailModel.result?.isadshow ==
-          //             1; // Check if ad should be shown
-          //     bool isRenteBuy =
-          //         videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
-          //             1; // Rent buy access
-
-          //     print("Prime User: $isPrimeUser");
-          //     print("Prime User with Coins: $isPrimeUserCoin");
-          //     print("Show Ad: $isAdShow");
-          //     print("Rent Buy: $isRenteBuy");
-
-          //     if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-          //       // If the user is prime, directly navigate to the player
-          //       openPlayer("Video");
-          //     } else {
-          //       // Non-prime user, show ad if necessary
-          //       if (isAdShow) {
-          //         print("Ad should be shown");
-
-          //         // Show the rewarded ad
-          //         AdHelper.showRewardedAd(() async {
-          //           print("Rewarded ad dismissed");
-
-          //           // Handle the logic for adding coins after the ad is dismissed
-          //           try {
-          //             print("API call to add coins started...");
-          //             await walletProvider.addCoinsAfterWatchAd(
-          //               Constant.userID!,
-          //               videoDetailsProvider.sectionDetailModel.result?.id,
-          //               0,
-          //               generalProvider.isAdsCoin,
-          //             );
-          //             print("Coins added successfully!");
-          //             // After adding coins, open the player
-          //             openPlayer("Video");
-          //           } catch (error) {
-          //             print("Error while adding coins: $error");
-          //           }
-          //         });
-          //       } else {
-          //         // If the ad shouldn't be shown, directly proceed
-          //         openPlayer("Video");
-          //       }
-          //     }
-          //   }
-          // },
-          //focusColor:: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -2857,52 +2871,145 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () async {
+            // Similar logic as above without the maturity rating check
             if (Constant.userID != null) {
-              // Check if the user is a "prime" user or has other access
+
+                if (videoDetailsProvider
+                      .sectionDetailModel.result?.maturityRating ==
+                  "A") {
+                // Print statement for maturity rating check
+                print("Maturity Rating is A, showing pop-up");
+
+                // Show the pop-up with details
+              showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: Colors.black,
+      elevation: 5, // Adding shadow
+      title: Column(
+        children: [
+          Image.asset("assets/images/age.png",height: 50 ,width: 50,),
+          SizedBox(height: 10),
+
+
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Age ', 
+                  style: TextStyle(
+                    fontSize: 19, 
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                TextSpan(
+                  text: 'Verification', 
+                  style: TextStyle(
+                    fontSize: 19, 
+                    color:colorPrimary,
+                     fontWeight: FontWeight.w500
+                  ),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 14),
+          Text(
+            'You must be 18+ to access this content.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.w400
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Please verify your age.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  // User confirmed they're over 18, open player screen
+                  openPlayer("Video");
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: colorPrimary,
+                  primary: Colors.black,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: Text('I am over 18'),
+              ),
+              SizedBox(width: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog and do nothing
+                },
+                style: TextButton.styleFrom(
+                  side: BorderSide(color: Colors.white),
+                  primary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        ],
+      ),
+      actionsPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 30), // Increase content height
+    );
+  },
+);
+
+              
+                return; // Skip the rest of the logic as the pop-up is shown
+              }
+
+
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
               bool isPrimeUserCoin =
                   videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-                      1; // Prime user with coins
+                      1;
               bool isAdShow =
-                  videoDetailsProvider.sectionDetailModel.result?.isadshow ==
-                      1; // Check if ad should be shown
+                  videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
               bool isRenteBuy =
-                  videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
-                      1; // Rent buy access
+                  videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
 
-              print("Prime User: $isPrimeUser");
-              print("Prime User with Coins: $isPrimeUserCoin");
-              print("Show Ad: $isAdShow");
-              print("Rent Buy: $isRenteBuy");
-
-              // Check if rewardad is disabled for Android or iOS
-              if ((Platform.isAndroid && rewardad == "0") ||
-                  (Platform.isIOS && rewardadIos == "0")) {
-                print(
-                    "Rewarded ad is disabled for this platform. Opening player directly.");
+              if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
+                  (Platform.isIOS && generalProvider.rewardadIos == "0")) {
                 openPlayer("Video");
-                return; // Exit early since the ad logic is bypassed
+                return;
               }
 
-              // Check access conditions
-              if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-                // If the user is prime, directly navigate to the player
-                openPlayer("Video");
-              } else {
-                // Non-prime user, show ad if necessary
-                if (isAdShow) {
-                  print("Ad should be shown");
-
-                  // Show the rewarded ad
-                  // Show the rewarded ad
-                  AdHelper.showRewardedAd(
-                    onAdCompleted: () async {
-                      print(
-                          "Rewarded ad completed. Proceeding with API call...");
-
-                      try {
-                        print("API call to add coins started...");
+              if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+                  (Platform.isIOS && generalProvider.rewardadIos == "1")) {
+                if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+                  openPlayer("Video");
+                } else {
+                  if (isAdShow) {
+                    AdHelper.showRewardedAd(
+                      onAdCompleted: () async {
                         await walletProvider.addCoinsAfterWatchAd(
                           Constant.userID!,
                           videoDetailsProvider.sectionDetailModel.result?.id ??
@@ -2910,42 +3017,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           0,
                           generalProvider.isAdsCoin,
                         );
-                        print("Coins added successfully!");
-                        // Open the player after coins are added
                         openPlayer("Video");
-                      } catch (error) {
-                        print("Error while adding coins: $error");
-                      }
-                    },
-                    onAdFailed: () {
-                      print(
-                          "Ad failed or was not completed. Skipping API call.");
-                      openPlayer("Video");
-                    },
-                  );
-
-                  // AdHelper.showRewardedAd(() async {
-                  //   print("Rewarded ad dismissed");
-
-                  //   // Handle the logic for adding coins after the ad is dismissed
-                  //   try {
-                  //     print("API call to add coins started...");
-                  //     await walletProvider.addCoinsAfterWatchAd(
-                  //       Constant.userID!,
-                  //       videoDetailsProvider.sectionDetailModel.result?.id,
-                  //       0,
-                  //       generalProvider.isAdsCoin,
-                  //     );
-                  //     print("Coins added successfully!");
-                  //     // After adding coins, open the player
-                  //     openPlayer("Video");
-                  //   } catch (error) {
-                  //     print("Error while adding coins: $error");
-                  //   }
-                  // });
-                } else {
-                  // If the ad shouldn't be shown, directly proceed
-                  openPlayer("Video");
+                      },
+                      onAdFailed: () {
+                        openPlayer("Video");
+                      },
+                    );
+                  } else {
+                    openPlayer("Video");
+                  }
                 }
               }
             } else {
@@ -2956,71 +3036,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               );
             }
           },
-
-          // onTap: () async {
-          //   if (Constant.userID != null) {
-          //     // Check if the user is a "prime" user
-          //     bool isPrimeUser =
-          //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-          //     bool isPrimeUserCoin =
-          //         videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-          //             1; // Prime user
-          //     bool isAdShow =
-          //         videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
-          //     bool isRenteBuy =
-          //         videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
-
-          //     print("after show the add--${isPrimeUser}");
-          //     print("after show the add--${isPrimeUserCoin}");
-          //     print("after show the add--${isAdShow}");
-          //     print("after show the add--${isRenteBuy}");
-
-          //     if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-          //       // Prime user, directly navigate to the player
-          //       openPlayer("Video");
-          //     } else {
-          //       // Non-prime user, show the ad if necessary
-          //       if (isAdShow) {
-          //         print("IS AD SHOW--");
-          //         print("IS AD SHOW--${isAdShow}");
-
-          //         // Show the rewarded ad
-          //         AdHelper.showRewardedAd(() async {
-          //           print("Rewarded ad dismissed");
-
-          //           // Handle the logic for adding coins after the ad is dismissed
-          //           try {
-          //             print("Api call start--");
-          //             await walletProvider.addCoinsAfterWatchAd(
-          //               Constant.userID!,
-          //               videoDetailsProvider.sectionDetailModel.result?.id,
-          //               0,
-          //               generalProvider.isAdsCoin,
-          //             );
-          //             print("Coins added successfully!");
-          //           } catch (e) {
-          //             print("Error adding coins: $e");
-          //           }
-
-          //           // Navigate to the player after the ad
-          //           openPlayer("Video");
-          //         });
-          //       } else {
-          //         // No ad to show, directly navigate to the player
-          //         openPlayer("Video");
-          //       }
-          //     }
-          //   } else {
-          //     // User is not logged in, navigate to login screen
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) => const LoginSocial(),
-          //       ),
-          //     );
-          //   }
-          // }
-
-          //focusColor:: white,
           borderRadius: BorderRadius.circular(5),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -3070,188 +3085,434 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     }
   }
 
-  // Widget _buildRentBtn() {
-  //   if ((videoDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) == 1 &&
-  //       (videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
-  //     if ((videoDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
-  //         (videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
-  //       return const SizedBox.shrink();
-  //     } else {
-  //       return Expanded(
-  //         child: InkWell(
-  //           //focusColor:: white,
-  //           borderRadius: BorderRadius.circular(5),
-  //           onTap: () async {
-  //             if (Constant.userID != null) {
-  //               dynamic isRented = await Utils.paymentForRent(
-  //                 context: context,
-  //                 videoId: videoDetailsProvider.sectionDetailModel.result?.id
-  //                         .toString() ??
-  //                     '',
-  //                 rentPrice: videoDetailsProvider
-  //                         .sectionDetailModel.result?.rentPrice
-  //                         .toString() ??
-  //                     '',
-  //                 vTitle: videoDetailsProvider.sectionDetailModel.result?.name
-  //                         .toString() ??
-  //                     '',
-  //                 typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
-  //                         .toString() ??
-  //                     '',
-  //                 vType: videoDetailsProvider
-  //                         .sectionDetailModel.result?.videoType
-  //                         .toString() ??
-  //                     '',
-  //               );
-  //               if (isRented != null && isRented == true) {
-  //                 analytics.logEvent(
-  //                   name: "Watch_Rented_video",
-  //                   parameters: {
-  //                     "user_id": Constant.userID,
-  //                     'video_id':
-  //                         videoDetailsProvider.sectionDetailModel.result?.id ??
-  //                             '',
-  //                     'video_name': videoDetailsProvider
-  //                             .sectionDetailModel.result?.name ??
-  //                         '',
-  //                     'rent_price': videoDetailsProvider
-  //                             .sectionDetailModel.result?.rentPrice ??
-  //                         0,
-  //                   },
-  //                 );
-  //                  Map<String, Object> screenViewEvent = {
-  //                   'event_name': 'Watch_Rented_video',
-  //                   'video_id':
-  //                       videoDetailsProvider.sectionDetailModel.result?.id ??
-  //                           '',
-  //                   'video_name':
-  //                       videoDetailsProvider.sectionDetailModel.result?.name ??
-  //                           '',
-  //                   'rent_price': videoDetailsProvider
-  //                           .sectionDetailModel.result?.rentPrice ??
-  //                       0,
-  //                   'user_id': Constant.userID.toString(),
-  //                 };
+  // Widget _buildWatchNow() {
+  //   if ((videoDetailsProvider.sectionDetailModel.result?.stopTime ?? 0) > 0 &&
+  //       videoDetailsProvider.sectionDetailModel.result?.videoDuration != null) {
+  //     return Container(
+  //       alignment: Alignment.centerLeft,
+  //       child: InkWell(
+  //         onTap: () async {
+  //           if (Constant.userID != null) {
+  //             // Check if the user is a "prime" user or has other access
+  //             bool isPrimeUser =
+  //                 videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+  //             bool isPrimeUserCoin =
+  //                 videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+  //                     1; // Prime user with coins
+  //             bool isAdShow =
+  //                 videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+  //                     1; // Check if ad should be shown
+  //             bool isRenteBuy =
+  //                 videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+  //                     1; // Rent buy access
 
-  //                 Singular.eventWithArgs('Watch_Rented_video', screenViewEvent);
-  //                 _getData();
-  //               }
-  //             } else {
-  //               if ((kIsWeb || Constant.isTV)) {
-  //                 Utils.buildWebAlertDialog(context, "login", "")
-  //                     .then((value) => _getData());
-  //                 return;
-  //               }
-  //               Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) {
-  //                     return const LoginSocial();
-  //                   },
-  //                 ),
-  //               );
+  //             bool isCoinFeatureEnable = generalProvider.isCoinShow == "1";
+
+  //             print(
+  //                 "Prime User---:mat ${videoDetailsProvider.sectionDetailModel.result?.maturityRating}");
+  //             print("Prime User: $isPrimeUser");
+  //             print("Prime User with Coins: $isPrimeUserCoin");
+  //             print("Show Ad: $isAdShow");
+  //             print("Rent Buy: $isRenteBuy");
+
+  //             // Check if rewardad is disabled for Android or iOS
+  //             if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
+  //                 (Platform.isIOS && generalProvider.rewardadIos == "0")) {
+  //               print(
+  //                   "Rewarded ad is disabled for this platform. Opening player directly.");
+  //               openPlayer("Video");
+  //               return; // Exit early since the ad logic is bypassed
   //             }
-  //           },
-  //           child: _buildFeatureBtn(
-  //             icon: 'ic_store.png',
-  //             title:
-  //                 "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
-  //             multilanguage: false,
+
+  //             if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+  //                 (Platform.isIOS && generalProvider.rewardadIos == "1")) {
+  //               print("Rewarded ad is enable for this platform. Ope.");
+  //               if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+  //                 // If the user is prime, directly navigate to the player
+  //                 openPlayer("Video");
+  //               } else {
+  //                 // Non-prime user, show ad if necessary
+  //                 if (isAdShow) {
+  //                   print("Ad should be shown");
+
+  //                   // Show the rewarded ad
+
+  //                   // Show the rewarded ad
+  //                   AdHelper.showRewardedAd(
+  //                     onAdCompleted: () async {
+  //                       print(
+  //                           "Rewarded ad completed. Proceeding with API call...");
+
+  //                       try {
+  //                         print("API call to add coins started...");
+  //                         await walletProvider.addCoinsAfterWatchAd(
+  //                           Constant.userID!,
+  //                           videoDetailsProvider
+  //                                   .sectionDetailModel.result?.id ??
+  //                               '',
+  //                           0,
+  //                           generalProvider.isAdsCoin,
+  //                         );
+  //                         print("Coins added successfully!");
+  //                         // Open the player after coins are added
+  //                         openPlayer("Video");
+  //                       } catch (error) {
+  //                         print("Error while adding coins: $error");
+  //                       }
+  //                     },
+  //                     onAdFailed: () {
+  //                       print(
+  //                           "Ad failed or was not completed. Skipping API call.");
+  //                     },
+  //                   );
+  //                 } else {
+  //                   // If the ad shouldn't be shown, directly proceed
+  //                   openPlayer("Video");
+  //                 }
+  //               }
+  //               return;
+  //             }
+  //           } else {
+  //             Navigator.of(context).push(
+  //               MaterialPageRoute(
+  //                 builder: (context) => const LoginSocial(),
+  //               ),
+  //             );
+  //           }
+  //         },
+  //         borderRadius: BorderRadius.circular(5),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(2.0),
+  //           child: Container(
+  //             height: (kIsWeb || Constant.isTV) ? 40 : 55,
+  //             constraints: BoxConstraints(
+  //               maxWidth: (kIsWeb || Constant.isTV)
+  //                   ? 190
+  //                   : MediaQuery.of(context).size.width,
+  //             ),
+  //             decoration: BoxDecoration(
+  //               color: primaryDark,
+  //               borderRadius: BorderRadius.circular(5),
+  //             ),
+  //             child: Column(
+  //               children: [
+  //                 Expanded(
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.start,
+  //                     crossAxisAlignment: CrossAxisAlignment.center,
+  //                     children: [
+  //                       const SizedBox(width: 20),
+  //                       MyImage(
+  //                         width: 18,
+  //                         height: 18,
+  //                         imagePath: "ic_play.png",
+  //                         color: black,
+  //                       ),
+  //                       const SizedBox(width: 15),
+  //                       Expanded(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                           children: [
+  //                             MyText(
+  //                               color: black,
+  //                               text: "continuewatching",
+  //                               multilanguage: true,
+  //                               textalign: TextAlign.start,
+  //                               fontsizeNormal: 13,
+  //                               fontsizeWeb: 15,
+  //                               fontweight: FontWeight.w600,
+  //                               maxline: 1,
+  //                               overflow: TextOverflow.ellipsis,
+  //                               fontstyle: FontStyle.normal,
+  //                             ),
+  //                             Row(
+  //                               children: [
+  //                                 MyText(
+  //                                   color: black,
+  //                                   text: Utils.remainTimeInMin(
+  //                                       ((videoDetailsProvider
+  //                                                       .sectionDetailModel
+  //                                                       .result
+  //                                                       ?.videoDuration ??
+  //                                                   0) -
+  //                                               (videoDetailsProvider
+  //                                                       .sectionDetailModel
+  //                                                       .result
+  //                                                       ?.stopTime ??
+  //                                                   0))
+  //                                           .abs()),
+  //                                   textalign: TextAlign.start,
+  //                                   fontsizeNormal: 10,
+  //                                   fontweight: FontWeight.w500,
+  //                                   fontsizeWeb: 12,
+  //                                   multilanguage: false,
+  //                                   maxline: 1,
+  //                                   overflow: TextOverflow.ellipsis,
+  //                                   fontstyle: FontStyle.normal,
+  //                                 ),
+  //                                 const SizedBox(width: 5),
+  //                                 MyText(
+  //                                   color: black,
+  //                                   text: "left",
+  //                                   textalign: TextAlign.start,
+  //                                   fontsizeNormal: 10,
+  //                                   fontweight: FontWeight.w500,
+  //                                   fontsizeWeb: 12,
+  //                                   multilanguage: true,
+  //                                   maxline: 1,
+  //                                   overflow: TextOverflow.ellipsis,
+  //                                   fontstyle: FontStyle.normal,
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       const SizedBox(width: 20),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   height: 4,
+  //                   constraints: const BoxConstraints(minWidth: 0),
+  //                   margin: const EdgeInsets.all(3),
+  //                   child: LinearPercentIndicator(
+  //                     padding: const EdgeInsets.all(0),
+  //                     barRadius: const Radius.circular(2),
+  //                     lineHeight: 4,
+  //                     percent: Utils.getPercentage(
+  //                         videoDetailsProvider
+  //                                 .sectionDetailModel.result?.videoDuration ??
+  //                             0,
+  //                         videoDetailsProvider
+  //                                 .sectionDetailModel.result?.stopTime ??
+  //                             0),
+  //                     backgroundColor: secProgressColor,
+  //                     progressColor: colorPrimary,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
   //           ),
   //         ),
-  //       );
-  //     }
-  //   } else if ((videoDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
-  //       1) {
-  //     if ((videoDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) == 1) {
-  //       return const SizedBox.shrink();
-  //     } else {
-  //       return Expanded(
-  //         child: InkWell(
-  //           //focusColor:: white,
-  //           borderRadius: BorderRadius.circular(5),
-  //           onTap: () async {
-  //             if (Constant.userID != null) {
-  //               dynamic isRented = await Utils.paymentForRent(
-  //                 context: context,
-  //                 videoId: videoDetailsProvider.sectionDetailModel.result?.id
-  //                         .toString() ??
-  //                     '',
-  //                 rentPrice: videoDetailsProvider
-  //                         .sectionDetailModel.result?.rentPrice
-  //                         .toString() ??
-  //                     '',
-  //                 vTitle: videoDetailsProvider.sectionDetailModel.result?.name
-  //                         .toString() ??
-  //                     '',
-  //                 typeId: videoDetailsProvider.sectionDetailModel.result?.typeId
-  //                         .toString() ??
-  //                     '',
-  //                 vType: videoDetailsProvider
-  //                         .sectionDetailModel.result?.videoType
-  //                         .toString() ??
-  //                     '',
-  //               );
-  //               if (isRented != null && isRented == true) {
-  //                 analytics.logEvent(
-  //                   name: "Watch_Rented_video",
-  //                   parameters: {
-  //                     "user_id": Constant.userID,
-  //                     'video_id':
-  //                         videoDetailsProvider.sectionDetailModel.result?.id ??
-  //                             '',
-  //                     'video_name': videoDetailsProvider
-  //                             .sectionDetailModel.result?.name ??
-  //                         '',
-  //                     'rent_price': videoDetailsProvider
-  //                             .sectionDetailModel.result?.rentPrice ??
-  //                         0,
-  //                   },
-  //                 );
-  // Map<String, Object> screenViewEvent = {
-  //                   'event_name': 'Watch_Rented_video',
-  //                   'video_id':
-  //                       videoDetailsProvider.sectionDetailModel.result?.id ??
-  //                           '',
-  //                   'video_name':
-  //                       videoDetailsProvider.sectionDetailModel.result?.name ??
-  //                           '',
-  //                   'rent_price': videoDetailsProvider
-  //                           .sectionDetailModel.result?.rentPrice ??
-  //                       0,
-  //                   'user_id': Constant.userID.toString(),
-  //                 };
-
-  //                 Singular.eventWithArgs('Watch_Rented_video', screenViewEvent);
-  //                 _getData();
-  //               }
-  //             } else {
-  //               if ((kIsWeb || Constant.isTV)) {
-  //                 Utils.buildWebAlertDialog(context, "login", "")
-  //                     .then((value) => _getData());
-  //                 return;
-  //               }
-  //               Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) {
-  //                     return const LoginSocial();
-  //                   },
-  //                 ),
-  //               );
-  //             }
-  //           },
-  //           child: _buildFeatureBtn(
-  //             icon: 'ic_store.png',
-  //             title:
-  //                 "Rent at just\n${Constant.currencySymbol}${videoDetailsProvider.sectionDetailModel.result?.rentPrice ?? 0}",
-  //             multilanguage: false,
-  //           ),
-  //         ),
-  //       );
-  //     }
+  //       ),
+  //     );
   //   } else {
-  //     return const SizedBox.shrink();
+  //     return Container(
+  //       alignment: Alignment.centerLeft,
+  //       child: InkWell(
+  //         onTap: () async {
+  //           if (Constant.userID != null) {
+  //             // Check if the user is a "prime" user or has other access
+  //             bool isPrimeUser =
+  //                 videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+  //             bool isPrimeUserCoin =
+  //                 videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+  //                     1; // Prime user with coins
+  //             bool isAdShow =
+  //                 videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+  //                     1; // Check if ad should be shown
+  //             bool isRenteBuy =
+  //                 videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+  //                     1; // Rent buy access
+
+  //             print("Prime User: $isPrimeUser");
+  //             print("Prime User with Coins: $isPrimeUserCoin");
+  //             print("Show Ad: $isAdShow");
+  //             print("Rent Buy: $isRenteBuy");
+
+  //             // Check if rewardad is disabled for Android or iOS
+  //             if ((Platform.isAndroid && rewardad == "0") ||
+  //                 (Platform.isIOS && rewardadIos == "0")) {
+  //               print(
+  //                   "Rewarded ad is disabled for this platform. Opening player directly.");
+  //               openPlayer("Video");
+  //               return; // Exit early since the ad logic is bypassed
+  //             }
+
+  //             // Check access conditions
+  //             if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+  //               // If the user is prime, directly navigate to the player
+  //               openPlayer("Video");
+  //             } else {
+  //               // Non-prime user, show ad if necessary
+  //               if (isAdShow) {
+  //                 print("Ad should be shown");
+
+  //                 // Show the rewarded ad
+  //                 // Show the rewarded ad
+  //                 AdHelper.showRewardedAd(
+  //                   onAdCompleted: () async {
+  //                     print(
+  //                         "Rewarded ad completed. Proceeding with API call...");
+
+  //                     try {
+  //                       print("API call to add coins started...");
+  //                       await walletProvider.addCoinsAfterWatchAd(
+  //                         Constant.userID!,
+  //                         videoDetailsProvider.sectionDetailModel.result?.id ??
+  //                             '',
+  //                         0,
+  //                         generalProvider.isAdsCoin,
+  //                       );
+  //                       print("Coins added successfully!");
+  //                       // Open the player after coins are added
+  //                       openPlayer("Video");
+  //                     } catch (error) {
+  //                       print("Error while adding coins: $error");
+  //                     }
+  //                   },
+  //                   onAdFailed: () {
+  //                     print(
+  //                         "Ad failed or was not completed. Skipping API call.");
+  //                     openPlayer("Video");
+  //                   },
+  //                 );
+
+  //                 // AdHelper.showRewardedAd(() async {
+  //                 //   print("Rewarded ad dismissed");
+
+  //                 //   // Handle the logic for adding coins after the ad is dismissed
+  //                 //   try {
+  //                 //     print("API call to add coins started...");
+  //                 //     await walletProvider.addCoinsAfterWatchAd(
+  //                 //       Constant.userID!,
+  //                 //       videoDetailsProvider.sectionDetailModel.result?.id,
+  //                 //       0,
+  //                 //       generalProvider.isAdsCoin,
+  //                 //     );
+  //                 //     print("Coins added successfully!");
+  //                 //     // After adding coins, open the player
+  //                 //     openPlayer("Video");
+  //                 //   } catch (error) {
+  //                 //     print("Error while adding coins: $error");
+  //                 //   }
+  //                 // });
+  //               } else {
+  //                 // If the ad shouldn't be shown, directly proceed
+  //                 openPlayer("Video");
+  //               }
+  //             }
+  //           } else {
+  //             Navigator.of(context).push(
+  //               MaterialPageRoute(
+  //                 builder: (context) => const LoginSocial(),
+  //               ),
+  //             );
+  //           }
+  //         },
+
+  //         // onTap: () async {
+  //         //   if (Constant.userID != null) {
+  //         //     // Check if the user is a "prime" user
+  //         //     bool isPrimeUser =
+  //         //         videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+  //         //     bool isPrimeUserCoin =
+  //         //         videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+  //         //             1; // Prime user
+  //         //     bool isAdShow =
+  //         //         videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
+  //         //     bool isRenteBuy =
+  //         //         videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
+
+  //         //     print("after show the add--${isPrimeUser}");
+  //         //     print("after show the add--${isPrimeUserCoin}");
+  //         //     print("after show the add--${isAdShow}");
+  //         //     print("after show the add--${isRenteBuy}");
+
+  //         //     if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+  //         //       // Prime user, directly navigate to the player
+  //         //       openPlayer("Video");
+  //         //     } else {
+  //         //       // Non-prime user, show the ad if necessary
+  //         //       if (isAdShow) {
+  //         //         print("IS AD SHOW--");
+  //         //         print("IS AD SHOW--${isAdShow}");
+
+  //         //         // Show the rewarded ad
+  //         //         AdHelper.showRewardedAd(() async {
+  //         //           print("Rewarded ad dismissed");
+
+  //         //           // Handle the logic for adding coins after the ad is dismissed
+  //         //           try {
+  //         //             print("Api call start--");
+  //         //             await walletProvider.addCoinsAfterWatchAd(
+  //         //               Constant.userID!,
+  //         //               videoDetailsProvider.sectionDetailModel.result?.id,
+  //         //               0,
+  //         //               generalProvider.isAdsCoin,
+  //         //             );
+  //         //             print("Coins added successfully!");
+  //         //           } catch (e) {
+  //         //             print("Error adding coins: $e");
+  //         //           }
+
+  //         //           // Navigate to the player after the ad
+  //         //           openPlayer("Video");
+  //         //         });
+  //         //       } else {
+  //         //         // No ad to show, directly navigate to the player
+  //         //         openPlayer("Video");
+  //         //       }
+  //         //     }
+  //         //   } else {
+  //         //     // User is not logged in, navigate to login screen
+  //         //     Navigator.of(context).push(
+  //         //       MaterialPageRoute(
+  //         //         builder: (context) => const LoginSocial(),
+  //         //       ),
+  //         //     );
+  //         //   }
+  //         // }
+
+  //         //focusColor:: white,
+  //         borderRadius: BorderRadius.circular(5),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(2.0),
+  //           child: Container(
+  //             height: (kIsWeb || Constant.isTV) ? 40 : 55,
+  //             constraints: BoxConstraints(
+  //               maxWidth: (kIsWeb || Constant.isTV)
+  //                   ? 180
+  //                   : MediaQuery.of(context).size.width,
+  //             ),
+  //             padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
+  //             decoration: BoxDecoration(
+  //               color: primaryDark,
+  //               borderRadius: BorderRadius.circular(5),
+  //             ),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 MyImage(
+  //                   width: 18,
+  //                   height: 18,
+  //                   imagePath: "ic_play.png",
+  //                   color: black,
+  //                 ),
+  //                 const SizedBox(width: 15),
+  //                 Expanded(
+  //                   child: MyText(
+  //                     color: black,
+  //                     text: "watch_now",
+  //                     multilanguage: true,
+  //                     textalign: TextAlign.start,
+  //                     fontsizeNormal: 15,
+  //                     fontweight: FontWeight.w600,
+  //                     fontsizeWeb: 16,
+  //                     maxline: 1,
+  //                     overflow: TextOverflow.ellipsis,
+  //                     fontstyle: FontStyle.normal,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
   //   }
   // }
 
