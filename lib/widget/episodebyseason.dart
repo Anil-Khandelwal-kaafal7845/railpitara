@@ -98,7 +98,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         widget.seasonList?[(widget.seasonPos ?? 0)].id ?? 0, widget.videoId);
     await showDetailsProvider
         .setEpisodeBySeason(episodeProvider.episodeBySeasonModel);
-         await generalProvider.getGeneralsetting(context);
+    await generalProvider.getGeneralsetting(context);
     Future.delayed(Duration.zero).then((value) async {
       if (!mounted) return;
       rewardad = await sharePref.read("reward_ad") ?? "";
@@ -166,6 +166,136 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                               onTap: () async {
                                 // Check if the user is logged in
                                 if (Constant.userID != null) {
+                                  if (showDetailsProvider.sectionDetailModel
+                                          .result?.maturityRating ==
+                                      "A") {
+                                    print("Maturity Rating check in show--");
+                                    // Show the pop-up with details
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          backgroundColor: Colors.black,
+                                          elevation: 5, // Adding shadow
+                                          title: Column(
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/age.png",
+                                                height: 50,
+                                                width: 50,
+                                              ),
+                                              SizedBox(height: 10),
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'Age ',
+                                                      style: TextStyle(
+                                                          fontSize: 19,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    TextSpan(
+                                                      text: 'Verification',
+                                                      style: TextStyle(
+                                                          fontSize: 19,
+                                                          color: colorPrimary,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              SizedBox(height: 14),
+                                              Text(
+                                                'You must be 18+ to access this content.',
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'Please verify your age.',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              SizedBox(height: 20),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      // User confirmed they're over 18, open player screen
+                                                      openPlayer(
+                                                        "Show",
+                                                        index,
+                                                        episodeProvider
+                                                            .episodeBySeasonModel
+                                                            .result,
+                                                      );
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          colorPrimary,
+                                                      primary: Colors.black,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20,
+                                                              vertical: 10),
+                                                    ),
+                                                    child: Text('I am over 18'),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog and do nothing
+                                                    },
+                                                    style: TextButton.styleFrom(
+                                                      side: BorderSide(
+                                                          color: Colors.white),
+                                                      primary: Colors.white,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20,
+                                                              vertical: 10),
+                                                    ),
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          actionsPadding: EdgeInsets.zero,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 20,
+                                              horizontal:
+                                                  30), // Increase content height
+                                        );
+                                      },
+                                    );
+
+                                    return;
+                                  }
                                   // Extract isBuy and isAdShow values from the episode data
                                   bool isPrimeUser = episodeProvider
                                           .episodeBySeasonModel
@@ -197,8 +327,10 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                     return; // Exit early since ads are skipped
                                   }
 
-                                  if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
-                                      (Platform.isIOS && generalProvider.rewardadIos == "1")) {
+                                  if ((Platform.isAndroid &&
+                                          generalProvider.rewardad == "1") ||
+                                      (Platform.isIOS &&
+                                          generalProvider.rewardadIos == "1")) {
                                     print(
                                         "Rewarded ad is disabled for this platform. Opening player directly.");
                                     if (isPrimeUser || isPrimeUserCoin) {
@@ -211,39 +343,47 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                       );
                                     } else {
                                       if (isAdShow) {
-                                       AdHelper.showRewardedAd(
-  onAdCompleted: () async {
-    // Callback when the ad is completed successfully
-    try {
-      print("API call start...");
-      await walletProvider.addCoinsAfterWatchAd(
-        Constant.userID!,
-        0,
-        episodeProvider.episodeBySeasonModel.result?[index].showId,
-        generalProvider.isAdsCoin,
-      );
-      print("Coins added successfully!");
-    } catch (e) {
-      print("Error adding coins: $e");
-    }
-    // Navigate to the player after adding coins
-    openPlayer(
-      "Show",
-      index,
-      episodeProvider.episodeBySeasonModel.result,
-    );
-  },
-  onAdFailed: () {
-    // Callback when the ad fails to show
-    print("Ad failed to show. Navigating to the player without rewarding.");
-    // Navigate to the player without adding coins
-    openPlayer(
-      "Show",
-      index,
-      episodeProvider.episodeBySeasonModel.result,
-    );
-  },
-);
+                                        AdHelper.showRewardedAd(
+                                          onAdCompleted: () async {
+                                            // Callback when the ad is completed successfully
+                                            try {
+                                              print("API call start...");
+                                              await walletProvider
+                                                  .addCoinsAfterWatchAd(
+                                                Constant.userID!,
+                                                0,
+                                                episodeProvider
+                                                    .episodeBySeasonModel
+                                                    .result?[index]
+                                                    .showId,
+                                                generalProvider.isAdsCoin,
+                                              );
+                                              print(
+                                                  "Coins added successfully!");
+                                            } catch (e) {
+                                              print("Error adding coins: $e");
+                                            }
+                                            // Navigate to the player after adding coins
+                                            openPlayer(
+                                              "Show",
+                                              index,
+                                              episodeProvider
+                                                  .episodeBySeasonModel.result,
+                                            );
+                                          },
+                                          onAdFailed: () {
+                                            // Callback when the ad fails to show
+                                            print(
+                                                "Ad failed to show. Navigating to the player without rewarding.");
+                                            // Navigate to the player without adding coins
+                                            openPlayer(
+                                              "Show",
+                                              index,
+                                              episodeProvider
+                                                  .episodeBySeasonModel.result,
+                                            );
+                                          },
+                                        );
 
                                         // AdHelper.showRewardedAd(() async {
                                         //   try {
@@ -484,41 +624,42 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                 fontstyle: FontStyle.normal,
                               ),
                               const SizedBox(width: 5),
-                            
-                             generalProvider.isCoinShow == "1" ?  
-                              Row(
-                                children: [
-                                  MyText(
-                                    color: white,
-                                    text: "cointag",
-                                    textalign: TextAlign.center,
-                                    fontsizeNormal: 12,
-                                    fontsizeWeb: 13,
-                                    multilanguage: true,
-                                    fontweight: FontWeight.w500,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  MyText(
-                                    color: colorPrimary,
-                                    text: episodeProvider.episodeBySeasonModel
-                                            .result?[index].coinvalue
-                                            .toString() ??
-                                        "",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 12,
-                                    fontsizeWeb: 12,
-                                    multilanguage: false,
-                                    fontweight: FontWeight.w400,
-                                    maxline: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ],
-                              ):SizedBox.shrink(),
-                            
+                              generalProvider.isCoinShow == "1"
+                                  ? Row(
+                                      children: [
+                                        MyText(
+                                          color: white,
+                                          text: "cointag",
+                                          textalign: TextAlign.center,
+                                          fontsizeNormal: 12,
+                                          fontsizeWeb: 13,
+                                          multilanguage: true,
+                                          fontweight: FontWeight.w500,
+                                          maxline: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontstyle: FontStyle.normal,
+                                        ),
+                                        const SizedBox(height: 5),
+                                        MyText(
+                                          color: colorPrimary,
+                                          text: episodeProvider
+                                                  .episodeBySeasonModel
+                                                  .result?[index]
+                                                  .coinvalue
+                                                  .toString() ??
+                                              "",
+                                          textalign: TextAlign.start,
+                                          fontsizeNormal: 12,
+                                          fontsizeWeb: 12,
+                                          multilanguage: false,
+                                          fontweight: FontWeight.w400,
+                                          maxline: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontstyle: FontStyle.normal,
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox.shrink(),
                             ],
                           ),
                         ),
@@ -772,7 +913,10 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
                   // Single option: Rent via Coin
                   ListTile(
-                    leading:      AnimatedGifWidget(height:60 ,width: 60,),
+                    leading: AnimatedGifWidget(
+                      height: 60,
+                      width: 60,
+                    ),
                     title: const Text(
                       'Rent via Coin',
                       style: TextStyle(color: Colors.white),
@@ -951,7 +1095,10 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
                     // Single option: Rent via Coin
                     ListTile(
-                      leading:       AnimatedGifWidget(height:50 ,width: 50,),
+                      leading: AnimatedGifWidget(
+                        height: 50,
+                        width: 50,
+                      ),
                       title: const Text(
                         'Rent via Coin',
                         style: TextStyle(color: Colors.white),

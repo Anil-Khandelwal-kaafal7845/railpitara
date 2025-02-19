@@ -42,7 +42,7 @@ class Dimens {
     static double widthLangGenLand = 150;
   static double heightLangGenLand = 100;
 
-  static double heightWatchlist = 100;
+  static double heightWatchlist = 110;
   static double upcomingHeight =90 ;
 
   static double homeBanner = 210;

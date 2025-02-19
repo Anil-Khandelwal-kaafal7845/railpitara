@@ -187,6 +187,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           .watchlistModel.result?[position].typeId ??
                       0,
                 );
+            
               },
               child: MyNetworkImageLand(
                 imageUrl: (watchlistProvider
@@ -203,11 +204,11 @@ class _MyWatchlistState extends State<MyWatchlist> {
               ),
             ),
           ),
-          ((watchlistProvider.watchlistModel.result?[position].videoType ??
-                      0) !=
-                  2)
-              ? _buildWatchBtnWithProgress(position)
-              : const SizedBox.shrink(),
+          // ((watchlistProvider.watchlistModel.result?[position].videoType ??
+          //             0) !=
+          //         2)
+          //     ? _buildWatchBtnWithProgress(position)
+          //     : const SizedBox.shrink(),
         ],
       ),
     );
@@ -635,91 +636,95 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           borderRadius: BorderRadius.circular(5),
                           onTap: () async {
                             Navigator.pop(context);
-                            openPlayer("Video", position);
+                             Utils.openDetails(
+                  context: context,
+                  videoId:
+                      watchlistProvider.watchlistModel.result?[position].id ??
+                          0,
+                  upcomingType: 0,
+                  videoType: watchlistProvider
+                          .watchlistModel.result?[position].videoType ??
+                      0,
+                  typeId: watchlistProvider
+                          .watchlistModel.result?[position].typeId ??
+                      0,
+                );
+            
+                            // openPlayer("Video", position);
                           },
                           child: _buildDialogItems(
-                            icon: (watchlistProvider.watchlistModel
-                                            .result?[position].stopTime ??
-                                        0) >
-                                    0
-                                ? "ic_resume.png"
-                                : "ic_play.png",
-                            title: (watchlistProvider.watchlistModel
-                                            .result?[position].stopTime ??
-                                        0) >
-                                    0
-                                ? "resume"
-                                : "watch_now",
+                            icon: "ic_play.png",
+                            title: "watch_now",
                             isMultilang: true,
                           ),
                         )
                       : const SizedBox.shrink(),
 
-                  /* Start Over */
-                  ((watchlistProvider.watchlistModel.result?[position]
-                                      .stopTime ??
-                                  0) >
-                              0 &&
-                          (watchlistProvider.watchlistModel.result?[position]
-                                      .videoType ??
-                                  0) !=
-                              2)
-                      ? InkWell(
-                          borderRadius: BorderRadius.circular(5),
-                          onTap: () async {
-                            Navigator.pop(context);
-                            openPlayer("startOver", position);
-                          },
-                          child: _buildDialogItems(
-                            icon: "ic_restart.png",
-                            title: "startover",
-                            isMultilang: true,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  // /* Start Over */
+                  // ((watchlistProvider.watchlistModel.result?[position]
+                  //                     .stopTime ??
+                  //                 0) >
+                  //             0 &&
+                  //         (watchlistProvider.watchlistModel.result?[position]
+                  //                     .videoType ??
+                  //                 0) !=
+                  //             2)
+                  //     ? InkWell(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         onTap: () async {
+                  //           Navigator.pop(context);
+                  //           openPlayer("startOver", position);
+                  //         },
+                  //         child: _buildDialogItems(
+                  //           icon: "ic_restart.png",
+                  //           title: "startover",
+                  //           isMultilang: true,
+                  //         ),
+                  //       )
+                  //     : const SizedBox.shrink(),
 
                   /* Watch Trailer */
-                  ((watchlistProvider
-                                  .watchlistModel.result?[position].videoType ??
-                              0) !=
-                          2)
-                      ? InkWell(
-                          borderRadius: BorderRadius.circular(5),
-                          onTap: () async {
-                            Navigator.pop(context);
-                            if (!mounted) return;
+                  // ((watchlistProvider
+                  //                 .watchlistModel.result?[position].videoType ??
+                  //             0) !=
+                  //         2)
+                  //     ? InkWell(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         onTap: () async {
+                  //           Navigator.pop(context);
+                  //           if (!mounted) return;
 
-                            Utils.openPlayer(
-                                context: context,
-                                playType: "Trailer",
-                                videoId: watchlistProvider
-                                        .watchlistModel.result?[position].id ??
-                                    0,
-                                videoType: watchlistProvider.watchlistModel
-                                        .result?[position].videoType ??
-                                    0,
-                                typeId: watchlistProvider.watchlistModel
-                                        .result?[position].typeId ??
-                                    0,
-                                otherId: 0,
-                                videoUrl: watchlistProvider.watchlistModel
-                                        .result?[position].trailerUrl ??
-                                    "",
-                                trailerUrl: watchlistProvider.watchlistModel
-                                        .result?[position].trailerUrl ??
-                                    "",
-                                uploadType:
-                                    watchlistProvider.watchlistModel.result?[position].trailerType ?? "",
-                                videoThumb: watchlistProvider.watchlistModel.result?[position].landscape ?? "",
-                                vStopTime: 0);
-                          },
-                          child: _buildDialogItems(
-                            icon: "ic_borderplay.png",
-                            title: "watch_trailer",
-                            isMultilang: true,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  //           Utils.openPlayer(
+                  //               context: context,
+                  //               playType: "Trailer",
+                  //               videoId: watchlistProvider
+                  //                       .watchlistModel.result?[position].id ??
+                  //                   0,
+                  //               videoType: watchlistProvider.watchlistModel
+                  //                       .result?[position].videoType ??
+                  //                   0,
+                  //               typeId: watchlistProvider.watchlistModel
+                  //                       .result?[position].typeId ??
+                  //                   0,
+                  //               otherId: 0,
+                  //               videoUrl: watchlistProvider.watchlistModel
+                  //                       .result?[position].trailerUrl ??
+                  //                   "",
+                  //               trailerUrl: watchlistProvider.watchlistModel
+                  //                       .result?[position].trailerUrl ??
+                  //                   "",
+                  //               uploadType:
+                  //                   watchlistProvider.watchlistModel.result?[position].trailerType ?? "",
+                  //               videoThumb: watchlistProvider.watchlistModel.result?[position].landscape ?? "",
+                  //               vStopTime: 0);
+                  //         },
+                  //         child: _buildDialogItems(
+                  //           icon: "ic_borderplay.png",
+                  //           title: "watch_trailer",
+                  //           isMultilang: true,
+                  //         ),
+                  //       )
+                  //     : const SizedBox.shrink(),
 
                   /* Add to Watchlist / Remove from Watchlist */
                   InkWell(
@@ -807,32 +812,33 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     ),
                   ),
 
-                  /* View Details */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      debugPrint("Clicked on position :==> $position");
-                      Utils.openDetails(
-                        context: context,
-                        videoId: watchlistProvider
-                                .watchlistModel.result?[position].id ??
-                            0,
-                        upcomingType: 0,
-                        videoType: watchlistProvider
-                                .watchlistModel.result?[position].videoType ??
-                            0,
-                        typeId: watchlistProvider
-                                .watchlistModel.result?[position].typeId ??
-                            0,
-                      );
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_info.png",
-                      title: "view_details",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* View Details */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () async {
+                  //     Navigator.pop(context);
+                  //     debugPrint("Clicked on position :==> $position");
+                  //     Utils.openDetails(
+                  //       context: context,
+                  //       videoId: watchlistProvider
+                  //               .watchlistModel.result?[position].id ??
+                  //           0,
+                  //       upcomingType: 0,
+                  //       videoType: watchlistProvider
+                  //               .watchlistModel.result?[position].videoType ??
+                  //           0,
+                  //       typeId: watchlistProvider
+                  //               .watchlistModel.result?[position].typeId ??
+                  //           0,
+                  //     );
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_info.png",
+                  //     title: "view_details",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
+                
                 ],
               ),
             ),

@@ -2687,6 +2687,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
               
                 return; // Skip the rest of the logic as the pop-up is shown
+            
               }
 
 
