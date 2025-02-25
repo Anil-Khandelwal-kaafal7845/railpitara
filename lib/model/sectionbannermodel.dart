@@ -48,6 +48,7 @@ class Result {
   String? thumbnail;
   String? bannerBacklink;
   String? landscape;
+  String? fullWidth;
   dynamic? videoUrl;
   String? trailerType;
   int? stopTime;
@@ -79,6 +80,7 @@ class Result {
     this.videoUrl,
     this.isPremium,
     this.thumbnail,
+    this.fullWidth,
     this.isLiveUrl,
     this.landscape,
     this.trailerType,
@@ -113,6 +115,7 @@ class Result {
         thumbnail: json["thumbnail"],
         isLiveUrl: json["is_live_url"],
         landscape: json["landscape"],
+        fullWidth:json["full_width"],
         trailerType: json["trailer_type"],
         stopTime: json["stop_time"],
         isDownloaded: json["is_downloaded"],
@@ -141,6 +144,7 @@ class Result {
         "banner_backlink":bannerBacklink ,
         "type_id": typeId,
         "is_live_url": isLiveUrl,
+        "full_width":fullWidth,
         "is_premium": isPremium,
         "thumbnail": thumbnail,
         "video_320": videoUrl,

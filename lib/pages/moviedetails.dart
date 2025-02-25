@@ -1146,66 +1146,66 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           //   ],
                           // ),
 
-                          Container(
-                            constraints: const BoxConstraints(minHeight: 0),
-                            margin: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MyText(
-                                  color: white,
-                                  text: "MaturityRating",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                MyText(
-                                  color: white,
-                                  text: ":",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: false,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: MyText(
-                                    color: white,
-                                    text: (videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.maturityRating ??
-                                                "")
-                                            .isNotEmpty
-                                        ? videoDetailsProvider
-                                                .sectionDetailModel
-                                                .result
-                                                ?.maturityRating ??
-                                            ""
-                                        : "N/A",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 13,
-                                    fontweight: FontWeight.w500,
-                                    fontsizeWeb: 14,
-                                    multilanguage: false,
-                                    maxline: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // Container(
+                          //   constraints: const BoxConstraints(minHeight: 0),
+                          //   margin: const EdgeInsets.only(top: 10),
+                          //   child: Row(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       MyText(
+                          //         color: white,
+                          //         text: "MaturityRating",
+                          //         textalign: TextAlign.center,
+                          //         fontsizeNormal: 13,
+                          //         fontweight: FontWeight.w500,
+                          //         fontsizeWeb: 15,
+                          //         maxline: 1,
+                          //         multilanguage: true,
+                          //         overflow: TextOverflow.ellipsis,
+                          //         fontstyle: FontStyle.normal,
+                          //       ),
+                          //       const SizedBox(width: 5),
+                          //       MyText(
+                          //         color: white,
+                          //         text: ":",
+                          //         textalign: TextAlign.center,
+                          //         fontsizeNormal: 13,
+                          //         fontweight: FontWeight.w500,
+                          //         fontsizeWeb: 15,
+                          //         maxline: 1,
+                          //         multilanguage: false,
+                          //         overflow: TextOverflow.ellipsis,
+                          //         fontstyle: FontStyle.normal,
+                          //       ),
+                          //       const SizedBox(width: 5),
+                          //       Expanded(
+                          //         child: MyText(
+                          //           color: white,
+                          //           text: (videoDetailsProvider
+                          //                           .sectionDetailModel
+                          //                           .result
+                          //                           ?.maturityRating ??
+                          //                       "")
+                          //                   .isNotEmpty
+                          //               ? videoDetailsProvider
+                          //                       .sectionDetailModel
+                          //                       .result
+                          //                       ?.maturityRating ??
+                          //                   ""
+                          //               : "N/A",
+                          //           textalign: TextAlign.start,
+                          //           fontsizeNormal: 13,
+                          //           fontweight: FontWeight.w500,
+                          //           fontsizeWeb: 14,
+                          //           multilanguage: false,
+                          //           maxline: 5,
+                          //           overflow: TextOverflow.ellipsis,
+                          //           fontstyle: FontStyle.normal,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
 
                           Container(
                             constraints: const BoxConstraints(minHeight: 0),
@@ -1591,15 +1591,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               ? Dimens.detailWebPoster
               : Dimens.detailPoster,
           child: MyNetworkImage(
-            fit: BoxFit.fill,
-            imageUrl: videoDetailsProvider
-                        .sectionDetailModel.result?.landscape !=
-                    ""
-                ? (videoDetailsProvider.sectionDetailModel.result?.landscape ??
-                    "")
-                : (videoDetailsProvider.sectionDetailModel.result?.thumbnail ??
-                    ""),
-          ),
+              fit: BoxFit.fill,
+              imageUrl:
+                  videoDetailsProvider.sectionDetailModel.result?.fullWidth ??
+                      ""),
         ),
         Container(
           padding: const EdgeInsets.all(0),
@@ -2523,7 +2518,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Container(
-            height: (kIsWeb || Constant.isTV) ? 40 : 55,
+            height: (kIsWeb || Constant.isTV) ? 40 : 40,
             constraints: BoxConstraints(
               maxWidth: (kIsWeb || Constant.isTV)
                   ? 180
@@ -2567,11 +2562,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   }
 
   Widget _buildWatchNow() {
-
     if ((videoDetailsProvider.sectionDetailModel.result?.stopTime ?? 0) > 0 &&
         videoDetailsProvider.sectionDetailModel.result?.videoDuration != null) {
-      return
-       Container(
+      return Container(
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () async {
@@ -2585,111 +2578,113 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 print("Maturity Rating is A, showing pop-up");
 
                 // Show the pop-up with details
-              showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      backgroundColor: Colors.black,
-      elevation: 5, // Adding shadow
-      title: Column(
-        children: [
-          Image.asset("assets/images/age.png",height: 50 ,width: 50,),
-          SizedBox(height: 10),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      backgroundColor: Colors.black,
+                      elevation: 5, // Adding shadow
+                      title: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/age.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          SizedBox(height: 10),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Age ',
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                TextSpan(
+                                  text: 'Verification',
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      color: colorPrimary,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 14),
+                          Text(
+                            'You must be 18+ to access this content.',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Please verify your age.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  // User confirmed they're over 18, open player screen
+                                  openPlayer("Video");
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: colorPrimary,
+                                  primary: Colors.black,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Text('I am over 18'),
+                              ),
+                              SizedBox(width: 10),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog and do nothing
+                                },
+                                style: TextButton.styleFrom(
+                                  side: BorderSide(color: Colors.white),
+                                  primary: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      actionsPadding: EdgeInsets.zero,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 30), // Increase content height
+                    );
+                  },
+                );
 
-
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Age ', 
-                  style: TextStyle(
-                    fontSize: 19, 
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                TextSpan(
-                  text: 'Verification', 
-                  style: TextStyle(
-                    fontSize: 19, 
-                    color:colorPrimary,
-                     fontWeight: FontWeight.w500
-                  ),
-                ),
-              ],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 14),
-          Text(
-            'You must be 18+ to access this content.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.w400
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Please verify your age.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () {
-                  // User confirmed they're over 18, open player screen
-                  openPlayer("Video");
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: colorPrimary,
-                  primary: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                child: Text('I am over 18'),
-              ),
-              SizedBox(width: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog and do nothing
-                },
-                style: TextButton.styleFrom(
-                  side: BorderSide(color: Colors.white),
-                  primary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                child: Text('Cancel'),
-              ),
-            ],
-          ),
-        ],
-      ),
-      actionsPadding: EdgeInsets.zero,
-      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 30), // Increase content height
-    );
-  },
-);
-
-              
                 return; // Skip the rest of the logic as the pop-up is shown
-            
               }
-
 
               // Print the maturity rating when not "A"
               print(
@@ -2753,7 +2748,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Container(
-              height: (kIsWeb || Constant.isTV) ? 40 : 55,
+              height: 40,
               constraints: BoxConstraints(
                 maxWidth: (kIsWeb || Constant.isTV)
                     ? 190
@@ -2874,118 +2869,120 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           onTap: () async {
             // Similar logic as above without the maturity rating check
             if (Constant.userID != null) {
-
-                if (videoDetailsProvider
+              if (videoDetailsProvider
                       .sectionDetailModel.result?.maturityRating ==
                   "A") {
                 // Print statement for maturity rating check
                 print("Maturity Rating is A, showing pop-up");
 
                 // Show the pop-up with details
-              showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      backgroundColor: Colors.black,
-      elevation: 5, // Adding shadow
-      title: Column(
-        children: [
-          Image.asset("assets/images/age.png",height: 50 ,width: 50,),
-          SizedBox(height: 10),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      backgroundColor: Colors.black,
+                      elevation: 5, // Adding shadow
+                      title: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/age.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          SizedBox(height: 10),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Age ',
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                TextSpan(
+                                  text: 'Verification',
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      color: colorPrimary,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 14),
+                          Text(
+                            'You must be 18+ to access this content.',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Please verify your age.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  // User confirmed they're over 18, open player screen
+                                  openPlayer("Video");
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: colorPrimary,
+                                  primary: Colors.black,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Text('I am over 18'),
+                              ),
+                              SizedBox(width: 10),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog and do nothing
+                                },
+                                style: TextButton.styleFrom(
+                                  side: BorderSide(color: Colors.white),
+                                  primary: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      actionsPadding: EdgeInsets.zero,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 30), // Increase content height
+                    );
+                  },
+                );
 
-
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Age ', 
-                  style: TextStyle(
-                    fontSize: 19, 
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                TextSpan(
-                  text: 'Verification', 
-                  style: TextStyle(
-                    fontSize: 19, 
-                    color:colorPrimary,
-                     fontWeight: FontWeight.w500
-                  ),
-                ),
-              ],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 14),
-          Text(
-            'You must be 18+ to access this content.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.w400
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Please verify your age.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () {
-                  // User confirmed they're over 18, open player screen
-                  openPlayer("Video");
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: colorPrimary,
-                  primary: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                child: Text('I am over 18'),
-              ),
-              SizedBox(width: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog and do nothing
-                },
-                style: TextButton.styleFrom(
-                  side: BorderSide(color: Colors.white),
-                  primary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                child: Text('Cancel'),
-              ),
-            ],
-          ),
-        ],
-      ),
-      actionsPadding: EdgeInsets.zero,
-      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 30), // Increase content height
-    );
-  },
-);
-
-              
                 return; // Skip the rest of the logic as the pop-up is shown
               }
-
 
               bool isPrimeUser =
                   videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
@@ -3041,7 +3038,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Container(
-              height: (kIsWeb || Constant.isTV) ? 40 : 55,
+              height: (kIsWeb || Constant.isTV) ? 40 : 40,
               constraints: BoxConstraints(
                 maxWidth: (kIsWeb || Constant.isTV)
                     ? 180

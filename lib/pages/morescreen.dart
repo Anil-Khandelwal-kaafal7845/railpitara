@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/utils/color.dart';
@@ -16,8 +15,7 @@ class MoreScreen extends StatefulWidget {
   final String appBarTitle;
   final String sectionId;
 
-  const MoreScreen(this.appBarTitle, this.sectionId, {Key? key})
-      : super(key: key);
+  const MoreScreen(this.appBarTitle, this.sectionId, {Key? key}) : super(key: key);
 
   @override
   State<MoreScreen> createState() => MoreScreenState();
@@ -27,8 +25,7 @@ class MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<SectionDataProvider>(context, listen: false)
-        .getViewAll(widget.sectionId);
+    Provider.of<SectionDataProvider>(context, listen: false).getViewAll(widget.sectionId);
   }
 
   @override
@@ -45,198 +42,61 @@ class MoreScreenState extends State<MoreScreen> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: (kIsWeb || Constant.isTV)
-          ? Utils.myAppBar(context, widget.appBarTitle, false)
-          : Utils.myAppBarWithBack(context, widget.appBarTitle, false),
+      appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),
       body: SafeArea(
         child: Consumer<SectionDataProvider>(
           builder: (context, sectionDataProvider, child) {
             if (sectionDataProvider.loadingViewAll) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: primaryLight,
-                ),
+                child: CircularProgressIndicator(color: primaryLight),
               );
             }
 
             final sectionDataList = sectionDataProvider.sectionDataList;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(10, 6, 10, 5),
-                            child: ResponsiveGridList(
-                              minItemWidth: Dimens.widthLandmore,
-                              verticalGridSpacing: 8,
-                              horizontalGridSpacing: 8,
-                              minItemsPerRow: 2,
-                              maxItemsPerRow: 8,
-                              listViewBuilderOptions: ListViewBuilderOptions(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                              ),
-                              children: List.generate(
-                                sectionDataList.length,
-                                (position) {
-                                  final videoData = sectionDataList[position];
-                                  return InkWell(
-                                    borderRadius: BorderRadius.circular(4),
-                                    onTap: () {
-                                      debugPrint(
-                                          "Clicked on position ==> $position");
-                                      // Reuse the openDetailPage logic as in landscape
-                                      openDetailPage(
-                                        (videoData.videoType ?? 0) == 2
-                                            ? "showdetail"
-                                            : "videodetail",
-                                        videoData.id ?? 0,
-                                        0, // You can replace this with the actual `upcomingType`
-                                        videoData.videoType ?? 0,
-                                        videoData.typeId ?? 0,
-                                      );
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Container(
-                                          width: Dimens.widthLandmore,
-                                          height: Dimens.heightLand,
-                                          alignment: Alignment.center,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: MyNetworkImage(
-                                              imageUrl: videoData.landscape
-                                                  .toString(),
-                                              fit: BoxFit.cover,
-                                              imgHeight: double.infinity,
-                                              imgWidth: Dimens.widthLandmore,
-                                            ),
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: videoData.isRent == 1 &&
-                                              videoData.isPremium == 0,
-                                          child: FittedBox(
-                                            child: Container(
-                                              constraints: const BoxConstraints(
-                                                minHeight: 15,
-                                                minWidth: 30,
-                                              ),
-                                              alignment: Alignment.center,
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                color: otherColor,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(3),
-                                                  topRight: Radius.circular(4),
-                                                  bottomLeft:
-                                                      Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(3),
-                                                ),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/rupee.png',
-                                                    height: 13,
-                                                    width: 13,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: videoData.isPremium == 1,
-                                          child: FittedBox(
-                                            child: Container(
-                                              constraints: const BoxConstraints(
-                                                minHeight: 15,
-                                                minWidth: 30,
-                                              ),
-                                              alignment: Alignment.center,
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                color: otherColor,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(3),
-                                                  topRight: Radius.circular(4),
-                                                  bottomLeft:
-                                                      Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(3),
-                                                ),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/crown.png',
-                                                    height: 15,
-                                                    width: 15,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: videoData.isRent == 1 &&
-                                              videoData.isPremium == 1,
-                                          child: FittedBox(
-                                            child: Container(
-                                              constraints: const BoxConstraints(
-                                                minHeight: 15,
-                                                minWidth: 30,
-                                              ),
-                                              alignment: Alignment.center,
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                color: otherColor,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(3),
-                                                  topRight: Radius.circular(4),
-                                                  bottomLeft:
-                                                      Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(3),
-                                                ),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/crown.png',
-                                                    height: 15,
-                                                    width: 15,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+            return GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 3 columns
+                childAspectRatio: 0.7, // Portrait aspect ratio
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemCount: sectionDataList.length,
+              itemBuilder: (context, index) {
+                final videoData = sectionDataList[index];
+                return InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    openDetailPage(
+                      (videoData.videoType ?? 0) == 2 ? "showdetail" : "videodetail",
+                      videoData.id ?? 0,
+                      0,
+                      videoData.videoType ?? 0,
+                      videoData.typeId ?? 0,
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: MyNetworkImage(
+                          imageUrl: videoData.thumbnail1.toString(),
+                          fit: BoxFit.cover,
+                          imgHeight: double.infinity,
+                          imgWidth: double.infinity,
+                        ),
                       ),
-                    ),
+                      _buildGradientOverlay(),
+                      if (videoData.isPremium == 1) _buildTag('assets/images/crown.png'),
+                      // if (videoData.isLiveUrl == 1) _buildLiveIndicator(),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
             );
           },
         ),
@@ -244,9 +104,73 @@ class MoreScreenState extends State<MoreScreen> {
     );
   }
 
-  // Assuming openDetailPage is a method in the current screen.
-  void openDetailPage(String pageName, int videoId, int upcomingType,
-      int videoType, int typeId) {
+  Widget _buildGradientOverlay() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+        ),
+      ),
+    );
+  }
+
+ 
+
+    Widget _buildTag(String assetPath) {
+    return Positioned(
+      top: 8,
+      left: 8,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        child: Image.asset(
+          assetPath,
+          height: 16,
+          width: 16,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLiveIndicator() {
+    return Positioned(
+      top: 8,
+      left: 8,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 6,
+              width: 6,
+              margin: const EdgeInsets.only(right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            const Text(
+              "LIVE",
+              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void openDetailPage(String pageName, int videoId, int upcomingType, int videoType, int typeId) {
     debugPrint("pageName =======> $pageName");
     Utils.openDetails(
       context: context,
