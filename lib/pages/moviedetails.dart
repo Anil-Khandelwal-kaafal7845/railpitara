@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -4578,28 +4579,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           'video_type': widget.videoType,
                         },
                       );
-                      Map<String, Object> screenViewEvent = {
-                        'event_name': 'share_video_copy_link',
-                        'video_id': widget.videoId,
-                        'video_name': videoDetailsProvider
-                                .sectionDetailModel.result?.name ??
-                            "",
-                        'type_id': widget.typeId,
-                        'video_type': widget.videoType,
-                        'user_id': Constant.userID.toString(),
-                      };
-                      Singular.eventWithArgs(
-                          'share_video_copy_link', screenViewEvent);
-                      SocialShare.copyToClipboard(
-                        text: Platform.isIOS
-                            ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                            : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n",
+                      final textToCopy = Platform.isIOS
+                          ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n"
+                          : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n";
 
-                        //"Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
-                      ).then((data) {
-                        debugPrint(data);
+                      //"Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
+                      // Use Flutter's Clipboard to copy text
+                      Clipboard.setData(ClipboardData(text: textToCopy))
+                          .then((_) {
                         Utils.showSnackbar(
                             context, "success", "link_copied", true);
+                      }).catchError((error) {
+                        debugPrint("Error copying to clipboard: $error");
+                        Utils.showSnackbar(
+                            context, "Error", "Failed to copy link", true);
                       });
                     },
                     child: _buildDialogItems(

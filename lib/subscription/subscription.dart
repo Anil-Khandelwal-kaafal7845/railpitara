@@ -515,8 +515,10 @@ class SubscriptionState extends State<Subscription> with RouteAware {
             ),
             GestureDetector(
               onTap: () {
+                  generalProvider.isCoinShow == "1"?
                 _checkPackageAndShowBottomSheet(
-                    packageList, selectedIndex, context);
+                    packageList, selectedIndex, context): _checkAndPay(packageList, selectedIndex);
+
               },
               child: Container(
                 margin: EdgeInsets.only(top: 0, bottom: 20),
@@ -925,6 +927,8 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                         ),
                       ),
                     ),
+                   
+                   
                     const SizedBox(height: 10),
                   ],
                 ),

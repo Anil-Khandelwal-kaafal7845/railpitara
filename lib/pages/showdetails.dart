@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -9,6 +10,7 @@ import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/adhelper.dart';
 
 import 'package:dtlive/widget/myusernetworkimg.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
@@ -3847,20 +3849,24 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     ),
                   ),
 
-                  /* Copy Link */
+                     /* Copy Link */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {
                       Navigator.pop(context);
-                      SocialShare.copyToClipboard(
-                        text: Platform.isIOS
-                            ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                            : "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n",
-                        // "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
-                      ).then((data) {
-                        debugPrint(data);
+
+                      final textToCopy = Platform.isIOS
+                          ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${showDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n"
+                          : "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${showDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n";
+                      // "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
+                      Clipboard.setData(ClipboardData(text: textToCopy))
+                          .then((_) {
                         Utils.showSnackbar(
                             context, "success", "link_copied", true);
+                      }).catchError((error) {
+                        debugPrint("Error copying to clipboard: $error");
+                        Utils.showSnackbar(
+                            context, "Error", "Failed to copy link", true);
                       });
                     },
                     child: _buildDialogItems(
@@ -3869,6 +3875,30 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                       isMultilang: true,
                     ),
                   ),
+
+
+                  // /* Copy Link */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     SocialShare.copyToClipboard(
+                  //       text: Platform.isIOS
+                  //           ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                  //           : "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n",
+                  //       // "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
+                  //     ).then((data) {
+                  //       debugPrint(data);
+                  //       Utils.showSnackbar(
+                  //           context, "success", "link_copied", true);
+                  //     });
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_link.png",
+                  //     title: "copy_link",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
                   /* More */
                   InkWell(

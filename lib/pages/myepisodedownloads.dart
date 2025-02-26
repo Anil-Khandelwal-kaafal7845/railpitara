@@ -13,6 +13,7 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/widget/nodata.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:social_share/social_share.dart';
@@ -833,19 +834,23 @@ class _MyEpisodeDownloadsState extends State<MyEpisodeDownloads> {
                     ),
                   ),
 
-                  /* Copy Link */
+                 /* Copy Link */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {
                       Navigator.pop(context);
-                      SocialShare.copyToClipboard(
-                        text: Platform.isIOS
-                            ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                            : "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n",
-                      ).then((data) {
-                        debugPrint(data);
+
+                      final textToCopy = Platform.isIOS
+                          ? "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/id${Uri.encodeComponent(Constant.appleAppId)} \n"
+                          : "Hey! I'm watching ${myEpisodeList?[position].description ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n";
+                      Clipboard.setData(ClipboardData(text: textToCopy))
+                          .then((_) {
                         Utils.showSnackbar(
                             context, "success", "link_copied", true);
+                      }).catchError((error) {
+                        debugPrint("Error copying to clipboard: $error");
+                        Utils.showSnackbar(
+                            context, "Error", "Failed to copy link", true);
                       });
                     },
                     child: Container(
