@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "188395223241-lu3dbpbpjpbmr12lqo9j1f0sk6igdaoo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ott.chulltvott",
+            "certificate_hash": "163d50d77ef17c979c130fae046bb25e08142c3a"
+          }
+        },
+        {
           "client_id": "188395223241-4cg0vg6bvss6la2e8ckm8musv0j87b52.apps.googleusercontent.com",
           "client_type": 3
         }

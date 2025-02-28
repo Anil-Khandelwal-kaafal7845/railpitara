@@ -976,14 +976,9 @@ class TVShowDetailsState extends State<TVShowDetails> {
                   child: MyNetworkImage(
                     fit: BoxFit.fill,
                     imageUrl: showDetailsProvider
-                                .sectionDetailModel.result?.landscape !=
+                                .sectionDetailModel.result?.fullWidth??
                             ""
-                        ? (showDetailsProvider
-                                .sectionDetailModel.result?.landscape ??
-                            "")
-                        : (showDetailsProvider
-                                .sectionDetailModel.result?.thumbnail ??
-                            ""),
+                        
                   ),
                 ),
                 Container(

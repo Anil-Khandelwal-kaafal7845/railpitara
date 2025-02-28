@@ -2075,7 +2075,7 @@ class HomeState extends State<Home> with RouteAware {
                               MediaQuery.of(context).size.width > 720
                           ? _webHomeBanner(
                               sectionDataProvider.sectionBannerModel.result)
-                          : _mobileHomeBanner(sectionDataProvider.sectionBannerModel.result, context);
+                          : _mobileHomeBanner(sectionDataProvider.sectionBannerModel.result);
                     } else {
                       return const SizedBox.shrink();
                     }
@@ -2287,94 +2287,235 @@ class HomeState extends State<Home> with RouteAware {
     );
   }
 
-  Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList, BuildContext context) {
-  if ((sectionBannerList?.length ?? 0) > 0) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: Dimens.homeBanner,
-          child: CarouselSlider.builder(
-            itemCount: sectionBannerList?.length ?? 0,
-            carouselController: carouselController,
-            options: CarouselOptions(
-              initialPage: 0,
-              height: Dimens.homeBanner,
-              autoPlay: true,
-              autoPlayCurve: Curves.easeInOut,
-              enableInfiniteScroll: true,
-              autoPlayInterval: Duration(seconds: 3),
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
-              viewportFraction: 1.0, // Adjust for spacing
-              onPageChanged: (val, _) async {
-                await sectionDataProvider.setCurrentBanner(val);
-              },
-            ),
-            itemBuilder: (context, index, _) {
-              final bannerItem = sectionBannerList?[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5), // Adds margin
-                child: GestureDetector(
-                  onTap: () => _handleBannerTap(bannerItem, context),
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            MyNetworkImageTwo(
-                              imageUrl: bannerItem?.fullWidth ?? "",
-                              fit: BoxFit.cover,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.black.withOpacity(0.2),
-                                    Colors.black.withOpacity(0.6),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+ Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+    if ((sectionBannerList?.length ?? 0) > 0) {
+      return Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: Dimens.homeBanner,
+            child: CarouselSlider.builder(
+              itemCount: (sectionBannerList?.length ?? 0),
+              carouselController: carouselController,
+              options: CarouselOptions(
+                initialPage: 0,
+                height: Dimens.homeBanner,
+                enlargeCenterPage: false,
+                autoPlay: true,
+                autoPlayCurve: Curves.linear,
+                enableInfiniteScroll: true,
+                autoPlayInterval:
+                    Duration(milliseconds: Constant.bannerDuration),
+                autoPlayAnimationDuration:
+                    Duration(milliseconds: Constant.animationDuration),
+                viewportFraction: 1.0,
+                onPageChanged: (val, _) async {
+                  await sectionDataProvider.setCurrentBanner(val);
+                },
+              ),
+              itemBuilder:
+                  (BuildContext context, int index, int pageViewIndex) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  // focusColor: white,
+                  // borderRadius: BorderRadius.circular(0),
+                  onTap: () {
+                    debugPrint("Clicked userid ==> ${Constant.userID}");
+                    debugPrint(
+                        "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
+                    if (sectionBannerList?[index].isLiveUrl == 1) {
+                      if (Constant.userID == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginSocial()),
+                        );
+                      } else {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => PlayerVideo(
+                        //           '',
+                        //           0,
+                        //           0,
+                        //           typeId,
+                        //           0,
+                        //           sectionBannerList?[index].videoUrl,
+                        //           0,
+                        //           "",
+                        //           "")),
+                        // );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TestPlayerWeb(
+                                loadURL: sectionBannerList?[index].videoUrl!)));
+                      }
+                    } else if (sectionBannerList?[index].bannerBacklink !=
+                            null &&
+                        sectionBannerList![index]
+                            .bannerBacklink
+                            .toString()
+                            .isNotEmpty) {
+                      launchUrl(Uri.parse(
+                          sectionBannerList[index].bannerBacklink.toString()));
+                    } else {
+                      openDetailPage(
+                        (sectionBannerList?[index].videoType ?? 0) == 2
+                            ? "showdetail"
+                            : "videodetail",
+                        sectionBannerList?[index].id ?? 0,
+                        sectionBannerList?[index].upcomingType ?? 0,
+                        sectionBannerList?[index].videoType ?? 0,
+                        sectionBannerList?[index].typeId ?? 0,
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 0, bottom: 0, left: 10, right: 10),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      // alignment: AlignmentDirectional.bottomCenter,
+                      children: [
+                        SizedBox(
+                          height: Dimens.homeBanner,
+                          child: MyNetworkImageTwo(
+                            imageUrl: sectionBannerList?[index].fullWidth ?? "",
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
-                      Positioned(
+                       Positioned(
                         top: 10,
                         right: 10,
-                        child: _buildBannerBadge(bannerItem),
+                        child: _buildBannerBadge(sectionBannerList?[index]),
                       ),
-                    ],
+                     
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-        Positioned(
-          bottom: 12,
-          child: AnimatedSmoothIndicator(
-            count: sectionBannerList?.length ?? 0,
-            activeIndex: sectionDataProvider.cBannerIndex ?? 0,
-            effect: ScrollingDotsEffect(
-              spacing: 8,
-              activeDotColor: Colors.white,
-              dotColor: Colors.grey.shade400,
-              dotHeight: 8,
-              dotWidth: 8,
+                );
+              },
             ),
           ),
-        ),
-      ],
-    );
-  } else {
-    return SizedBox.shrink();
+          // const SizedBox(height: 5.5),
+          // Positioned(
+          //   bottom: 10,
+          //   child: Consumer<SectionDataProvider>(
+          //     builder: (context, sectionDataProvider, child) {
+          //       return AnimatedSmoothIndicator(
+          //         count: (sectionBannerList?.length ?? 0),
+          //         activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+          //         effect: const ScrollingDotsEffect(
+          //           spacing: 8,
+          //           radius: 4,
+          //           activeDotColor: colorPrimary,
+          //           dotColor: dotsDefaultColor,
+          //           dotHeight: 8,
+          //           dotWidth: 8,
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+       
+        ],
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
-}
+
+
+
+//   Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList, BuildContext context) {
+//   if ((sectionBannerList?.length ?? 0) > 0) {
+//     return Stack(
+//       alignment: Alignment.bottomCenter,
+//       children: [
+//         SizedBox(
+//           width: MediaQuery.of(context).size.width,
+//           height: Dimens.homeBanner,
+//           child: CarouselSlider.builder(
+//             itemCount: sectionBannerList?.length ?? 0,
+//             carouselController: carouselController,
+//             options: CarouselOptions(
+//               initialPage: 0,
+//               height: Dimens.homeBanner,
+//               autoPlay: true,
+//               autoPlayCurve: Curves.easeInOut,
+//               enableInfiniteScroll: true,
+//               autoPlayInterval: Duration(seconds: 3),
+//               autoPlayAnimationDuration: Duration(milliseconds: 800),
+//               viewportFraction: 1.0, // Adjust for spacing
+//               onPageChanged: (val, _) async {
+//                 await sectionDataProvider.setCurrentBanner(val);
+//               },
+//             ),
+//             itemBuilder: (context, index, _) {
+//               final bannerItem = sectionBannerList?[index];
+//               return Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 5), // Adds margin
+//                 child: GestureDetector(
+//                   onTap: () => _handleBannerTap(bannerItem, context),
+//                   child: Stack(
+//                     children: [
+//                       ClipRRect(
+//                         borderRadius: BorderRadius.circular(12),
+//                         child: Stack(
+//                           fit: StackFit.expand,
+//                           children: [
+//                             MyNetworkImageTwo(
+//                               imageUrl: bannerItem?.landscape ?? "",
+//                               fit: BoxFit.cover,
+//                             ),
+//                             // Container(
+//                             //   decoration: BoxDecoration(
+//                             //     gradient: LinearGradient(
+//                             //       begin: Alignment.topCenter,
+//                             //       end: Alignment.bottomCenter,
+//                             //       colors: [
+//                             //         Colors.black.withOpacity(0.2),
+//                             //         Colors.black.withOpacity(0.6),
+//                             //       ],
+//                             //     ),
+//                             //   ),
+//                             // ),
+//                           ],
+//                         ),
+//                       ),
+//                       Positioned(
+//                         top: 10,
+//                         right: 10,
+//                         child: _buildBannerBadge(bannerItem),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//         Positioned(
+//           bottom: 12,
+//           child: AnimatedSmoothIndicator(
+//             count: sectionBannerList?.length ?? 0,
+//             activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+//             effect: ScrollingDotsEffect(
+//               spacing: 8,
+//               activeDotColor: Colors.white,
+//               dotColor: Colors.grey.shade400,
+//               dotHeight: 8,
+//               dotWidth: 8,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   } else {
+//     return SizedBox.shrink();
+//   }
+// }
 
 
 // Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList, BuildContext context) {
@@ -3290,8 +3431,14 @@ Widget _iconBadge(String assetPath) {
             sectionList?[index].upcomingType, sectionList?[index].data);
       }
     } else if ((sectionList?[index].videoType ?? 0) == 2) {
-      if ((sectionList?[index].screenLayout ?? "") == "landscape") {
+        if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
+            sectionList?[index].upcomingType, sectionList?[index].data);
+      } else if ((sectionList?[index].screenLayout ?? "") == "landscape_1") {
+        return landscapeTwo(
+            sectionList?[index].upcomingType, sectionList?[index].data);
+      } else if ((sectionList?[index].screenLayout ?? "") == "potrait_1") {
+        return portraitTwo(
             sectionList?[index].upcomingType, sectionList?[index].data);
       } else if ((sectionList?[index].screenLayout ?? "") == "potrait") {
         return portrait(
@@ -3996,6 +4143,7 @@ Widget _iconBadge(String assetPath) {
                     ),
                   ),
                 ),
+              
               ],
             ),
           );
@@ -4599,95 +4747,66 @@ Widget _iconBadge(String assetPath) {
                               ),
                             ),
                           ),
-                          Visibility(
-                            visible: sectionDataList?[index].isRent == 1 &&
-                                sectionDataList?[index].isPremium == 0,
-                            child: FittedBox(
-                              child: Container(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 15,
-                                    minWidth: 30,
-                                  ),
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                    color: otherIcons,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(3),
-                                        topRight: Radius.circular(4),
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(3)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/rupee.png',
-                                        height: 13,
-                                        width: 13,
-                                      ),
-                                    ],
-                                  )),
+                           // Rent Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: _buildTag('assets/images/rupee.png'),
+                ),
+
+                // Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Both Rent & Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Live Indicator
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          Visibility(
-                            visible: sectionDataList?[index].isPremium == 1,
-                            child: FittedBox(
-                              child: Container(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 15,
-                                    minWidth: 30,
-                                  ),
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                    color: otherIcons,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(3),
-                                        topRight: Radius.circular(4),
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(3)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/crown.png',
-                                        height: 15,
-                                        width: 15,
-                                      ),
-                                    ],
-                                  )),
-                            ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
                           ),
-                          Visibility(
-                            visible: sectionDataList?[index].isRent == 1 &&
-                                sectionDataList?[index].isPremium == 1,
-                            child: FittedBox(
-                              child: Container(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 15,
-                                    minWidth: 30,
-                                  ),
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                    color: otherIcons,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(3),
-                                        topRight: Radius.circular(4),
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(3)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/crown.png',
-                                        height: 15,
-                                        width: 15,
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              
                         ],
                       ),
                     ),

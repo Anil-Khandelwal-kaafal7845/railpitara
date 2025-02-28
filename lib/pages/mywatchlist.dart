@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dtlive/main.dart';
-import 'package:dtlive/pages/bottombar.dart';
 import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
@@ -922,41 +922,41 @@ class _MyWatchlistState extends State<MyWatchlist> {
                   ),
                   const SizedBox(height: 12),
 
-                  /* SMS */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pop(context);
-                      if (Platform.isAndroid) {
-                        Utils.redirectToUrl(
-                            'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
-                      } else if (Platform.isIOS) {
-                        Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
-                      }
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_sms.png",
-                      title: "sms",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* SMS */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     if (Platform.isAndroid) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
+                  //     } else if (Platform.isIOS) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/id${Uri.encodeComponent(Constant.appleAppId)} \n")}');
+                  //     }
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_sms.png",
+                  //     title: "sms",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
-                  /* Instgram Stories */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_insta.png",
-                      title: "instagram_stories",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* Instgram Stories */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     Utils.shareApp(Platform.isIOS
+                  //         ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/id${Uri.encodeComponent(Constant.appleAppId)} \n"
+                  //         : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_insta.png",
+                  //     title: "instagram_stories",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
                   /* Copy Link */
 
@@ -966,9 +966,11 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     onTap: () {
                       Navigator.pop(context);
 
-                      final textToCopy = Platform.isIOS
-                            ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/id${Uri.encodeComponent(Constant.appleAppId)} \n"
-                            : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n";
+                   
+                       final textToCopy = Platform.isIOS
+                            ?"Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
+                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n";
+
                       Clipboard.setData(ClipboardData(text: textToCopy))
                           .then((_) {
                         Utils.showSnackbar(
@@ -992,8 +994,9 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     onTap: () {
                       Navigator.pop(context);
                       Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
+                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n");
+                   
                     },
                     child: _buildDialogItems(
                       icon: "ic_dots_h.png",

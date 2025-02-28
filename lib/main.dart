@@ -61,7 +61,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'omtv-32b09', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',
@@ -163,25 +163,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  // void processDeepLink(Uri uri) {
-  //   print("Deep Link Opened: $uri");
-
-  //   final pathSegments = uri.pathSegments;
-  //   if (pathSegments.length >= 3 && pathSegments[0] == 'home') {
-  //     String title = pathSegments[1];
-  //     String encodedParams = pathSegments[2];
-
-  //     print("Extracted Title: $title");
-  //     print("Extracted Encoded Params: $encodedParams");
-
-  //     GoRouter.of(navigatorKey.currentContext!).go(
-  //       '/home/$title/$encodedParams',
-  //     );
-  //   } else {
-  //     print("Invalid deep link format: $uri");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     Wakelock.enable();
@@ -191,7 +172,7 @@ class _MyAppState extends State<MyApp> {
             path: '/',
             builder: (_, __) => LocaleBuilder(
                   builder: (locale) => MaterialApp(
-                    navigatorKey: GlobalKey<NavigatorState>(),
+                    navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
                     navigatorObservers: [
                       routeObserver,
@@ -235,71 +216,6 @@ class _MyAppState extends State<MyApp> {
                         : Splash(
                             isDynamicLink: false,
                           ),
-                    scrollBehavior: const MaterialScrollBehavior().copyWith(
-                      dragDevices: {
-                        PointerDeviceKind.mouse,
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.stylus,
-                        PointerDeviceKind.unknown,
-                        PointerDeviceKind.trackpad
-                      },
-                    ),
-                  ),
-                )),
-        GoRoute(
-            path: '/videodetails/:typeId/:videoId/:upcomingType/:videoType',
-            builder: (context, state) => LocaleBuilder(
-                  builder: (locale) => MaterialApp(
-                    navigatorKey: GlobalKey<NavigatorState>(),
-                    debugShowCheckedModeBanner: false,
-                    navigatorObservers: [routeObserver, analyticsObserver],
-
-                    theme: ThemeData(
-                      primaryColor: colorPrimary,
-                      primaryColorDark: colorPrimaryDark,
-                      primaryColorLight: primaryLight,
-                      scaffoldBackgroundColor: appBgColor,
-                    ).copyWith(
-                      scrollbarTheme: const ScrollbarThemeData().copyWith(
-                        thumbColor: MaterialStateProperty.all(white),
-                        trackVisibility: MaterialStateProperty.all(true),
-                        trackColor: MaterialStateProperty.all(whiteTransparent),
-                      ),
-                    ),
-                    title: Constant.appName,
-                    localizationsDelegates: Locales.delegates,
-                    supportedLocales: Locales.supportedLocales,
-                    locale: locale,
-                    localeResolutionCallback:
-                        (Locale? locale, Iterable<Locale> supportedLocales) {
-                      return locale;
-                    },
-                    home: Splash(
-                      isDynamicLink: true,
-                      videoType: int.parse(
-                          state.pathParameters['videoType'].toString()),
-                      upcomingType: int.parse(
-                          state.pathParameters['upcomingType'].toString()),
-                      videoId:
-                          int.parse(state.pathParameters['videoId'].toString()),
-                      typeId:
-                          int.parse(state.pathParameters['typeId'].toString()),
-                    ),
-
-                    builder: (context, child) {
-                      return ResponsiveBreakpoints.builder(
-                        child: child!,
-                        breakpoints: [
-                          const Breakpoint(start: 0, end: 360, name: MOBILE),
-                          const Breakpoint(start: 361, end: 800, name: TABLET),
-                          const Breakpoint(
-                              start: 801, end: 1000, name: DESKTOP),
-                          const Breakpoint(
-                              start: 1001, end: double.infinity, name: '4K'),
-                        ],
-                      );
-                    },
-                    // home: (kIsWeb) ? const TVHome(pageName: "") : const Splash(),
                     scrollBehavior: const MaterialScrollBehavior().copyWith(
                       dragDevices: {
                         PointerDeviceKind.mouse,
@@ -367,8 +283,6 @@ class _MyAppState extends State<MyApp> {
                     typeId: int.parse(decodedParams[1]),
                     videoType: int.parse(decodedParams[2]),
                     upcomingType: int.parse(decodedParams[3]),
-                    // videoId: int.parse(decodedParams[2]),
-                    // typeId: int.parse(decodedParams[3]),
                   ),
                   builder: (context, child) {
                     return ResponsiveBreakpoints.builder(
@@ -396,7 +310,7 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-      
+    
       ],
     );
 

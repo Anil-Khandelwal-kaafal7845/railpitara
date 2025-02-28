@@ -711,7 +711,8 @@ class _MyDownloadsState extends State<MyDownloads> {
                   ),
 
                   /* Copy Link */
-                   /* Copy Link */
+                 
+                  /* Copy Link */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     //focusColor: Colors.white,
@@ -737,6 +738,7 @@ class _MyDownloadsState extends State<MyDownloads> {
                       isMultilang: true,
                     ),
                   ),
+
 
                   /* More */
                   InkWell(

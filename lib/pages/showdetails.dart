@@ -2577,14 +2577,14 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: 'Age ',
+                                      text: 'Maturity Rating:',
                                       style: TextStyle(
                                           fontSize: 19,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
                                     ),
                                     TextSpan(
-                                      text: 'Verification',
+                                      text: ' 18+',
                                       style: TextStyle(
                                           fontSize: 19,
                                           color: colorPrimary,
@@ -2596,7 +2596,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               ),
                               SizedBox(height: 14),
                               Text(
-                                'You must be 18+ to access this content.',
+                                'May contain mature content, nudity, violence, foul language, substances.',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -2609,7 +2609,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Please verify your age.',
+                                'I Confirm that i am 18 years and above',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.white,
@@ -2660,6 +2660,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                         );
                       },
                     );
+                 
                   }
                 } else {
                   Navigator.push(
@@ -2812,7 +2813,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                       "A") {
                     print("Maturity Rating check in show--");
                     // Show the pop-up with details
-                    showDialog(
+                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -2833,14 +2834,14 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: 'Age ',
+                                      text: 'Maturity Rating:',
                                       style: TextStyle(
                                           fontSize: 19,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
                                     ),
                                     TextSpan(
-                                      text: 'Verification',
+                                      text: ' 18+',
                                       style: TextStyle(
                                           fontSize: 19,
                                           color: colorPrimary,
@@ -2852,7 +2853,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               ),
                               SizedBox(height: 14),
                               Text(
-                                'You must be 18+ to access this content.',
+                                'May contain mature content, nudity, violence, foul language, substances.',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -2865,7 +2866,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Please verify your age.',
+                                'I Confirm that i am 18 years and above',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.white,
@@ -2916,7 +2917,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                         );
                       },
                     );
-                  }
+                 
+                 }
                 } else {
                   Navigator.push(
                     context,
@@ -3849,7 +3851,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     ),
                   ),
 
-                     /* Copy Link */
+                
+                  /* Copy Link */
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {
