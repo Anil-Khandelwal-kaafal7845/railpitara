@@ -22,7 +22,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
-import 'package:social_share/social_share.dart';
 
 class MyWatchlist extends StatefulWidget {
   const MyWatchlist({Key? key}) : super(key: key);
@@ -188,7 +187,6 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           .watchlistModel.result?[position].typeId ??
                       0,
                 );
-            
               },
               child: MyNetworkImageLand(
                 imageUrl: (watchlistProvider
@@ -637,20 +635,20 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           borderRadius: BorderRadius.circular(5),
                           onTap: () async {
                             Navigator.pop(context);
-                             Utils.openDetails(
-                  context: context,
-                  videoId:
-                      watchlistProvider.watchlistModel.result?[position].id ??
-                          0,
-                  upcomingType: 0,
-                  videoType: watchlistProvider
-                          .watchlistModel.result?[position].videoType ??
-                      0,
-                  typeId: watchlistProvider
-                          .watchlistModel.result?[position].typeId ??
-                      0,
-                );
-            
+                            Utils.openDetails(
+                              context: context,
+                              videoId: watchlistProvider
+                                      .watchlistModel.result?[position].id ??
+                                  0,
+                              upcomingType: 0,
+                              videoType: watchlistProvider.watchlistModel
+                                      .result?[position].videoType ??
+                                  0,
+                              typeId: watchlistProvider.watchlistModel
+                                      .result?[position].typeId ??
+                                  0,
+                            );
+
                             // openPlayer("Video", position);
                           },
                           child: _buildDialogItems(
@@ -839,7 +837,6 @@ class _MyWatchlistState extends State<MyWatchlist> {
                   //     isMultilang: true,
                   //   ),
                   // ),
-                
                 ],
               ),
             ),
@@ -966,10 +963,9 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     onTap: () {
                       Navigator.pop(context);
 
-                   
-                       final textToCopy = Platform.isIOS
-                            ?"Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
-                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n";
+                      final textToCopy = Platform.isIOS
+                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
+                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n";
 
                       Clipboard.setData(ClipboardData(text: textToCopy))
                           .then((_) {
@@ -993,10 +989,13 @@ class _MyWatchlistState extends State<MyWatchlist> {
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {
                       Navigator.pop(context);
-                      Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
-                          : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n");
-                   
+                      Utils.shareApp(
+                        Platform.isIOS
+                            ? "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n"
+                            : "Hey! I'm watching ${watchlistProvider.watchlistModel.result?[position].name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}home/${watchlistProvider.watchlistModel.result?[position].name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${watchlistProvider.watchlistModel.result?[position].id}-${watchlistProvider.watchlistModel.result?[position].typeId}-${watchlistProvider.watchlistModel.result?[position].videoType}-${watchlistProvider.watchlistModel.result?[position].upcomingType}'))} \n",
+                        imageUrl: watchlistProvider
+                            .watchlistModel.result?[position].thumbnail,
+                      );
                     },
                     child: _buildDialogItems(
                       icon: "ic_dots_h.png",

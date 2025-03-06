@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:social_share/social_share.dart';
+
 
 class MyDownloads extends StatefulWidget {
   const MyDownloads({Key? key}) : super(key: key);

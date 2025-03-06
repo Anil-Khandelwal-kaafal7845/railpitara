@@ -25,7 +25,6 @@ import 'package:dtlive/utils/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
@@ -34,6 +33,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
@@ -1346,25 +1346,25 @@ class Utils {
     );
   }
 
-  static Future<void> shareVideo(context, videoTitle) async {
-    try {
-      String? shareMessage, shareDesc;
-      shareDesc =
-          "Hey I'm watching $videoTitle . Check it out now on ${Constant.appName}! and more.";
-      if (Platform.isAndroid) {
-        shareMessage = "$shareDesc\n${Constant.androidAppUrl}";
-      } else {
-        shareMessage = "$shareDesc\n${Constant.iosAppUrl}";
-      }
-      await FlutterShare.share(
-        title: Constant.appName,
-        linkUrl: shareMessage,
-      );
-    } catch (e) {
-      debugPrint("shareFile Exception ===> $e");
-      return;
-    }
-  }
+  // static Future<void> shareVideo(context, videoTitle) async {
+  //   try {
+  //     String? shareMessage, shareDesc;
+  //     shareDesc =
+  //         "Hey I'm watching $videoTitle . Check it out now on ${Constant.appName}! and more.";
+  //     if (Platform.isAndroid) {
+  //       shareMessage = "$shareDesc\n${Constant.androidAppUrl}";
+  //     } else {
+  //       shareMessage = "$shareDesc\n${Constant.iosAppUrl}";
+  //     }
+  //     await FlutterShare.share(
+  //       title: Constant.appName,
+  //       linkUrl: shareMessage,
+  //     );
+  //   } catch (e) {
+  //     debugPrint("shareFile Exception ===> $e");
+  //     return;
+  //   }
+  // }
 
   static Future<void> redirectToUrl(String url) async {
     debugPrint("_launchUrl url ===> $url");
@@ -1397,17 +1397,43 @@ class Utils {
     }
   }
 
-  static Future<void> shareApp(shareMessage) async {
+  // static Future<void> shareApp(shareMessage) async {
+  //   try {
+  //     await FlutterShare.share(
+  //       title: Constant.appName,
+  //       linkUrl: shareMessage,
+  //     );
+  //   } catch (e) {
+  //     debugPrint("shareFile Exception ===> $e");
+  //     return;
+  //   }
+  // }
+
+  //for share feature with images ----
+   static Future<void> shareApp(String shareMessage, {String? imageUrl}) async {
     try {
-      await FlutterShare.share(
-        title: Constant.appName,
-        linkUrl: shareMessage,
-      );
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        // Download the image
+        final response = await http.get(Uri.parse(imageUrl));
+        if (response.statusCode == 200) {
+          final tempDir = await getTemporaryDirectory();
+          final imagePath = File('${tempDir.path}/shared_image.jpg');
+          await imagePath.writeAsBytes(response.bodyBytes);
+
+          // Share image with text
+          await Share.shareFiles([imagePath.path], text: shareMessage);
+          return;
+        }
+      }
+
+      // If image download fails or no image is provided, fallback to text-only sharing
+      await Share.share(shareMessage);
     } catch (e) {
-      debugPrint("shareFile Exception ===> $e");
-      return;
+      debugPrint("Share Exception: $e");
+      await Share.share(shareMessage); // Fallback to text-only sharing
     }
   }
+
 
   /* ***************** generate Unique OrderID START ***************** */
   static String generateRandomOrderID() {
