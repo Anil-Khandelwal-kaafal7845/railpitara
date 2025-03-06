@@ -142,6 +142,8 @@ class SplashState extends State<Splash> {
               videoType: widget.videoType!,
               typeId: widget.videoId!);
         });
+     
+     
       } else {
         if (seen == "1") {
           Navigator.pushReplacement(

@@ -32,6 +32,7 @@ import 'package:dtlive/tvpages/tvhome.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
+import 'package:dtlive/utils/utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -277,12 +278,19 @@ class _MyAppState extends State<MyApp> {
                       (Locale? locale, Iterable<Locale> supportedLocales) {
                     return locale;
                   },
-                  home: Splash(
-                    isDynamicLink: true,
-                    videoId: int.parse(decodedParams[0]),
-                    typeId: int.parse(decodedParams[1]),
-                    videoType: int.parse(decodedParams[2]),
-                    upcomingType: int.parse(decodedParams[3]),
+                  home: Builder(
+                    builder: (context) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Utils.openDetailsUsingDynamicLink(
+                          context: context,
+                          videoId: int.parse(decodedParams[0]),
+                          upcomingType: int.parse(decodedParams[3]),
+                          videoType: int.parse(decodedParams[2]),
+                          typeId: int.parse(decodedParams[1]),
+                        );
+                      });
+                      return const SizedBox(); // Prevents an unnecessary blank screen
+                    },
                   ),
                   builder: (context, child) {
                     return ResponsiveBreakpoints.builder(
@@ -310,7 +318,6 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-    
       ],
     );
 
@@ -377,3 +384,4 @@ class _MyAppState extends State<MyApp> {
 
 //TO BUILD APK
 //flutter build appbundle --target-platform android-arm,android-arm64,android-x64
+

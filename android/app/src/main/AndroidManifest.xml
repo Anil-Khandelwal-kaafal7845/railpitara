@@ -84,7 +84,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="omtv.ottsnap.in"/>
+                <data android:scheme="http" android:host="chull.tv"/>
                 <data android:scheme="https"/>
             </intent-filter>
            

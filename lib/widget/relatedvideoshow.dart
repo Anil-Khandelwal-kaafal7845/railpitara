@@ -110,6 +110,7 @@ class _RelatedVideoShowState extends State<RelatedVideoShow> {
                           relatedDataList?[index].upcomingType ?? 0,
                           relatedDataList?[index].videoType ?? 0,
                           relatedDataList?[index].typeId ?? 0,
+                          isDynamicLink: false
                         );
                       }
                     },
@@ -134,6 +135,8 @@ class _RelatedVideoShowState extends State<RelatedVideoShow> {
                           relatedDataList?[index].upcomingType ?? 0,
                           relatedDataList?[index].videoType ?? 0,
                           relatedDataList?[index].typeId ?? 0,
+                          isDynamicLink: false,
+                          
                         );
                       }
                     },
@@ -160,6 +163,7 @@ class _RelatedVideoShowState extends State<RelatedVideoShow> {
                           relatedDataList?[index].upcomingType ?? 0,
                           relatedDataList?[index].videoType ?? 0,
                           relatedDataList?[index].typeId ?? 0,
+                          isDynamicLink: false
                         );
                       }
                     },
@@ -184,6 +188,7 @@ class _RelatedVideoShowState extends State<RelatedVideoShow> {
                           relatedDataList?[index].upcomingType ?? 0,
                           relatedDataList?[index].videoType ?? 0,
                           relatedDataList?[index].typeId ?? 0,
+                          isDynamicLink: false,
                         );
                       }
                     },

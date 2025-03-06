@@ -2385,6 +2385,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                               relatedDataList?[index].upcomingType ?? 0,
                               relatedDataList?[index].videoType ?? 0,
                               relatedDataList?[index].typeId ?? 0,
+                              isDynamicLink: false
                             );
                           }
                         },
@@ -2409,6 +2410,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                               relatedDataList?[index].upcomingType ?? 0,
                               relatedDataList?[index].videoType ?? 0,
                               relatedDataList?[index].typeId ?? 0,
+                              isDynamicLink: false,
                             );
                           }
                         },
@@ -2435,6 +2437,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                               relatedDataList?[index].upcomingType ?? 0,
                               relatedDataList?[index].videoType ?? 0,
                               relatedDataList?[index].typeId ?? 0,
+                              isDynamicLink: false
                             );
                           }
                         },
@@ -2459,6 +2462,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                               relatedDataList?[index].upcomingType ?? 0,
                               relatedDataList?[index].videoType ?? 0,
                               relatedDataList?[index].typeId ?? 0,
+                               isDynamicLink: false,
                             );
                           }
                         },

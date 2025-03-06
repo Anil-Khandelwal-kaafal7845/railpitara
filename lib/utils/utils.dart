@@ -36,9 +36,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class Utils {
-
   static Widget showBannerAd(BuildContext context) {
     if (!kIsWeb) {
       return Container(
@@ -64,8 +62,6 @@ class Utils {
       AdHelper.createRewardedAd();
     }
   }
-
-
 
   static showToast(String msg) {
     Fluttertoast.showToast(
@@ -105,12 +101,8 @@ class Utils {
                   typeId,
                 );
               } else {
-                return MovieDetails(
-                  videoId,
-                  upcomingType,
-                  videoType,
-                  typeId,
-                );
+                return MovieDetails(videoId, upcomingType, videoType, typeId,
+                    isDynamicLink: false);
               }
             },
           ),
@@ -134,6 +126,7 @@ class Utils {
                   upcomingType,
                   videoType,
                   typeId,
+                  isDynamicLink: false,
                 );
               }
             },
@@ -160,6 +153,7 @@ class Utils {
                   upcomingType,
                   videoType,
                   typeId,
+                  isDynamicLink: false,
                 );
               }
             },
@@ -184,6 +178,120 @@ class Utils {
                   upcomingType,
                   videoType,
                   typeId,
+                  isDynamicLink: false,
+                );
+              }
+            },
+          ),
+        );
+      }
+    }
+  }
+
+  static Future<dynamic> openDetailsUsingDynamicLink({
+    required BuildContext context,
+    required int videoId,
+    required int upcomingType,
+    required int videoType,
+    required int typeId,
+  }) async {
+    debugPrint("openDetails videoId ========> $videoId");
+    debugPrint("openDetails upcomingType ===> $upcomingType");
+    debugPrint("openDetails videoType ======> $videoType");
+    debugPrint("openDetails typeId =========> $typeId");
+    if (videoType == 5) {
+      if (upcomingType == 1) {
+        if (!(context.mounted)) return;
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              if (kIsWeb || Constant.isTV) {
+                return TVMovieDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                );
+              } else {
+                return MovieDetails(videoId, upcomingType, videoType, typeId,
+                    isDynamicLink: true);
+              }
+            },
+          ),
+        );
+      } else if (upcomingType == 2) {
+        if (!(context.mounted)) return;
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              if (kIsWeb || Constant.isTV) {
+                return TVShowDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                );
+              } else {
+                return ShowDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                  isDynamicLink: true,
+                );
+              }
+            },
+          ),
+        );
+      }
+    } else {
+      if (videoType == 1) {
+        if (!(context.mounted)) return;
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              if (kIsWeb || Constant.isTV) {
+                return TVMovieDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                );
+              } else {
+                return MovieDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                  isDynamicLink: true,
+                );
+              }
+            },
+          ),
+        );
+      } else if (videoType == 2) {
+        if (!(context.mounted)) return;
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              if (kIsWeb || Constant.isTV) {
+                return TVShowDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                );
+              } else {
+                return ShowDetails(
+                  videoId,
+                  upcomingType,
+                  videoType,
+                  typeId,
+                  isDynamicLink: true,
                 );
               }
             },
@@ -253,7 +361,7 @@ class Utils {
   }
   /* ========= Check Supported Currency for PGs END =========== */
 
-    /* ========= Open Player ========= */
+  /* ========= Open Player ========= */
   static Future<dynamic> openPlayer(
       {required BuildContext context,
       required String? playType,
@@ -352,24 +460,26 @@ class Utils {
             MaterialPageRoute(
               builder: (context) {
                 return PlayerVideo(
-                    playType == "Trailer"
-                        ? "Trailer"
-                        : playType == "Download"
-                            ? "Download"
-                            : (videoType == 2 ? "Show" : "Video"),
-                    vID,
-                    vType,
-                    vTypeID,
-                    vOtherID,
-                    vUrl ?? "",
-                    stopTime,
-                    vUploadType,
-                    videoThumb,
-                    trailerLibraryId: trailerLibraryId,
-                    trailerUrlVideoId: trailerUrlVideoId,
-                    videoLibraryId: videoLibraryId,
-                    videoUrlId: videoUrlVideoId,
-                    isLive: isLive, trailerUrl: trailerUrl,);
+                  playType == "Trailer"
+                      ? "Trailer"
+                      : playType == "Download"
+                          ? "Download"
+                          : (videoType == 2 ? "Show" : "Video"),
+                  vID,
+                  vType,
+                  vTypeID,
+                  vOtherID,
+                  vUrl ?? "",
+                  stopTime,
+                  vUploadType,
+                  videoThumb,
+                  trailerLibraryId: trailerLibraryId,
+                  trailerUrlVideoId: trailerUrlVideoId,
+                  videoLibraryId: videoLibraryId,
+                  videoUrlId: videoUrlVideoId,
+                  isLive: isLive,
+                  trailerUrl: trailerUrl,
+                );
               },
             ),
           );
@@ -397,7 +507,8 @@ class Utils {
                   trailerUrlVideoId: trailerUrlVideoId,
                   videoLibraryId: videoLibraryId,
                   videoUrlId: videoUrlVideoId,
-                  isLive: isLive ,trailerUrl: trailerUrl);
+                  isLive: isLive,
+                  trailerUrl: trailerUrl);
             },
           ),
         );
@@ -497,7 +608,8 @@ class Utils {
                     trailerUrlVideoId: trailerUrlVideoId,
                     videoLibraryId: videoLibraryId,
                     videoUrlId: videoUrlVideoId,
-                    isLive: isLive ,trailerUrl: trailerUrl);
+                    isLive: isLive,
+                    trailerUrl: trailerUrl);
               },
             ),
           );
@@ -508,25 +620,25 @@ class Utils {
           MaterialPageRoute(
             builder: (context) {
               return PlayerVideo(
-                playType == "Trailer"
-                    ? "Trailer"
-                    : playType == "Download"
-                        ? "Download"
-                        : (videoType == 2 ? "Show" : "Video"),
-                vID,
-                vType,
-                vTypeID,
-                vOtherID,
-                vUrl ?? "",
-                stopTime,
-                vUploadType,
-                videoThumb,
-                trailerLibraryId: trailerLibraryId,
-                trailerUrlVideoId: trailerUrlVideoId,
-                videoLibraryId: videoLibraryId,
-                videoUrlId: videoUrlVideoId,
-                isLive: isLive,trailerUrl: trailerUrl
-              );
+                  playType == "Trailer"
+                      ? "Trailer"
+                      : playType == "Download"
+                          ? "Download"
+                          : (videoType == 2 ? "Show" : "Video"),
+                  vID,
+                  vType,
+                  vTypeID,
+                  vOtherID,
+                  vUrl ?? "",
+                  stopTime,
+                  vUploadType,
+                  videoThumb,
+                  trailerLibraryId: trailerLibraryId,
+                  trailerUrlVideoId: trailerUrlVideoId,
+                  videoLibraryId: videoLibraryId,
+                  videoUrlId: videoUrlVideoId,
+                  isLive: isLive,
+                  trailerUrl: trailerUrl);
             },
           ),
         );
@@ -904,7 +1016,7 @@ class Utils {
     );
   }
 
-static AppBar myAppBarWithBackBottomBar(
+  static AppBar myAppBarWithBackBottomBar(
       BuildContext context, String appBarTitle, bool showBackButton) {
     return AppBar(
       elevation: 5,
@@ -950,16 +1062,15 @@ static AppBar myAppBarWithBackBottomBar(
 
   static void showSnackbar(BuildContext context, String showFor, String message,
       bool multilanguage) {
-            final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     // Hide any current SnackBar before showing a new one
     scaffoldMessenger.hideCurrentSnackBar();
 
     ScaffoldMessenger.of(context).showSnackBar(
-
       SnackBar(
-
-duration: Duration(milliseconds:500),        behavior: SnackBarBehavior.floating,
+        duration: Duration(milliseconds: 500),
+        behavior: SnackBarBehavior.floating,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         backgroundColor: showFor == "fail"
             ? failureBG
@@ -980,10 +1091,10 @@ duration: Duration(milliseconds:500),        behavior: SnackBarBehavior.floating
         ),
       ),
     );
-      // Hide the SnackBar after 2 seconds
-  Future.delayed(Duration(seconds: 2), () {
-    scaffoldMessenger.hideCurrentSnackBar();
-  });
+    // Hide the SnackBar after 2 seconds
+    Future.delayed(Duration(seconds: 2), () {
+      scaffoldMessenger.hideCurrentSnackBar();
+    });
   }
 
   static void showProgress(

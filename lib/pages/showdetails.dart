@@ -48,9 +48,11 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class ShowDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
-  const ShowDetails(
+  final bool isDynamicLink;
+
+   const ShowDetails(
       this.videoId, this.upcomingType, this.videoType, this.typeId,
-      {Key? key})
+      {required this.isDynamicLink,Key? key})
       : super(key: key);
 
   @override
@@ -328,6 +330,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Back button pressed. Can pop: ${Navigator.of(context).canPop()}");
+
     analytics.logEvent(
       name: "screen_view",
       parameters: {
@@ -385,13 +389,36 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         }
       }
     }
-    return Scaffold(
-      key: widget.key,
-      backgroundColor: appBgColor,
-      body: SafeArea(
-        child: _buildUIWithAppBar(),
+
+  return WillPopScope(
+      onWillPop: () async {
+        if (widget.isDynamicLink) {
+          if (Platform.isAndroid) {
+      SystemNavigator.pop(); // Works on Android
+    } else if (Platform.isIOS) {
+      exit(0); // Closes the app on iOS
+    }
+        } else {
+          Navigator.of(context).pop();
+        }
+
+        return false;
+      },
+      child: Scaffold(
+        key: widget.key,
+        backgroundColor: appBgColor,
+        body: SafeArea(
+          child: _buildUIWithAppBar(),
+        ),
       ),
     );
+    // return Scaffold(
+    //   key: widget.key,
+    //   backgroundColor: appBgColor,
+    //   body: SafeArea(
+    //     child: _buildUIWithAppBar(),
+    //   ),
+    // );
   }
 
   Widget _buildUIWithAppBar() {
@@ -3813,43 +3840,43 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   ),
                   const SizedBox(height: 12),
 
-                  /* SMS */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pop(context);
-                      if (Platform.isAndroid) {
-                        Utils.redirectToUrl(
-                            'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
-                        // 'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
-                      } else if (Platform.isIOS) {
-                        Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
-                      }
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_sms.png",
-                      title: "sms",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* SMS */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     if (Platform.isAndroid) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
+                  //       // 'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
+                  //     } else if (Platform.isIOS) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                  //     }
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_sms.png",
+                  //     title: "sms",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
-                  /* Instgram Stories */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
-                          : "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType}\n");
-                      //"Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_insta.png",
-                      title: "instagram_stories",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* Instgram Stories */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     Utils.shareApp(Platform.isIOS
+                  //         ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n"
+                  //         : "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType}\n");
+                  //     //"Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_insta.png",
+                  //     title: "instagram_stories",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
                 
                   /* Copy Link */

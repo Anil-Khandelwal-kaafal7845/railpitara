@@ -54,9 +54,11 @@ import '../model/force_update_model.dart';
 
 class MovieDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
+  final bool isDynamicLink;
+
   const MovieDetails(
       this.videoId, this.upcomingType, this.videoType, this.typeId,
-      {Key? key})
+      {required this.isDynamicLink, Key? key})
       : super(key: key);
 
   @override
@@ -409,6 +411,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        "Back button pressed. Can pop: ${Navigator.of(context).canPop()}");
+
     analytics.logEvent(
       name: "screen_view",
       parameters: {
@@ -469,11 +474,27 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         }
       }
     }
-    return Scaffold(
-      key: widget.key,
-      backgroundColor: appBgColor,
-      body: SafeArea(
-        child: _buildUIWithAppBar(),
+
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.isDynamicLink) {
+          if (Platform.isAndroid) {
+      SystemNavigator.pop(); // Works on Android
+    } else if (Platform.isIOS) {
+      exit(0); // Closes the app on iOS
+    }
+        } else {
+          Navigator.of(context).pop();
+        }
+
+        return false;
+      },
+      child: Scaffold(
+        key: widget.key,
+        backgroundColor: appBgColor,
+        body: SafeArea(
+          child: _buildUIWithAppBar(),
+        ),
       ),
     );
   }
