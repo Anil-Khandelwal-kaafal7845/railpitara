@@ -4518,51 +4518,51 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   ),
                   const SizedBox(height: 12),
 
-                  /* SMS */
-                  InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    //focusColor:: white,
-                    onTap: () {
-                      Navigator.pop(context);
-                      analytics.logEvent(
-                        name: 'share_video_sms',
-                        parameters: {
-                          'video_id': widget.videoId,
-                          'video_name': videoDetailsProvider
-                                  .sectionDetailModel.result?.name ??
-                              "",
-                          'type_id': widget.typeId,
-                          'video_type': widget.videoType,
-                        },
-                      );
-                      Map<String, Object> screenViewEvent = {
-                        'event_name': 'share_video_sms',
-                        'video_id': widget.videoId,
-                        'video_name': videoDetailsProvider
-                                .sectionDetailModel.result?.name ??
-                            "",
-                        'type_id': widget.typeId,
-                        'video_type': widget.videoType,
-                        'user_id': Constant.userID.toString(),
-                      };
-                      Singular.eventWithArgs(
-                          'share_video_sms', screenViewEvent);
-                      if (Platform.isAndroid) {
-                        Utils.redirectToUrl(
-                            'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
-                        // 'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
-                      } else if (Platform.isIOS) {
-                        Utils.redirectToUrl(
-                            'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}.\n Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
-                        //'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
-                      }
-                    },
-                    child: _buildDialogItems(
-                      icon: "ic_sms.png",
-                      title: "sms",
-                      isMultilang: true,
-                    ),
-                  ),
+                  // /* SMS */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   //focusColor:: white,
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     analytics.logEvent(
+                  //       name: 'share_video_sms',
+                  //       parameters: {
+                  //         'video_id': widget.videoId,
+                  //         'video_name': videoDetailsProvider
+                  //                 .sectionDetailModel.result?.name ??
+                  //             "",
+                  //         'type_id': widget.typeId,
+                  //         'video_type': widget.videoType,
+                  //       },
+                  //     );
+                  //     Map<String, Object> screenViewEvent = {
+                  //       'event_name': 'share_video_sms',
+                  //       'video_id': widget.videoId,
+                  //       'video_name': videoDetailsProvider
+                  //               .sectionDetailModel.result?.name ??
+                  //           "",
+                  //       'type_id': widget.typeId,
+                  //       'video_type': widget.videoType,
+                  //       'user_id': Constant.userID.toString(),
+                  //     };
+                  //     Singular.eventWithArgs(
+                  //         'share_video_sms', screenViewEvent);
+                  //     if (Platform.isAndroid) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now: ${Constant.dynamicBaseUrl}videodetails/${widget.typeId}/${widget.videoId}/${widget.upcomingType}/${widget.videoType} \n")}');
+                  //       // 'sms:?body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n")}');
+                  //     } else if (Platform.isIOS) {
+                  //       Utils.redirectToUrl(
+                  //           'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}.\n Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                  //       //'sms:&body=${Uri.encodeComponent("Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://apps.apple.com/in/app/${Constant.appName.toLowerCase()}/${Constant.appPackageName} \n")}');
+                  //     }
+                  //   },
+                  //   child: _buildDialogItems(
+                  //     icon: "ic_sms.png",
+                  //     title: "sms",
+                  //     isMultilang: true,
+                  //   ),
+                  // ),
 
                   // /* Instgram Stories */
                   // InkWell(
