@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
 import 'package:dtlive/pages/splash.dart';
@@ -47,8 +48,25 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:wakelock/wakelock.dart';
 
+Future<void> getInstallReferrer() async {
+  try {
+    final referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
+    
+    print('------------------------------');
+    print('✅ Install Referrer: ${referrerDetails.installReferrer}');
+    print('📌 Referrer Click Timestamp: ${referrerDetails.referrerClickTimestampSeconds}');
+    print('⏳ Install Begin Timestamp: ${referrerDetails.installBeginTimestampSeconds}');
+    print('------------------------------');
+  } catch (e) {
+    print('❌ Error retrieving install referrer: $e');
+  }
+}
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+      await getInstallReferrer();  // Call this on app startup
+
   if (!kIsWeb) {
     await FlutterDownloader.initialize();
     await MobileAds.instance.initialize();
