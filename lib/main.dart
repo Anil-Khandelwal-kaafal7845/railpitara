@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:android_play_install_referrer/android_play_install_referrer.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
 import 'package:dtlive/pages/splash.dart';
@@ -46,6 +47,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:singular_flutter_sdk/singular.dart';
+import 'package:singular_flutter_sdk/singular_config.dart';
 import 'package:wakelock/wakelock.dart';
 
 Future<void> getInstallReferrer() async {
@@ -97,6 +100,29 @@ Future<void> main() async {
     'tr',
     'vi'
   ]);
+
+    // Initialize Singular SDK
+
+  // Request App Tracking Transparency Permission
+  final trackingStatus = await AppTrackingTransparency.requestTrackingAuthorization();
+  debugPrint("Tracking Authorization Status: $trackingStatus");
+
+  SingularConfig config = SingularConfig('ott_snap_37c31355',
+      '127028793bbb28d66296b90aef4eddec'); // Replace with your SDK Key and Secret
+  config.customUserId = "${Constant.userID}"; // Optionally set user ID
+
+// For iOS (Remove this if you are not displaying an ATT prompt)
+  config.waitForTrackingAuthorizationWithTimeoutInterval = 300;
+
+  // Enable SkAdNetwork Support (optional for iOS)
+  config.skAdNetworkEnabled = true;
+
+  // Start Singular SDK with the configuration
+  Singular.start(config);
+
+  debugPrint("Singular SDK Initialized successfully");
+
+// Initialize Singular done ---
 
   if (!kIsWeb) {
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);

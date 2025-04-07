@@ -55,7 +55,6 @@ import '../webservice/apiservices.dart';
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
 import 'aboutprivacyterms.dart';
-
 import 'pip_web_player.dart';
 
 class Home extends StatefulWidget {
