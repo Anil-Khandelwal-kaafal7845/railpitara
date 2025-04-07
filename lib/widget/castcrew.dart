@@ -40,7 +40,7 @@ class _CastCrewState extends State<CastCrew> {
           ),
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 5),
         _buildCAndCLayout(),
         // Container(
         //   width: MediaQuery.of(context).size.width,
@@ -54,80 +54,74 @@ class _CastCrewState extends State<CastCrew> {
   }
 
 Widget _buildCAndCLayout() {
-  if (widget.castList != null && (widget.castList?.length ?? 0) > 0) {
+  if (widget.castList != null && widget.castList!.isNotEmpty) {
     return Container(
-      padding: const EdgeInsets.only(left: 20, right: 12, bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: ResponsiveGridList(
-        minItemWidth: (kIsWeb || Constant.isTV)
-            ? Dimens.widthCastWeb
-            : Dimens.widthCast,
+        minItemWidth: 100,
         verticalGridSpacing: 20,
-        horizontalGridSpacing: 10,
+        horizontalGridSpacing: 12,
         minItemsPerRow: 4,
         maxItemsPerRow: 6,
-        listViewBuilderOptions: ListViewBuilderOptions(
+        listViewBuilderOptions:  ListViewBuilderOptions(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
         ),
-        children: List.generate(
-          (widget.castList?.length ?? 0),
-          (position) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  borderRadius: BorderRadius.circular(50),
-                  onTap: () {
-                    debugPrint("Item Clicked! => $position");
-                    if (kIsWeb || Constant.isTV) return;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CastDetails(
-                          castID: widget.castList?[position].id.toString() ?? "",
-                        ),
-                      ),
-                    );
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black26, blurRadius: 5),
-                        ],
-                      ),
-                      child: MyUserNetworkImage(
-                        imageUrl: widget.castList?[position].image ?? "",
-                        fit: BoxFit.cover,
+        children: List.generate(widget.castList!.length, (index) {
+          final cast = widget.castList![index];
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () {
+                  if (kIsWeb || Constant.isTV) return;
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CastDetails(
+                        castID: cast.id.toString(),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
+                  );
+                },
+                child: Container(
                   width: 90,
-                  height: MediaQuery.of(context).size.height,
-                  child: MyText(
-                    multilanguage: false,
-                    text: widget.castList?[position].name ?? "",
-                    fontstyle: FontStyle.normal,
-                    fontsizeNormal: 10,
-                    fontweight: FontWeight.w400,
-                    fontsizeWeb: 14,
-                    maxline: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textalign: TextAlign.center,
-                    color: white.withOpacity(0.7),
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: MyUserNetworkImage(
+                    imageUrl: cast.image ?? "",
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: 90,
+                child: MyText(
+                  multilanguage: false,
+                  text: cast.name ?? "",
+                  fontstyle: FontStyle.normal,
+                  fontsizeNormal: 11,
+                  fontweight: FontWeight.w500,
+                  fontsizeWeb: 14,
+                  maxline: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textalign: TextAlign.center,
+                  color: white.withOpacity(0.85),
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   } else {
@@ -135,102 +129,5 @@ Widget _buildCAndCLayout() {
   }
 }
 
-  // Widget _buildCAndCLayout() {
-  //   if (widget.castList != null && (widget.castList?.length ?? 0) > 0) {
-  //     return Container(
-  //       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
-  //       child: ResponsiveGridList(
-  //         minItemWidth: (kIsWeb || Constant.isTV)
-  //             ? Dimens.widthCastWeb
-  //             : Dimens.widthCast,
-  //         verticalGridSpacing: 8,
-  //         horizontalGridSpacing: 6,
-  //         minItemsPerRow: 3,
-  //         maxItemsPerRow: 6,
-  //         listViewBuilderOptions: ListViewBuilderOptions(
-  //           shrinkWrap: true,
-  //           physics: const NeverScrollableScrollPhysics(),
-  //         ),
-  //         children: List.generate(
-  //           (widget.castList?.length ?? 0),
-  //           (position) {
-  //             return InkWell(
-  //               borderRadius: BorderRadius.circular(8),
-  //               //focusColor:: white,
-  //               onTap: () {
-  //                 debugPrint("Item Clicked! => $position");
-  //                 if (kIsWeb || Constant.isTV) return;
-  //                 Navigator.of(context).push(
-  //                   MaterialPageRoute(
-  //                     builder: (context) => CastDetails(
-  //                         castID:
-  //                             widget.castList?[position].id.toString() ?? ""),
-  //                   ),
-  //                 );
-  //               },
-  //               child: Padding(
-  //                 padding: const EdgeInsets.all(2.0),
-  //                 child: Stack(
-  //                   alignment: Alignment.bottomCenter,
-  //                   clipBehavior: Clip.antiAlias,
-  //                   children: <Widget>[
-  //                     SizedBox(
-  //                       height: (kIsWeb || Constant.isTV)
-  //                           ? Dimens.heightCastWeb
-  //                           : Dimens.heightCast,
-  //                       width: MediaQuery.of(context).size.width,
-  //                       child: ClipRRect(
-  //                         borderRadius:
-  //                             BorderRadius.circular(Dimens.cardRadius),
-  //                         child: MyUserNetworkImage(
-  //                           imageUrl: widget.castList?[position].image ?? "",
-  //                           fit: BoxFit.cover,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       padding: const EdgeInsets.all(0),
-  //                       width: MediaQuery.of(context).size.width,
-  //                       height: (kIsWeb || Constant.isTV)
-  //                           ? Dimens.heightCastWeb
-  //                           : Dimens.heightCast,
-  //                       decoration: const BoxDecoration(
-  //                         gradient: LinearGradient(
-  //                           begin: Alignment.center,
-  //                           end: Alignment.bottomCenter,
-  //                           colors: [
-  //                             transparentColor,
-  //                             blackTransparent,
-  //                             black,
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Padding(
-  //                       padding: const EdgeInsets.all(5),
-  //                       child: MyText(
-  //                         multilanguage: false,
-  //                         text: widget.castList?[position].name ?? "",
-  //                         fontstyle: FontStyle.normal,
-  //                         fontsizeNormal: 12,
-  //                         fontweight: FontWeight.w500,
-  //                         fontsizeWeb: 14,
-  //                         maxline: 3,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         textalign: TextAlign.center,
-  //                         color: white,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     );
-  //   } else {
-  //     return const SizedBox.shrink();
-  //   }
-  // }
+
 }

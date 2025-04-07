@@ -65,6 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'chulltv.firebasestorage.app',
     androidClientId: '188395223241-fgfqaqmjvkl35bvc6ft1h6jlrukrkggp.apps.googleusercontent.com',
     iosClientId: '188395223241-icetli8fdrkfnd6790jui6dr60fnjeqs.apps.googleusercontent.com',
-    iosBundleId: 'com.flickfusion.chulltv',
+    iosBundleId: 'com.ott.chulltvott',
   );
 }

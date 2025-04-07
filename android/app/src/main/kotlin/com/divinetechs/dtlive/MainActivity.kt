@@ -1,4 +1,4 @@
-package com.flickfusion.chulltv
+package com.ott.chulltvott
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity
