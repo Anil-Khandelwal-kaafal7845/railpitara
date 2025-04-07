@@ -59,7 +59,7 @@ class Result {
     String? subtitle2;
     String? subtitleLang3;
     String? subtitle3;
-    dynamic? isadshow;
+    dynamic isadshow;
     int? view;
     int? status;
     DateTime? createdAt;

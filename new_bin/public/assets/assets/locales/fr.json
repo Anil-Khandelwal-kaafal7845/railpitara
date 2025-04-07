@@ -159,7 +159,7 @@
     "invalidphonenumber": "Le numéro de téléphone saisi n'est pas valide !",
     "enterreceivedotp": "Entrez l'OTP reçu",
     "otp_not_working": "Actuellement, la connexion OTP ne fonctionne pas. ",
-    "confirm": "Confirmer",
+    "confirm": "Verify OTP",
     "resend": "Renvoyer",
     "watch_now": "Regarde maintenant",
     "watch_with": "Regarder avec",

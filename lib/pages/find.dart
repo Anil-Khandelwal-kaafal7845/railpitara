@@ -1,13 +1,10 @@
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/search.dart';
 import 'package:dtlive/pages/sectionbytype.dart';
 import 'package:dtlive/provider/findprovider.dart';
-import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
-import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/myimage.dart';
 import 'package:dtlive/widget/mytext.dart';

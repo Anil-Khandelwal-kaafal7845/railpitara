@@ -158,7 +158,7 @@
     "invalidphonenumber": "O número de telefone inserido é inválido!",
     "enterreceivedotp": "Insira o OTP recebido",
     "otp_not_working": "Atualmente, o login OTP não está funcionando. Você pode continuar com outros logins.",
-    "confirm": "confirme",
+    "confirm": "Verify OTP",
     "resend": "Reenviar",
     "watch_now": "Assista agora",
     "watch_with": "Assistir com",

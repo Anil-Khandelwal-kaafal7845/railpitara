@@ -4,18 +4,17 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:dtlive/main.dart';
+import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/provider/showdownloadprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
-import 'package:dtlive/utils/adhelper.dart';
 
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
-import 'package:dtlive/pages/castdetails.dart';
-import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/cast_details.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
@@ -879,7 +878,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) {
-                                            return const LoginSocial();
+                                            return const LoginViaSocial();
                                           },
                                         ),
                                       );
@@ -1864,7 +1863,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return const LoginSocial();
+                                  return const LoginViaSocial();
                                 },
                               ),
                             );
@@ -2178,7 +2177,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const LoginSocial();
+                      return const LoginViaSocial();
                     },
                   ),
                 );
@@ -2237,7 +2236,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const LoginSocial();
+                      return const LoginViaSocial();
                     },
                   ),
                 );
@@ -2654,8 +2653,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                           .pop(); // Close the dialog
                                     },
                                     style: TextButton.styleFrom(
-                                      backgroundColor: colorPrimary,
-                                      primary: Colors.black,
+                                      foregroundColor: Colors.black, backgroundColor: colorPrimary,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
                                     ),
@@ -2668,8 +2666,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                           .pop(); // Close the dialog and do nothing
                                     },
                                     style: TextButton.styleFrom(
-                                      side: BorderSide(color: Colors.white),
-                                      primary: Colors.white,
+                                      foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
                                     ),
@@ -2693,7 +2690,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const LoginSocial();
+                        return const LoginViaSocial();
                       },
                     ),
                   );
@@ -2911,8 +2908,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                           .pop(); // Close the dialog
                                     },
                                     style: TextButton.styleFrom(
-                                      backgroundColor: colorPrimary,
-                                      primary: Colors.black,
+                                      foregroundColor: Colors.black, backgroundColor: colorPrimary,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
                                     ),
@@ -2925,8 +2921,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                           .pop(); // Close the dialog and do nothing
                                     },
                                     style: TextButton.styleFrom(
-                                      side: BorderSide(color: Colors.white),
-                                      primary: Colors.white,
+                                      foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
                                     ),
@@ -2950,7 +2945,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const LoginSocial();
+                        return const LoginViaSocial();
                       },
                     ),
                   );
@@ -3458,7 +3453,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return const LoginSocial();
+                  return const LoginViaSocial();
                 },
               ),
             );
@@ -3641,7 +3636,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                         }
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
+                            builder: (context) => const LoginViaSocial(),
                           ),
                         );
                       }
@@ -4382,7 +4377,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

@@ -51,7 +51,7 @@ import 'package:wakelock/wakelock.dart';
 Future<void> getInstallReferrer() async {
   try {
     final referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
-    
+
     print('------------------------------');
     print('✅ Install Referrer: ${referrerDetails.installReferrer}');
     print('📌 Referrer Click Timestamp: ${referrerDetails.referrerClickTimestampSeconds}');
@@ -80,7 +80,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'chullottios', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',
@@ -151,8 +151,7 @@ Future<void> main() async {
   );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitDown, 
   ]);
 }
 

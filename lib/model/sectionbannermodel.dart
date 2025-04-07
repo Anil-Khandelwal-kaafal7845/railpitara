@@ -46,17 +46,18 @@ class Result {
   int? typeId;
   dynamic isPremium;
   String? thumbnail;
+  dynamic thumbnaiul1;
   String? bannerBacklink;
   String? landscape;
   String? fullWidth;
-  dynamic? videoUrl;
+  dynamic videoUrl;
   String? trailerType;
   int? stopTime;
   int? isDownloaded;
   int? isBookmark;
   int? rentBuy;
   int? isRent;
-  dynamic? isLiveUrl;
+  dynamic isLiveUrl;
   int? rentPrice;
   int? isBuy;
   String? categoryName;
@@ -76,6 +77,7 @@ class Result {
     this.description,
     this.videoType,
     this.typeId,
+    this.thumbnaiul1,
     this.bannerBacklink ,
     this.videoUrl,
     this.isPremium,
@@ -109,6 +111,7 @@ class Result {
         description: json["description"],
         videoType: json["video_type"],
         typeId: json["type_id"],
+        thumbnaiul1: json["thumbnaiul_1"],
         bannerBacklink: json["banner_backlink"],
         isPremium: json["is_premium"],
         videoUrl: json["video_320"],
@@ -144,6 +147,7 @@ class Result {
         "banner_backlink":bannerBacklink ,
         "type_id": typeId,
         "is_live_url": isLiveUrl,
+        "thumbnaiul_1":thumbnail,
         "full_width":fullWidth,
         "is_premium": isPremium,
         "thumbnail": thumbnail,

@@ -1,13 +1,10 @@
 import 'dart:io';
 
-import 'package:dtlive/pages/bottombar.dart';
-import 'package:dtlive/pages/home.dart';
+import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/pages/profileavatar.dart';
-import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dtlive/provider/profileprovider.dart';
 import 'package:dtlive/utils/color.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 
-import 'package:dtlive/pages/home.dart';
+import 'package:dtlive/pages/home_screen.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';

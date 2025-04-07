@@ -1,10 +1,8 @@
 
 
 import 'package:dtlive/model/searchmodel.dart';
-import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SearchProvider extends ChangeNotifier {
   SearchModel searchModel = SearchModel();

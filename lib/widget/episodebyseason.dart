@@ -1,18 +1,17 @@
 import 'dart:io';
 
 import 'package:dtlive/pages/coinstorescreen.dart';
-import 'package:dtlive/pages/home.dart';
 import 'package:dtlive/pages/successCoinShow.dart';
-import 'package:dtlive/pages/successScreen.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/widget/animatedgif.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
-import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/model/episodebyseasonmodel.dart' as episode;
 import 'package:dtlive/provider/episodeprovider.dart';
@@ -254,9 +253,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                           .pop(); // Close the dialog
                                                     },
                                                     style: TextButton.styleFrom(
-                                                      backgroundColor:
+                                                      foregroundColor: Colors.black, backgroundColor:
                                                           colorPrimary,
-                                                      primary: Colors.black,
                                                       padding:
                                                           EdgeInsets.symmetric(
                                                               horizontal: 20,
@@ -271,9 +269,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                           .pop(); // Close the dialog and do nothing
                                                     },
                                                     style: TextButton.styleFrom(
-                                                      side: BorderSide(
+                                                      foregroundColor: Colors.white, side: BorderSide(
                                                           color: Colors.white),
-                                                      primary: Colors.white,
                                                       padding:
                                                           EdgeInsets.symmetric(
                                                               horizontal: 20,
@@ -426,7 +423,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                   // User not logged in, navigate to the login screen
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const LoginSocial(),
+                                      builder: (context) => const LoginViaSocial(),
                                     ),
                                   );
                                 }
@@ -501,7 +498,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                               //     // User not logged in, navigate to the login screen
                               //     Navigator.of(context).push(
                               //       MaterialPageRoute(
-                              //         builder: (context) => const LoginSocial(),
+                              //         builder: (context) => const LoginViaSocial(),
                               //       ),
                               //     );
                               //   }
@@ -1219,7 +1216,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );
@@ -1317,7 +1314,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   //       context,
   //       MaterialPageRoute(
   //         builder: (context) {
-  //           return const LoginSocial();
+  //           return const LoginViaSocial();
   //         },
   //       ),
   //     );

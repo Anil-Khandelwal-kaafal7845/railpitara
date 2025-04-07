@@ -121,114 +121,12 @@ class _PlayerVideoState extends State<PlayerVideo> {
     Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
         body: widget.playType == "Trailer"
-            ? Stack(
-                children: [
-                  InAppWebView(
-                    initialData: InAppWebViewInitialData(
-                      data: '''
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <style>
-              html, body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                background-color: black;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-
-              iframe {
-                width: 100vw;
-                height: 100vh;
-                border: none;
-              }
-            </style>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-          </head>
-          <body>
-            <iframe
-              id="videoFrame"
-              src="https://chull.tv/unviiplayer.html?url=${widget.trailerUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true"
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
-              allowfullscreen>
-            </iframe>
-
-            <script>
-              const videoFrame = document.getElementById("videoFrame");
-
-              // Resize iframe correctly
-              function adjustIframeSize() {
-                videoFrame.style.width = window.innerWidth + "px";
-                videoFrame.style.height = window.innerHeight + "px";
-              }
-
-              window.addEventListener("resize", adjustIframeSize);
-              adjustIframeSize();
-            </script>
-          </body>
-          </html>
-          ''',
-                    ),
-                    initialOptions: InAppWebViewGroupOptions(
-                      crossPlatform: InAppWebViewOptions(
-                        disableVerticalScroll: true,
-                        disableHorizontalScroll: true,
-                        disableContextMenu: true,
-                        useOnLoadResource: true,
-                        javaScriptEnabled: true,
-                        mediaPlaybackRequiresUserGesture: false,
-                        userAgent:
-                            'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
-                      ),
-                    ),
-                  ),
-
-                  // Flutter Back Button (Only in Normal Mode)
-                  Positioned(
-                    top: 40.0,
-                    left: 20.0,
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: isFullScreen,
-                      builder: (context, fullScreen, child) {
-                        return fullScreen
-                            ? SizedBox() // Hide back button in fullscreen
-                            : GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: 45,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      CupertinoIcons.back,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ),
-                              );
-                      },
-                    ),
-                  ),
-                ],
-              )
-            : widget.isLive == 1
-                ? TestPlayerWeb(loadURL: widget.videoUrl ?? '')
-                : Stack(
-                    children: [
-                      InAppWebView(
-                        initialData: InAppWebViewInitialData(
-                          data: '''
+            ? 
+            Stack(
+  children: [
+    InAppWebView(
+      initialData: InAppWebViewInitialData(
+        data: '''
           <!DOCTYPE html>
           <html>
           <head>
@@ -276,54 +174,159 @@ class _PlayerVideoState extends State<PlayerVideo> {
           </body>
           </html>
           ''',
-                        ),
-                        initialOptions: InAppWebViewGroupOptions(
-                          crossPlatform: InAppWebViewOptions(
-                            disableVerticalScroll: true,
-                            disableHorizontalScroll: true,
-                            disableContextMenu: true,
-                            useOnLoadResource: true,
-                            javaScriptEnabled: true,
-                            mediaPlaybackRequiresUserGesture: false,
-                            userAgent:
-                                'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
-                          ),
-                        ),
+      ),
+      initialOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          disableVerticalScroll: true,
+          disableHorizontalScroll: true,
+          disableContextMenu: true,
+          useOnLoadResource: true,
+          javaScriptEnabled: true,
+          mediaPlaybackRequiresUserGesture: false,
+          userAgent: 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+        ),
+      ),
+    ),
+    
+    // Flutter Back Button (Only in Normal Mode)
+    Positioned(
+      top: 40.0,
+      left: 20.0,
+      child: ValueListenableBuilder<bool>(
+        valueListenable: isFullScreen,
+        builder: (context, fullScreen, child) {
+          return fullScreen
+              ? SizedBox() // Hide back button in fullscreen
+              : GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        CupertinoIcons.back,
+                        color: Colors.black,
+                        size: 25,
                       ),
+                    ),
+                  ),
+                );
+        },
+      ),
+    ),
+  ],
+)
+            
+            : widget.isLive == 1
+                ? TestPlayerWeb(loadURL: widget.videoUrl ?? '')
+                : 
+               Stack(
+  children: [
+    InAppWebView(
+      initialData: InAppWebViewInitialData(
+        data: '''
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              html, body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                background-color: black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
 
-                      // Flutter Back Button (Only in Normal Mode)
-                      Positioned(
-                        top: 40.0,
-                        left: 20.0,
-                        child: ValueListenableBuilder<bool>(
-                          valueListenable: isFullScreen,
-                          builder: (context, fullScreen, child) {
-                            return fullScreen
-                                ? SizedBox() // Hide back button in fullscreen
-                                : GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      width: 45,
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          CupertinoIcons.back,
-                                          color: Colors.black,
-                                          size: 25,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                          },
-                        ),
+              iframe {
+                width: 100vw;
+                height: 100vh;
+                border: none;
+              }
+            </style>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+          </head>
+          <body>
+            <iframe
+              id="videoFrame"
+              src="https://chull.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true"
+              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
+              allowfullscreen>
+            </iframe>
+
+            <script>
+              const videoFrame = document.getElementById("videoFrame");
+
+              // Resize iframe correctly
+              function adjustIframeSize() {
+                videoFrame.style.width = window.innerWidth + "px";
+                videoFrame.style.height = window.innerHeight + "px";
+              }
+
+              window.addEventListener("resize", adjustIframeSize);
+              adjustIframeSize();
+            </script>
+          </body>
+          </html>
+          ''',
+      ),
+      initialOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          disableVerticalScroll: true,
+          disableHorizontalScroll: true,
+          disableContextMenu: true,
+          useOnLoadResource: true,
+          javaScriptEnabled: true,
+          mediaPlaybackRequiresUserGesture: false,
+          userAgent: 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+        ),
+      ),
+    ),
+    
+    // Flutter Back Button (Only in Normal Mode)
+    Positioned(
+      top: 40.0,
+      left: 20.0,
+      child: ValueListenableBuilder<bool>(
+        valueListenable: isFullScreen,
+        builder: (context, fullScreen, child) {
+          return fullScreen
+              ? SizedBox() // Hide back button in fullscreen
+              : GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        CupertinoIcons.back,
+                        color: Colors.black,
+                        size: 25,
                       ),
-                    ],
-                  ));
+                    ),
+                  ),
+                );
+        },
+      ),
+    ),
+  ],
+));
+ 
+ 
   }
 }

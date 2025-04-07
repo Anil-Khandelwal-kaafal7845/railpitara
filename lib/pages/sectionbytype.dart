@@ -4,8 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectionlistmodel.dart' as list;
 import 'package:dtlive/model/sectionbannermodel.dart' as banner;
-import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/pages/morescreen.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+import 'package:dtlive/pages/more_screen.dart';
 import 'package:dtlive/pages/pip_web_player.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
@@ -380,7 +380,7 @@ class SectionByTypeState extends State<SectionByType> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginSocial()),
+                                      builder: (context) => LoginViaSocial()),
                                 );
                                 // Utils.buildWebAlertDialog(context, "login", "");
                               } else {
@@ -566,7 +566,7 @@ class SectionByTypeState extends State<SectionByType> {
                 if (Constant.userID == null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                    MaterialPageRoute(builder: (context) => LoginViaSocial()),
                   );
                 } else {
                   // Navigator.push(
@@ -597,7 +597,7 @@ class SectionByTypeState extends State<SectionByType> {
             //   if (Constant.userID == null) {
             //     Navigator.push(
             //       context,
-            //       MaterialPageRoute(builder: (context) => LoginSocial()),
+            //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
             //     );
 
             //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -810,7 +810,7 @@ class SectionByTypeState extends State<SectionByType> {
                 if (Constant.userID == null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginSocial()),
+                    MaterialPageRoute(builder: (context) => LoginViaSocial()),
                   );
                 } else {
                   // Navigator.push(
@@ -840,7 +840,7 @@ class SectionByTypeState extends State<SectionByType> {
             //   if (Constant.userID == null) {
             //     Navigator.push(
             //       context,
-            //       MaterialPageRoute(builder: (context) => LoginSocial()),
+            //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
             //     );
 
             //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -1050,7 +1050,7 @@ class SectionByTypeState extends State<SectionByType> {
               //   if (Constant.userID == null) {
               //     Navigator.push(
               //       context,
-              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
               //     );
 
               //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -1089,7 +1089,7 @@ class SectionByTypeState extends State<SectionByType> {
                   if (Constant.userID == null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
                     );
                   } else {
                     // Navigator.push(
@@ -1291,7 +1291,7 @@ class SectionByTypeState extends State<SectionByType> {
                   if (Constant.userID == null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
                     );
                   } else {
                     // Navigator.push(
@@ -1321,7 +1321,7 @@ class SectionByTypeState extends State<SectionByType> {
               //   if (Constant.userID == null) {
               //     Navigator.push(
               //       context,
-              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
               //     );
 
               //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -1531,7 +1531,7 @@ class SectionByTypeState extends State<SectionByType> {
                   if (Constant.userID == null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
                     );
                   } else {
                     // Navigator.push(
@@ -1561,7 +1561,7 @@ class SectionByTypeState extends State<SectionByType> {
               //   if (Constant.userID == null) {
               //     Navigator.push(
               //       context,
-              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
               //     );
 
               //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -2042,7 +2042,7 @@ class SectionByTypeState extends State<SectionByType> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginSocial()),
+                              builder: (context) => LoginViaSocial()),
                         );
                       } else {
                         // Navigator.push(

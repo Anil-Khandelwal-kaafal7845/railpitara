@@ -5,7 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/model/subscriptionmodel.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
-import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/pages/successPrime.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -146,7 +146,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );
@@ -589,9 +589,9 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                 Map<String, Object> screenViewEvent = {
                   'event_name': 'package_selected',
                   'user_id': Constant.userID.toString(),
-                  "package_id": '${packageList?[index].id}',
-                  "package_name": '${packageList?[index].name}',
-                  "package_price": '${packageList?[index].price}',
+                  "package_id": '${packageList[index].id}',
+                  "package_name": '${packageList[index].name}',
+                  "package_price": '${packageList[index].price}',
                 };
                 Singular.eventWithArgs('package_selected', screenViewEvent);
               },

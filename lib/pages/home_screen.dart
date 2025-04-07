@@ -5,18 +5,15 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
-import 'package:dtlive/pages/find.dart';
-import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/pages/morescreen.dart';
-import 'package:dtlive/pages/mypurchaselist.dart';
-import 'package:dtlive/pages/profileedit.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+import 'package:dtlive/pages/more_screen.dart';
 
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/provider/findprovider.dart';
+import 'package:dtlive/reel%20feature/reel_screen.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
-import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/commonappbar.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
@@ -36,6 +33,7 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -56,10 +54,8 @@ import '../model/force_update_model.dart';
 import '../webservice/apiservices.dart';
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
-import '../utils/strings.dart';
 import 'aboutprivacyterms.dart';
 
-import 'mywatchlist.dart';
 import 'pip_web_player.dart';
 
 class Home extends StatefulWidget {
@@ -249,7 +245,7 @@ class HomeState extends State<Home> with RouteAware {
                         if (Platform.isAndroid || Platform.isIOS) {
                           final url = Uri.parse(
                             Platform.isAndroid
-                                ? "https://play.google.com/store/apps/details?id=com.ott.chulltvott&hl=en_IN"
+                                ? "https://play.google.com/store/apps/details?id=com.ott.Chull tvott&hl=en_IN"
                                 : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
                           );
                           launchUrl(
@@ -310,7 +306,7 @@ class HomeState extends State<Home> with RouteAware {
   //                       if (Platform.isAndroid || Platform.isIOS) {
   //                         final url = Uri.parse(
   //                           Platform.isAndroid
-  //                               ? "https://play.google.com/store/apps/details?id=com.ott.chulltvott&hl=en_IN"
+  //                               ? "https://play.google.com/store/apps/details?id=com.ott.Chull tvott&hl=en_IN"
   //                               : "https://apps.apple.com/in/app/om-tv/id1584477559",
   //                         );
   //                         launchUrl(
@@ -505,13 +501,54 @@ class HomeState extends State<Home> with RouteAware {
         selectedLanguageIds.join(','));
   }
 
-  openDetailPage(String pageName, int videoId, int upcomingType, int videoType,
-      int typeId) async {
-    debugPrint("pageName =======> $pageName");
+  // reel feature ---
+
+  openDetailPage(String pageName, dynamic videoId, dynamic upcomingType,
+      dynamic videoType, int typeId, dynamic reelName) async {
+    debugPrint("reelName =======> $reelName");
     debugPrint("videoId ========> $videoId");
     debugPrint("upcomingType ===> $upcomingType");
     debugPrint("videoType ======> $videoType");
     debugPrint("typeId =========> $typeId");
+
+    // Check if the videoType is 7
+    if (videoType == 7) {
+      if (Constant.userID == null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const LoginViaSocial(),
+          ),
+        );
+        return;
+      }
+      // Navigate to PreloadPage if videoType is 7
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ReelScreen(
+            videoId: videoId,
+            videoType: videoType,
+            typeId: typeId,
+            nameReelVideo: reelName,
+            // initialIndex: 0,
+          ),
+        ),
+      );
+      return; // Early return to prevent further code execution
+    }
+    // if (videoType == 7) {
+    //   // Navigate to PreloadPage if videoType is 7
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => ReelScreen(),
+    //     ),
+    //   );
+    //   return; // Early return to prevent further code execution
+    // }
+
+    // If videoType is not 7, proceed with the original behavior
+
     if (pageName != "" && (kIsWeb || Constant.isTV)) {
       await setSelectedTab(-1);
     }
@@ -524,6 +561,26 @@ class HomeState extends State<Home> with RouteAware {
       typeId: typeId,
     );
   }
+
+  // openDetailPage(String pageName, int videoId, int upcomingType, int videoType,
+  //     int typeId) async {
+  //   debugPrint("pageName =======> $pageName");
+  //   debugPrint("videoId ========> $videoId");
+  //   debugPrint("upcomingType ===> $upcomingType");
+  //   debugPrint("videoType ======> $videoType");
+  //   debugPrint("typeId =========> $typeId");
+  //   if (pageName != "" && (kIsWeb || Constant.isTV)) {
+  //     await setSelectedTab(-1);
+  //   }
+  //   if (!mounted) return;
+  //   Utils.openDetails(
+  //     context: context,
+  //     videoId: videoId,
+  //     upcomingType: upcomingType,
+  //     videoType: videoType,
+  //     typeId: typeId,
+  //   );
+  // }
 
   Future<void> _redirectToUrl(String url) async {
     if (await canLaunch(url)) {
@@ -580,18 +637,7 @@ class HomeState extends State<Home> with RouteAware {
       backgroundColor: appBgColor,
       appBar: AppBar(
         surfaceTintColor: appBgColor,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Image.asset(
-            "assets/images/ic_channels.png",
-            width: 17,
-            height: 17,
-            color: white,
-          ),
-          onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        centerTitle: false,
         actions: [
           generalProvider.isCoinShow == "1"
               ? GestureDetector(
@@ -605,7 +651,7 @@ class HomeState extends State<Home> with RouteAware {
                     } else {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
+                          builder: (context) => const LoginViaSocial(),
                         ),
                       );
                     }
@@ -632,579 +678,14 @@ class HomeState extends State<Home> with RouteAware {
                       )),
                 )
               : SizedBox.shrink(),
-
-          // Padding(
-          //   padding: const EdgeInsets.only(right: 10),
-          //   child: PopupMenuButton<type.Result>(
-          //     offset: const Offset(0, 70),
-          //     color: Colors.black54,
-          //     itemBuilder: (context) {
-          //       List<bool> tempSelectedLanguages = List.generate(
-          //         findProvider.langaugeModel.result!.length,
-          //         (index) => selectedLanguages[index],
-          //       );
-          //       return [
-          //         PopupMenuItem(
-          //           child: SizedBox(
-          //             width: MediaQuery.of(context).size.width * 0.33,
-          //             child: StatefulBuilder(
-          //               builder: (context, setState) {
-          //                 return Column(
-          //                   crossAxisAlignment: CrossAxisAlignment.center,
-          //                   mainAxisAlignment: MainAxisAlignment.center,
-          //                   children: [
-          //                     for (int i = 0;
-          //                         i < findProvider.langaugeModel.result!.length;
-          //                         i++)
-          //                       Theme(
-          //                         data: ThemeData(
-          //                           unselectedWidgetColor: Colors.white,
-          //                         ),
-          //                         child: Padding(
-          //                           padding: const EdgeInsets.symmetric(
-          //                               vertical: 0,
-          //                               horizontal: 0), // Reduce padding
-          //                           child: CheckboxListTile(
-          //                             contentPadding: EdgeInsets.symmetric(
-          //                                 horizontal:
-          //                                     5), // Reduce horizontal padding
-          //                             dense: true,
-          //                             title: Text(
-          //                               findProvider
-          //                                   .langaugeModel.result![i].name!,
-          //                               style: const TextStyle(
-          //                                   color: Colors.white, fontSize: 14),
-          //                             ),
-          //                             value: tempSelectedLanguages[i],
-          //                             onChanged: (bool? value) {
-          //                               setState(() {
-          //                                 tempSelectedLanguages[i] = value!;
-          //                               });
-          //                             },
-          //                             autofocus: true,
-          //                             activeColor: primaryDark,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ElevatedButton(
-          //                       style: ElevatedButton.styleFrom(
-          //                         primary: primaryDark,
-          //                       ),
-          //                       onPressed: () {
-          //                         setState(() {
-          //                           selectedLanguages =
-          //                               List.from(tempSelectedLanguages);
-          //                         });
-          //                         selectedLanguageIds.clear();
-          //                         for (int i = 0;
-          //                             i < tempSelectedLanguages.length;
-          //                             i++) {
-          //                           if (tempSelectedLanguages[i]) {
-          //                             selectedLanguageIds.add(
-          //                               findProvider.langaugeModel.result![i].id
-          //                                   .toString(),
-          //                             );
-          //                           }
-          //                         }
-          //                         getTabData(
-          //                           homeProvider.selectedIndex,
-          //                           homeProvider.sectionTypeModel.result,
-          //                         );
-          //                         Navigator.pop(context);
-          //                       },
-          //                       child: const Text(
-          //                         'Submit',
-          //                         style: TextStyle(color: Colors.white),
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 );
-          //               },
-          //             ),
-          //           ),
-          //         ),
-          //       ];
-          //     },
-          //     child: Image.asset(
-          //       "assets/images/ic_language.png",
-          //       width: 20,
-          //       height: 20,
-          //       color: white,
-          //     ),
-          //   ),
-          // )
         ],
-        title: MyImage(width: 90, height: 90, imagePath: "appicon.png"),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MyImage(width: 110, height: 110, imagePath: "appicon.png"),
+          ],
+        ),
         backgroundColor: Colors.black,
-      ),
-      drawer: Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor:
-              appBgColor, //This will change the drawer background to blue.
-          //other styles
-        ),
-        child: Drawer(
-          backgroundColor: appBgColor,
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              SizedBox(
-                height: 180,
-                child: DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: appBgColor,
-                  ),
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: MyImage(
-                        width: 50, height: 50, imagePath: "appicon.png"),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Column(
-                  children: [
-                    /* Account Details */
-                    _buildSettingButton(
-                      title: 'accountdetails',
-                      // subTitle: 'manageprofile',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const ProfileEdit(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-
-                    // _buildLine(),
-                    // _buildLine(16.0, 16.0),
-
-                    // /* Active TV */
-                    // _buildSettingButton(
-                    //   title: 'activetv',
-                    //   // subTitle: 'activetv_desc',
-                    //   titleMultilang: true,
-                    //   subTitleMultilang: true,
-                    //   onClick: () {
-                    //     AdHelper.showFullscreenAd(
-                    //         context, Constant.rewardAdType, () async {
-                    //       if (Constant.userID != null) {
-                    //         Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const ActiveTV(),
-                    //           ),
-                    //         );
-                    //       } else {
-                    //         Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const LoginSocial(),
-                    //           ),
-                    //         );
-                    //       }
-                    //     });
-                    //   },
-                    // ),
-                    // // _buildLine(),
-
-                    /* Watchlist */
-                    _buildSettingButton(
-                      title: 'watchlist',
-                      // subTitle: 'view_your_watchlist',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        if (Constant.userID != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const MyWatchlist(),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    // _buildLine(),
-
-                    /* Purchases */
-                    Visibility(
-                      visible: forceUpdateData?.result?.showPackage == 1,
-                      child: _buildSettingButton(
-                        title: 'purchases',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const MyPurchaselist(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-
-                    /* Coin--- */
-                    Visibility(
-                      visible: generalProvider.isCoinShow == "1",
-                      child: _buildSettingButton(
-                        title: 'coin',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CoinStoreScreen(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-
-                    // _buildLine(),
-
-                    /* Subscription */
-                    Visibility(
-                      visible: forceUpdateData?.result?.showPackage == 1,
-                      child: _buildSettingButton(
-                        title: 'subsciption',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () {
-                          if (Constant.userID != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const Subscription(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-
-                    // _buildLine(),
-
-                    // /* Transactions */
-                    // _buildSettingButton(
-                    //   title: 'transactions',
-                    //   // subTitle: 'transactions_notes',
-                    //   titleMultilang: true,
-                    //   subTitleMultilang: true,
-                    //   onClick: () {
-                    //     AdHelper.showFullscreenAd(
-                    //         context, Constant.rewardAdType, () async {
-                    //       if (Constant.userID != null) {
-                    //         Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) =>
-                    //                 const SubscriptionHistory(),
-                    //           ),
-                    //         );
-                    //       } else {
-                    //         Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const LoginSocial(),
-                    //           ),
-                    //         );
-                    //       }
-                    //     });
-                    //   },
-                    // ),
-                    // // _buildLine(),
-
-                    /* MaltiLanguage */
-                    _buildSettingButton(
-                      title: 'change_language',
-                      // subTitle: 'change_language_desc',
-                      titleMultilang: true,
-                      subTitleMultilang: true,
-                      onClick: () {
-                        _languageChangeDialog();
-                      },
-                    ),
-                    // _buildLine(),
-
-                    // /* Push Notification enable/disable */
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     Expanded(
-                    //       child: _buildSettingButton(
-                    //         title: 'notification',
-                    //         // subTitle: 'recivepushnotification',
-                    //         titleMultilang: true,
-                    //         subTitleMultilang: true,
-                    //         onClick: () {
-                    //           toggleSwitch(!(isSwitched ?? false));
-                    //         },
-                    //       ),
-                    //     ),
-                    //     Switch(
-                    //       activeColor: primaryDark,
-                    //       activeTrackColor: primaryLight,
-                    //       inactiveTrackColor: gray,
-                    //       value: isSwitched ?? true,
-                    //       onChanged: toggleSwitch,
-                    //     ),
-                    //   ],
-                    // ),
-                    // // _buildLine(),
-
-                    // /* Clear Cache */
-                    // if (!Platform.isIOS)
-                    //   Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     children: [
-                    //       Expanded(
-                    //         child: _buildSettingButton(
-                    //           title: 'clearcatch',
-                    //           // subTitle: 'clearlocallycatch',
-                    //           titleMultilang: true,
-                    //           subTitleMultilang: true,
-                    //           onClick: () async {
-                    //             if (!(kIsWeb) || !(Constant.isTV)) {
-                    //               Utils.deleteCacheDir();
-                    //             }
-                    //             if (!mounted) return;
-                    //             Utils.showSnackbar(
-                    //                 context, "success", "cacheclearmsg", true);
-                    //           },
-                    //         ),
-                    //       ),
-                    //       MyImage(
-                    //         width: 28,
-                    //         height: 28,
-                    //         imagePath: "ic_clear.png",
-                    //         color: colorPrimary,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // if (!Platform.isIOS)
-                    //   //  _buildLine(),
-
-                    //       /* SignIn / SignOut */
-                    //       _buildSettingButton(
-                    //   title: Constant.userID == null
-                    //       ? youAreNotSignIn
-                    //       : (userType == "3" && (userName ?? "").isEmpty)
-                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
-                    //           : ("$signedInAs ${userName ?? ""}"),
-                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                    //   titleMultilang: false,
-                    //   subTitleMultilang: true,
-                    //   onClick: () async {
-                    //     if (Constant.userID != null) {
-                    //       final updatedUserName = await Navigator.of(context).push(
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const ProfileEdit(),
-                    //         ),
-                    //       );
-
-                    //       if (updatedUserName != null && updatedUserName is String) {
-                    //         setState(() {
-                    //           userName = updatedUserName;
-                    //         });
-                    //       }
-                    //     } else {
-                    //       await Navigator.of(context).push(
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const LoginSocial(),
-                    //         ),
-                    //       );
-                    //       setState(() {});
-                    //     }
-                    //   },
-                    // ),
-
-                    /* SignIn / SignOut */
-                    _buildSettingButton(
-                      title: Constant.userID == null
-                          ? youAreNotSignIn
-                          : (userType == "3" && (userName ?? "").isEmpty)
-                              ? ("$signedInAs ${userMobileNo ?? ""}")
-                              : ("$signedInAs ${userName ?? ""}"),
-                      // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                      titleMultilang: false,
-                      subTitleMultilang: true,
-                      onClick: () async {
-                        if (Constant.userID != null) {
-                          logoutConfirmDialog();
-                        } else {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginSocial(),
-                            ),
-                          );
-                          setState(() {});
-                        }
-                      },
-                    ),
-
-                    // _buildSettingButton(
-                    //   title: Constant.userID == null
-                    //       ? youAreNotSignIn
-                    //       : (userType == "3" && (userName ?? "").isEmpty)
-                    //           ? ("$signedInAs ${userMobileNo ?? ""}")
-                    //           : ("$signedInAs ${userName ?? ""}"),
-                    //   // subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                    //   titleMultilang: false,
-                    //   subTitleMultilang: true,
-                    //   onClick: () async {
-                    //     if (Constant.userID != null) {
-                    //       logoutConfirmDialog();
-                    //     } else {
-                    //       await Navigator.of(context).push(
-                    //         MaterialPageRoute(
-                    //           builder: (context) => const LoginSocial(),
-                    //         ),
-                    //       );
-                    //       setState(() {});
-                    //     }
-                    //   },
-                    // ),
-
-                    // _buildLine(),
-
-                    // /* Rate App */
-                    // _buildSettingButton(
-                    //   title: 'rateus',
-                    //   // subTitle: 'rateourapp',
-                    //   titleMultilang: true,
-                    //   subTitleMultilang: true,
-                    //   onClick: () async {
-                    //     debugPrint("Clicked on rateApp");
-                    //     await Utils.redirectToStore();
-                    //   },
-                    // ),
-                    // // _buildLine(),
-
-                    // /* Share App */
-                    // _buildSettingButton(
-                    //   title: 'shareapp',
-                    //   // subTitle: 'sharewithfriends',
-                    //   titleMultilang: true,
-                    //   subTitleMultilang: true,
-                    //   onClick: () async {
-                    //     await Utils.shareApp(Platform.isIOS
-                    //         ? Constant.iosAppShareUrlDesc
-                    //         : Constant.androidAppShareUrlDesc);
-                    //   },
-                    // ),
-                    // // _buildLine(),
-
-                    /* Delete Account */
-                    if (Constant.userID != null)
-                      _buildSettingButton(
-                        title: 'delete_account',
-                        // subTitle: 'delete_account_desc',
-                        titleMultilang: true,
-                        subTitleMultilang: true,
-                        onClick: () async {
-                          if (Constant.userID != null) {
-                            deleteConfirmDialog();
-                          } else {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
-                              ),
-                            );
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    // if (Constant.userID != null) _buildLine(),
-
-                    // /* Pages */
-                    // _buildPages(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _buildLine(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          socialMediaIcon(
-                            imageUrl: 'assets/images/fb.png',
-                            onTap: () {
-                              _redirectToUrl(Constant.fbLink);
-                            },
-                          ),
-                          const SizedBox(width: 15),
-                          socialMediaIcon(
-                            imageUrl: 'assets/images/insta.png',
-                            onTap: () {
-                              _redirectToUrl(Constant.InstaLink);
-                            },
-                          ),
-                          const SizedBox(width: 15),
-                          socialMediaIcon(
-                            imageUrl: 'assets/images/twt.png',
-                            onTap: () {
-                              _redirectToUrl(Constant.twitterLink);
-                            },
-                          ),
-                          const SizedBox(width: 15),
-                          socialMediaIcon(
-                            imageUrl: 'assets/images/yt.png',
-                            onTap: () {
-                              _redirectToUrl(Constant.youtubeLink);
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
@@ -1715,7 +1196,7 @@ class HomeState extends State<Home> with RouteAware {
                             Navigator.pop(context);
                             await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
+                                builder: (context) => const LoginViaSocial(),
                               ),
                             );
                           },
@@ -1837,7 +1318,7 @@ class HomeState extends State<Home> with RouteAware {
                             Navigator.pop(context);
                             await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
+                                builder: (context) => const LoginViaSocial(),
                               ),
                             );
                           },
@@ -1935,7 +1416,7 @@ class HomeState extends State<Home> with RouteAware {
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: Dimens.homeTabHeight,
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          padding: const EdgeInsets.only(top: 6, bottom: 6),
                           color: black.withOpacity(0.8),
                           child: tabTitle(homeProvider.sectionTypeModel.result),
                         ),
@@ -1975,6 +1456,7 @@ class HomeState extends State<Home> with RouteAware {
         _scrollToCurrent();
       }
     });
+
     return ListViewObserver(
       controller: observerController,
       child: ListView.separated(
@@ -1983,50 +1465,69 @@ class HomeState extends State<Home> with RouteAware {
         controller: tabScrollController,
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(13, 2, 13, 2),
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        separatorBuilder: (context, index) => const SizedBox(width: 6),
         itemBuilder: (BuildContext context, int index) {
           return Consumer<HomeProvider>(
             builder: (context, homeProvider, child) {
-              return InkWell(
-                  borderRadius: BorderRadius.circular(25),
-                  onTap: () async {
-                    debugPrint("index ===========> $index");
+              bool isSelected = homeProvider.selectedIndex == index;
+              String title = index == 0
+                  ? "HOME"
+                  : (sectionTypeList?[index - 1].name.toString() ?? "");
 
-                    if (kIsWeb) _onItemTapped("");
-                    await getTabData(
-                        index, homeProvider.sectionTypeModel.result);
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        constraints: const BoxConstraints(maxHeight: 35),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
-                        child: MyText(
-                          color: homeProvider.selectedIndex == index
-                              ? colorPrimary
-                              : white,
-                          multilanguage: false,
-                          text: index == 0
-                              ? "Home"
-                              : index > 0
-                                  ? (sectionTypeList?[index - 1]
-                                          .name
-                                          .toString() ??
-                                      "")
-                                  : "",
-                          fontsizeNormal: 12,
-                          fontweight: FontWeight.w700,
-                          fontsizeWeb: 14,
-                          maxline: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textalign: TextAlign.center,
-                          fontstyle: FontStyle.normal,
-                        ),
-                      ),
-                    ],
-                  ));
+              return InkWell(
+                onTap: () async {
+                  debugPrint("index ===========> $index");
+                  await getTabData(index, homeProvider.sectionTypeModel.result);
+                },
+                child: Container(
+                  height: 38, // Set exact height
+                  width: 95, // Set exact width
+                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(12), // Reduced border radius
+                    gradient: isSelected
+                        ? const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 169, 11, 6), // Dark Red
+                              Color.fromARGB(
+                                  255, 237, 48, 41), // Light Red/Orange Mix
+                              Color.fromARGB(
+                                  226, 230, 62, 56), // White for smooth blend
+                            ], // Dark Red → Light Red/Orange
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : const LinearGradient(
+                            colors: [
+                              Color(0xFF232526),
+                              Color(0xFF414345)
+                            ], // Dark Black → Light Gray
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                  ),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: isSelected
+                          ? Colors.white
+                          : Color(
+                              0xFFB0B0B0), // White for selected, Gray for non-selected
+                      fontSize: 14, // Adjusted font size
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal, // Bold for selected
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              );
             },
           );
         },
@@ -2075,7 +1576,8 @@ class HomeState extends State<Home> with RouteAware {
                               MediaQuery.of(context).size.width > 720
                           ? _webHomeBanner(
                               sectionDataProvider.sectionBannerModel.result)
-                          : _mobileHomeBanner(sectionDataProvider.sectionBannerModel.result);
+                          : _mobileHomeBanner(
+                              sectionDataProvider.sectionBannerModel.result);
                     } else {
                       return const SizedBox.shrink();
                     }
@@ -2141,6 +1643,7 @@ class HomeState extends State<Home> with RouteAware {
                   }
                 },
               ),
+
               const SizedBox(height: 20),
 
               /* Web Footer */
@@ -2287,138 +1790,134 @@ class HomeState extends State<Home> with RouteAware {
     );
   }
 
- Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+// animated banner ----
+  Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+    final isTablet = MediaQuery.of(context).size.width >= 600;
+
     if ((sectionBannerList?.length ?? 0) > 0) {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: double.infinity,
             height: Dimens.homeBanner,
             child: CarouselSlider.builder(
-              itemCount: (sectionBannerList?.length ?? 0),
+              itemCount: sectionBannerList?.length ?? 0,
               carouselController: carouselController,
               options: CarouselOptions(
                 initialPage: 0,
                 height: Dimens.homeBanner,
-                enlargeCenterPage: false,
+                enlargeCenterPage: true,
                 autoPlay: true,
-                autoPlayCurve: Curves.linear,
+                autoPlayCurve: Curves.easeInOut,
                 enableInfiniteScroll: true,
                 autoPlayInterval:
                     Duration(milliseconds: Constant.bannerDuration),
                 autoPlayAnimationDuration:
                     Duration(milliseconds: Constant.animationDuration),
-                viewportFraction: 1.0,
+                viewportFraction: isTablet ? 1.0 : 0.70,
                 onPageChanged: (val, _) async {
                   await sectionDataProvider.setCurrentBanner(val);
                 },
               ),
-              itemBuilder:
-                  (BuildContext context, int index, int pageViewIndex) {
+              itemBuilder: (context, index, realIndex) {
+                final bannerItem = sectionBannerList?[index];
+                final imageUrl = isTablet
+                    ? bannerItem?.fullWidth ?? ""
+                    : bannerItem?.thumbnail ?? "";
+
                 return GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  // focusColor: white,
-                  // borderRadius: BorderRadius.circular(0),
                   onTap: () {
-                    debugPrint("Clicked userid ==> ${Constant.userID}");
-                    debugPrint(
-                        "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
-                    if (sectionBannerList?[index].isLiveUrl == 1) {
+                    debugPrint("Clicked on banner: ${bannerItem?.video320}");
+
+                    if (bannerItem?.isLiveUrl == 1) {
                       if (Constant.userID == null) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginSocial()),
+                              builder: (context) => LoginViaSocial()),
                         );
                       } else {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => PlayerVideo(
-                        //           '',
-                        //           0,
-                        //           0,
-                        //           typeId,
-                        //           0,
-                        //           sectionBannerList?[index].videoUrl,
-                        //           0,
-                        //           "",
-                        //           "")),
-                        // );
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) => TestPlayerWeb(
-                                loadURL: sectionBannerList?[index].videoUrl!)));
+                              loadURL: bannerItem?.videoUrl ?? "",
+                            ),
+                          ),
+                        );
                       }
-                    } else if (sectionBannerList?[index].bannerBacklink !=
-                            null &&
-                        sectionBannerList![index]
-                            .bannerBacklink
-                            .toString()
-                            .isNotEmpty) {
-                      launchUrl(Uri.parse(
-                          sectionBannerList[index].bannerBacklink.toString()));
+                    } else if (bannerItem?.bannerBacklink != null &&
+                        bannerItem!.bannerBacklink!.isNotEmpty) {
+                      launchUrl(Uri.parse(bannerItem.bannerBacklink!));
                     } else {
                       openDetailPage(
-                        (sectionBannerList?[index].videoType ?? 0) == 2
+                        (bannerItem?.videoType ?? 0) == 2
                             ? "showdetail"
                             : "videodetail",
-                        sectionBannerList?[index].id ?? 0,
-                        sectionBannerList?[index].upcomingType ?? 0,
-                        sectionBannerList?[index].videoType ?? 0,
-                        sectionBannerList?[index].typeId ?? 0,
+                        bannerItem?.id ?? 0,
+                        bannerItem?.upcomingType ?? 0,
+                        bannerItem?.videoType ?? 0,
+                        bannerItem?.typeId ?? 0,
+                        bannerItem?.name ?? 0,
                       );
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 0, bottom: 0, left: 10, right: 10),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      // alignment: AlignmentDirectional.bottomCenter,
-                      children: [
-                        SizedBox(
-                          height: Dimens.homeBanner,
-                          child: MyNetworkImageTwo(
-                            imageUrl: sectionBannerList?[index].fullWidth ?? "",
-                            fit: BoxFit.fill,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 5,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: MyNetworkImageTwo(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                       Positioned(
-                        top: 10,
-                        right: 10,
-                        child: _buildBannerBadge(sectionBannerList?[index]),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: _buildBannerBadge(bannerItem),
+                          ),
+                        ],
                       ),
-                     
-                      ],
                     ),
                   ),
                 );
               },
             ),
           ),
-          // const SizedBox(height: 5.5),
-          // Positioned(
-          //   bottom: 10,
-          //   child: Consumer<SectionDataProvider>(
-          //     builder: (context, sectionDataProvider, child) {
-          //       return AnimatedSmoothIndicator(
-          //         count: (sectionBannerList?.length ?? 0),
-          //         activeIndex: sectionDataProvider.cBannerIndex ?? 0,
-          //         effect: const ScrollingDotsEffect(
-          //           spacing: 8,
-          //           radius: 4,
-          //           activeDotColor: colorPrimary,
-          //           dotColor: dotsDefaultColor,
-          //           dotHeight: 8,
-          //           dotWidth: 8,
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-       
+          Positioned(
+            bottom: 10,
+            child: Consumer<SectionDataProvider>(
+              builder: (context, sectionDataProvider, child) {
+                return AnimatedSmoothIndicator(
+                  count: sectionBannerList?.length ?? 0,
+                  activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+                  effect: const ExpandingDotsEffect(
+                    spacing: 8,
+                    radius: 6,
+                    activeDotColor: colorPrimary,
+                    dotColor: dotsDefaultColor,
+                    dotHeight: 8,
+                    dotWidth: 8,
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       );
     } else {
@@ -2426,7 +1925,366 @@ class HomeState extends State<Home> with RouteAware {
     }
   }
 
+  // Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+  //   if ((sectionBannerList?.length ?? 0) > 0) {
+  //     return Stack(
+  //       alignment: AlignmentDirectional.bottomCenter,
+  //       children: [
+  //         SizedBox(
+  //           width: double.infinity,
+  //           height: Dimens.homeBanner,
+  //           child: CarouselSlider.builder(
+  //             itemCount: sectionBannerList?.length ?? 0,
+  //             carouselController: carouselController,
+  //             options: CarouselOptions(
+  //               initialPage: 0,
+  //               height: Dimens.homeBanner,
+  //               enlargeCenterPage: true,
+  //               autoPlay: true,
+  //               autoPlayCurve: Curves.easeInOut,
+  //               enableInfiniteScroll: true,
+  //               autoPlayInterval:
+  //                   Duration(milliseconds: Constant.bannerDuration),
+  //               autoPlayAnimationDuration:
+  //                   Duration(milliseconds: Constant.animationDuration),
+  //               viewportFraction:
+  //                   0.70, // Adjusted for better portrait mode visibility
+  //               onPageChanged: (val, _) async {
+  //                 await sectionDataProvider.setCurrentBanner(val);
+  //               },
+  //             ),
+  //             itemBuilder: (context, index, realIndex) {
+  //               return GestureDetector(
+  //                 onTap: () {
+  //                   debugPrint(
+  //                       "Clicked on banner: ${sectionBannerList?[index].video320}");
+  //                   if (sectionBannerList?[index].isLiveUrl == 1) {
+  //                     if (Constant.userID == null) {
+  //                       Navigator.push(
+  //                           context,
+  //                           MaterialPageRoute(
+  //                               builder: (context) => LoginViaSocial()));
+  //                     } else {
+  //                       Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => TestPlayerWeb(
+  //                             loadURL: sectionBannerList?[index].videoUrl!,
+  //                           ),
+  //                         ),
+  //                       );
+  //                     }
+  //                   } else if (sectionBannerList?[index].bannerBacklink !=
+  //                           null &&
+  //                       sectionBannerList![index].bannerBacklink!.isNotEmpty) {
+  //                     launchUrl(
+  //                         Uri.parse(sectionBannerList[index].bannerBacklink!));
+  //                   } else {
+  //                     openDetailPage(
+  //                       (sectionBannerList?[index].videoType ?? 0) == 2
+  //                           ? "showdetail"
+  //                           : "videodetail",
+  //                       sectionBannerList?[index].id ?? 0,
+  //                       sectionBannerList?[index].upcomingType ?? 0,
+  //                       sectionBannerList?[index].videoType ?? 0,
+  //                       sectionBannerList?[index].typeId ?? 0,
+  //                       sectionBannerList?[index].name ?? 0,
 
+  //                     );
+  //                   }
+  //                 },
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(12),
+  //                     child: Stack(
+  //                       alignment: Alignment.topRight,
+  //                       children: [
+  //                         Container(
+  //                           decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(12),
+  //                             boxShadow: [
+  //                               BoxShadow(
+  //                                 color: Colors.black26,
+  //                                 blurRadius: 5,
+  //                                 spreadRadius: 2,
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           child: MyNetworkImageTwo(
+  //                             imageUrl:
+  //                                 sectionBannerList?[index].thumbnail ?? "",
+  //                             fit: BoxFit.cover,
+  //                           ),
+  //                         ),
+  //                         Positioned(
+  //                           top: 10,
+  //                           right: 10,
+  //                           child: _buildBannerBadge(sectionBannerList?[index]),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //         Positioned(
+  //           bottom: 10,
+  //           child: Consumer<SectionDataProvider>(
+  //             builder: (context, sectionDataProvider, child) {
+  //               return AnimatedSmoothIndicator(
+  //                 count: sectionBannerList?.length ?? 0,
+  //                 activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+  //                 effect: const ExpandingDotsEffect(
+  //                   spacing: 8,
+  //                   radius: 6,
+  //                   activeDotColor: colorPrimary,
+  //                   dotColor: dotsDefaultColor,
+  //                   dotHeight: 8,
+  //                   dotWidth: 8,
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return const SizedBox.shrink();
+  //   }
+  // }
+
+//  Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+//     if ((sectionBannerList?.length ?? 0) > 0) {
+//       return Stack(
+//         alignment: AlignmentDirectional.bottomCenter,
+//         clipBehavior: Clip.antiAliasWithSaveLayer,
+//         children: [
+//           SizedBox(
+//             width: MediaQuery.of(context).size.width,
+//             height: Dimens.homeBanner,
+//             child: CarouselSlider.builder(
+//               itemCount: (sectionBannerList?.length ?? 0),
+//               carouselController: carouselController,
+//               options: CarouselOptions(
+//                 initialPage: 0,
+//                 height: Dimens.homeBanner,
+//                 enlargeCenterPage: false,
+//                 autoPlay: true,
+//                 autoPlayCurve: Curves.linear,
+//                 enableInfiniteScroll: true,
+//                 autoPlayInterval:
+//                     Duration(milliseconds: Constant.bannerDuration),
+//                 autoPlayAnimationDuration:
+//                     Duration(milliseconds: Constant.animationDuration),
+//                 viewportFraction: 1.0,
+//                 onPageChanged: (val, _) async {
+//                   await sectionDataProvider.setCurrentBanner(val);
+//                 },
+//               ),
+//               itemBuilder:
+//                   (BuildContext context, int index, int pageViewIndex) {
+//                 return GestureDetector(
+//                   behavior: HitTestBehavior.translucent,
+//                   // focusColor: white,
+//                   // borderRadius: BorderRadius.circular(0),
+//                   onTap: () {
+//                     debugPrint("Clicked userid ==> ${Constant.userID}");
+//                     debugPrint(
+//                         "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
+//                     if (sectionBannerList?[index].isLiveUrl == 1) {
+//                       if (Constant.userID == null) {
+//                         Navigator.push(
+//                           context,
+//                           MaterialPageRoute(
+//                               builder: (context) => LoginViaSocial()),
+//                         );
+//                       } else {
+
+//                         Navigator.of(context).push(MaterialPageRoute(
+//                             builder: (context) => TestPlayerWeb(
+//                                 loadURL: sectionBannerList?[index].videoUrl!)));
+//                       }
+//                     } else if (sectionBannerList?[index].bannerBacklink !=
+//                             null &&
+//                         sectionBannerList![index]
+//                             .bannerBacklink
+//                             .toString()
+//                             .isNotEmpty) {
+//                       launchUrl(Uri.parse(
+//                           sectionBannerList[index].bannerBacklink.toString()));
+//                     } else {
+//                       openDetailPage(
+//                         (sectionBannerList?[index].videoType ?? 0) == 2
+//                             ? "showdetail"
+//                             : "videodetail",
+//                         sectionBannerList?[index].id ?? 0,
+//                         sectionBannerList?[index].upcomingType ?? 0,
+//                         sectionBannerList?[index].videoType ?? 0,
+//                         sectionBannerList?[index].typeId ?? 0,
+//                       );
+//                     }
+//                   },
+//                   child: Padding(
+//                     padding: const EdgeInsets.only(
+//                         top: 0, bottom: 0, left: 10, right: 10),
+//                     child: Stack(
+//                       alignment: Alignment.topRight,
+//                       // alignment: AlignmentDirectional.bottomCenter,
+//                       children: [
+//                         SizedBox(
+//                           height: Dimens.homeBanner,
+//                           child: MyNetworkImageTwo(
+//                             imageUrl: sectionBannerList?[index].fullWidth?? "",
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                        Positioned(
+//                         top: 10,
+//                         right: 10,
+//                         child: _buildBannerBadge(sectionBannerList?[index]),
+//                       ),
+
+//                       ],
+//                     ),
+//                   ),
+//                 );
+//               },
+//             ),
+//           ),
+
+//         ],
+//       );
+//     } else {
+//       return const SizedBox.shrink();
+//     }
+//   }
+
+  // Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+  //   if ((sectionBannerList?.length ?? 0) > 0) {
+  //     return Stack(
+  //       alignment: AlignmentDirectional.bottomCenter,
+  //       clipBehavior: Clip.antiAliasWithSaveLayer,
+  //       children: [
+  //         SizedBox(
+  //           width: MediaQuery.of(context).size.width,
+  //           height: Dimens.homeBanner,
+  //           child: CarouselSlider.builder(
+  //             itemCount: (sectionBannerList?.length ?? 0),
+  //             carouselController: carouselController,
+  //             options: CarouselOptions(
+  //               initialPage: 0,
+  //               height: Dimens.homeBanner,
+  //               enlargeCenterPage: false,
+  //               autoPlay: true,
+  //               autoPlayCurve: Curves.linear,
+  //               enableInfiniteScroll: true,
+  //               autoPlayInterval:
+  //                   Duration(milliseconds: Constant.bannerDuration),
+  //               autoPlayAnimationDuration:
+  //                   Duration(milliseconds: Constant.animationDuration),
+  //               viewportFraction: 1.0,
+  //               onPageChanged: (val, _) async {
+  //                 await sectionDataProvider.setCurrentBanner(val);
+  //               },
+  //             ),
+  //             itemBuilder:
+  //                 (BuildContext context, int index, int pageViewIndex) {
+  //               return GestureDetector(
+  //                 behavior: HitTestBehavior.translucent,
+  //                 // focusColor: white,
+  //                 // borderRadius: BorderRadius.circular(0),
+  //                 onTap: () {
+  //                   debugPrint("Clicked userid ==> ${Constant.userID}");
+  //                   debugPrint(
+  //                       "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
+  //                   if (sectionBannerList?[index].isLiveUrl == 1) {
+  //                     if (Constant.userID == null) {
+  //                       Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                             builder: (context) => LoginViaSocial()),
+  //                       );
+  //                     } else {
+
+  //                       Navigator.of(context).push(MaterialPageRoute(
+  //                           builder: (context) => TestPlayerWeb(
+  //                               loadURL: sectionBannerList?[index].videoUrl!)));
+  //                     }
+  //                   } else if (sectionBannerList?[index].bannerBacklink !=
+  //                           null &&
+  //                       sectionBannerList![index]
+  //                           .bannerBacklink
+  //                           .toString()
+  //                           .isNotEmpty) {
+  //                     launchUrl(Uri.parse(
+  //                         sectionBannerList[index].bannerBacklink.toString()));
+  //                   } else {
+  //                     openDetailPage(
+  //                       (sectionBannerList?[index].videoType ?? 0) == 2
+  //                           ? "showdetail"
+  //                           : "videodetail",
+  //                       sectionBannerList?[index].id ?? 0,
+  //                       sectionBannerList?[index].upcomingType ?? 0,
+  //                       sectionBannerList?[index].videoType ?? 0,
+  //                       sectionBannerList?[index].typeId ?? 0,
+  //                     );
+  //                   }
+  //                 },
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.only(
+  //                       top: 0, bottom: 0, left: 10, right: 10),
+  //                   child: Stack(
+  //                     alignment: Alignment.topRight,
+  //                     // alignment: AlignmentDirectional.bottomCenter,
+  //                     children: [
+  //                       SizedBox(
+  //                         height: Dimens.homeBanner,
+  //                         child: MyNetworkImageTwo(
+  //                           imageUrl: sectionBannerList?[index].fullWidth ?? "",
+  //                           fit: BoxFit.fill,
+  //                         ),
+  //                       ),
+  //                       Positioned(
+  //                         top: 10,
+  //                         right: 10,
+  //                         child: _buildBannerBadge(sectionBannerList?[index]),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //         const SizedBox(height: 5.5),
+  //         Positioned(
+  //           bottom: 10,
+  //           child: Consumer<SectionDataProvider>(
+  //             builder: (context, sectionDataProvider, child) {
+  //               return AnimatedSmoothIndicator(
+  //                 count: (sectionBannerList?.length ?? 0),
+  //                 activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+  //                 effect: const ScrollingDotsEffect(
+  //                   spacing: 8,
+  //                   radius: 4,
+  //                   activeDotColor: colorPrimary,
+  //                   dotColor: dotsDefaultColor,
+  //                   dotHeight: 8,
+  //                   dotWidth: 8,
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return const SizedBox.shrink();
+  //   }
+  // }
 
 //   Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList, BuildContext context) {
 //   if ((sectionBannerList?.length ?? 0) > 0) {
@@ -2517,7 +2375,6 @@ class HomeState extends State<Home> with RouteAware {
 //   }
 // }
 
-
 // Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList, BuildContext context) {
 //   if ((sectionBannerList?.length ?? 0) > 0) {
 //     return Stack(
@@ -2604,75 +2461,77 @@ class HomeState extends State<Home> with RouteAware {
 //   }
 // }
 
-void _handleBannerTap(banner.Result? bannerItem, BuildContext context) {
-  if (bannerItem == null) return;
-  if (bannerItem.isLiveUrl == 1) {
-    if (Constant.userID == null) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginSocial()));
+  void _handleBannerTap(banner.Result? bannerItem, BuildContext context) {
+    if (bannerItem == null) return;
+    if (bannerItem.isLiveUrl == 1) {
+      if (Constant.userID == null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginViaSocial()));
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  TestPlayerWeb(loadURL: bannerItem.videoUrl!)),
+        );
+      }
+    } else if (bannerItem.bannerBacklink?.isNotEmpty == true) {
+      launchUrl(Uri.parse(bannerItem.bannerBacklink!));
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TestPlayerWeb(loadURL: bannerItem.videoUrl!)),
-      );
+      openDetailPage(
+          (bannerItem.videoType ?? 0) == 2 ? "showdetail" : "videodetail",
+          bannerItem.id ?? 0,
+          bannerItem.upcomingType ?? 0,
+          bannerItem.videoType ?? 0,
+          bannerItem.typeId ?? 0,
+          bannerItem.name ?? "");
     }
-  } else if (bannerItem.bannerBacklink?.isNotEmpty == true) {
-    launchUrl(Uri.parse(bannerItem.bannerBacklink!));
-  } else {
-    openDetailPage(
-      (bannerItem.videoType ?? 0) == 2 ? "showdetail" : "videodetail",
-      bannerItem.id ?? 0,
-      bannerItem.upcomingType ?? 0,
-      bannerItem.videoType ?? 0,
-      bannerItem.typeId ?? 0,
+  }
+
+  Widget _buildBannerBadge(banner.Result? bannerItem) {
+    if (bannerItem == null) return SizedBox.shrink();
+    if (bannerItem.isLiveUrl == 1) {
+      return _badge("LIVE", Colors.red);
+    } else if (bannerItem.isRent == 1 && bannerItem.isPremium == 0) {
+      return _iconBadge('assets/images/rupee.png');
+    } else if (bannerItem.isPremium == 1) {
+      return _iconBadge('assets/images/crown.png');
+    }
+    return SizedBox.shrink();
+  }
+
+  Widget _badge(String text, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
+      ),
     );
   }
-}
 
-Widget _buildBannerBadge(banner.Result? bannerItem) {
-  if (bannerItem == null) return SizedBox.shrink();
-  if (bannerItem.isLiveUrl == 1) {
-    return _badge("LIVE", Colors.red);
-  } else if (bannerItem.isRent == 1 && bannerItem.isPremium == 0) {
-    return _iconBadge('assets/images/rupee.png');
-  } else if (bannerItem.isPremium == 1) {
-    return _iconBadge('assets/images/crown.png');
-  }
-  return SizedBox.shrink();
-}
-
-Widget _badge(String text, Color color) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Text(
-      text,
-      style: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 12,
+  Widget _iconBadge(String assetPath) {
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: Colors.black54,
+        borderRadius: BorderRadius.circular(8),
       ),
-    ),
-  );
-}
-
-Widget _iconBadge(String assetPath) {
-  return Container(
-    padding: EdgeInsets.all(6),
-    decoration: BoxDecoration(
-      color: Colors.black54,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Image.asset(
-      assetPath,
-      height: 15,
-      width: 15,
-    ),
-  );
-}
-
+      child: Image.asset(
+        assetPath,
+        height: 15,
+        width: 15,
+      ),
+    );
+  }
 
   // Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
   //   if ((sectionBannerList?.length ?? 0) > 0) {
@@ -2717,7 +2576,7 @@ Widget _iconBadge(String assetPath) {
   //                       Navigator.push(
   //                         context,
   //                         MaterialPageRoute(
-  //                             builder: (context) => LoginSocial()),
+  //                             builder: (context) => LoginViaSocial()),
   //                       );
   //                     } else {
   //                       Navigator.of(context).push(MaterialPageRoute(
@@ -2959,6 +2818,7 @@ Widget _iconBadge(String assetPath) {
                   sectionBannerList?[index].upcomingType ?? 0,
                   sectionBannerList?[index].videoType ?? 0,
                   sectionBannerList?[index].typeId ?? 0,
+                  sectionBannerList?[index].name ?? "",
                 );
               },
               child: Container(
@@ -3133,16 +2993,16 @@ Widget _iconBadge(String assetPath) {
                       onTap: () {
                         debugPrint("Clicked on index ==> $index");
                         openDetailPage(
-                          (continueWatchingList?[index].videoType ?? 0) == 2
-                              ? "showdetail"
-                              : "videodetail",
-                          (continueWatchingList?[index].videoType ?? 0) == 2
-                              ? (continueWatchingList?[index].showId ?? 0)
-                              : (continueWatchingList?[index].id ?? 0),
-                          0,
-                          continueWatchingList?[index].videoType ?? 0,
-                          continueWatchingList?[index].typeId ?? 0,
-                        );
+                            (continueWatchingList?[index].videoType ?? 0) == 2
+                                ? "showdetail"
+                                : "videodetail",
+                            (continueWatchingList?[index].videoType ?? 0) == 2
+                                ? (continueWatchingList?[index].showId ?? 0)
+                                : (continueWatchingList?[index].id ?? 0),
+                            0,
+                            continueWatchingList?[index].videoType ?? 0,
+                            continueWatchingList?[index].typeId ?? 0,
+                            continueWatchingList?[index].name ?? "");
                       },
                       child: Container(
                         width: Dimens.widthContiLand,
@@ -3263,6 +3123,7 @@ Widget _iconBadge(String assetPath) {
           bool isGenreOrLanguage = sectionList[index].videoType == 3 ||
               sectionList[index].videoType == 4 ||
               sectionList[index].videoType == 6;
+          bool isReelShow = sectionList[index].videoType == 7;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3271,21 +3132,21 @@ Widget _iconBadge(String assetPath) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 9, 20, 7),
+                    padding: const EdgeInsets.fromLTRB(18, 9, 18, 4),
                     child: MyTextTWO(
                       maxline: 2,
                       color: white,
                       text: sectionList[index].title.toString(),
                       textalign: TextAlign.left,
-                      fontsizeNormal: 14,
-                      fontweight: FontWeight.w600,
-                      fontsizeWeb: 16,
+                      fontsizeNormal: 11,
+                      fontweight: FontWeight.w500,
+                      fontsizeWeb: 11,
                       multilanguage: false,
                       overflow: TextOverflow.ellipsis,
                       fontstyle: FontStyle.normal,
                     ),
                   ),
-                  if (!isGenreOrLanguage)
+                  if (!isGenreOrLanguage && !isReelShow)
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(
@@ -3300,18 +3161,33 @@ Widget _iconBadge(String assetPath) {
                         ));
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-                        child: MyText(
-                          color: colorPrimary,
-                          text: "More",
-                          textalign: TextAlign.center,
-                          fontsizeNormal: 10,
-                          fontweight: FontWeight.w600,
-                          fontsizeWeb: 16,
-                          multilanguage: false,
-                          maxline: 1,
-                          overflow: TextOverflow.ellipsis,
-                          fontstyle: FontStyle.normal,
+                        padding: const EdgeInsets.only(
+                            right: 6), // Adjust padding to avoid overflow
+                        child: Row(
+                          mainAxisSize: MainAxisSize
+                              .min, // Prevents the row from stretching
+                          children: [
+                            MyText(
+                              color: primaryLight,
+                              text: "More",
+                              textalign: TextAlign.center,
+                              fontsizeNormal: 8,
+                              fontweight: FontWeight.w500,
+                              fontsizeWeb: 14,
+                              multilanguage: false,
+                              maxline: 1,
+                              overflow: TextOverflow
+                                  .ellipsis, // Prevents text overflow
+                              fontstyle: FontStyle.normal,
+                            ),
+                            const SizedBox(
+                                width: 4), // Space between text and icon
+                            Icon(
+                              CupertinoIcons.right_chevron,
+                              color: primaryLight, // White color arrow
+                              size: 14, // Adjust size as needed
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -3326,73 +3202,73 @@ Widget _iconBadge(String assetPath) {
                 ),
                 child: setSectionData(sectionList: sectionList, index: index),
               ),
-              // if (isBannerVisible)
-              //   Column(
-              //     children: [
-              //       const SizedBox(
-              //         height: 15,
-              //       ),
-              //       Padding(
-              //         padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
-              //         child: SizedBox(
-              //           height: Dimens.upcomingHeight,
-              //           width: MediaQuery.of(context).size.width,
-              //           child: GestureDetector(
-              //             onTap: () {
-              //               if (sectionList[index].bannerLinkType == 0) {
-              //                 // Handle onTap for bannerLinkType = 0
-              //                 if (sectionList[index].bannerBacklink != null &&
-              //                     sectionList[index]
-              //                         .bannerBacklink
-              //                         .toString()
-              //                         .isNotEmpty) {
-              //                   launchUrl(Uri.parse(sectionList[index]
-              //                       .bannerBacklink
-              //                       .toString()));
-              //                 }
-              //               } else {
-              //                 // Handle onTap for bannerLinkType = 1
-              //                 if (Constant.userID == null) {
-              //                   Navigator.push(
-              //                     context,
-              //                     MaterialPageRoute(
-              //                         builder: (context) => LoginSocial()),
-              //                   );
-              //                   // Utils.buildWebAlertDialog(context, "login", "");
-              //                 } else {
-              //                   // Navigator.push(
-              //                   //   context,
-              //                   //   MaterialPageRoute(
-              //                   //       builder: (context) => PlayerVideo(
-              //                   //           '',
-              //                   //           0,
-              //                   //           0,
-              //                   //           typeId,
-              //                   //           0,
-              //                   //           sectionList[index]
-              //                   //               .bannerBacklink
-              //                   //               .toString(),
-              //                   //           0,
-              //                   //           "",
-              //                   //           "")),
-              //                   // );
+              if (isBannerVisible)
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      child: SizedBox(
+                        height: Dimens.upcomingHeight,
+                        width: MediaQuery.of(context).size.width,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (sectionList[index].bannerLinkType == 0) {
+                              // Handle onTap for bannerLinkType = 0
+                              if (sectionList[index].bannerBacklink != null &&
+                                  sectionList[index]
+                                      .bannerBacklink
+                                      .toString()
+                                      .isNotEmpty) {
+                                launchUrl(Uri.parse(sectionList[index]
+                                    .bannerBacklink
+                                    .toString()));
+                              }
+                            } else {
+                              // Handle onTap for bannerLinkType = 1
+                              if (Constant.userID == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginViaSocial()),
+                                );
+                                // Utils.buildWebAlertDialog(context, "login", "");
+                              } else {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => PlayerVideo(
+                                //           '',
+                                //           0,
+                                //           0,
+                                //           typeId,
+                                //           0,
+                                //           sectionList[index]
+                                //               .bannerBacklink
+                                //               .toString(),
+                                //           0,
+                                //           "",
+                                //           "")),
+                                // );
 
-              //                   Navigator.of(context).push(MaterialPageRoute(
-              //                       builder: (context) => TestPlayerWeb(
-              //                           loadURL: sectionList[index]
-              //                               .bannerBacklink
-              //                               .toString())));
-              //                 }
-              //               }
-              //             },
-              //             child: Image.network(
-              //                 sectionList[index].bannerImage.toString(),
-              //                 fit: BoxFit.fill),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => TestPlayerWeb(
+                                        loadURL: sectionList[index]
+                                            .bannerBacklink
+                                            .toString())));
+                              }
+                            }
+                          },
+                          child: Image.network(
+                              sectionList[index].bannerImage.toString(),
+                              fit: BoxFit.fill),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ],
           );
         } else {
@@ -3431,7 +3307,7 @@ Widget _iconBadge(String assetPath) {
             sectionList?[index].upcomingType, sectionList?[index].data);
       }
     } else if ((sectionList?[index].videoType ?? 0) == 2) {
-        if ((sectionList?[index].screenLayout ?? "") == "landscape") {
+      if ((sectionList?[index].screenLayout ?? "") == "landscape") {
         return landscape(
             sectionList?[index].upcomingType, sectionList?[index].data);
       } else if ((sectionList?[index].screenLayout ?? "") == "landscape_1") {
@@ -3545,8 +3421,10 @@ Widget _iconBadge(String assetPath) {
 
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
@@ -3562,6 +3440,7 @@ Widget _iconBadge(String assetPath) {
                   upcomingType ?? 0,
                   sectionDataList?[index].videoType ?? 0,
                   sectionDataList?[index].typeId ?? 0,
+                  sectionDataList?[index].name ?? "",
                 );
               }
             },
@@ -3675,7 +3554,6 @@ Widget _iconBadge(String assetPath) {
     );
   }
 
-
   Widget landscapeTwo(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -3697,8 +3575,10 @@ Widget _iconBadge(String assetPath) {
 
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
@@ -3714,6 +3594,7 @@ Widget _iconBadge(String assetPath) {
                   upcomingType ?? 0,
                   sectionDataList?[index].videoType ?? 0,
                   sectionDataList?[index].typeId ?? 0,
+                  sectionDataList?[index].name ?? "",
                 );
               }
             },
@@ -3827,7 +3708,6 @@ Widget _iconBadge(String assetPath) {
     );
   }
 
-
   Widget portrait(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -3849,8 +3729,10 @@ Widget _iconBadge(String assetPath) {
 
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
@@ -3866,6 +3748,7 @@ Widget _iconBadge(String assetPath) {
                   upcomingType ?? 0,
                   sectionDataList?[index].videoType ?? 0,
                   sectionDataList?[index].typeId ?? 0,
+                  sectionDataList?[index].name ?? "",
                 );
               }
             },
@@ -4021,8 +3904,10 @@ Widget _iconBadge(String assetPath) {
 
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
@@ -4038,6 +3923,7 @@ Widget _iconBadge(String assetPath) {
                   upcomingType ?? 0,
                   sectionDataList?[index].videoType ?? 0,
                   sectionDataList?[index].typeId ?? 0,
+                  sectionDataList?[index].name ?? "",
                 );
               }
             },
@@ -4084,66 +3970,65 @@ Widget _iconBadge(String assetPath) {
                   ),
                 ),
 
-                // Rent Tag
-                Visibility(
-                  visible: sectionDataList?[index].isRent == 1 &&
-                      sectionDataList?[index].isPremium == 0,
-                  child: _buildTag('assets/images/rupee.png'),
-                ),
+                // // Rent Tag
+                // Visibility(
+                //   visible: sectionDataList?[index].isRent == 1 &&
+                //       sectionDataList?[index].isPremium == 0,
+                //   child: _buildTag('assets/images/rupee.png'),
+                // ),
 
-                // Premium Tag
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1,
-                  child: _buildTag('assets/images/crown.png'),
-                ),
+                // // Premium Tag
+                // Visibility(
+                //   visible: sectionDataList?[index].isPremium == 1,
+                //   child: _buildTag('assets/images/crown.png'),
+                // ),
 
-                // Both Rent & Premium Tag
-                Visibility(
-                  visible: sectionDataList?[index].isRent == 1 &&
-                      sectionDataList?[index].isPremium == 1,
-                  child: _buildTag('assets/images/crown.png'),
-                ),
+                // // Both Rent & Premium Tag
+                // Visibility(
+                //   visible: sectionDataList?[index].isRent == 1 &&
+                //       sectionDataList?[index].isPremium == 1,
+                //   child: _buildTag('assets/images/crown.png'),
+                // ),
 
-                // Live Indicator
-                Visibility(
-                  visible: sectionDataList?[index].isLiveUrl == 1,
-                  child: Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black26, blurRadius: 4)
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 6,
-                            width: 6,
-                            margin: const EdgeInsets.only(right: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          const Text(
-                            "LIVE",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              
+                // // Live Indicator
+                // Visibility(
+                //   visible: sectionDataList?[index].isLiveUrl == 1,
+                //   child: Positioned(
+                //     top: 8,
+                //     right: 8,
+                //     child: Container(
+                //       padding: const EdgeInsets.symmetric(
+                //           horizontal: 8, vertical: 4),
+                //       decoration: BoxDecoration(
+                //         color: Colors.red,
+                //         borderRadius: BorderRadius.circular(12),
+                //         boxShadow: [
+                //           BoxShadow(color: Colors.black26, blurRadius: 4)
+                //         ],
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Container(
+                //             height: 6,
+                //             width: 6,
+                //             margin: const EdgeInsets.only(right: 5),
+                //             decoration: BoxDecoration(
+                //               color: Colors.white,
+                //               borderRadius: BorderRadius.circular(10),
+                //             ),
+                //           ),
+                //           const Text(
+                //             "LIVE",
+                //             style: TextStyle(
+                //                 color: Colors.white,
+                //                 fontSize: 12,
+                //                 fontWeight: FontWeight.bold),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );
@@ -4175,7 +4060,7 @@ Widget _iconBadge(String assetPath) {
                   if (Constant.userID == null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginSocial()),
+                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
                     );
                   } else {
                     // Navigator.push(
@@ -4197,6 +4082,7 @@ Widget _iconBadge(String assetPath) {
                     upcomingType ?? 0,
                     sectionDataList?[index].videoType ?? 0,
                     sectionDataList?[index].typeId ?? 0,
+                    sectionDataList?[index].name ?? 0,
                   );
                 }
               },
@@ -4207,7 +4093,7 @@ Widget _iconBadge(String assetPath) {
               //   if (Constant.userID == null) {
               //     Navigator.push(
               //       context,
-              //       MaterialPageRoute(builder: (context) => LoginSocial()),
+              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
               //     );
 
               //     // Utils.buildWebAlertDialog(context, "login", "");
@@ -4653,7 +4539,7 @@ Widget _iconBadge(String assetPath) {
   }
 
   Widget topTenLayout(int? upcomingType, List<Datum>? sectionDataList) {
-    getAdaptiveTextSize(BuildContext context, dynamic value) {
+    getAdaptiveTextSize(BuildContext context, double value) {
       if (kIsWeb || Constant.isTV) {
         return (value / 650) *
             min(MediaQuery.of(context).size.height,
@@ -4663,154 +4549,77 @@ Widget _iconBadge(String assetPath) {
       }
     }
 
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: Dimens.heightTopTen,
+      height: Dimens.heightTopTen, // Adjusted for better visibility
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 1),
-        itemBuilder: (BuildContext context, int index) {
+        padding: const EdgeInsets.only(left: 20, right: 5),
+        physics: const BouncingScrollPhysics(),
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
           return Stack(
+            alignment: Alignment.bottomLeft,
             children: [
               InkWell(
-                  //focusColor:: white,
-                  borderRadius: BorderRadius.circular(4),
-                  onTap: () {
-                    debugPrint("Clicked userid ==> ${Constant.userID}");
-                    debugPrint(
-                        "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-                    if (sectionDataList?[index].isLiveUrl == 1) {
-                      if (Constant.userID == null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginSocial()),
-                        );
-                      } else {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => PlayerVideo(
-                        //           '',
-                        //           0,
-                        //           0,
-                        //           typeId,
-                        //           0,
-                        //           sectionDataList?[index].video320,
-                        //           0,
-                        //           "",
-                        //           "")),
-                        // );
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => TestPlayerWeb(
-                                loadURL: sectionDataList![index].video320!)));
-                      }
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  debugPrint("Clicked on: ${sectionDataList?[index].video320}");
+
+                  if (sectionDataList?[index].isLiveUrl == 1) {
+                    if (Constant.userID == null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginViaSocial()),
+                      );
                     } else {
-                      openDetailPage(
-                        (sectionDataList?[index].videoType ?? 0) == 2
-                            ? "showdetail"
-                            : "videodetail",
-                        sectionDataList?[index].id ?? 0,
-                        upcomingType ?? 0,
-                        sectionDataList?[index].videoType ?? 0,
-                        sectionDataList?[index].typeId ?? 0,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TestPlayerWeb(
+                            loadURL: sectionDataList![index].video320!,
+                          ),
+                        ),
                       );
                     }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18),
-                    child: Container(
-                      width: Dimens.widthTopTen,
-                      height: Dimens.heightTopTen,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Container(
-                            width: 100,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              child: MyNetworkImage(
-                                imageUrl: sectionDataList?[index]
-                                        .thumbnail1
-                                        .toString() ??
-                                    "",
-                                fit: BoxFit.fill,
-                                imgHeight: MediaQuery.of(context).size.height,
-                                imgWidth: MediaQuery.of(context).size.width,
-                              ),
-                            ),
-                          ),
-                           // Rent Tag
-                Visibility(
-                  visible: sectionDataList?[index].isRent == 1 &&
-                      sectionDataList?[index].isPremium == 0,
-                  child: _buildTag('assets/images/rupee.png'),
-                ),
-
-                // Premium Tag
-                Visibility(
-                  visible: sectionDataList?[index].isPremium == 1,
-                  child: _buildTag('assets/images/crown.png'),
-                ),
-
-                // Both Rent & Premium Tag
-                Visibility(
-                  visible: sectionDataList?[index].isRent == 1 &&
-                      sectionDataList?[index].isPremium == 1,
-                  child: _buildTag('assets/images/crown.png'),
-                ),
-
-                // Live Indicator
-                Visibility(
-                  visible: sectionDataList?[index].isLiveUrl == 1,
-                  child: Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black26, blurRadius: 4)
-                        ],
+                  } else {
+                    openDetailPage(
+                      (sectionDataList?[index].videoType ?? 0) == 2
+                          ? "showdetail"
+                          : "videodetail",
+                      sectionDataList?[index].id ?? 0,
+                      upcomingType ?? 0,
+                      sectionDataList?[index].videoType ?? 0,
+                      sectionDataList?[index].typeId ?? 0,
+                      sectionDataList?[index].name ?? "",
+                    );
+                  }
+                },
+                child: Container(
+                  width: Dimens.widthTopTen,
+                  height: Dimens.heightTopTen,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 5,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 3),
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 6,
-                            width: 6,
-                            margin: const EdgeInsets.only(right: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          const Text(
-                            "LIVE",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: MyNetworkImage(
+                      imageUrl: sectionDataList?[index].thumbnail1 ?? "",
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              
-                        ],
-                      ),
-                    ),
-                  )),
+              ),
               Positioned(
                 left: 0,
                 bottom: -18,
@@ -4822,7 +4631,7 @@ Widget _iconBadge(String assetPath) {
                         style: GoogleFonts.outfit(
                           fontSize: getAdaptiveTextSize(
                             context,
-                            60,
+                            75,
                           ),
                           fontStyle: FontStyle.normal,
                           color: topTen,
@@ -4839,6 +4648,193 @@ Widget _iconBadge(String assetPath) {
       ),
     );
   }
+
+  // Widget topTenLayout(int? upcomingType, List<Datum>? sectionDataList) {
+  //   getAdaptiveTextSize(BuildContext context, dynamic value) {
+  //     if (kIsWeb || Constant.isTV) {
+  //       return (value / 650) *
+  //           min(MediaQuery.of(context).size.height,
+  //               MediaQuery.of(context).size.width);
+  //     } else {
+  //       return (value / 720 * MediaQuery.of(context).size.height);
+  //     }
+  //   }
+
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: Dimens.heightTopTen,
+  //     child: ListView.separated(
+  //       itemCount: sectionDataList?.length ?? 0,
+  //       shrinkWrap: true,
+  //       physics: const AlwaysScrollableScrollPhysics(),
+  //       padding: const EdgeInsets.only(left: 20, right: 5),
+  //       scrollDirection: Axis.horizontal,
+  //       separatorBuilder: (context, index) => const SizedBox(width: 1),
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return Stack(
+  //           children: [
+  //             InkWell(
+  //                 //focusColor:: white,
+  //                 borderRadius: BorderRadius.circular(4),
+  //                 onTap: () {
+  //                   debugPrint("Clicked userid ==> ${Constant.userID}");
+  //                   debugPrint(
+  //                       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //                   if (sectionDataList?[index].isLiveUrl == 1) {
+  //                     if (Constant.userID == null) {
+  //                       Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                             builder: (context) => LoginViaSocial()),
+  //                       );
+  //                     } else {
+  //                       // Navigator.push(
+  //                       //   context,
+  //                       //   MaterialPageRoute(
+  //                       //       builder: (context) => PlayerVideo(
+  //                       //           '',
+  //                       //           0,
+  //                       //           0,
+  //                       //           typeId,
+  //                       //           0,
+  //                       //           sectionDataList?[index].video320,
+  //                       //           0,
+  //                       //           "",
+  //                       //           "")),
+  //                       // );
+  //                       Navigator.of(context).push(MaterialPageRoute(
+  //                           builder: (context) => TestPlayerWeb(
+  //                               loadURL: sectionDataList![index].video320!)));
+  //                     }
+  //                   } else {
+  //                     openDetailPage(
+  //                       (sectionDataList?[index].videoType ?? 0) == 2
+  //                           ? "showdetail"
+  //                           : "videodetail",
+  //                       sectionDataList?[index].id ?? 0,
+  //                       upcomingType ?? 0,
+  //                       sectionDataList?[index].videoType ?? 0,
+  //                       sectionDataList?[index].typeId ?? 0,
+  //                     );
+  //                   }
+  //                 },
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.only(left: 18),
+  //                   child: Container(
+  //                     width: Dimens.widthTopTen,
+  //                     height: Dimens.heightTopTen,
+  //                     alignment: Alignment.center,
+  //                     padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                     child: Stack(
+  //                       alignment: Alignment.topRight,
+  //                       children: [
+  //                         Container(
+  //                           width: 100,
+  //                           child: ClipRRect(
+  //                             borderRadius: BorderRadius.circular(4),
+  //                             clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                             child: MyNetworkImage(
+  //                               imageUrl: sectionDataList?[index]
+  //                                       .thumbnail1
+  //                                       .toString() ??
+  //                                   "",
+  //                               fit: BoxFit.fill,
+  //                               imgHeight: MediaQuery.of(context).size.height,
+  //                               imgWidth: MediaQuery.of(context).size.width,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         // Rent Tag
+  //                         // Visibility(
+  //                         //   visible: sectionDataList?[index].isRent == 1 &&
+  //                         //       sectionDataList?[index].isPremium == 0,
+  //                         //   child: _buildTag('assets/images/rupee.png'),
+  //                         // ),
+
+  //                         // // Premium Tag
+  //                         // Visibility(
+  //                         //   visible: sectionDataList?[index].isPremium == 1,
+  //                         //   child: _buildTag('assets/images/crown.png'),
+  //                         // ),
+
+  //                         // // Both Rent & Premium Tag
+  //                         // Visibility(
+  //                         //   visible: sectionDataList?[index].isRent == 1 &&
+  //                         //       sectionDataList?[index].isPremium == 1,
+  //                         //   child: _buildTag('assets/images/crown.png'),
+  //                         // ),
+
+  //                         // // Live Indicator
+  //                         // Visibility(
+  //                         //   visible: sectionDataList?[index].isLiveUrl == 1,
+  //                         //   child: Positioned(
+  //                         //     top: 8,
+  //                         //     right: 8,
+  //                         //     child: Container(
+  //                         //       padding: const EdgeInsets.symmetric(
+  //                         //           horizontal: 8, vertical: 4),
+  //                         //       decoration: BoxDecoration(
+  //                         //         color: Colors.red,
+  //                         //         borderRadius: BorderRadius.circular(12),
+  //                         //         boxShadow: [
+  //                         //           BoxShadow(color: Colors.black26, blurRadius: 4)
+  //                         //         ],
+  //                         //       ),
+  //                         //       child: Row(
+  //                         //         children: [
+  //                         //           Container(
+  //                         //             height: 6,
+  //                         //             width: 6,
+  //                         //             margin: const EdgeInsets.only(right: 5),
+  //                         //             decoration: BoxDecoration(
+  //                         //               color: Colors.white,
+  //                         //               borderRadius: BorderRadius.circular(10),
+  //                         //             ),
+  //                         //           ),
+  //                         //           const Text(
+  //                         //             "LIVE",
+  //                         //             style: TextStyle(
+  //                         //                 color: Colors.white,
+  //                         //                 fontSize: 12,
+  //                         //                 fontWeight: FontWeight.bold),
+  //                         //           ),
+  //                         //         ],
+  //                         //       ),
+  //                         //     ),
+  //                         //   ),
+  //                         // ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 )),
+  //             Positioned(
+  //               left: 0,
+  //               bottom: -18,
+  //               child: Container(
+  //                 child: RichText(
+  //                   text: TextSpan(children: <TextSpan>[
+  //                     TextSpan(
+  //                       text: '${index + 1} ',
+  //                       style: GoogleFonts.outfit(
+  //                         fontSize: getAdaptiveTextSize(
+  //                           context,
+  //                           60,
+  //                         ),
+  //                         fontStyle: FontStyle.normal,
+  //                         color: topTen,
+  //                         fontWeight: FontWeight.w600,
+  //                       ),
+  //                     ),
+  //                   ]),
+  //                 ),
+  //               ),
+  //             )
+  //           ],
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget browseByArtistLayout(int? typeId, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -5055,7 +5051,7 @@ Widget _iconBadge(String assetPath) {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

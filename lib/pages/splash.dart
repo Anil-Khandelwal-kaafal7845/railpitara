@@ -1,6 +1,6 @@
 import 'package:dtlive/main.dart';
 
-import 'package:dtlive/pages/bottombar.dart';
+import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
 import 'package:dtlive/utils/constant.dart';

@@ -14,7 +14,7 @@ class GeneralProvider extends ChangeNotifier {
   GeneralSettingModel generalSettingModel = GeneralSettingModel();
   PagesModel pagesModel = PagesModel();
   SocialLinkModel socialLinkModel = SocialLinkModel();
-  LoginRegisterModel loginSocialModel = LoginRegisterModel();
+  LoginRegisterModel LoginViaSocialModel = LoginRegisterModel();
   LoginRegisterModel loginOTPModel = LoginRegisterModel();
   LoginRegisterModel loginTVModel = LoginRegisterModel();
 
@@ -105,10 +105,10 @@ class GeneralProvider extends ChangeNotifier {
     debugPrint("loginWithSocial profileImg :==> ${profileImg?.path}");
 
     loading = true;
-    loginSocialModel =
+    LoginViaSocialModel =
         await ApiService().loginWithSocial(email, name, type, profileImg);
-    debugPrint("loginWithSocial status :==> ${loginSocialModel.status}");
-    debugPrint("loginWithSocial message :==> ${loginSocialModel.message}");
+    debugPrint("loginWithSocial status :==> ${LoginViaSocialModel.status}");
+    debugPrint("loginWithSocial message :==> ${LoginViaSocialModel.message}");
     loading = false;
     notifyListeners();
   }

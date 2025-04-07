@@ -1,16 +1,17 @@
 import 'package:dtlive/main.dart';
-import 'package:dtlive/pages/moviedetails.dart';
+import 'package:dtlive/pages/movie_details.dart';
 import 'package:dtlive/pages/showdetails.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
-import 'package:dtlive/pages/castdetails.dart';
-import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/cast_details.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/tvpages/tvmoviedetails.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+
 import 'package:dtlive/widget/moredetails.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:dtlive/widget/nodata.dart';
@@ -898,7 +899,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return const LoginSocial();
+                                      return const LoginViaSocial();
                                     },
                                   ),
                                 );
@@ -1388,7 +1389,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) {
-                                          return const LoginSocial();
+                                          return const LoginViaSocial();
                                         },
                                       ),
                                     );
@@ -1861,7 +1862,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const LoginSocial();
+                    return const LoginViaSocial();
                   },
                 ),
               );
@@ -1917,7 +1918,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const LoginSocial();
+                    return const LoginViaSocial();
                   },
                 ),
               );
@@ -3256,7 +3257,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );
@@ -3348,7 +3349,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

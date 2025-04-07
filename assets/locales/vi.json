@@ -158,7 +158,7 @@
     "invalidphonenumber": "Số điện thoại đã nhập không hợp lệ!",
     "enterreceivedotp": "Nhập OTP đã nhận",
     "otp_not_working": "Hiện tại đăng nhập OTP không hoạt động. ",
-    "confirm": "Xác nhận",
+    "confirm": "Verify OTP",
     "resend": "Gửi lại",
     "watch_now": "Xem bây giờ",
     "watch_with": "Xem với",

@@ -97,7 +97,7 @@
     "subtitle": "ترجمات",
     "languagechangenote": "يمكن تغيير اللغة أثناء تشغيل الفيديو.",
     "welcomeback": "مرحبًا بعودتك!",
-    "login": "تسجيل الدخول",
+    "login": "Send OTP",
     "login_with_mobile_note": "أدخل رقم هاتفك المحمول لتسجيل الدخول",
     "code_sent_desc_email": "We have sent code to your email",
 
@@ -166,7 +166,7 @@
     "invalidphonenumber": "رقم الهاتف الذي تم إدخاله غير صالح!",
     "enterreceivedotp": "أدخل OTP المستلم",
     "otp_not_working": "حاليا تسجيل الدخول إلى OTP لا يعمل. يمكنك الاستمرار في عمليات تسجيل الدخول الأخرى.",
-    "confirm": "يتأكد",
+    "confirm": "Verify OTP",
     "resend": "إعادة إرسال",
     "watch_now": "شاهد الآن",
     "watch_with": "مشاهدة مع",

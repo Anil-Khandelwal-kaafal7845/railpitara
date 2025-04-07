@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math' as number;
 import 'package:dtlive/model/qualitymodel.dart';
 import 'package:dtlive/model/subtitlemodel.dart';
-import 'package:dtlive/pages/moviedetails.dart';
+import 'package:dtlive/pages/movie_details.dart';
 import 'package:dtlive/players/player_video.dart';
 import 'package:dtlive/players/player_vimeo.dart';
 import 'package:dtlive/players/player_youtube.dart';
@@ -14,6 +14,7 @@ import 'package:dtlive/tvpages/tvmoviedetails.dart';
 import 'package:dtlive/tvpages/tvshowdetails.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
+
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/webwidget/loginsocialweb.dart';
 import 'package:dtlive/webwidget/otpverifyweb.dart';
@@ -333,7 +334,7 @@ class Utils {
       BuildContext context, String pageName, String? reqData) async {
     Widget? child;
     if (pageName == "login") {
-      child = const LoginSocialWeb();
+      child = const LoginViaSocialWeb();
     } else if (pageName == "profile") {
       child = const ProfileEditWeb();
     } else if (pageName == "otp") {
@@ -1166,43 +1167,25 @@ class Utils {
     return convTime;
   }
 
-  static String convertTimeToText(int timeInMilli) {
-    String convTime = "";
-
-    try {
-      if (timeInMilli > 0) {
-        double seconds = ((timeInMilli / 1000) % 60);
-        double minutes = ((timeInMilli / (1000 * 60)) % 60);
-        double hours = ((timeInMilli / (1000 * 60 * 60)) % 24);
-
-        if (hours >= 1) {
-          if (minutes > 0 && seconds > 0) {
-            convTime =
-                "${hours.toInt()} hr ${minutes.toInt()} min ${seconds.toInt()} sec";
-          } else if (minutes > 0 && seconds == 0) {
-            convTime = "${hours.toInt()} hr ${minutes.toInt()} min";
-          } else if (minutes == 0 && seconds > 0) {
-            convTime = "${hours.toInt()} hr ${seconds.toInt()} sec";
-          } else if (minutes == 0 && seconds == 0) {
-            convTime = "${hours.toInt()} hr";
-          }
-        } else if (minutes > 0) {
-          if (seconds > 0) {
-            convTime = "${minutes.toInt()} min ${seconds.toInt()} sec";
-          } else if (minutes > 0 && seconds == 0) {
-            convTime = "${minutes.toInt()} min";
-          }
-        } else if (seconds > 0) {
-          convTime = "${seconds.toInt()} sec";
-        }
-      } else {
-        convTime = "0";
-      }
-    } catch (e) {
-      debugPrint("ConvTimeE Exception ==> $e");
-    }
-    return convTime;
+static String convertTimeToText(int timeInSeconds) {
+  // Convert milliseconds to seconds if input is too large
+  if (timeInSeconds > 86400 * 100) { // More than 100 days in seconds
+    timeInSeconds ~/= 1000; // Convert from milliseconds to seconds
   }
+
+  if (timeInSeconds <= 0) return "0";
+
+  int hours = timeInSeconds ~/ 3600;
+  int minutes = (timeInSeconds % 3600) ~/ 60;
+
+  if (hours > 0 && minutes > 0) {
+    return "$hours h $minutes m";
+  } else if (hours > 0) {
+    return "$hours h";
+  } else {
+    return "$minutes m";
+  }
+}
 
   static String remainTimeInMin(int remainWatch) {
     String convTime = "";

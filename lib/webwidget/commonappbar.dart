@@ -2,7 +2,7 @@
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dtlive/pages/channels.dart';
-import 'package:dtlive/pages/home.dart';
+import 'package:dtlive/pages/home_screen.dart';
 import 'package:dtlive/pages/rentstore.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/provider/searchprovider.dart';

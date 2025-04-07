@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:dtlive/pages/loginsocial.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/tvpages/tvchannels.dart';
@@ -11,6 +10,8 @@ import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/utils/strings.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+
 
 import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/model/sectiontypemodel.dart' as type;
@@ -2064,7 +2065,7 @@ class TVHomeState extends State<TVHome> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

@@ -15,7 +15,7 @@ const colorGraidentLeft = Color(0xffF9D1A0);
 const colorGraidentRight = Color(0xffFFFFFF);
 
 const complimentryColor = Color(0xFFB80E07);
-const primaryLight = Color(0xFFB80E07);
+const primaryLight = Color.fromARGB(255, 237, 25, 18);
 const primaryDark =Color(0xFFB80E07);
 const primaryTras75 = Color(0xFFB80E07);
 const primaryTras50 = Color(0xFFB80E07);

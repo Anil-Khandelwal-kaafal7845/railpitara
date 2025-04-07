@@ -4,8 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dtlive/model/channelsectionmodel.dart';
 import 'package:dtlive/model/channelsectionmodel.dart' as list;
 import 'package:dtlive/model/channelsectionmodel.dart' as banner;
-import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/players/player_video.dart';
+import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/constant.dart';
@@ -754,7 +753,7 @@ class TVChannelsState extends State<TVChannels> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

@@ -1,15 +1,12 @@
-import 'dart:io';
 
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/aboutprivacyterms.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
-import 'package:dtlive/pages/emailscrren.dart';
-import 'package:dtlive/pages/home.dart';
-import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/pages/mydownloads.dart';
-import 'package:dtlive/pages/profileedit.dart';
+import 'package:dtlive/pages/home_screen.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+import 'package:dtlive/pages/profile_edit.dart';
 import 'package:dtlive/pages/mypurchaselist.dart';
-import 'package:dtlive/pages/mywatchlist.dart';
+import 'package:dtlive/pages/my_watchlist.dart';
 import 'package:dtlive/pages/rentstore.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -17,15 +14,14 @@ import 'package:dtlive/provider/profileprovider.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:dtlive/subscription/subscription.dart';
-import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/utils/sharedpre.dart';
-import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -116,25 +112,38 @@ class SettingState extends State<Setting> {
     Singular.eventWithArgs('screen_view', screenViewEvent);
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: Utils.myAppBar(context, "setting", true),
+      // appBar: Utils.myAppBar(context, "setting", true),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.all(22),
+            margin: EdgeInsets.all(22),
             child: Column(
               children: [
-                /* Account Details */
-                // Account Details Button On Click
-
-                _buildSettingButton(
-                  title: 'accountdetails',
-                  subTitle: 'manageprofile',
-                  titleMultilang: true,
-                  subTitleMultilang: true,
-                  onClick: () {
-                    // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
-                    //     () async {
+                profileCardWidget(
+                  userID: Constant.userID,
+                  userName: userName,
+                  userMobileNo: userMobileNo,
+                  userType: userType,
+                  onDeleteAccountPressed: () {
+                    if (Constant.userID != null) {
+                      deleteConfirmDialog();
+                    }
+                  },
+                  onLoginPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginViaSocial(),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  onLogoutPressed: () {
+                    if (Constant.userID != null) {
+                      logoutConfirmDialog();
+                    }
+                  },
+                  onEditProfilePressed: () {
                     if (Constant.userID != null) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -144,16 +153,43 @@ class SettingState extends State<Setting> {
                     } else {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
+                          builder: (context) => const LoginViaSocial(),
                         ),
                       );
                     }
                   },
                 ),
+                /* Account Details */
+                // Account Details Button On Click
 
-                Visibility(
-                    visible: forceUpdateData!.result!.showPackage == 1,
-                    child: _buildLine(16.0, 16.0)),
+                // _buildSettingButton(
+                //   title: 'accountdetails',
+                //   subTitle: 'manageprofile',
+                //   titleMultilang: true,
+                //   subTitleMultilang: true,
+                //   onClick: () {
+                //     // AdHelper.showFullscreenAd(context, Constant.rewardAdType,
+                //     //     () async {
+                //     if (Constant.userID != null) {
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => const ProfileEdit(),
+                //         ),
+                //       );
+                //     } else {
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => const LoginViaSocial(),
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ),
+
+                // Visibility(
+                //   visible: forceUpdateData!.result!.showPackage == 1,
+                //   child: _buildLine(7.0, 7.0),
+                // ),
 
                 Visibility(
                   visible: forceUpdateData!.result!.showPackage == 1,
@@ -175,14 +211,18 @@ class SettingState extends State<Setting> {
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
+                            builder: (context) => const LoginViaSocial(),
                           ),
                         );
                       }
                     },
                   ),
                 ),
-                _buildLine(16.0, 16.0),
+
+                Visibility(
+                  visible: forceUpdateData!.result!.showPackage == 1,
+                  child: _buildLine(7.0, 7.0),
+                ),
 
                 /* Watchlist */
                 _buildSettingButton(
@@ -200,13 +240,13 @@ class SettingState extends State<Setting> {
                     } else {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
+                          builder: (context) => const LoginViaSocial(),
                         ),
                       );
                     }
                   },
                 ),
-                _buildLine(16.0, 16.0),
+                _buildLine(7.0, 7.0),
 
                 /* Purchases */
                 Visibility(
@@ -226,7 +266,7 @@ class SettingState extends State<Setting> {
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
+                            builder: (context) => const LoginViaSocial(),
                           ),
                         );
                       }
@@ -236,7 +276,7 @@ class SettingState extends State<Setting> {
 
                 Visibility(
                     visible: forceUpdateData!.result!.showPackage == 1,
-                    child: _buildLine(16.0, 16.0)),
+                    child: _buildLine(7.0, 7.0)),
 
                 /* Coin--- */
 
@@ -256,7 +296,7 @@ class SettingState extends State<Setting> {
                           } else {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
+                                builder: (context) => const LoginViaSocial(),
                               ),
                             );
                           }
@@ -265,7 +305,7 @@ class SettingState extends State<Setting> {
                     : SizedBox.shrink(),
 
                 generalProvider.isCoinShow == "1"
-                    ? _buildLine(16.0, 16.0)
+                    ? _buildLine(7.0, 7.0)
                     : SizedBox.shrink(),
 
                 /* Subscription */
@@ -286,7 +326,7 @@ class SettingState extends State<Setting> {
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
+                            builder: (context) => const LoginViaSocial(),
                           ),
                         );
                       }
@@ -308,7 +348,8 @@ class SettingState extends State<Setting> {
                     _languageChangeDialog();
                   },
                 ),
-                _buildLine(16.0, 16.0),
+
+                _buildLine(7.0, 7.0),
 
                 // /* Push Notification enable/disable */
                 // Row(
@@ -367,52 +408,53 @@ class SettingState extends State<Setting> {
                 //   ),
                 // if (!Platform.isIOS) _buildLine(16.0, 16.0),
 
-                /* SignIn / SignOut */
-                _buildSettingButton(
-                  title: Constant.userID == null
-                      ? youAreNotSignIn
-                      : (userType == "3" && (userName ?? "").isEmpty)
-                          ? ("$signedInAs ${userMobileNo ?? ""}")
-                          : ("$signedInAs ${userName ?? ""}"),
-                  subTitle: Constant.userID == null ? "sign_in" : "sign_out",
-                  titleMultilang: false,
-                  subTitleMultilang: true,
-                  onClick: () async {
-                    if (Constant.userID != null) {
-                      logoutConfirmDialog();
-                    } else {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginSocial(),
-                        ),
-                      );
-                      setState(() {});
-                    }
-                  },
-                ),
+                // /* SignIn / SignOut */
+                // _buildSettingButton(
+                //   title: Constant.userID == null
+                //       ? youAreNotSignIn
+                //       : (userType == "3" && (userName ?? "").isEmpty)
+                //           ? ("$signedInAs ${userMobileNo ?? ""}")
+                //           : ("$signedInAs ${userName ?? ""}"),
+                //   subTitle: Constant.userID == null ? "sign_in" : "sign_out",
+                //   titleMultilang: false,
+                //   subTitleMultilang: true,
+                //   onClick: () async {
+                //     if (Constant.userID != null) {
+                //       logoutConfirmDialog();
+                //     } else {
+                //       await Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => const LoginViaSocial(),
+                //         ),
+                //       );
+                //       setState(() {});
+                //     }
+                //   },
+                // ),
 
-                _buildLine(16.0, 16.0),
+                // _buildLine(7.0, 7.0),
 
-                if (Constant.userID != null)
-                  _buildSettingButton(
-                    title: 'delete_account',
-                    subTitle: 'delete_account_desc',
-                    titleMultilang: true,
-                    subTitleMultilang: true,
-                    onClick: () async {
-                      if (Constant.userID != null) {
-                        deleteConfirmDialog();
-                      } else {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
-                          ),
-                        );
-                        setState(() {});
-                      }
-                    },
-                  ),
-                if (Constant.userID != null) _buildLine(16.0, 16.0),
+                // if (Constant.userID != null)
+                //   _buildSettingButton(
+                //     title: 'delete_account',
+                //     subTitle: 'delete_account_desc',
+                //     titleMultilang: true,
+                //     subTitleMultilang: true,
+                //     onClick: () async {
+                //       if (Constant.userID != null) {
+                //         deleteConfirmDialog();
+                //       } else {
+                //         await Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const LoginViaSocial(),
+                //           ),
+                //         );
+                //         setState(() {});
+                //       }
+                //     },
+                //   ),
+
+                // if (Constant.userID != null) _buildLine(7.0, 7.0),
 
                 // /* Rate App */
                 // _buildSettingButton(
@@ -427,19 +469,19 @@ class SettingState extends State<Setting> {
                 // ),
                 // _buildLine(16.0, 16.0),
 
-                /* Share App */
-                _buildSettingButton(
-                  title: 'shareapp',
-                  subTitle: 'sharewithfriends',
-                  titleMultilang: true,
-                  subTitleMultilang: true,
-                  onClick: () async {
-                    await Utils.shareApp(Platform.isIOS
-                        ? Constant.iosAppUrl
-                        : Constant.androidAppUrl);
-                  },
-                ),
-                _buildLine(16.0, 16.0),
+                // /* Share App */
+                // _buildSettingButton(
+                //   title: 'shareapp',
+                //   subTitle: 'sharewithfriends',
+                //   titleMultilang: true,
+                //   subTitleMultilang: true,
+                //   onClick: () async {
+                //     await Utils.shareApp(Platform.isIOS
+                //         ? Constant.iosAppUrl
+                //         : Constant.androidAppUrl);
+                //   },
+                // ),
+                // _buildLine(7.0, 7.0),
 
                 // /* Delete Account */
                 // if (Constant.userID != null)
@@ -448,24 +490,57 @@ class SettingState extends State<Setting> {
                 //     subTitle: 'delete_account_desc',
                 //     titleMultilang: true,
                 //     subTitleMultilang: true,
-                //     onClick: () async {
-                //       if (Constant.userID != null) {
-                //         deleteConfirmDialog();
-                //       } else {
-                //         await Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const LoginSocial(),
-                //           ),
-                //         );
-                //         setState(() {});
-                //       }
-                //     },
-                //   ),
+                // onClick: () async {
+                // if (Constant.userID != null) {
+                //   deleteConfirmDialog();
+                // } else {
+                //   await Navigator.of(context).push(
+                //     MaterialPageRoute(
+                //       builder: (context) => const LoginViaSocial(),
+                //     ),
+                //   );
+                //   setState(() {});
+                // }
+                //   },
+                // ),
 
                 //  if (Constant.userID != null) _buildLine(16.0, 16.0),
 
                 /* Pages */
                 _buildPages(),
+
+                SizedBox(
+                  height: 20,
+                ),
+
+                GestureDetector(
+                    onTap: () {
+                      if (Constant.userID != null) {
+                        deleteConfirmDialog();
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginViaSocial(),
+                          ),
+                        );
+                        setState(() {});
+                      }
+                    },
+                    child: Constant.userID == null
+                        ? Text(
+                            "Log in ",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: primaryDark,
+                            ),
+                          )
+                        : Text(
+                            "Log out",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: primaryDark,
+                            ),
+                          )),
               ],
             ),
           ),
@@ -520,7 +595,7 @@ class SettingState extends State<Setting> {
                     );
                   },
                 ),
-                _buildLine(16.0, 0.0),
+                _buildLine(7.0, 0.0),
               ],
             );
           },
@@ -606,35 +681,715 @@ class SettingState extends State<Setting> {
             MyText(
               color: white,
               text: title,
-              fontsizeNormal: 14,
-              fontsizeWeb: 15,
+              fontsizeNormal: 12,
+              fontsizeWeb: 12,
               maxline: 1,
               multilanguage: titleMultilang,
               overflow: TextOverflow.ellipsis,
-              fontweight: FontWeight.w600,
+              fontweight: FontWeight.w500,
               textalign: TextAlign.start,
               fontstyle: FontStyle.normal,
             ),
-            SizedBox(height: subTitle.isEmpty ? 0 : 5),
-            subTitle.isEmpty
-                ? const SizedBox.shrink()
-                : MyText(
-                    color: otherColor,
-                    text: subTitle,
-                    fontsizeNormal: 12,
-                    fontsizeWeb: 14,
-                    multilanguage: subTitleMultilang,
-                    maxline: 2,
-                    overflow: TextOverflow.ellipsis,
-                    fontweight: FontWeight.w500,
-                    textalign: TextAlign.start,
-                    fontstyle: FontStyle.normal,
-                  ),
+            //     SizedBox(height: subTitle.isEmpty ? 0 : 5),
+            //     subTitle.isEmpty
+            //         ? const SizedBox.shrink()
+            //         : MyText(
+            //             color: otherColor,
+            //             text: subTitle,
+            //             fontsizeNormal: 12,
+            //             fontsizeWeb: 14,
+            //             multilanguage: subTitleMultilang,
+            //             maxline: 2,
+            //             overflow: TextOverflow.ellipsis,
+            //             fontweight: FontWeight.w500,
+            //             textalign: TextAlign.start,
+            //             fontstyle: FontStyle.normal,
+            //           ),
+            // //
           ],
         ),
       ),
     );
   }
+
+Widget profileCardWidget({
+  required String? userID,
+  required String? userName,
+  required String? userMobileNo,
+  required String? userType,
+  required VoidCallback onLoginPressed,
+  required VoidCallback onLogoutPressed,
+  required VoidCallback onDeleteAccountPressed,
+  required VoidCallback onEditProfilePressed,
+}) {
+  const colorPrimary = Color(0xFFB80E07);
+  bool isLoggedIn = userID != null && userID.isNotEmpty;
+
+  /// Get Safe Initials
+  String getInitials(String? name) {
+    if (name == null || name.trim().isEmpty) return "NA";
+    List<String> nameParts = name.trim().split(" ");
+    return nameParts.length > 1
+        ? "${nameParts[0][0]}${nameParts[1][0]}"
+        : nameParts[0][0];
+  }
+
+  /// Dynamic Gradient Colors for Profile Circle
+  final List<Color> gradientColors = [
+    Colors.blueAccent,
+    Colors.purpleAccent,
+    Colors.deepOrangeAccent,
+    Colors.greenAccent,
+    Colors.tealAccent,
+  ];
+
+  Color gradientStartColor =
+      gradientColors[(userName?.hashCode ?? 0).abs() % gradientColors.length];
+  Color gradientEndColor =
+      gradientColors[((userName?.hashCode ?? 0).abs() + 1) % gradientColors.length];
+
+  /// Login Text
+  String loginText = !isLoggedIn
+      ? "You are not signed in"
+      : (userType == "3" && (userName ?? "").isEmpty)
+          ? "Signed in as ${userMobileNo ?? ""}"
+          : "Signed in as ${userName ?? ""}";
+
+  return Container(
+    width: double.infinity,
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [Colors.black, Color(0xFF1C1C1C), Colors.grey],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(15),
+      border: Border.all(color: colorPrimary, width: 2),
+    ),
+    child: Stack(
+      children: [
+        Column(
+          children: [
+            /// Profile Info Row
+            Row(
+              children: [
+                /// Profile Icon with Gradient
+                Container(
+                  width: 65,
+                  height: 65,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [gradientStartColor, gradientEndColor],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    isLoggedIn ? getInitials(userName).toUpperCase() : "NA",
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+
+                /// User Info
+                Expanded(
+                  child: Text(
+                    loginText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            /// Delete & Logout Button Row or Login Button
+            isLoggedIn
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      /// Delete Account Button
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: onDeleteAccountPressed,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            "Delete Account",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+
+                      /// Logout Button (Circular)
+                      GestureDetector(
+                        onTap: onLogoutPressed,
+                        child: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Colors.black, Colors.grey],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            CupertinoIcons.square_arrow_right,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : ElevatedButton(
+                    onPressed: onLoginPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: colorPrimary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text("Login", style: TextStyle(fontSize: 13)),
+                  ),
+          ],
+        ),
+
+        if (isLoggedIn)
+          Positioned(
+            top: 5,
+            right: -10,
+            child: IconButton(
+              icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+              onPressed: onEditProfilePressed,
+            ),
+          ),
+      ],
+    ),
+  );
+}
+  // Widget profileCardWidget({
+  //   required String? userID,
+  //   required String? userName,
+  //   required String? userMobileNo,
+  //   required String? userType,
+  //   required VoidCallback onLoginPressed,
+  //   required VoidCallback onLogoutPressed,
+  //   required VoidCallback onDeleteAccountPressed,
+  //   required VoidCallback onEditProfilePressed,
+  // }) {
+  //   const colorPrimary = Color(0xFFB80E07);
+
+  //   bool isLoggedIn = userID != null && userID.isNotEmpty;
+
+  //   /// **Get Safe Initials**
+  //   String getInitials(String? name) {
+  //     if (name == null || name.isEmpty) return "NA";
+  //     List<String> nameParts = name.split(" ");
+  //     return nameParts.length > 1
+  //         ? "${nameParts[0][0]}${nameParts[1][0]}"
+  //         : nameParts[0][0];
+  //   }
+
+  //   /// **Dynamic Gradient Colors for Profile Circle**
+  //   final List<Color> gradientColors = [
+  //     Colors.blueAccent,
+  //     Colors.purpleAccent,
+  //     Colors.deepOrangeAccent,
+  //     Colors.greenAccent,
+  //     Colors.tealAccent
+  //   ];
+  //   Color gradientStartColor =
+  //       gradientColors[(userName?.hashCode ?? 0) % gradientColors.length];
+  //   Color gradientEndColor =
+  //       gradientColors[((userName?.hashCode ?? 0) + 1) % gradientColors.length];
+
+  //   /// **Login Text**
+  //   String loginText = !isLoggedIn
+  //       ? "You are not signed in"
+  //       : (userType == "3" && (userName ?? "").isEmpty)
+  //           ? "Signed in as ${userMobileNo ?? ""}"
+  //           : "Signed in as ${userName ?? ""}";
+
+  //   return Container(
+  //     width: double.infinity,
+  //     margin: const EdgeInsets.symmetric(vertical: 10),
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       gradient: const LinearGradient(
+  //         colors: [
+  //           Colors.black,
+  //           Color(0xFF1C1C1C),
+  //           Colors.grey
+  //         ], // Dark to Light Gradient
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //       ),
+  //       borderRadius: BorderRadius.circular(15),
+  //       border: Border.all(
+  //           color: colorPrimary, width: 2), // Border with Primary Color
+  //     ),
+  //     child: Stack(
+  //       children: [
+  //         Column(
+  //           children: [
+  //             /// **Profile Info Row**
+  //             Row(
+  //               children: [
+  //                 /// **Profile Icon with Gradient**
+  //                 Container(
+  //                   width: 65,
+  //                   height: 65,
+  //                   decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     gradient: LinearGradient(
+  //                       colors: [gradientStartColor, gradientEndColor],
+  //                       begin: Alignment.topLeft,
+  //                       end: Alignment.bottomRight,
+  //                     ),
+  //                   ),
+  //                   alignment: Alignment.center,
+  //                   child: Text(
+  //                     isLoggedIn ? getInitials(userName).toUpperCase() : "NA",
+  //                     style: const TextStyle(
+  //                       fontSize: 22,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+
+  //                 const SizedBox(width: 16),
+
+  //                 /// **User Info**
+  //                 Expanded(
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(
+  //                         loginText,
+  //                         style: TextStyle(
+  //                           fontSize: 16,
+  //                           fontWeight: FontWeight.w600,
+  //                           color: Colors.white.withOpacity(0.7),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+
+  //             const SizedBox(height: 10),
+
+  //             /// **Delete & Logout Button Row**
+  //             if (isLoggedIn)
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   /// **Delete Account Button**
+  //                   Expanded(
+  //                     child: ElevatedButton(
+  //                       onPressed: onDeleteAccountPressed,
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.white,
+  //                         foregroundColor: Colors.red,
+  //                         shape: RoundedRectangleBorder(
+  //                           borderRadius: BorderRadius.circular(10),
+  //                         ),
+  //                       ),
+  //                       child: const Text(
+  //                         "Delete Account",
+  //                         style: TextStyle(fontSize: 13),
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(width: 10),
+
+  //                   /// **Logout Button (Circular)**
+  //                   GestureDetector(
+  //                     onTap: onLogoutPressed,
+  //                     child: Container(
+  //                       width: 38,
+  //                       height: 38,
+  //                       decoration: BoxDecoration(
+  //                         shape: BoxShape.circle,
+  //                         gradient: const LinearGradient(
+  //                           colors: [
+  //                             Colors.black,
+  //                             Colors.grey
+  //                           ], // Black to Gray Gradient
+  //                           begin: Alignment.centerLeft,
+  //                           end: Alignment.centerRight,
+  //                         ),
+  //                       ),
+  //                       alignment: Alignment.center,
+  //                       child: const Icon(
+  //                         CupertinoIcons.square_arrow_right, // Logout Icon
+  //                         color: Colors.white,
+  //                         size: 22,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               )
+  //             else
+
+  //               /// **Login Button**
+  //               ElevatedButton(
+  //                 onPressed: onLoginPressed,
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: Colors.white,
+  //                   foregroundColor: colorPrimary,
+  //                   shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(10)),
+  //                 ),
+  //                 child: const Text("Login", style: TextStyle(fontSize: 13)),
+  //               ),
+  //           ],
+  //         ),
+
+  //         /// **Edit Button at Top Right**
+  //         ///
+  //         if (isLoggedIn)
+  //           Positioned(
+  //             top: 5,
+  //             right: -10,
+  //             child: IconButton(
+  //               icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+  //               onPressed: onEditProfilePressed,
+  //             ),
+  //           ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget profileCardWidget({
+  //   required String? userID,
+  //   required String? userName,
+  //   required String? userMobileNo,
+  //   required String? userType,
+  //   required VoidCallback onLoginPressed,
+  //   required VoidCallback onLogoutPressed,
+  //   required VoidCallback onDeleteAccountPressed,
+  //   required VoidCallback onEditProfilePressed,
+  // }) {
+  //   const colorPrimary = Color(0xFFB80E07);
+
+  //   bool isLoggedIn = userID != null && userID.isNotEmpty;
+
+  //   /// **Get Safe Initials**
+  //   String getInitials(String? name) {
+  //     if (name == null || name.isEmpty) return "NA";
+  //     List<String> nameParts = name.split(" ");
+  //     return nameParts.length > 1
+  //         ? "${nameParts[0][0]}${nameParts[1][0]}"
+  //         : nameParts[0][0];
+  //   }
+
+  //   /// **Dynamic Gradient Colors for Profile Circle**
+  //   final List<Color> gradientColors = [
+  //     Colors.blueAccent,
+  //     Colors.purpleAccent,
+  //     Colors.deepOrangeAccent,
+  //     Colors.greenAccent,
+  //     Colors.tealAccent
+  //   ];
+  //   Color gradientStartColor =
+  //       gradientColors[(userName?.hashCode ?? 0) % gradientColors.length];
+  //   Color gradientEndColor =
+  //       gradientColors[((userName?.hashCode ?? 0) + 1) % gradientColors.length];
+
+  //   /// **Login Text**
+  //   String loginText = !isLoggedIn
+  //       ? "You are not signed in"
+  //       : (userType == "3" && (userName ?? "").isEmpty)
+  //           ? "Signed in as ${userMobileNo ?? ""}"
+  //           : "Signed in as ${userName ?? ""}";
+
+  //   return Container(
+  //     width: double.infinity,
+  //     margin: const EdgeInsets.symmetric(vertical: 10),
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       gradient: const LinearGradient(
+  //         colors: [
+  //           Colors.black,
+  //           Color(0xFF1C1C1C),
+  //           Colors.grey
+  //         ], // Dark to Light Gradient
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //       ),
+  //       borderRadius: BorderRadius.circular(15),
+  //       border: Border.all(
+  //           color: colorPrimary, width: 2), // Border with Primary Color
+  //     ),
+  //     child: Stack(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             /// **Profile Icon with Gradient**
+  //             Container(
+  //               width: 65,
+  //               height: 65,
+  //               decoration: BoxDecoration(
+  //                 shape: BoxShape.circle,
+  //                 gradient: LinearGradient(
+  //                   colors: [gradientStartColor, gradientEndColor],
+  //                   begin: Alignment.topLeft,
+  //                   end: Alignment.bottomRight,
+  //                 ),
+  //               ),
+  //               alignment: Alignment.center,
+  //               child: Text(
+  //                 isLoggedIn ? getInitials(userName).toUpperCase() : "NA",
+  //                 style: const TextStyle(
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.white),
+  //               ),
+  //             ),
+
+  //             const SizedBox(width: 16),
+
+  //             /// **User Info & Buttons**
+  //             Expanded(
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     loginText,
+  //                     style: TextStyle(
+  //                         fontSize: 16,
+  //                         fontWeight: FontWeight.w600,
+  //                         color: white.withOpacity(0.7)),
+  //                   ),
+  //                   const SizedBox(height: 8),
+  //                   if (isLoggedIn) ...[
+  //                     /// **Delete Account Button**
+  //                     ElevatedButton(
+  //                       onPressed: onDeleteAccountPressed,
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.white,
+  //                         foregroundColor: Colors.red,
+  //                         shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(10)),
+  //                       ),
+  //                       child: const Text(
+  //                         "Delete Account",
+  //                         style: TextStyle(fontSize: 13),
+  //                       ),
+  //                     ),
+  //                   ] else ...[
+  //                     /// **Login Button**
+  //                     ElevatedButton(
+  //                       onPressed: onLoginPressed,
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.white,
+  //                         foregroundColor: colorPrimary,
+  //                         shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(10)),
+  //                       ),
+  //                       child:
+  //                           const Text("Login", style: TextStyle(fontSize: 13)),
+  //                     ),
+  //                   ]
+  //                 ],
+  //               ),
+  //             ),
+
+  //             /// **Logout Button as Circular Icon (Using Cupertino Icon)**
+  //             if (isLoggedIn)
+  //               GestureDetector(
+  //                 onTap: onLogoutPressed,
+  //                 child: Container(
+  //                   width: 38,
+  //                   height: 38,
+  //                   decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     gradient: const LinearGradient(
+  //                       colors: [
+  //                         Colors.black,
+  //                         Colors.grey
+  //                       ], // Gradient from Black to Gray
+  //                       begin: Alignment.centerLeft,
+  //                       end: Alignment.centerRight,
+  //                     ),
+  //                   ),
+  //                   alignment: Alignment.center,
+  //                   child: const Icon(
+  //                     CupertinoIcons.square_arrow_right, // Logout Icon
+  //                     color: Colors.white,
+  //                     size: 22,
+  //                   ),
+  //                 ),
+  //               ),
+  //           ],
+  //         ),
+
+  //         /// **Edit Button at Top Right**
+  //         Positioned(
+  //           top: 0,
+  //           right: 0,
+  //           child: IconButton(
+  //             icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+  //             onPressed: onEditProfilePressed,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+// Widget profileCardWidget({
+//   required String? userID,
+//   required String? userName,
+//   required String? userMobileNo,
+//   required String? userType,
+//   required VoidCallback onLoginPressed,
+//   required VoidCallback onLogoutPressed,
+//   required VoidCallback onDeleteAccountPressed,
+// }) {
+//   const colorPrimary = Color(0xFFB80E07);
+//   bool isLoggedIn = userID != null && userID.isNotEmpty;
+
+//   /// **Safe function to get initials**
+//   String getInitials(String? name) {
+//     if (name == null || name.isEmpty) return "NA"; // Handle null or empty names safely
+
+//     List<String> nameParts = name.split(" ");
+//     if (nameParts.length > 1) {
+//       return "${nameParts[0][0]}${nameParts[1][0]}".toUpperCase();
+//     } else {
+//       return nameParts[0][0].toUpperCase();
+//     }
+//   }
+
+//   /// **Login text logic**
+//   String loginText = !isLoggedIn
+//       ? "You are not signed in"
+//       : (userType == "3" && (userName ?? "").isEmpty)
+//           ? "Signed in as ${userMobileNo ?? ""}"
+//           : "Signed in as ${userName ?? ""}";
+
+//   return Container(
+//     width: double.infinity,
+//     margin: const EdgeInsets.symmetric(vertical: 10),
+//     padding: const EdgeInsets.all(16),
+//     decoration: BoxDecoration(
+//       gradient: const LinearGradient(
+//         colors: [colorPrimary, Colors.redAccent],
+//         begin: Alignment.topLeft,
+//         end: Alignment.bottomRight,
+//       ),
+//       borderRadius: BorderRadius.circular(15),
+//     ),
+//     child: Row(
+//       children: [
+//         /// **Profile Icon (Initials)**
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(50),
+//           child: Container(
+//             width: 60,
+//             height: 60,
+//             alignment: Alignment.center,
+//             decoration: BoxDecoration(
+//               color: Colors.primaries[
+//                   (userName?.hashCode ?? 0) % Colors.primaries.length],
+//               shape: BoxShape.circle,
+//             ),
+//             child: Text(
+//               isLoggedIn ? getInitials(userName) : "NA",
+//               style: const TextStyle(
+//                   fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(width: 16),
+
+//         /// **User Info and Buttons**
+//         Expanded(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(
+//                 loginText,
+//                 style: const TextStyle(
+//                     fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+//               ),
+//               const SizedBox(height: 8),
+
+//               isLoggedIn
+//                   ? Row(
+//                       children: [
+//                         Expanded(
+//                           child: ElevatedButton(
+//                             onPressed: onDeleteAccountPressed,
+//                             style: ElevatedButton.styleFrom(
+//                               backgroundColor: Colors.white,
+//                               foregroundColor: Colors.red,
+//                               shape: RoundedRectangleBorder(
+//                                   borderRadius: BorderRadius.circular(10)),
+//                             ),
+//                             child: const Text("Delete Account"),
+//                           ),
+//                         ),
+//                         const SizedBox(width: 10),
+//                         Expanded(
+//                           child: ElevatedButton(
+//                             onPressed: onLogoutPressed,
+//                             style: ElevatedButton.styleFrom(
+//                               backgroundColor: Colors.white,
+//                               foregroundColor: Colors.black,
+//                               shape: RoundedRectangleBorder(
+//                                   borderRadius: BorderRadius.circular(10)),
+//                             ),
+//                             child: const Text("Logout"),
+//                           ),
+//                         ),
+//                       ],
+//                     )
+//                   : ElevatedButton(
+//                       onPressed: onLoginPressed,
+//                       style: ElevatedButton.styleFrom(
+//                         backgroundColor: Colors.white,
+//                         foregroundColor: colorPrimary,
+//                         shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(10)),
+//                       ),
+//                       child: const Text("Login"),
+//                     ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
   Widget _buildLine(double topMargin, double bottomMargin) {
     return Container(
@@ -1017,7 +1772,7 @@ class SettingState extends State<Setting> {
                             Navigator.pop(context);
                             await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
+                                builder: (context) => const LoginViaSocial(),
                               ),
                             );
                           },
@@ -1139,7 +1894,7 @@ class SettingState extends State<Setting> {
                             Navigator.pop(context);
                             await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const LoginSocial(),
+                                builder: (context) => const LoginViaSocial(),
                               ),
                             );
                           },

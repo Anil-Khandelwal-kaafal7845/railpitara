@@ -5,6 +5,8 @@ const bottomView3 = "Channels";
 const bottomView4 = "Store";
 const bottomView5 = "My Stuff";
 const myProfile = "My Profile";
+const bottomView6 = "Watchlist";
+
 //BottomNavigation END
 
 //Login, Registration Strings START

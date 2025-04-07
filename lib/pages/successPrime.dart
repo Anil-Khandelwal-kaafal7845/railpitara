@@ -1,6 +1,4 @@
-import 'package:dtlive/model/successmodel.dart';
-import 'package:dtlive/pages/bottombar.dart';
-import 'package:dtlive/pages/home.dart';
+import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/provider/paymentprovider.dart';
 import 'package:dtlive/provider/userwallectProvider.dart';
 import 'package:flutter/material.dart';

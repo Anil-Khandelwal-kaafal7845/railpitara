@@ -1,22 +1,19 @@
-import 'package:bottom_bar/bottom_bar.dart';
-import 'package:dtlive/pages/channels.dart';
+
 import 'package:dtlive/pages/find.dart';
-import 'package:dtlive/pages/home.dart';
-import 'package:dtlive/pages/loginsocial.dart';
-import 'package:dtlive/pages/mywatchlist.dart';
-import 'package:dtlive/pages/rentstore.dart';
+import 'package:dtlive/pages/home_screen.dart';
+import 'package:dtlive/pages/my_watchlist.dart';
 import 'package:dtlive/pages/setting.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/profileprovider.dart';
-import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/sharedpre.dart';
+import 'package:dtlive/utils/strings.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class Bottombar extends StatefulWidget {
   const Bottombar({Key? key}) : super(key: key);
@@ -35,7 +32,7 @@ class BottombarState extends State<Bottombar> {
   static List<Widget> widgetOptions = <Widget>[
     const Home(pageName: ""),
     const Find(),
-    const NewLivePlayer(),
+    const MyWatchlist(),
     const Setting(),
   ];
 
@@ -93,101 +90,68 @@ class BottombarState extends State<Bottombar> {
             // Utils.showBannerAd(context),
           ],
         ),
-        bottomNavigationBar: SalomonBottomBar(
-          currentIndex: selectedIndex,
-          onTap: _onItemTapped,
-          items: [
-            SalomonBottomBarItem(
-              icon: Image.asset(
-                "assets/images/ic_home.png",
-                width: 15,
-                height: 15,
-                color: white,
-              ),
-              title: Text(
-                'Home',
-                style:
-                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
-              ),
-              selectedColor: Color.fromRGBO(33, 150, 243, 1),
-              //activeTitleColor: Colors.blue.shade600,
-            ),
-            SalomonBottomBarItem(
-              icon: Image.asset(
-                "assets/images/ic_find.png",
-                width: 15,
-                height: 15,
-                color: white,
-              ),
-              title: Text(
-                'Search',
-                style:
-                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
-              ),
-              selectedColor: Color.fromRGBO(33, 150, 243, 1),
-              //activeTitleColor: Colors.blue.shade600,
-            ),
+        bottomNavigationBar: 
+         BottomAppBar(
 
-            SalomonBottomBarItem(
-              icon: Image.asset(
-                "assets/images/ic_channels.png",
-                width: 15,
-                height: 15,
-                color: white,
-              ),
-              title: Text(
-                'Channels',
-                style:
-                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
-              ),
-              // backgroundColorOpacity: 0.1,
-              selectedColor: Colors.blue,
-              //activeTitleColor: Colors.blue.shade600,
+          color: appBgColor,
+          padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),
+          elevation: 5,
+          child: BottomNavigationBar(
+            backgroundColor: appBgColor,
+            selectedLabelStyle: GoogleFonts.montserrat(
+              fontSize: 10,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w500,
+              color: colorPrimary,
             ),
-            //  SalomonBottomBarItem(
-            //     icon: Image.asset(
-            //       "assets/images/ic_store.png",
-            //       width: 15,
-            //       height: 15,
-            //       color: white,
-            //     ),
-            //     title:Text('Store' ,style: TextStyle(color: colorPrimary,fontWeight: FontWeight.w500),),
-            //     selectedColor: Colors.blue,
-            //     //activeTitleColor: Colors.blue.shade600,
-            //   ),
-            // SalomonBottomBarItem(
-            //   icon: Image.asset(
-            //     "assets/images/ic_plus.png",
-            //     width: 15,
-            //     height: 15,
-            //     color: white,
-            //   ),
-            //   title: Text(
-            //     'Watchlist',
-            //     // 'Store',
-            //     style:
-            //         TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
-            //   ),
-            //   selectedColor: Colors.blue,
-            //   //activeTitleColor: Colors.blue.shade600,
-            // ),
-            SalomonBottomBarItem(
-              icon: Image.asset(
-                "assets/images/ic_stuff.png",
-                width: 15,
-                height: 15,
-                color: white,
-              ),
-              title: Text(
-                'My Stuff',
-                style:
-                    TextStyle(color: colorPrimary, fontWeight: FontWeight.w500),
-              ),
-              selectedColor: Colors.blue,
-              //activeTitleColor: Colors.blue.shade600,
+            unselectedLabelStyle: GoogleFonts.montserrat(
+              fontSize: 10,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w400,
+              color: colorPrimary,
             ),
-          ],
-        ),
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            elevation: 5,
+            currentIndex: selectedIndex,
+            unselectedItemColor: gray,
+            selectedItemColor: colorPrimary,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                backgroundColor: black,
+                label: bottomView1,
+                activeIcon: _buildBottomNavIcon(
+                    iconName: 'ic_home', iconColor: colorPrimary),
+                icon: _buildBottomNavIcon(iconName: 'ic_home', iconColor: gray),
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: black,
+                label: bottomView2,
+                activeIcon: _buildBottomNavIcon(
+                    iconName: 'ic_find', iconColor: colorPrimary),
+                icon: _buildBottomNavIcon(iconName: 'ic_find', iconColor: gray),
+              ),
+               BottomNavigationBarItem(
+                backgroundColor: black,
+                label: bottomView6,
+                activeIcon: _buildBottomNavIcon(
+                    iconName: 'ic_plus', iconColor: colorPrimary),
+                icon: _buildBottomNavIcon(iconName: 'ic_plus', iconColor: gray),
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: black,
+                label: bottomView5,
+                activeIcon: _buildBottomNavIcon(
+                    iconName: 'ic_stuff', iconColor: colorPrimary),
+                icon:
+                    _buildBottomNavIcon(iconName: 'ic_stuff', iconColor: gray),
+              ),
+            ],
+            onTap: _onItemTapped,
+          ),
+        )
+   
       ),
     );
   }
@@ -255,8 +219,7 @@ class BottombarState extends State<Bottombar> {
                       false); // Close bottom sheet and indicate not to exit app
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: colorPrimary, // Set button color to primaryDark
-                  onPrimary: Colors.white, // Set text color to white
+                  foregroundColor: Colors.white, backgroundColor: colorPrimary, // Set text color to white
                   minimumSize: Size(
                       double.infinity, 50), // Set button width to full width
                 ),
@@ -272,9 +235,7 @@ class BottombarState extends State<Bottombar> {
                       true); // Close bottom sheet and indicate to exit app
                 },
                 style: ElevatedButton.styleFrom(
-                  primary:
-                      Colors.transparent, // Set button color to transparent
-                  onPrimary: Colors.white, // Set text color to white
+                  foregroundColor: Colors.white, backgroundColor: Colors.transparent, // Set text color to white
                   side: BorderSide(
                       color: Colors.white), // Set border color to white
                   minimumSize: Size(

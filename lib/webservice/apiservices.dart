@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dtlive/model/addCoinModel.dart';
 import 'package:dtlive/model/auditionmodel.dart';
 import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/browsebyartistmodel.dart';

@@ -6,13 +6,17 @@ class Dimens {
   static double buttonHeight = 45;
   static double backBtnHeight = 15;
   static double backBtnWidth = 19;
-  static double homeTabHeight = 55;
+  static double homeTabHeight = 50;
 
   static double cardRadius = 4;
   static double widthPort = 190;
   static double heightPort = 240;
-static double widthPortTwo = 105;  // Match MoreScreen's width
-static double heightPortTwo = 147; // Match MoreScreen's height
+
+static double widthPortTwoTop10 = 105;  // Match MoreScreen's width
+static double heightPortTwoTop10 = 147; // Match MoreScreen's height
+
+static double widthPortTwo = 131;  // Match MoreScreen's width
+static double heightPortTwo = 184; // Match MoreScreen's height
 
   static double widthLand = 170;
   static double widthLandmore = 185;
@@ -29,15 +33,16 @@ static double heightPortTwo = 147; // Match MoreScreen's height
   static double widthContiSquare = 172;
   static double heightContiSquare = 172;
 
-  static double widthCast = 110;
+  static double widthCast = 130;
   static double heightCast = 165;
   static double widthCastWeb = 160;
   static double heightCastWeb = 220;
 
   static double widthLangGen = 100;
   static double heightLangGen = 120;
-  static double heightTopTen = 140;
-  static double widthTopTen = 100;
+static double heightTopTen = 180;  // Increased for better visuals
+static double widthTopTen = 120;   // Adjusted to maintain proportion
+
   static double widthArtist = 100;
   static double heightArtist = 130;
   static double widthLangGenLand = 150;
@@ -46,14 +51,16 @@ static double heightPortTwo = 147; // Match MoreScreen's height
   static double heightWatchlist = 110;
   static double upcomingHeight = 90;
 
-  static double homeBanner = 210;
+  static double homeBanner = 400;
+    // static double homeBanner = 210;
+
   static double homeWebBanner = 350;
   static double webBannerImgPr = 0.59; // Should be less than 1.0
   static double detailPoster = 250;
   static double detailWebPoster = 360;
-  static double detailTabs = 50;
+  static double detailTabs = 20;
   static double featureSize = 50;
-  static double featureIconSize = 20;
+  static double featureIconSize = 15;
   static double featureWebSize = 30;
   static double featureIconWebSize = 13;
   static double epiPoster = 240;

@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dtlive/main.dart';
-import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/subscription/subscription.dart';
-import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/dimens.dart';
@@ -69,7 +68,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
       // appBar: Utils.myAppBarWithBack(
       //     context, "watchlist", selectedIndex != 3),
 
-      appBar: Utils.myAppBarWithBack(context, "watchlist", true),
+      appBar: Utils.myAppBar(context, "watchlist", true),
       body: SafeArea(
         child: Column(
           children: [
@@ -756,7 +755,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const LoginSocial();
+                              return const LoginViaSocial();
                             },
                           ),
                         );
@@ -1209,7 +1208,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );

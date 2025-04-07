@@ -3,9 +3,8 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:dtlive/main.dart';
-import 'package:dtlive/model/coinrentmodel.dart';
-import 'package:dtlive/model/sectionlistmodel.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
+import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/pages/mydownloads.dart';
 import 'package:dtlive/pages/successScreen.dart';
 import 'package:dtlive/provider/generalprovider.dart';
@@ -18,18 +17,16 @@ import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/webwidget/footerweb.dart';
 import 'package:dtlive/widget/animatedgif.dart';
 import 'package:dtlive/widget/castcrew.dart';
-import 'package:dtlive/widget/moredetails.dart';
 import 'package:dtlive/widget/myusernetworkimg.dart';
 import 'package:dtlive/widget/relatedvideoshow.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:dtlive/model/sectiondetailmodel.dart';
-import 'package:dtlive/pages/castdetails.dart';
-import 'package:dtlive/pages/loginsocial.dart';
+import 'package:dtlive/pages/cast_details.dart';
 import 'package:dtlive/subscription/subscription.dart';
 import 'package:dtlive/utils/dimens.dart';
 import 'package:dtlive/widget/nodata.dart';
@@ -478,10 +475,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       onWillPop: () async {
         if (widget.isDynamicLink) {
           if (Platform.isAndroid) {
-      SystemNavigator.pop(); // Works on Android
-    } else if (Platform.isIOS) {
-      exit(0); // Closes the app on iOS
-    }
+            SystemNavigator.pop(); // Works on Android
+          } else if (Platform.isIOS) {
+            exit(0); // Closes the app on iOS
+          }
         } else {
           Navigator.of(context).pop();
         }
@@ -550,335 +547,714 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
               /* Other Details */
               Container(
-                transform: Matrix4.translationValues(0, -kToolbarHeight, 0),
+                // margin: EdgeInsets.only(left: 12 ,right: 12 ,top: 12 ),
+                // transform: Matrix4.translationValues(0, -kToolbarHeight, 0),
                 child: Column(
                   children: [
-                    /* Small Poster, Main title, ReleaseYear, Duration, Age Restriction, Video Quality */
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 12, right: 12, top: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          const SizedBox(height: 5),
+                          MyText(
+                            color: white,
+                            text: videoDetailsProvider
+                                    .sectionDetailModel.result?.name ??
+                                "",
+                            textalign: TextAlign.start,
+                            fontsizeNormal: 13,
+                            fontsizeWeb: 20,
+                            fontweight: FontWeight.w600,
+                            maxline: 2,
+                            multilanguage: false,
+                            overflow: TextOverflow.ellipsis,
+                            fontstyle: FontStyle.normal,
+                          ),
+                          const SizedBox(height: 5),
+                          // Row(
+                          //   mainAxisSize: MainAxisSize.max,
+                          //   children: [
+                          //     /* Release Year */
+                          //     (videoDetailsProvider.sectionDetailModel.result
+                          //                     ?.releaseYear !=
+                          //                 null &&
+                          //             videoDetailsProvider.sectionDetailModel
+                          //                     .result?.releaseYear !=
+                          //                 "")
+                          //         ? Container(
+                          //             margin: const EdgeInsets.only(right: 10),
+                          //             child: MyText(
+                          //               color: whiteLight,
+                          //               text: videoDetailsProvider
+                          //                       .sectionDetailModel
+                          //                       .result
+                          //                       ?.releaseYear ??
+                          //                   "",
+                          //               textalign: TextAlign.center,
+                          //               fontsizeNormal: 10,
+                          //               fontsizeWeb: 10,
+                          //               fontweight: FontWeight.w500,
+                          //               multilanguage: false,
+                          //               maxline: 1,
+                          //               overflow: TextOverflow.ellipsis,
+                          //               fontstyle: FontStyle.normal,
+                          //             ),
+                          //           )
+                          //         : const SizedBox.shrink(),
+                          //     /* Duration */
+                          //     // (videoDetailsProvider.sectionDetailModel.result
+                          //     //             ?.videoDuration !=
+                          //     //         null)
+                          //     //     ? Container(
+                          //     //         margin: const EdgeInsets.only(right: 10),
+                          //     //         child: MyText(
+                          //     //           color: otherColor,
+                          //     //           multilanguage: false,
+                          //     //           text: ((videoDetailsProvider
+                          //     //                           .sectionDetailModel
+                          //     //                           .result
+                          //     //                           ?.videoDuration ??
+                          //     //                       0) >
+                          //     //                   0)
+                          //     //               ? Utils.convertTimeToText(
+                          //     //                   videoDetailsProvider
+                          //     //                           .sectionDetailModel
+                          //     //                           .result
+                          //     //                           ?.videoDuration ??
+                          //     //                       0)
+                          //     //               : "",
+                          //     //           textalign: TextAlign.center,
+                          //     //           fontsizeNormal: 11,
+                          //     //           fontsizeWeb: 15,
+                          //     //           fontweight: FontWeight.w500,
+                          //     //           maxline: 1,
+                          //     //           overflow: TextOverflow.ellipsis,
+                          //     //           fontstyle: FontStyle.normal,
+                          //     //         ),
+                          //     //       )
+                          //     //     : const SizedBox.shrink(),
+
+                          //     // /* MaxQuality */
+                          //     // (videoDetailsProvider.sectionDetailModel.result
+                          //     //                 ?.maxVideoQuality !=
+                          //     //             null &&
+                          //     //         videoDetailsProvider.sectionDetailModel
+                          //     //                 .result?.maxVideoQuality !=
+                          //     //             "")
+                          //     //     ? Container(
+                          //     //         margin: const EdgeInsets.only(right: 10),
+                          //     //         padding:
+                          //     //             const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                          //     //         decoration: BoxDecoration(
+                          //     //           border: Border.all(
+                          //     //             color: otherColor,
+                          //     //             width: .7,
+                          //     //           ),
+                          //     //           borderRadius: BorderRadius.circular(4),
+                          //     //           shape: BoxShape.rectangle,
+                          //     //         ),
+                          //     //         child: MyText(
+                          //     //           color: otherColor,
+                          //     //           text: videoDetailsProvider
+                          //     //                   .sectionDetailModel
+                          //     //                   .result
+                          //     //                   ?.maxVideoQuality ??
+                          //     //               "",
+                          //     //           textalign: TextAlign.center,
+                          //     //           fontsizeNormal: 10,
+                          //     //           fontsizeWeb: 11,
+                          //     //           fontweight: FontWeight.w500,
+                          //     //           multilanguage: false,
+                          //     //           maxline: 1,
+                          //     //           overflow: TextOverflow.ellipsis,
+                          //     //           fontstyle: FontStyle.normal,
+                          //     //         ),
+                          //     //       )
+                          //     //     : const SizedBox.shrink(),
+
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                    ),
+
+                    // /* Small Poster, Main title, ReleaseYear, Duration, Age Restriction, Video Quality */
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   constraints: const BoxConstraints(minHeight: 85),
+                    //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    //   child: Row(
+                    //     mainAxisSize: MainAxisSize.max,
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       // Container(
+                    //       //   width: 65,
+                    //       //   height: 85,
+                    //       //   alignment: Alignment.centerLeft,
+                    //       //   decoration: BoxDecoration(
+                    //       //     borderRadius: BorderRadius.circular(4),
+                    //       //   ),
+                    //       //   child: ClipRRect(
+                    //       //     borderRadius: BorderRadius.circular(4),
+                    //       //     child: MyNetworkImage(
+                    //       //       fit: BoxFit.cover,
+                    //       //       imgHeight: 85,
+                    //       //       imgWidth: 65,
+                    //       //       imageUrl: videoDetailsProvider
+                    //       //               .sectionDetailModel.result?.thumbnail ??
+                    //       //           "",
+                    //       //     ),
+                    //       //   ),
+                    //       // ),
+                    //       const SizedBox(width: 12),
+                    //       Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         mainAxisSize: MainAxisSize.max,
+                    //         children: [
+                    //           MyText(
+                    //             color: white,
+                    //             text: videoDetailsProvider
+                    //                     .sectionDetailModel.result?.name ??
+                    //                 "",
+                    //             textalign: TextAlign.start,
+                    //             fontsizeNormal: 20,
+                    //             fontsizeWeb: 24,
+                    //             fontweight: FontWeight.w800,
+                    //             maxline: 2,
+                    //             multilanguage: false,
+                    //             overflow: TextOverflow.ellipsis,
+                    //             fontstyle: FontStyle.normal,
+                    //           ),
+                    //           const SizedBox(height: 5),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.max,
+                    //             children: [
+                    //               /* Release Year */
+                    //               (videoDetailsProvider.sectionDetailModel
+                    //                               .result?.releaseYear !=
+                    //                           null &&
+                    //                       videoDetailsProvider
+                    //                               .sectionDetailModel
+                    //                               .result
+                    //                               ?.releaseYear !=
+                    //                           "")
+                    //                   ? Container(
+                    //                       margin: const EdgeInsets.only(
+                    //                           right: 10),
+                    //                       child: MyText(
+                    //                         color: whiteLight,
+                    //                         text: videoDetailsProvider
+                    //                                 .sectionDetailModel
+                    //                                 .result
+                    //                                 ?.releaseYear ??
+                    //                             "",
+                    //                         textalign: TextAlign.center,
+                    //                         fontsizeNormal: 13,
+                    //                         fontsizeWeb: 15,
+                    //                         fontweight: FontWeight.w500,
+                    //                         multilanguage: false,
+                    //                         maxline: 1,
+                    //                         overflow: TextOverflow.ellipsis,
+                    //                         fontstyle: FontStyle.normal,
+                    //                       ),
+                    //                     )
+                    //                   : const SizedBox.shrink(),
+                    //               /* Duration */
+                    //               (videoDetailsProvider.sectionDetailModel
+                    //                           .result?.videoDuration !=
+                    //                       null)
+                    //                   ? Container(
+                    //                       margin: const EdgeInsets.only(
+                    //                           right: 10),
+                    //                       child: MyText(
+                    //                         color: otherColor,
+                    //                         multilanguage: false,
+                    //                         text: ((videoDetailsProvider
+                    //                                         .sectionDetailModel
+                    //                                         .result
+                    //                                         ?.videoDuration ??
+                    //                                     0) >
+                    //                                 0)
+                    //                             ? Utils.convertTimeToText(
+                    //                                 videoDetailsProvider
+                    //                                         .sectionDetailModel
+                    //                                         .result
+                    //                                         ?.videoDuration ??
+                    //                                     0)
+                    //                             : "",
+                    //                         textalign: TextAlign.center,
+                    //                         fontsizeNormal: 13,
+                    //                         fontsizeWeb: 15,
+                    //                         fontweight: FontWeight.w500,
+                    //                         maxline: 1,
+                    //                         overflow: TextOverflow.ellipsis,
+                    //                         fontstyle: FontStyle.normal,
+                    //                       ),
+                    //                     )
+                    //                   : const SizedBox.shrink(),
+                    //               /* MaxQuality */
+                    //               (videoDetailsProvider.sectionDetailModel
+                    //                               .result?.maxVideoQuality !=
+                    //                           null &&
+                    //                       videoDetailsProvider
+                    //                               .sectionDetailModel
+                    //                               .result
+                    //                               ?.maxVideoQuality !=
+                    //                           "")
+                    //                   ? Container(
+                    //                       margin: const EdgeInsets.only(
+                    //                           right: 10),
+                    //                       padding: const EdgeInsets.fromLTRB(
+                    //                           5, 1, 5, 1),
+                    //                       decoration: BoxDecoration(
+                    //                         border: Border.all(
+                    //                           color: otherColor,
+                    //                           width: .7,
+                    //                         ),
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(4),
+                    //                         shape: BoxShape.rectangle,
+                    //                       ),
+                    //                       child: MyText(
+                    //                         color: otherColor,
+                    //                         text: videoDetailsProvider
+                    //                                 .sectionDetailModel
+                    //                                 .result
+                    //                                 ?.maxVideoQuality ??
+                    //                             "",
+                    //                         textalign: TextAlign.center,
+                    //                         fontsizeNormal: 10,
+                    //                         fontsizeWeb: 12,
+                    //                         fontweight: FontWeight.w500,
+                    //                         multilanguage: false,
+                    //                         maxline: 1,
+                    //                         overflow: TextOverflow.ellipsis,
+                    //                         fontstyle: FontStyle.normal,
+                    //                       ),
+                    //                     )
+                    //                   : const SizedBox.shrink(),
+                    //             ],
+                    //           ),
+
+                    //         ],
+                    //       ),
+
+                    //     ],
+                    //   ),
+                    // ),
+
+                    // /* Release Date */
+                    // _buildReleaseDate(),
+
+//                     /* Prime TAG */
+//                     (videoDetailsProvider
+//                                     .sectionDetailModel.result?.isPremium ??
+//                                 0) ==
+//                             1
+//                         ? Container(
+//                             margin: const EdgeInsets.fromLTRB(12, 11, 12, 0),
+//                             width: MediaQuery.of(context).size.width,
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               mainAxisAlignment: MainAxisAlignment.start,
+//                               mainAxisSize: MainAxisSize.max,
+//                               children: [
+//                                 MyText(
+//                                   color: colorPrimary,
+//                                   text: "primetag",
+//                                   textalign: TextAlign.start,
+//                                   fontsizeNormal: 10,
+//                                   fontsizeWeb: 15,
+//                                   fontweight: FontWeight.w700,
+//                                   multilanguage: true,
+//                                   maxline: 1,
+//                                   overflow: TextOverflow.ellipsis,
+//                                   fontstyle: FontStyle.normal,
+//                                 ),
+//                                 const SizedBox(height: 2),
+//                                 MyText(
+//                                   color: white,
+//                                   text: "primetagdesc",
+//                                   multilanguage: true,
+//                                   textalign: TextAlign.center,
+//                                   fontsizeNormal: 10,
+//                                   fontsizeWeb: 13,
+//                                   fontweight: FontWeight.w500,
+//                                   maxline: 1,
+//                                   overflow: TextOverflow.ellipsis,
+//                                   fontstyle: FontStyle.normal,
+//                                 ),
+//                               ],
+//                             ),
+//                           )
+//                         : const SizedBox.shrink(),
+
+//                     /* Rent TAG */
+//                     (videoDetailsProvider.sectionDetailModel.result?.isRent ??
+//                                 0) ==
+//                             1
+//                         ? Container(
+//                             margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+//                             width: MediaQuery.of(context).size.width,
+//                             child: Row(
+//                               mainAxisSize: MainAxisSize.max,
+//                               children: [
+//                                 Container(
+//                                   width: 20,
+//                                   height: 20,
+//                                   decoration: BoxDecoration(
+//                                     color: complimentryColor,
+//                                     borderRadius: BorderRadius.circular(10),
+//                                     shape: BoxShape.rectangle,
+//                                   ),
+//                                   alignment: Alignment.center,
+//                                   child: MyText(
+//                                     color: white,
+//                                     text: Constant.currencySymbol,
+//                                     textalign: TextAlign.center,
+//                                     fontsizeNormal: 10,
+//                                     fontsizeWeb: 12,
+//                                     fontweight: FontWeight.w800,
+//                                     multilanguage: false,
+//                                     maxline: 1,
+//                                     overflow: TextOverflow.ellipsis,
+//                                     fontstyle: FontStyle.normal,
+//                                   ),
+//                                 ),
+//                                 Container(
+//                                   margin: const EdgeInsets.only(left: 5),
+//                                   child: MyText(
+//                                     color: white,
+//                                     text: "renttag",
+//                                     textalign: TextAlign.center,
+//                                     fontsizeNormal: 10,
+//                                     fontsizeWeb: 13,
+//                                     multilanguage: true,
+//                                     fontweight: FontWeight.w500,
+//                                     maxline: 1,
+//                                     overflow: TextOverflow.ellipsis,
+//                                     fontstyle: FontStyle.normal,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           )
+//                         : const SizedBox.shrink(),
+
+// //coin tag--
+//                     generalProvider.isCoinShow == "1"
+//                         ? (videoDetailsProvider.sectionDetailModel.result
+//                                         ?.isabaletocoinpurches ??
+//                                     0) ==
+//                                 1
+//                             ? Container(
+//                                 margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+//                                 width: MediaQuery.of(context).size.width,
+//                                 child: Row(
+//                                   mainAxisSize: MainAxisSize.max,
+//                                   children: [
+//                                     AnimatedGifWidget(
+//                                       height: 50,
+//                                       width: 50,
+//                                     ),
+//                                     Container(
+//                                       margin: const EdgeInsets.only(
+//                                           left: 5, right: 5),
+//                                       child: Row(
+//                                         children: [
+//                                           MyText(
+//                                             color: white,
+//                                             text: "cointag",
+//                                             textalign: TextAlign.center,
+//                                             fontsizeNormal: 10,
+//                                             fontsizeWeb: 13,
+//                                             multilanguage: true,
+//                                             fontweight: FontWeight.w500,
+//                                             maxline: 1,
+//                                             overflow: TextOverflow.ellipsis,
+//                                             fontstyle: FontStyle.normal,
+//                                           ),
+//                                           SizedBox(
+//                                             width: 5,
+//                                           ),
+//                                           Text(
+//                                             "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
+//                                             style: TextStyle(
+//                                               color: white,
+//                                               fontSize:
+//                                                   15, // Large font size for coin value
+//                                               fontWeight: FontWeight.bold,
+//                                             ),
+//                                           ),
+//                                         ],
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               )
+//                             : const SizedBox.shrink()
+//                         : const SizedBox.shrink(),
+
+                    
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      constraints: const BoxConstraints(minHeight: 85),
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      margin: const EdgeInsets.fromLTRB(12, 0, 20, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 65,
-                            height: 85,
-                            alignment: Alignment.centerLeft,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: MyNetworkImage(
-                                fit: BoxFit.cover,
-                                imgHeight: 85,
-                                imgWidth: 65,
-                                imageUrl: videoDetailsProvider
-                                        .sectionDetailModel.result?.thumbnail ??
-                                    "",
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                MyText(
-                                  color: white,
-                                  text: videoDetailsProvider
-                                          .sectionDetailModel.result?.name ??
-                                      "",
-                                  textalign: TextAlign.start,
-                                  fontsizeNormal: 20,
-                                  fontsizeWeb: 24,
-                                  fontweight: FontWeight.w800,
-                                  maxline: 2,
-                                  multilanguage: false,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
+                          const SizedBox(height: 7),
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              if ((videoDetailsProvider.sectionDetailModel
+                                          .result?.categoryName ??
+                                      "")
+                                  .isNotEmpty)
+                                _buildBulletPoint(videoDetailsProvider
+                                        .sectionDetailModel
+                                        .result
+                                        ?.categoryName ??
+                                    ""),
+
+                              if ((audioLanguages ?? "").isNotEmpty)
+                                _buildBulletPoint(audioLanguages ?? ""),
+
+                              if ((videoDetailsProvider.sectionDetailModel
+                                          .result?.maturityRating ??
+                                      "N/A")
+                                  .isNotEmpty)
+                                _buildBulletPoint(videoDetailsProvider
+                                        .sectionDetailModel
+                                        .result
+                                        ?.maturityRating ??
+                                    "N/A"),
+
+                              if (Constant.subtitleUrls.isNotEmpty)
+                                _buildBulletPoint("Available Subtitles"),
+
+                              // Video Duration
+                              if ((videoDetailsProvider.sectionDetailModel
+                                          .result?.videoDuration ??
+                                      0) >
+                                  0)
+                                _buildBulletPoint(
+                                  Utils.convertTimeToText(videoDetailsProvider
+                                          .sectionDetailModel
+                                          .result
+                                          ?.videoDuration ??
+                                      0),
                                 ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    /* Release Year */
-                                    (videoDetailsProvider.sectionDetailModel
-                                                    .result?.releaseYear !=
-                                                null &&
-                                            videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.releaseYear !=
-                                                "")
-                                        ? Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 10),
-                                            child: MyText(
-                                              color: whiteLight,
-                                              text: videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.releaseYear ??
-                                                  "",
-                                              textalign: TextAlign.center,
-                                              fontsizeNormal: 13,
-                                              fontsizeWeb: 15,
-                                              fontweight: FontWeight.w500,
-                                              multilanguage: false,
-                                              maxline: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              fontstyle: FontStyle.normal,
-                                            ),
-                                          )
-                                        : const SizedBox.shrink(),
-                                    /* Duration */
-                                    (videoDetailsProvider.sectionDetailModel
-                                                .result?.videoDuration !=
-                                            null)
-                                        ? Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 10),
-                                            child: MyText(
-                                              color: otherColor,
-                                              multilanguage: false,
-                                              text: ((videoDetailsProvider
-                                                              .sectionDetailModel
-                                                              .result
-                                                              ?.videoDuration ??
-                                                          0) >
-                                                      0)
-                                                  ? Utils.convertTimeToText(
-                                                      videoDetailsProvider
-                                                              .sectionDetailModel
-                                                              .result
-                                                              ?.videoDuration ??
-                                                          0)
-                                                  : "",
-                                              textalign: TextAlign.center,
-                                              fontsizeNormal: 13,
-                                              fontsizeWeb: 15,
-                                              fontweight: FontWeight.w500,
-                                              maxline: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              fontstyle: FontStyle.normal,
-                                            ),
-                                          )
-                                        : const SizedBox.shrink(),
-                                    /* MaxQuality */
-                                    (videoDetailsProvider.sectionDetailModel
-                                                    .result?.maxVideoQuality !=
-                                                null &&
-                                            videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.maxVideoQuality !=
-                                                "")
-                                        ? Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 10),
-                                            padding: const EdgeInsets.fromLTRB(
-                                                5, 1, 5, 1),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: otherColor,
-                                                width: .7,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              shape: BoxShape.rectangle,
-                                            ),
-                                            child: MyText(
-                                              color: otherColor,
-                                              text: videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.maxVideoQuality ??
-                                                  "",
-                                              textalign: TextAlign.center,
-                                              fontsizeNormal: 10,
-                                              fontsizeWeb: 12,
-                                              fontweight: FontWeight.w500,
-                                              multilanguage: false,
-                                              maxline: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              fontstyle: FontStyle.normal,
-                                            ),
-                                          )
-                                        : const SizedBox.shrink(),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            ],
                           ),
                         ],
                       ),
                     ),
 
-                    /* Release Date */
-                    _buildReleaseDate(),
+//    Container(
+//   width: MediaQuery.of(context).size.width,
+//   margin: const EdgeInsets.fromLTRB(12, 0, 20, 0),
+//   child: Column(
+//     crossAxisAlignment: CrossAxisAlignment.center,
+//     children: [
+//       const SizedBox(height: 7),
 
-                    /* Prime TAG */
-                    (videoDetailsProvider
-                                    .sectionDetailModel.result?.isPremium ??
-                                0) ==
-                            1
-                        ? Container(
-                            margin: const EdgeInsets.fromLTRB(20, 11, 20, 0),
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                MyText(
-                                  color: colorPrimary,
-                                  text: "primetag",
-                                  textalign: TextAlign.start,
-                                  fontsizeNormal: 12,
-                                  fontsizeWeb: 15,
-                                  fontweight: FontWeight.w700,
-                                  multilanguage: true,
-                                  maxline: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(height: 2),
-                                MyText(
-                                  color: white,
-                                  text: "primetagdesc",
-                                  multilanguage: true,
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 12,
-                                  fontsizeWeb: 13,
-                                  fontweight: FontWeight.w500,
-                                  maxline: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                              ],
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+//       Wrap(
+//         spacing: 10,
+//         runSpacing: 10,
+//         children: [
+//           if ((videoDetailsProvider.sectionDetailModel.result?.categoryName ?? "").isNotEmpty)
+//             _buildBulletPoint(videoDetailsProvider.sectionDetailModel.result?.categoryName ?? ""),
 
-                    /* Rent TAG */
-                    (videoDetailsProvider.sectionDetailModel.result?.isRent ??
-                                0) ==
-                            1
-                        ? Container(
-                            margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    color: complimentryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    shape: BoxShape.rectangle,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: MyText(
-                                    color: white,
-                                    text: Constant.currencySymbol,
-                                    textalign: TextAlign.center,
-                                    fontsizeNormal: 10,
-                                    fontsizeWeb: 12,
-                                    fontweight: FontWeight.w800,
-                                    multilanguage: false,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(left: 5),
-                                  child: MyText(
-                                    color: white,
-                                    text: "renttag",
-                                    textalign: TextAlign.center,
-                                    fontsizeNormal: 12,
-                                    fontsizeWeb: 13,
-                                    multilanguage: true,
-                                    fontweight: FontWeight.w500,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+//           if ((audioLanguages ?? "").isNotEmpty)
+//             _buildBulletPoint(audioLanguages ?? ""),
 
-//coin tag--
-                    generalProvider.isCoinShow == "1"
-                        ? (videoDetailsProvider.sectionDetailModel.result
-                                        ?.isabaletocoinpurches ??
-                                    0) ==
-                                1
-                            ? Container(
-                                margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    AnimatedGifWidget(
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 5, right: 5),
-                                      child: Row(
-                                        children: [
-                                          MyText(
-                                            color: white,
-                                            text: "cointag",
-                                            textalign: TextAlign.center,
-                                            fontsizeNormal: 12,
-                                            fontsizeWeb: 13,
-                                            multilanguage: true,
-                                            fontweight: FontWeight.w500,
-                                            maxline: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            fontstyle: FontStyle.normal,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
-                                            style: TextStyle(
-                                              color: white,
-                                              fontSize:
-                                                  18, // Large font size for coin value
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox.shrink()
-                        : const SizedBox.shrink(),
+//           if ((videoDetailsProvider.sectionDetailModel.result?.maturityRating ?? "N/A").isNotEmpty)
+//             _buildBulletPoint(videoDetailsProvider.sectionDetailModel.result?.maturityRating ?? "N/A"),
+
+//           if (Constant.subtitleUrls.isNotEmpty)
+//             _buildBulletPoint("Available Subtitles"),
+//         ],
+//       ),
+//     ],
+//   ),
+// ),
+
+                    // Container(
+                    //   margin: EdgeInsets.only(left: 12 ,top: 12),
+                    //                           width: MediaQuery.of(context).size.width,
+                    //                           constraints: const BoxConstraints(minHeight: 0),
+                    //                           alignment: Alignment.centerLeft,
+                    //                           child: ExpandableText(
+                    //                             videoDetailsProvider
+                    //                                     .sectionDetailModel.result?.description ??
+                    //                                 "",
+                    //                             expandText: more,
+                    //                             collapseText: less_,
+                    //                             maxLines: (kIsWeb || Constant.isTV) ? 50 : 3,
+                    //                             linkColor: otherColor,
+                    //                             expandOnTextTap: true,
+                    //                             collapseOnTextTap: true,
+                    //                             style: TextStyle(
+                    //                               fontSize: (kIsWeb || Constant.isTV) ? 12 : 12,
+                    //                               fontStyle: FontStyle.normal,
+                    //                               color: white.withOpacity(0.5),
+                    //                               fontWeight: FontWeight.w400,
+                    //                             ),
+                    //                           ),
+                    //                         ),
 
                     /* Continue Watching Button */
                     /* Watch Now button */
                     Container(
-                      margin: const EdgeInsets.fromLTRB(20, 18, 20, 0),
+                      margin: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                       child: (widget.videoType == 5)
                           ? _buildWatchTrailer()
                           : _buildWatchNow(),
                     ),
+
+
+// SizedBox(height: 10,) ,
+                    Wrap(
+                      spacing: 10, // Space between each tag
+                      runSpacing: 5, // Space between lines if wrapped
+                      children: [
+                        /* Prime TAG */
+                        if ((videoDetailsProvider
+                                    .sectionDetailModel.result?.isPremium ??
+                                0) ==
+                            1)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                               Text(
+                                "•", // Bullet point
+                                style: TextStyle(
+                                    color: white.withOpacity(0.7), fontSize: 14),
+                              ),
+                              const SizedBox(width: 5),
+                              MyText(
+                                color: white,
+                                text: "primetag",
+                                textalign: TextAlign.start,
+                                fontsizeNormal: 10,
+                                fontsizeWeb: 15,
+                                fontweight: FontWeight.w500,
+                                multilanguage: true,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                            ],
+                          ),
+
+                        /* Rent TAG */
+                        if ((videoDetailsProvider
+                                    .sectionDetailModel.result?.isRent ??
+                                0) ==
+                            1)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                               Text(
+                                "•", // Bullet point
+                                style: TextStyle(
+                                    color: white.withOpacity(0.7), fontSize: 14),
+                              ),
+                            
+                              const SizedBox(width: 5),
+                              MyText(
+                                color: white.withOpacity(0.5),
+                                text: "renttag",
+                                textalign: TextAlign.center,
+                                fontsizeNormal: 10,
+                                fontsizeWeb: 13,
+                                multilanguage: true,
+                                fontweight: FontWeight.w500,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                            ],
+                          ),
+
+                        /* Coin TAG */
+                        if (generalProvider.isCoinShow == "1" &&
+                            (videoDetailsProvider.sectionDetailModel.result
+                                        ?.isabaletocoinpurches ??
+                                    0) ==
+                                1)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                               Text(
+                                "•", // Bullet point
+                                style: TextStyle(
+                                    color: white.withOpacity(0.7), fontSize: 14),
+                              ),
+                              const SizedBox(width: 5),
+                              AnimatedGifWidget(
+                                height: 20,
+                                width: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              MyText(
+                                color: white,
+                                text: "cointag",
+                                textalign: TextAlign.center,
+                                fontsizeNormal: 10,
+                                fontsizeWeb: 13,
+                                multilanguage: true,
+                                fontweight: FontWeight.w500,
+                                maxline: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontstyle: FontStyle.normal,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "${videoDetailsProvider.sectionDetailModel.result?.coinvalue ?? ''}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    )
+,
+
+                    Container(
+                      margin: EdgeInsets.only(left: 12, top: 12),
+                      width: MediaQuery.of(context).size.width,
+                      constraints: const BoxConstraints(minHeight: 0),
+                      alignment: Alignment.centerLeft,
+                      child: ExpandableText(
+                        videoDetailsProvider
+                                .sectionDetailModel.result?.description ??
+                            "",
+                        expandText: more,
+                        collapseText: less_,
+                        maxLines: (kIsWeb || Constant.isTV) ? 50 : 3,
+                        linkColor: otherColor,
+                        expandOnTextTap: true,
+                        collapseOnTextTap: true,
+                        style: TextStyle(
+                          fontSize: (kIsWeb || Constant.isTV) ? 12 : 12,
+                          fontStyle: FontStyle.normal,
+                          color: white.withOpacity(0.5),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+
+
 
                     /* Included Features buttons */
                     if (widget.videoType != 5)
@@ -889,135 +1265,115 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ? (MediaQuery.of(context).size.width / 2)
                               : MediaQuery.of(context).size.width,
                           constraints: const BoxConstraints(minHeight: 0),
-                          margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // /* Rent Button */
-                              // _buildRentBtn(),
-                              // const SizedBox(width: 5),
+                          margin: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                          child: Consumer<VideoDetailsProvider>(
+                            builder: (context, videoDetailsProvider, child) {
+                              List<Widget> featureButtons = [];
 
-                              /* Start Over & Trailer */
-                              Expanded(
-                                child: Consumer<VideoDetailsProvider>(
-                                  builder:
-                                      (context, videoDetailsProvider, child) {
-                                    if ((videoDetailsProvider.sectionDetailModel
-                                                    .result?.stopTime ??
-                                                0) >
-                                            0 &&
-                                        videoDetailsProvider.sectionDetailModel
-                                                .result?.videoDuration !=
-                                            null) {
-                                      /* Start Over */
-                                      return InkWell(
-                                        borderRadius: BorderRadius.circular(5),
-                                        //focusColor:: gray.withOpacity(0.5),
-                                        onTap: () async {
-                                          analytics.logEvent(
-                                            name: 'watch_from_start',
-                                            parameters: {
-                                              'video_id': widget.videoId,
-                                              'video_name': videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.name ??
-                                                  "",
-                                            },
-                                          );
-                                          Map<String, Object> screenViewEvent =
-                                              {
-                                            'video_id': widget.videoId,
-                                            'video_name': videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.name ??
-                                                "",
-                                            'user_id':
-                                                Constant.userID.toString(),
-                                          };
-                                          Singular.eventWithArgs(
-                                              'watch_from_start',
-                                              screenViewEvent);
-                                          openPlayer("startOver");
-                                        },
-                                        child: _buildFeatureBtn(
-                                          icon: 'ic_restart.png',
-                                          title: 'startover',
-                                          multilanguage: true,
-                                        ),
-                                      );
-                                    } else {
-                                      /* Trailer */
-                                      return InkWell(
-                                        borderRadius: BorderRadius.circular(5),
-                                        //focusColor:: gray.withOpacity(0.5),
-                                        onTap: () {
-                                          analytics.logEvent(
-                                            name: 'watch_trailer',
-                                            parameters: {
-                                              'video_id': widget.videoId,
-                                              'video_name': videoDetailsProvider
-                                                      .sectionDetailModel
-                                                      .result
-                                                      ?.name ??
-                                                  "",
-                                            },
-                                          );
-                                          Map<String, Object> screenViewEvent =
-                                              {
-                                            'video_id': widget.videoId,
-                                            'video_name': videoDetailsProvider
-                                                    .sectionDetailModel
-                                                    .result
-                                                    ?.name ??
-                                                "",
-                                            'user_id':
-                                                Constant.userID.toString(),
-                                          };
-                                          Singular.eventWithArgs(
-                                              'watch_trailer', screenViewEvent);
-                                          openPlayer("Trailer");
-                                        },
-                                        child: _buildFeatureBtn(
-                                          icon: 'ic_borderplay.png',
-                                          title: 'trailer',
-                                          multilanguage: true,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
-
-                              /* Download */
-                              if (!(kIsWeb) || !(Constant.isTV))
-                                (videoDetailsProvider.sectionDetailModel.result
-                                                ?.download ??
-                                            0) ==
-                                        1
-                                    ? _buildDownloadWithSubCheck()
-                                    : const SizedBox.shrink(),
-
-                              /* Watchlist */
-                              Expanded(
-                                child: InkWell(
-                                  //focusColor:: gray.withOpacity(0.5),
-                                  onTap: () async {
-                                    debugPrint(
-                                        "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
-
-                                    if (Constant.userID != null) {
-                                      final isCurrentlyBookmarked =
-                                          videoDetailsProvider
-                                                  .sectionDetailModel
-                                                  .result
-                                                  ?.isBookmark ??
-                                              0;
-
-                                      // Log event for adding/removing from watchlist
+                              /// Add Start Over or Trailer
+                              if ((videoDetailsProvider.sectionDetailModel
+                                              .result?.stopTime ??
+                                          0) >
+                                      0 &&
+                                  videoDetailsProvider.sectionDetailModel.result
+                                          ?.videoDuration !=
+                                      null) {
+                                featureButtons.add(
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(5),
+                                    onTap: () {
                                       analytics.logEvent(
-                                        name: isCurrentlyBookmarked == 1
+                                          name: 'watch_from_start',
+                                          parameters: {
+                                            'video_id': widget.videoId,
+                                            'video_name': videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.name ??
+                                                "",
+                                          });
+
+                                      Singular.eventWithArgs(
+                                          'watch_from_start', {
+                                        'video_id': widget.videoId,
+                                        'video_name': videoDetailsProvider
+                                                .sectionDetailModel
+                                                .result
+                                                ?.name ??
+                                            "",
+                                        'user_id': Constant.userID.toString(),
+                                      });
+
+                                      openPlayer("startOver");
+                                    },
+                                    child: _buildFeatureBtn(
+                                      icon: 'ic_restart.png',
+                                      title: 'startover',
+                                      multilanguage: true,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                featureButtons.add(
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(5),
+                                    onTap: () {
+                                      analytics.logEvent(
+                                          name: 'watch_trailer',
+                                          parameters: {
+                                            'video_id': widget.videoId,
+                                            'video_name': videoDetailsProvider
+                                                    .sectionDetailModel
+                                                    .result
+                                                    ?.name ??
+                                                "",
+                                          });
+
+                                      Singular.eventWithArgs('watch_trailer', {
+                                        'video_id': widget.videoId,
+                                        'video_name': videoDetailsProvider
+                                                .sectionDetailModel
+                                                .result
+                                                ?.name ??
+                                            "",
+                                        'user_id': Constant.userID.toString(),
+                                      });
+
+                                      openPlayer("Trailer");
+                                    },
+                                    child: _buildFeatureBtn(
+                                      icon: 'ic_borderplay.png',
+                                      title: 'trailer',
+                                      multilanguage: true,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              /// Add Download if available
+                              if (!(kIsWeb || Constant.isTV) &&
+                                  (videoDetailsProvider.sectionDetailModel
+                                              .result?.download ??
+                                          0) ==
+                                      1) {
+                                featureButtons
+                                    .add(_buildDownloadWithSubCheck());
+                              }
+
+                              /// Add Watchlist
+                              featureButtons.add(
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(5),
+                                  onTap: () async {
+                                    if (Constant.userID != null) {
+                                      final isBookmarked = videoDetailsProvider
+                                              .sectionDetailModel
+                                              .result
+                                              ?.isBookmark ??
+                                          0;
+
+                                      analytics.logEvent(
+                                        name: isBookmarked == 1
                                             ? "watchlist_removed"
                                             : "watchlist_added",
                                         parameters: {
@@ -1027,17 +1383,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           "user_id": Constant.userID,
                                         },
                                       );
-                                      Map<String, Object> screenViewEvent = {
-                                        'event_name': isCurrentlyBookmarked == 1
-                                            ? "watchlist_removed"
-                                            : "watchlist_added",
-                                        "video_id": widget.videoId,
-                                        "video_type": widget.videoType,
-                                        "type_id": widget.typeId,
-                                        "user_id": Constant.userID.toString(),
-                                      };
+
                                       Singular.eventWithArgs(
-                                          'Watchlist', screenViewEvent);
+                                        'Watchlist',
+                                        {
+                                          "event_name": isBookmarked == 1
+                                              ? "watchlist_removed"
+                                              : "watchlist_added",
+                                          "video_id": widget.videoId,
+                                          "video_type": widget.videoType,
+                                          "type_id": widget.typeId,
+                                          "user_id": Constant.userID.toString(),
+                                        },
+                                      );
+
                                       await videoDetailsProvider.setBookMark(
                                         context,
                                         widget.typeId,
@@ -1045,60 +1404,51 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         widget.videoId,
                                       );
                                     } else {
-                                      if ((kIsWeb || Constant.isTV)) {
+                                      if (kIsWeb || Constant.isTV) {
                                         Utils.buildWebAlertDialog(
                                             context, "login", "");
                                         return;
                                       }
+
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) {
-                                            return const LoginSocial();
-                                          },
-                                        ),
+                                            builder: (context) =>
+                                                const LoginViaSocial()),
                                       );
                                     }
                                   },
-                                  borderRadius: BorderRadius.circular(5),
                                   child: Consumer<VideoDetailsProvider>(
-                                    builder:
-                                        (context, videoDetailsProvider, child) {
-                                      if ((videoDetailsProvider
-                                                  .sectionDetailModel
-                                                  .result
-                                                  ?.isBookmark ??
-                                              0) ==
-                                          1) {
-                                        return _buildFeatureBtn(
-                                          icon: 'watchlist_remove.png',
-                                          title: 'watchlist',
-                                          multilanguage: true,
-                                        );
-                                      } else {
-                                        return _buildFeatureBtn(
-                                          icon: 'ic_plus.png',
-                                          title: 'watchlist',
-                                          multilanguage: true,
-                                        );
-                                      }
+                                    builder: (context, provider, child) {
+                                      final isBookmarked = provider
+                                              .sectionDetailModel
+                                              .result
+                                              ?.isBookmark ??
+                                          0;
+
+                                      return _buildFeatureBtn(
+                                        icon: isBookmarked == 1
+                                            ? 'watchlist_remove.png'
+                                            : 'ic_plus.png',
+                                        title: 'watchlist',
+                                        multilanguage: true,
+                                      );
                                     },
                                   ),
                                 ),
-                              ),
+                              );
 
-                              /* More */
-                              if (!(kIsWeb) || !(Constant.isTV))
-                                Expanded(
-                                  child: InkWell(
-                                    //focusColor:: gray.withOpacity(0.5),
+                              /// Add More Option
+                              if (!(kIsWeb || Constant.isTV)) {
+                                featureButtons.add(
+                                  InkWell(
                                     borderRadius: BorderRadius.circular(5),
                                     onTap: () {
-                                      buildMoreDialog(videoDetailsProvider
-                                              .sectionDetailModel
-                                              .result
-                                              ?.stopTime ??
-                                          0);
+                                      buildMoreDialog(
+                                        videoDetailsProvider.sectionDetailModel
+                                                .result?.stopTime ??
+                                            0,
+                                      );
                                     },
                                     child: _buildFeatureBtn(
                                       icon: 'ic_more.png',
@@ -1106,286 +1456,514 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       multilanguage: true,
                                     ),
                                   ),
+                                );
+                              }
+
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: featureButtons
+                                      .map((widget) => Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 8),
+                                            child: widget,
+                                          ))
+                                      .toList(),
                                 ),
-                            ],
+                              );
+                            },
                           ),
                         ),
                       ),
 
-                    /* Description, IMDb, Languages & Subtitles */
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            constraints: const BoxConstraints(minHeight: 0),
-                            alignment: Alignment.centerLeft,
-                            child: ExpandableText(
-                              videoDetailsProvider
-                                      .sectionDetailModel.result?.description ??
-                                  "",
-                              expandText: more,
-                              collapseText: less_,
-                              maxLines: (kIsWeb || Constant.isTV) ? 50 : 3,
-                              linkColor: otherColor,
-                              expandOnTextTap: true,
-                              collapseOnTextTap: true,
-                              style: TextStyle(
-                                fontSize: (kIsWeb || Constant.isTV) ? 12 : 14,
-                                fontStyle: FontStyle.normal,
-                                color: otherColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 18),
-                          // Row(
-                          //   children: [
-                          //     MyImage(
-                          //       width: 50,
-                          //       height: 23,
-                          //       imagePath: "imdb.png",
-                          //     ),
-                          //     const SizedBox(width: 5),
-                          //     MyText(
-                          //       color: otherColor,
-                          //       text:
-                          //           "${videoDetailsProvider.sectionDetailModel.result?.imdbRating ?? 0}",
-                          //       textalign: TextAlign.start,
-                          //       fontsizeNormal: 14,
-                          //       fontsizeWeb: 16,
-                          //       fontweight: FontWeight.w600,
-                          //       multilanguage: false,
-                          //       maxline: 1,
-                          //       overflow: TextOverflow.ellipsis,
-                          //       fontstyle: FontStyle.normal,
-                          //     ),
-                          //   ],
-                          // ),
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: Container(
+                    //     width: (kIsWeb || Constant.isTV)
+                    //         ? (MediaQuery.of(context).size.width / 2)
+                    //         : MediaQuery.of(context).size.width,
+                    //     constraints: const BoxConstraints(minHeight: 0),
+                    //     margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
+                    //     child: Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         // /* Rent Button */
+                    //         // _buildRentBtn(),
+                    //         // const SizedBox(width: 5),
 
-                          // Container(
-                          //   constraints: const BoxConstraints(minHeight: 0),
-                          //   margin: const EdgeInsets.only(top: 10),
-                          //   child: Row(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       MyText(
-                          //         color: white,
-                          //         text: "MaturityRating",
-                          //         textalign: TextAlign.center,
-                          //         fontsizeNormal: 13,
-                          //         fontweight: FontWeight.w500,
-                          //         fontsizeWeb: 15,
-                          //         maxline: 1,
-                          //         multilanguage: true,
-                          //         overflow: TextOverflow.ellipsis,
-                          //         fontstyle: FontStyle.normal,
-                          //       ),
-                          //       const SizedBox(width: 5),
-                          //       MyText(
-                          //         color: white,
-                          //         text: ":",
-                          //         textalign: TextAlign.center,
-                          //         fontsizeNormal: 13,
-                          //         fontweight: FontWeight.w500,
-                          //         fontsizeWeb: 15,
-                          //         maxline: 1,
-                          //         multilanguage: false,
-                          //         overflow: TextOverflow.ellipsis,
-                          //         fontstyle: FontStyle.normal,
-                          //       ),
-                          //       const SizedBox(width: 5),
-                          //       Expanded(
-                          //         child: MyText(
-                          //           color: white,
-                          //           text: (videoDetailsProvider
-                          //                           .sectionDetailModel
-                          //                           .result
-                          //                           ?.maturityRating ??
-                          //                       "")
-                          //                   .isNotEmpty
-                          //               ? videoDetailsProvider
-                          //                       .sectionDetailModel
-                          //                       .result
-                          //                       ?.maturityRating ??
-                          //                   ""
-                          //               : "N/A",
-                          //           textalign: TextAlign.start,
-                          //           fontsizeNormal: 13,
-                          //           fontweight: FontWeight.w500,
-                          //           fontsizeWeb: 14,
-                          //           multilanguage: false,
-                          //           maxline: 5,
-                          //           overflow: TextOverflow.ellipsis,
-                          //           fontstyle: FontStyle.normal,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
+                    //         /* Start Over & Trailer */
+                    //         Expanded(
+                    //           child: Consumer<VideoDetailsProvider>(
+                    //             builder:
+                    //                 (context, videoDetailsProvider, child) {
+                    //               if ((videoDetailsProvider.sectionDetailModel
+                    //                               .result?.stopTime ??
+                    //                           0) >
+                    //                       0 &&
+                    //                   videoDetailsProvider.sectionDetailModel
+                    //                           .result?.videoDuration !=
+                    //                       null) {
+                    //                 /* Start Over */
+                    //                 return InkWell(
+                    //                   borderRadius: BorderRadius.circular(5),
+                    //                   //focusColor:: gray.withOpacity(0.5),
+                    //                   onTap: () async {
+                    //                     analytics.logEvent(
+                    //                       name: 'watch_from_start',
+                    //                       parameters: {
+                    //                         'video_id': widget.videoId,
+                    //                         'video_name': videoDetailsProvider
+                    //                                 .sectionDetailModel
+                    //                                 .result
+                    //                                 ?.name ??
+                    //                             "",
+                    //                       },
+                    //                     );
+                    //                     Map<String, Object> screenViewEvent =
+                    //                         {
+                    //                       'video_id': widget.videoId,
+                    //                       'video_name': videoDetailsProvider
+                    //                               .sectionDetailModel
+                    //                               .result
+                    //                               ?.name ??
+                    //                           "",
+                    //                       'user_id':
+                    //                           Constant.userID.toString(),
+                    //                     };
+                    //                     Singular.eventWithArgs(
+                    //                         'watch_from_start',
+                    //                         screenViewEvent);
+                    //                     openPlayer("startOver");
+                    //                   },
+                    //                   child: _buildFeatureBtn(
+                    //                     icon: 'ic_restart.png',
+                    //                     title: 'startover',
+                    //                     multilanguage: true,
+                    //                   ),
+                    //                 );
+                    //               } else {
+                    //                 /* Trailer */
+                    //                 return InkWell(
+                    //                   borderRadius: BorderRadius.circular(5),
+                    //                   //focusColor:: gray.withOpacity(0.5),
+                    //                   onTap: () {
+                    //                     analytics.logEvent(
+                    //                       name: 'watch_trailer',
+                    //                       parameters: {
+                    //                         'video_id': widget.videoId,
+                    //                         'video_name': videoDetailsProvider
+                    //                                 .sectionDetailModel
+                    //                                 .result
+                    //                                 ?.name ??
+                    //                             "",
+                    //                       },
+                    //                     );
+                    //                     Map<String, Object> screenViewEvent =
+                    //                         {
+                    //                       'video_id': widget.videoId,
+                    //                       'video_name': videoDetailsProvider
+                    //                               .sectionDetailModel
+                    //                               .result
+                    //                               ?.name ??
+                    //                           "",
+                    //                       'user_id':
+                    //                           Constant.userID.toString(),
+                    //                     };
+                    //                     Singular.eventWithArgs(
+                    //                         'watch_trailer', screenViewEvent);
+                    //                     openPlayer("Trailer");
+                    //                   },
+                    //                   child: _buildFeatureBtn(
+                    //                     icon: 'ic_borderplay.png',
+                    //                     title: 'trailer',
+                    //                     multilanguage: true,
+                    //                   ),
+                    //                 );
+                    //               }
+                    //             },
+                    //           ),
+                    //         ),
 
-                          Container(
-                            constraints: const BoxConstraints(minHeight: 0),
-                            margin: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MyText(
-                                  color: white,
-                                  text: "category",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                MyText(
-                                  color: white,
-                                  text: ":",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: false,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: MyText(
-                                    color: white,
-                                    text: videoDetailsProvider
-                                            .sectionDetailModel
-                                            .result
-                                            ?.categoryName ??
-                                        "",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 13,
-                                    fontweight: FontWeight.w500,
-                                    fontsizeWeb: 14,
-                                    multilanguage: false,
-                                    maxline: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            constraints: const BoxConstraints(minHeight: 0),
-                            margin: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MyText(
-                                  color: white,
-                                  text: "language_",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                MyText(
-                                  color: white,
-                                  text: ":",
-                                  textalign: TextAlign.center,
-                                  fontsizeNormal: 13,
-                                  fontweight: FontWeight.w500,
-                                  fontsizeWeb: 15,
-                                  maxline: 1,
-                                  multilanguage: false,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontstyle: FontStyle.normal,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: MyText(
-                                    color: white,
-                                    text: audioLanguages ?? "",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 13,
-                                    fontweight: FontWeight.w500,
-                                    fontsizeWeb: 14,
-                                    multilanguage: false,
-                                    maxline: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Constant.subtitleUrls.isNotEmpty
-                              ? Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 0),
-                                  margin: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    children: [
-                                      MyText(
-                                        color: white,
-                                        text: "subtitle",
-                                        textalign: TextAlign.center,
-                                        fontsizeNormal: 13,
-                                        fontweight: FontWeight.w500,
-                                        fontsizeWeb: 15,
-                                        maxline: 1,
-                                        multilanguage: true,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontstyle: FontStyle.normal,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      MyText(
-                                        color: white,
-                                        text: ":",
-                                        textalign: TextAlign.center,
-                                        fontsizeNormal: 13,
-                                        fontweight: FontWeight.w500,
-                                        fontsizeWeb: 15,
-                                        maxline: 1,
-                                        multilanguage: false,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontstyle: FontStyle.normal,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      MyText(
-                                        color: white,
-                                        text: "Available",
-                                        textalign: TextAlign.center,
-                                        fontsizeNormal: 13,
-                                        fontweight: FontWeight.w500,
-                                        fontsizeWeb: 14,
-                                        maxline: 1,
-                                        multilanguage: false,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontstyle: FontStyle.normal,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                        ],
-                      ),
-                    ),
+                    //         /* Download */
+                    //         if (!(kIsWeb) || !(Constant.isTV))
+                    //           (videoDetailsProvider.sectionDetailModel.result
+                    //                           ?.download ??
+                    //                       0) ==
+                    //                   1
+                    //               ? _buildDownloadWithSubCheck()
+                    //               : const SizedBox.shrink(),
+
+                    //         /* Watchlist */
+                    //         Expanded(
+                    //           child: InkWell(
+                    //             //focusColor:: gray.withOpacity(0.5),
+                    //             onTap: () async {
+                    //               debugPrint(
+                    //                   "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
+
+                    //               if (Constant.userID != null) {
+                    //                 final isCurrentlyBookmarked =
+                    //                     videoDetailsProvider
+                    //                             .sectionDetailModel
+                    //                             .result
+                    //                             ?.isBookmark ??
+                    //                         0;
+
+                    //                 // Log event for adding/removing from watchlist
+                    //                 analytics.logEvent(
+                    //                   name: isCurrentlyBookmarked == 1
+                    //                       ? "watchlist_removed"
+                    //                       : "watchlist_added",
+                    //                   parameters: {
+                    //                     "video_id": widget.videoId,
+                    //                     "video_type": widget.videoType,
+                    //                     "type_id": widget.typeId,
+                    //                     "user_id": Constant.userID,
+                    //                   },
+                    //                 );
+                    //                 Map<String, Object> screenViewEvent = {
+                    //                   'event_name': isCurrentlyBookmarked == 1
+                    //                       ? "watchlist_removed"
+                    //                       : "watchlist_added",
+                    //                   "video_id": widget.videoId,
+                    //                   "video_type": widget.videoType,
+                    //                   "type_id": widget.typeId,
+                    //                   "user_id": Constant.userID.toString(),
+                    //                 };
+                    //                 Singular.eventWithArgs(
+                    //                     'Watchlist', screenViewEvent);
+                    //                 await videoDetailsProvider.setBookMark(
+                    //                   context,
+                    //                   widget.typeId,
+                    //                   widget.videoType,
+                    //                   widget.videoId,
+                    //                 );
+                    //               } else {
+                    //                 if ((kIsWeb || Constant.isTV)) {
+                    //                   Utils.buildWebAlertDialog(
+                    //                       context, "login", "");
+                    //                   return;
+                    //                 }
+                    //                 Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                     builder: (context) {
+                    //                       return const LoginViaSocial();
+                    //                     },
+                    //                   ),
+                    //                 );
+                    //               }
+                    //             },
+                    //             borderRadius: BorderRadius.circular(5),
+                    //             child: Consumer<VideoDetailsProvider>(
+                    //               builder:
+                    //                   (context, videoDetailsProvider, child) {
+                    //                 if ((videoDetailsProvider
+                    //                             .sectionDetailModel
+                    //                             .result
+                    //                             ?.isBookmark ??
+                    //                         0) ==
+                    //                     1) {
+                    //                   return _buildFeatureBtn(
+                    //                     icon: 'watchlist_remove.png',
+                    //                     title: 'watchlist',
+                    //                     multilanguage: true,
+                    //                   );
+                    //                 } else {
+                    //                   return _buildFeatureBtn(
+                    //                     icon: 'ic_plus.png',
+                    //                     title: 'watchlist',
+                    //                     multilanguage: true,
+                    //                   );
+                    //                 }
+                    //               },
+                    //             ),
+                    //           ),
+                    //         ),
+
+                    //         /* More */
+                    //         if (!(kIsWeb) || !(Constant.isTV))
+                    //           Expanded(
+                    //             child: InkWell(
+                    //               //focusColor:: gray.withOpacity(0.5),
+                    //               borderRadius: BorderRadius.circular(5),
+                    //               onTap: () {
+                    //                 buildMoreDialog(videoDetailsProvider
+                    //                         .sectionDetailModel
+                    //                         .result
+                    //                         ?.stopTime ??
+                    //                     0);
+                    //               },
+                    //               child: _buildFeatureBtn(
+                    //                 icon: 'ic_more.png',
+                    //                 title: 'more',
+                    //                 multilanguage: true,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+
+                    // /* Description, IMDb, Languages & Subtitles */
+
+//                     Container(
+//   width: MediaQuery.of(context).size.width,
+//   margin: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+//   child: Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       const SizedBox(height: 18),
+
+//       Wrap(
+//         spacing: 10,
+//         runSpacing: 10,
+//         children: [
+//           if ((videoDetailsProvider.sectionDetailModel.result?.categoryName ?? "").isNotEmpty)
+//             _buildBulletPoint(videoDetailsProvider.sectionDetailModel.result?.categoryName ?? ""),
+
+//           if ((audioLanguages ?? "").isNotEmpty)
+//             _buildBulletPoint(audioLanguages ?? ""),
+
+//           if ((videoDetailsProvider.sectionDetailModel.result?.maturityRating ?? "N/A").isNotEmpty)
+//             _buildBulletPoint(videoDetailsProvider.sectionDetailModel.result?.maturityRating ?? "N/A"),
+
+//           if (Constant.subtitleUrls.isNotEmpty)
+//             _buildBulletPoint("Available Subtitles"),
+//         ],
+//       ),
+//     ],
+//   ),
+// ),
+
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   margin: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+
+                    //       const SizedBox(height: 18),
+
+                    //       Container(
+                    //         constraints: const BoxConstraints(minHeight: 0),
+                    //         margin: const EdgeInsets.only(top: 10),
+                    //         child: Row(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             MyText(
+                    //               color: white,
+                    //               text: "category",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: true,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             MyText(
+                    //               color: white,
+                    //               text: ":",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: false,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             Expanded(
+                    //               child: MyText(
+                    //                 color: white,
+                    //                 text: videoDetailsProvider
+                    //                         .sectionDetailModel
+                    //                         .result
+                    //                         ?.categoryName ??
+                    //                     "",
+                    //                 textalign: TextAlign.start,
+                    //                 fontsizeNormal: 13,
+                    //                 fontweight: FontWeight.w500,
+                    //                 fontsizeWeb: 14,
+                    //                 multilanguage: false,
+                    //                 maxline: 5,
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 fontstyle: FontStyle.normal,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+
+                    //       Container(
+                    //         constraints: const BoxConstraints(minHeight: 0),
+                    //         margin: const EdgeInsets.only(top: 10),
+                    //         child: Row(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             MyText(
+                    //               color: white,
+                    //               text: "language_",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: true,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             MyText(
+                    //               color: white,
+                    //               text: ":",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: false,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             Expanded(
+                    //               child: MyText(
+                    //                 color: white,
+                    //                 text: audioLanguages ?? "",
+                    //                 textalign: TextAlign.start,
+                    //                 fontsizeNormal: 13,
+                    //                 fontweight: FontWeight.w500,
+                    //                 fontsizeWeb: 14,
+                    //                 multilanguage: false,
+                    //                 maxline: 5,
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 fontstyle: FontStyle.normal,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+
+                    //       //maturity rating ---
+
+                    //       Container(
+                    //         constraints: const BoxConstraints(minHeight: 0),
+                    //         margin: const EdgeInsets.only(top: 10),
+                    //         child: Row(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             MyText(
+                    //               color: white,
+                    //               text: "maturityrating",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: true,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             MyText(
+                    //               color: white,
+                    //               text: ":",
+                    //               textalign: TextAlign.center,
+                    //               fontsizeNormal: 13,
+                    //               fontweight: FontWeight.w500,
+                    //               fontsizeWeb: 15,
+                    //               maxline: 1,
+                    //               multilanguage: false,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               fontstyle: FontStyle.normal,
+                    //             ),
+                    //             const SizedBox(width: 5),
+                    //             Expanded(
+                    //               child: MyText(
+                    //                 color: white,
+                    //                 text: videoDetailsProvider
+                    //                         .sectionDetailModel
+                    //                         .result
+                    //                         ?.maturityRating ??
+                    //                     "N/A",
+                    //                 textalign: TextAlign.start,
+                    //                 fontsizeNormal: 13,
+                    //                 fontweight: FontWeight.w500,
+                    //                 fontsizeWeb: 14,
+                    //                 multilanguage: false,
+                    //                 maxline: 5,
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 fontstyle: FontStyle.normal,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+
+                    //       Constant.subtitleUrls.isNotEmpty
+                    //           ? Container(
+                    //               constraints:
+                    //                   const BoxConstraints(minHeight: 0),
+                    //               margin: const EdgeInsets.only(top: 10),
+                    //               child: Row(
+                    //                 children: [
+                    //                   MyText(
+                    //                     color: white,
+                    //                     text: "subtitle",
+                    //                     textalign: TextAlign.center,
+                    //                     fontsizeNormal: 13,
+                    //                     fontweight: FontWeight.w500,
+                    //                     fontsizeWeb: 15,
+                    //                     maxline: 1,
+                    //                     multilanguage: true,
+                    //                     overflow: TextOverflow.ellipsis,
+                    //                     fontstyle: FontStyle.normal,
+                    //                   ),
+                    //                   const SizedBox(
+                    //                     width: 5,
+                    //                   ),
+                    //                   MyText(
+                    //                     color: white,
+                    //                     text: ":",
+                    //                     textalign: TextAlign.center,
+                    //                     fontsizeNormal: 13,
+                    //                     fontweight: FontWeight.w500,
+                    //                     fontsizeWeb: 15,
+                    //                     maxline: 1,
+                    //                     multilanguage: false,
+                    //                     overflow: TextOverflow.ellipsis,
+                    //                     fontstyle: FontStyle.normal,
+                    //                   ),
+                    //                   const SizedBox(
+                    //                     width: 5,
+                    //                   ),
+                    //                   MyText(
+                    //                     color: white,
+                    //                     text: "Available",
+                    //                     textalign: TextAlign.center,
+                    //                     fontsizeNormal: 13,
+                    //                     fontweight: FontWeight.w500,
+                    //                     fontsizeWeb: 14,
+                    //                     maxline: 1,
+                    //                     multilanguage: false,
+                    //                     overflow: TextOverflow.ellipsis,
+                    //                     fontstyle: FontStyle.normal,
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //             )
+                    //           : const SizedBox.shrink(),
+                    //     ],
+                    //   ),
+                    // ),
 
                     /* AdMob Banner */
 
@@ -1417,6 +1995,62 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     );
   }
 
+  Widget _buildBulletPoint(String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          CupertinoIcons.circle_filled,
+          size: 6,
+          color: white.withOpacity(0.5),
+        ),
+        const SizedBox(width: 6),
+        MyText(
+          color: white.withOpacity(0.7),
+          text: text,
+          textalign: TextAlign.start,
+          fontsizeNormal: 9,
+          fontweight: FontWeight.w400,
+          fontsizeWeb: 14,
+          multilanguage: false,
+          maxline: 5,
+          overflow: TextOverflow.ellipsis,
+          fontstyle: FontStyle.normal,
+        ),
+      ],
+    );
+  }
+
+  /// Helper Widget for Prime Tag
+  Widget _buildTag(
+      {required String title, required String subtitle, required Color color}) {
+    return Row(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyText(
+                color: white.withOpacity(0.5),
+                text: title,
+                textalign: TextAlign.start,
+                fontsizeNormal: 10,
+                fontsizeWeb: 15,
+                fontweight: FontWeight.w500,
+                multilanguage: true,
+                maxline: 1,
+                overflow: TextOverflow.ellipsis,
+                fontstyle: FontStyle.normal,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildReleaseDate() {
     if (widget.videoType == 5) {
       if (videoDetailsProvider.sectionDetailModel.result?.releaseDate != null &&
@@ -1436,7 +2070,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 text: "release_date",
                 multilanguage: true,
                 textalign: TextAlign.start,
-                fontsizeNormal: 14,
+                fontsizeNormal: 12,
                 fontsizeWeb: 15,
                 fontweight: FontWeight.w500,
                 maxline: 1,
@@ -1449,7 +2083,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 text: ":",
                 multilanguage: false,
                 textalign: TextAlign.start,
-                fontsizeNormal: 14,
+                fontsizeNormal: 12,
                 fontsizeWeb: 15,
                 fontweight: FontWeight.w500,
                 maxline: 1,
@@ -1466,9 +2100,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           "")),
                   multilanguage: false,
                   textalign: TextAlign.start,
-                  fontsizeNormal: 14,
+                  fontsizeNormal: 12,
                   fontsizeWeb: 15,
-                  fontweight: FontWeight.w700,
+                  fontweight: FontWeight.w500,
                   maxline: 2,
                   overflow: TextOverflow.ellipsis,
                   fontstyle: FontStyle.normal,
@@ -1617,24 +2251,25 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                   videoDetailsProvider.sectionDetailModel.result?.fullWidth ??
                       ""),
         ),
-        Container(
-          padding: const EdgeInsets.all(0),
-          width: MediaQuery.of(context).size.width,
-          height: (kIsWeb || Constant.isTV)
-              ? Dimens.detailWebPoster
-              : Dimens.detailPoster,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.center,
-              end: Alignment.bottomCenter,
-              colors: [
-                transparentColor,
-                transparentColor,
-                appBgColor,
-              ],
-            ),
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.all(0),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: (kIsWeb || Constant.isTV)
+        //       ? Dimens.detailWebPoster
+        //       : Dimens.detailPoster,
+        //   decoration: const BoxDecoration(
+        //     gradient: LinearGradient(
+        //       begin: Alignment.center,
+        //       end: Alignment.bottomCenter,
+        //       colors: [
+        //         transparentColor,
+        //         transparentColor,
+        //         appBgColor,
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
         InkWell(
           borderRadius: BorderRadius.circular(30),
           //focusColor:: white,
@@ -2446,7 +3081,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return const LoginSocial();
+                                  return const LoginViaSocial();
                                 },
                               ),
                             );
@@ -2586,520 +3221,450 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     if ((videoDetailsProvider.sectionDetailModel.result?.stopTime ?? 0) > 0 &&
         videoDetailsProvider.sectionDetailModel.result?.videoDuration != null) {
       return Container(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         child: InkWell(
-          onTap: () async {
-            if (Constant.userID != null) {
-              // Check if the videoDetailsProvider.sectionDetailModel.result?.maturityRating is "A"
-              // Check if the maturity rating is "A"
-              if (videoDetailsProvider
-                      .sectionDetailModel.result?.maturityRating ==
-                  "A") {
-                // Print statement for maturity rating check
-                print("Maturity Rating is A, showing pop-up");
+            onTap: () async {
+              if (Constant.userID != null) {
+                // Check if the videoDetailsProvider.sectionDetailModel.result?.maturityRating is "A"
+                // Check if the maturity rating is "A"
+                if (videoDetailsProvider
+                        .sectionDetailModel.result?.maturityRating ==
+                    "A") {
+                  // Print statement for maturity rating check
+                  print("Maturity Rating is A, showing pop-up");
 
-                // Show the pop-up with details
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      backgroundColor: Colors.black,
-                      elevation: 5, // Adding shadow
-                      title: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/age.png",
-                            height: 50,
-                            width: 50,
-                          ),
-                          SizedBox(height: 10),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Maturity Rating:',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                TextSpan(
-                                  text: ' 18+',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: colorPrimary,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 14),
-                          Text(
-                            'May contain mature content, nudity, violence, foul language, substances.',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'I Confirm that i am 18 years and above',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  // User confirmed they're over 18, open player screen
-                                  openPlayer("Video");
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor: colorPrimary,
-                                  primary: Colors.black,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                ),
-                                child: Text('I am over 18'),
-                              ),
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog and do nothing
-                                },
-                                style: TextButton.styleFrom(
-                                  side: BorderSide(color: Colors.white),
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                ),
-                                child: Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      actionsPadding: EdgeInsets.zero,
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 30), // Increase content height
-                    );
-                  },
-                );
-
-                return; // Skip the rest of the logic as the pop-up is shown
-              }
-
-              // Print the maturity rating when not "A"
-              print(
-                  "Maturity Rating is not A, proceeding with regular functionality");
-
-              // Check if the user is a "prime" user or has other access
-              bool isPrimeUser =
-                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-              bool isPrimeUserCoin =
-                  videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-                      1;
-              bool isAdShow =
-                  videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
-              bool isRenteBuy =
-                  videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
-
-              // Check if rewardad is disabled for Android or iOS
-              if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
-                  (Platform.isIOS && generalProvider.rewardadIos == "0")) {
-                print(
-                    "Rewarded ad is disabled for this platform. Opening player directly.");
-                openPlayer("Video");
-                return;
-              }
-
-              if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
-                  (Platform.isIOS && generalProvider.rewardadIos == "1")) {
-                if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
-                  openPlayer("Video");
-                } else {
-                  if (isAdShow) {
-                    AdHelper.showRewardedAd(
-                      onAdCompleted: () async {
-                        await walletProvider.addCoinsAfterWatchAd(
-                          Constant.userID!,
-                          videoDetailsProvider.sectionDetailModel.result?.id ??
-                              '',
-                          0,
-                          generalProvider.isAdsCoin,
-                        );
-                        openPlayer("Video");
-                      },
-                      onAdFailed: () {
-                        openPlayer("Video");
-                      },
-                    );
-                  } else {
-                    openPlayer("Video");
-                  }
-                }
-              }
-            } else {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginSocial(),
-                ),
-              );
-            }
-          },
-          borderRadius: BorderRadius.circular(5),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Container(
-              height: 40,
-              constraints: BoxConstraints(
-                maxWidth: (kIsWeb || Constant.isTV)
-                    ? 190
-                    : MediaQuery.of(context).size.width,
-              ),
-              decoration: BoxDecoration(
-                color: primaryDark,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(width: 20),
-                        MyImage(
-                          width: 18,
-                          height: 18,
-                          imagePath: "ic_play.png",
-                          color: black,
+                  // Show the pop-up with details
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              MyText(
-                                color: black,
-                                text: "continuewatching",
-                                multilanguage: true,
-                                textalign: TextAlign.start,
-                                fontsizeNormal: 13,
-                                fontsizeWeb: 15,
-                                fontweight: FontWeight.w600,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                fontstyle: FontStyle.normal,
-                              ),
-                              Row(
+                        backgroundColor: Colors.black,
+                        elevation: 5, // Adding shadow
+                        title: Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/age.png",
+                              height: 50,
+                              width: 50,
+                            ),
+                            SizedBox(height: 10),
+                            Text.rich(
+                              TextSpan(
                                 children: [
-                                  MyText(
-                                    color: black,
-                                    text: Utils.remainTimeInMin(
-                                        ((videoDetailsProvider
-                                                        .sectionDetailModel
-                                                        .result
-                                                        ?.videoDuration ??
-                                                    0) -
-                                                (videoDetailsProvider
-                                                        .sectionDetailModel
-                                                        .result
-                                                        ?.stopTime ??
-                                                    0))
-                                            .abs()),
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 10,
-                                    fontweight: FontWeight.w500,
-                                    fontsizeWeb: 12,
-                                    multilanguage: false,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
+                                  TextSpan(
+                                    text: 'Maturity Rating:',
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                  const SizedBox(width: 5),
-                                  MyText(
-                                    color: black,
-                                    text: "left",
-                                    textalign: TextAlign.start,
-                                    fontsizeNormal: 10,
-                                    fontweight: FontWeight.w500,
-                                    fontsizeWeb: 12,
-                                    multilanguage: true,
-                                    maxline: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontstyle: FontStyle.normal,
+                                  TextSpan(
+                                    text: ' 18+',
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: colorPrimary,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 14),
+                            Text(
+                              'May contain mature content, nudity, violence, foul language, substances.',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 20),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 4,
-                    constraints: const BoxConstraints(minWidth: 0),
-                    margin: const EdgeInsets.all(3),
-                    child: LinearPercentIndicator(
-                      padding: const EdgeInsets.all(0),
-                      barRadius: const Radius.circular(2),
-                      lineHeight: 4,
-                      percent: Utils.getPercentage(
-                          videoDetailsProvider
-                                  .sectionDetailModel.result?.videoDuration ??
-                              0,
-                          videoDetailsProvider
-                                  .sectionDetailModel.result?.stopTime ??
-                              0),
-                      backgroundColor: secProgressColor,
-                      progressColor: colorPrimary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        alignment: Alignment.centerLeft,
-        child: InkWell(
-          onTap: () async {
-            // Similar logic as above without the maturity rating check
-            if (Constant.userID != null) {
-              if (videoDetailsProvider
-                      .sectionDetailModel.result?.maturityRating ==
-                  "A") {
-                // Print statement for maturity rating check
-                print("Maturity Rating is A, showing pop-up");
-
-                // Show the pop-up with details
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      backgroundColor: Colors.black,
-                      elevation: 5, // Adding shadow
-                      title: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/age.png",
-                            height: 50,
-                            width: 50,
-                          ),
-                          SizedBox(height: 10),
-                          Text.rich(
-                            TextSpan(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'I Confirm that i am 18 years and above',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                TextSpan(
-                                  text: 'Maturity Rating:',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
+                                TextButton(
+                                  onPressed: () {
+                                    // User confirmed they're over 18, open player screen
+                                    openPlayer("Video");
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black, backgroundColor: colorPrimary,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                  child: Text('I am over 18'),
                                 ),
-                                TextSpan(
-                                  text: ' 18+',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: colorPrimary,
-                                      fontWeight: FontWeight.w500),
+                                SizedBox(width: 10),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog and do nothing
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                  child: Text('Cancel'),
                                 ),
                               ],
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 14),
-                          Text(
-                            'May contain mature content, nudity, violence, foul language, substances.',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'I Confirm that i am 18 years and above',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  // User confirmed they're over 18, open player screen
-                                  openPlayer("Video");
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor: colorPrimary,
-                                  primary: Colors.black,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                ),
-                                child: Text('I am over 18'),
-                              ),
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog and do nothing
-                                },
-                                style: TextButton.styleFrom(
-                                  side: BorderSide(color: Colors.white),
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                ),
-                                child: Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      actionsPadding: EdgeInsets.zero,
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 30), // Increase content height
-                    );
-                  },
-                );
+                          ],
+                        ),
+                        actionsPadding: EdgeInsets.zero,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 30), // Increase content height
+                      );
+                    },
+                  );
 
-                return; // Skip the rest of the logic as the pop-up is shown
-              }
+                  return; // Skip the rest of the logic as the pop-up is shown
+                }
 
-              bool isPrimeUser =
-                  videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
-              bool isPrimeUserCoin =
-                  videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
-                      1;
-              bool isAdShow =
-                  videoDetailsProvider.sectionDetailModel.result?.isadshow == 1;
-              bool isRenteBuy =
-                  videoDetailsProvider.sectionDetailModel.result?.rentBuy == 1;
+                // Print the maturity rating when not "A"
+                print(
+                    "Maturity Rating is not A, proceeding with regular functionality");
 
-              if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
-                  (Platform.isIOS && generalProvider.rewardadIos == "0")) {
-                openPlayer("Video");
-                return;
-              }
+                // Check if the user is a "prime" user or has other access
+                bool isPrimeUser =
+                    videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+                bool isPrimeUserCoin =
+                    videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+                        1;
+                bool isAdShow =
+                    videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+                        1;
+                bool isRenteBuy =
+                    videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+                        1;
 
-              if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
-                  (Platform.isIOS && generalProvider.rewardadIos == "1")) {
-                if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+                // Check if rewardad is disabled for Android or iOS
+                if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
+                    (Platform.isIOS && generalProvider.rewardadIos == "0")) {
+                  print(
+                      "Rewarded ad is disabled for this platform. Opening player directly.");
                   openPlayer("Video");
-                } else {
-                  if (isAdShow) {
-                    AdHelper.showRewardedAd(
-                      onAdCompleted: () async {
-                        await walletProvider.addCoinsAfterWatchAd(
-                          Constant.userID!,
-                          videoDetailsProvider.sectionDetailModel.result?.id ??
-                              '',
-                          0,
-                          generalProvider.isAdsCoin,
-                        );
-                        openPlayer("Video");
-                      },
-                      onAdFailed: () {
-                        openPlayer("Video");
-                      },
-                    );
-                  } else {
+                  return;
+                }
+
+                if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+                    (Platform.isIOS && generalProvider.rewardadIos == "1")) {
+                  if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
                     openPlayer("Video");
+                  } else {
+                    if (isAdShow) {
+                      AdHelper.showRewardedAd(
+                        onAdCompleted: () async {
+                          await walletProvider.addCoinsAfterWatchAd(
+                            Constant.userID!,
+                            videoDetailsProvider
+                                    .sectionDetailModel.result?.id ??
+                                '',
+                            0,
+                            generalProvider.isAdsCoin,
+                          );
+                          openPlayer("Video");
+                        },
+                        onAdFailed: () {
+                          openPlayer("Video");
+                        },
+                      );
+                    } else {
+                      openPlayer("Video");
+                    }
                   }
                 }
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginViaSocial(),
+                  ),
+                );
               }
-            } else {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginSocial(),
+            },
+            borderRadius: BorderRadius.circular(5),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: (kIsWeb || Constant.isTV) ? 40 : 40,
+                constraints: BoxConstraints(
+                  maxWidth: (kIsWeb || Constant.isTV)
+                      ? 180
+                      : MediaQuery.of(context).size.width,
                 ),
-              );
-            }
-          },
-          borderRadius: BorderRadius.circular(5),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Container(
-              height: (kIsWeb || Constant.isTV) ? 40 : 40,
-              constraints: BoxConstraints(
-                maxWidth: (kIsWeb || Constant.isTV)
-                    ? 180
-                    : MediaQuery.of(context).size.width,
-              ),
-              padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
-              decoration: BoxDecoration(
-                color: primaryDark,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  MyImage(
-                    width: 18,
-                    height: 18,
-                    imagePath: "ic_play.png",
-                    color: black,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: primaryDark,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      MyImage(
+                        width: 18,
+                        height: 18,
+                        imagePath: "ic_play.png",
+                        color: black,
+                      ),
+                      const SizedBox(width: 10),
+                      MyText(
+                        color: black,
+                        text: "watch_now",
+                        multilanguage: true,
+                        textalign: TextAlign.center,
+                        fontsizeNormal: 13,
+                        fontweight: FontWeight.w600,
+                        fontsizeWeb: 13,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        fontstyle: FontStyle.normal,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: MyText(
-                      color: black,
-                      text: "watch_now",
-                      multilanguage: true,
-                      textalign: TextAlign.start,
-                      fontsizeNormal: 15,
-                      fontweight: FontWeight.w600,
-                      fontsizeWeb: 16,
-                      maxline: 1,
-                      overflow: TextOverflow.ellipsis,
-                      fontstyle: FontStyle.normal,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+            )),
+      );
+    } else {
+      return Container(
+        alignment: Alignment.center,
+        child: InkWell(
+            onTap: () async {
+              // Similar logic as above without the maturity rating check
+              if (Constant.userID != null) {
+                if (videoDetailsProvider
+                        .sectionDetailModel.result?.maturityRating ==
+                    "A") {
+                  // Print statement for maturity rating check
+                  print("Maturity Rating is A, showing pop-up");
+
+                  // Show the pop-up with details
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: Colors.black,
+                        elevation: 5, // Adding shadow
+                        title: Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/age.png",
+                              height: 50,
+                              width: 50,
+                            ),
+                            SizedBox(height: 10),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Maturity Rating:',
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  TextSpan(
+                                    text: ' 18+',
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: colorPrimary,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 14),
+                            Text(
+                              'May contain mature content, nudity, violence, foul language, substances.',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'I Confirm that i am 18 years and above',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    // User confirmed they're over 18, open player screen
+                                    openPlayer("Video");
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black, backgroundColor: colorPrimary,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                  child: Text('I am over 18'),
+                                ),
+                                SizedBox(width: 10),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog and do nothing
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        actionsPadding: EdgeInsets.zero,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 30), // Increase content height
+                      );
+                    },
+                  );
+
+                  return; // Skip the rest of the logic as the pop-up is shown
+                }
+
+                bool isPrimeUser =
+                    videoDetailsProvider.sectionDetailModel.result?.isBuy == 1;
+                bool isPrimeUserCoin =
+                    videoDetailsProvider.sectionDetailModel.result?.iscoinbuy ==
+                        1;
+                bool isAdShow =
+                    videoDetailsProvider.sectionDetailModel.result?.isadshow ==
+                        1;
+                bool isRenteBuy =
+                    videoDetailsProvider.sectionDetailModel.result?.rentBuy ==
+                        1;
+
+                if ((Platform.isAndroid && generalProvider.rewardad == "0") ||
+                    (Platform.isIOS && generalProvider.rewardadIos == "0")) {
+                  openPlayer("Video");
+                  return;
+                }
+
+                if ((Platform.isAndroid && generalProvider.rewardad == "1") ||
+                    (Platform.isIOS && generalProvider.rewardadIos == "1")) {
+                  if (isPrimeUser || isPrimeUserCoin || isRenteBuy) {
+                    openPlayer("Video");
+                  } else {
+                    if (isAdShow) {
+                      AdHelper.showRewardedAd(
+                        onAdCompleted: () async {
+                          await walletProvider.addCoinsAfterWatchAd(
+                            Constant.userID!,
+                            videoDetailsProvider
+                                    .sectionDetailModel.result?.id ??
+                                '',
+                            0,
+                            generalProvider.isAdsCoin,
+                          );
+                          openPlayer("Video");
+                        },
+                        onAdFailed: () {
+                          openPlayer("Video");
+                        },
+                      );
+                    } else {
+                      openPlayer("Video");
+                    }
+                  }
+                }
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginViaSocial(),
+                  ),
+                );
+              }
+            },
+            borderRadius: BorderRadius.circular(5),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: (kIsWeb || Constant.isTV) ? 40 : 40,
+                constraints: BoxConstraints(
+                  maxWidth: (kIsWeb || Constant.isTV)
+                      ? 180
+                      : MediaQuery.of(context).size.width,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: primaryDark,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      MyImage(
+                        width: 18,
+                        height: 18,
+                        imagePath: "ic_play.png",
+                        color: black,
+                      ),
+                      const SizedBox(width: 10),
+                      MyText(
+                        color: black,
+                        text: "watch_now",
+                        multilanguage: true,
+                        textalign: TextAlign.center,
+                        fontsizeNormal: 13,
+                        fontweight: FontWeight.w600,
+                        fontsizeWeb: 13,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        fontstyle: FontStyle.normal,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
       );
     }
   }
@@ -3194,7 +3759,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //           } else {
   //             Navigator.of(context).push(
   //               MaterialPageRoute(
-  //                 builder: (context) => const LoginSocial(),
+  //                 builder: (context) => const LoginViaSocial(),
   //               ),
   //             );
   //           }
@@ -3416,7 +3981,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //           } else {
   //             Navigator.of(context).push(
   //               MaterialPageRoute(
-  //                 builder: (context) => const LoginSocial(),
+  //                 builder: (context) => const LoginViaSocial(),
   //               ),
   //             );
   //           }
@@ -3479,7 +4044,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //         //     // User is not logged in, navigate to login screen
   //         //     Navigator.of(context).push(
   //         //       MaterialPageRoute(
-  //         //         builder: (context) => const LoginSocial(),
+  //         //         builder: (context) => const LoginViaSocial(),
   //         //       ),
   //         //     );
   //         //   }
@@ -3538,110 +4103,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   Widget _buildTabs() {
     return Column(
       children: [
-        Container(
-          constraints: BoxConstraints(
-            maxWidth: (kIsWeb || Constant.isTV)
-                ? (MediaQuery.of(context).size.width * 0.5)
-                : MediaQuery.of(context).size.width,
-          ),
-          height: (kIsWeb || Constant.isTV) ? 35 : Dimens.detailTabs,
-          child: Row(
-            children: [
-              /* Related */
-              Expanded(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  //focusColor:: Colors.grey.withOpacity(0.5),
-                  onTap: () async {
-                    await videoDetailsProvider.setTabClick("related");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: MyText(
-                              color:
-                                  videoDetailsProvider.tabClickedOn != "related"
-                                      ? otherColor
-                                      : white,
-                              text: "related",
-                              multilanguage: true,
-                              textalign: TextAlign.center,
-                              fontsizeNormal: 16,
-                              fontweight: FontWeight.w600,
-                              fontsizeWeb: 16,
-                              maxline: 1,
-                              overflow: TextOverflow.ellipsis,
-                              fontstyle: FontStyle.normal,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible:
-                              videoDetailsProvider.tabClickedOn == "related",
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 2,
-                            color: white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              /* More Details */
-              Expanded(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  //focusColor:: Colors.grey.withOpacity(0.5),
-                  onTap: () async {
-                    await videoDetailsProvider.setTabClick("moredetails");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: MyText(
-                              color: videoDetailsProvider.tabClickedOn !=
-                                      "moredetails"
-                                  ? otherColor
-                                  : white,
-                              text: "moredetails",
-                              textalign: TextAlign.center,
-                              fontsizeNormal: 16,
-                              fontweight: FontWeight.w600,
-                              fontsizeWeb: 16,
-                              multilanguage: true,
-                              maxline: 1,
-                              overflow: TextOverflow.ellipsis,
-                              fontstyle: FontStyle.normal,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: videoDetailsProvider.tabClickedOn ==
-                              "moredetails",
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 2,
-                            color: white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        
         Container(
           height: 0.5,
           color: otherColor,
@@ -3652,7 +4114,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           ),
         ),
         /* Data */
-        if (videoDetailsProvider.tabClickedOn == "related")
+      
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -3669,14 +4131,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               _buildDirector(),
             ],
           )
-        else
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: MoreDetails(
-                moreDetailList:
-                    videoDetailsProvider.sectionDetailModel.moreDetails),
-          )
-      ],
+       
+    ],
     );
   }
 
@@ -3828,15 +4284,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 ? Dimens.featureWebSize
                 : Dimens.featureSize,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: primaryLight,
-              ),
-              borderRadius: BorderRadius.circular((((kIsWeb || Constant.isTV))
-                      ? Dimens.featureWebSize
-                      : Dimens.featureSize) /
-                  2),
-            ),
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: primaryLight,
+            //   ),
+            //   borderRadius: BorderRadius.circular((((kIsWeb || Constant.isTV))
+            //           ? Dimens.featureWebSize
+            //           : Dimens.featureSize) /
+            //       2),
+            // ),
             child: MyImage(
               width: ((kIsWeb || Constant.isTV))
                   ? Dimens.featureIconWebSize
@@ -3844,18 +4300,18 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
               height: ((kIsWeb || Constant.isTV))
                   ? Dimens.featureIconWebSize
                   : Dimens.featureIconSize,
-              color: lightGray,
+              color: white,
               imagePath: icon,
             ),
           ),
-          const SizedBox(height: 5),
+          // const SizedBox(height: 5),
           MyText(
-            color: white,
+            color: white.withOpacity(0.7),
             text: title,
             multilanguage: multilanguage,
-            fontsizeNormal: 10,
-            fontsizeWeb: 14,
-            fontweight: FontWeight.w600,
+            fontsizeNormal: 8,
+            fontsizeWeb: 10,
+            fontweight: FontWeight.w500,
             maxline: 2,
             overflow: TextOverflow.ellipsis,
             textalign: TextAlign.center,
@@ -3928,7 +4384,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const LoginSocial();
+                    return const LoginViaSocial();
                   },
                 ),
               );
@@ -4128,7 +4584,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         }
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const LoginSocial(),
+                            builder: (context) => const LoginViaSocial(),
                           ),
                         );
                       }
@@ -4628,12 +5084,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     //focusColor:: white,
                     onTap: () {
                       Navigator.pop(context);
-                      Utils.shareApp(Platform.isIOS
-                          ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n"
-                          : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n",
-                            imageUrl: videoDetailsProvider.sectionDetailModel.result?.thumbnail1, 
-                          );
-                      
+                      Utils.shareApp(
+                        Platform.isIOS
+                            ? "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n"
+                            : "Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${videoDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n",
+                        imageUrl: videoDetailsProvider
+                            .sectionDetailModel.result?.thumbnail1,
+                      );
+
                       //"Hey! I'm watching ${videoDetailsProvider.sectionDetailModel.result?.name ?? ""}. Check it out now on ${Constant.appName}! \nhttps://play.google.com/store/apps/details?id=${Constant.appPackageName} \n");
                     },
                     child: _buildDialogItems(
@@ -4873,7 +5331,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     int? vType =
         (videoDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
     int? vTypeID = widget.typeId;
-    dynamic? trailerLibraryId,
+    dynamic trailerLibraryId,
         trailerUrlVideoId,
         videoLibraryId,
         videoUrlId,
@@ -5337,7 +5795,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const LoginSocial(),
+            builder: (context) => const LoginViaSocial(),
           ),
         );
       }
@@ -5432,7 +5890,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const LoginSocial();
+            return const LoginViaSocial();
           },
         ),
       );
@@ -5445,7 +5903,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       // Call the second method when `isCoinShow` is  "0"
       return await _checkSubsRentLoginWithoutCoin();
     } else {
-      // Call the first method when `isCoinShow` is not "0" 
+      // Call the first method when `isCoinShow` is not "0"
       return await _checkSubsRentLogin();
     }
   }

@@ -18,14 +18,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-class LoginSocialWeb extends StatefulWidget {
-  const LoginSocialWeb({super.key});
+class LoginViaSocialWeb extends StatefulWidget {
+  const LoginViaSocialWeb({super.key});
 
   @override
-  State<LoginSocialWeb> createState() => _LoginSocialWebState();
+  State<LoginViaSocialWeb> createState() => _LoginViaSocialWebState();
 }
 
-class _LoginSocialWebState extends State<LoginSocialWeb> {
+class _LoginViaSocialWebState extends State<LoginViaSocialWeb> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   SharedPre sharedPref = SharedPre();
@@ -398,26 +398,26 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
     debugPrint('checkAndNavigate loading ==>> ${generalProvider.loading}');
 
     if (!generalProvider.loading) {
-      if (generalProvider.loginSocialModel.status == 200) {
+      if (generalProvider.LoginViaSocialModel.status == 200) {
         debugPrint('Login Successfull!');
         await sharedPref.save("userid",
-            generalProvider.loginSocialModel.result?[0].id.toString());
+            generalProvider.LoginViaSocialModel.result?[0].id.toString());
         await sharedPref.save("username",
-            generalProvider.loginSocialModel.result?[0].name.toString() ?? "");
+            generalProvider.LoginViaSocialModel.result?[0].name.toString() ?? "");
         await sharedPref.save("userimage",
-            generalProvider.loginSocialModel.result?[0].image.toString() ?? "");
+            generalProvider.LoginViaSocialModel.result?[0].image.toString() ?? "");
         await sharedPref.save("useremail",
-            generalProvider.loginSocialModel.result?[0].email.toString() ?? "");
+            generalProvider.LoginViaSocialModel.result?[0].email.toString() ?? "");
         await sharedPref.save(
             "usermobile",
-            generalProvider.loginSocialModel.result?[0].mobile.toString() ??
+            generalProvider.LoginViaSocialModel.result?[0].mobile.toString() ??
                 "");
         await sharedPref.save("usertype",
-            generalProvider.loginSocialModel.result?[0].type.toString() ?? "");
+            generalProvider.LoginViaSocialModel.result?[0].type.toString() ?? "");
 
         // Set UserID for Next
         Constant.userID =
-            generalProvider.loginSocialModel.result?[0].id.toString();
+            generalProvider.LoginViaSocialModel.result?[0].id.toString();
         debugPrint('Constant userID ==>> ${Constant.userID}');
 
         if (!mounted) return;
@@ -430,7 +430,7 @@ class _LoginSocialWebState extends State<LoginSocialWeb> {
         // Hide Progress Dialog
         if (!mounted) return;
         Utils.showSnackbar(context, "fail",
-            "${generalProvider.loginSocialModel.message}", false);
+            "${generalProvider.LoginViaSocialModel.message}", false);
       }
     }
   }
