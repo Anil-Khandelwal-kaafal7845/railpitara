@@ -111,8 +111,6 @@ PODS:
     - OrderedSet (~> 5.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - flutter_share (0.0.1):
-    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -154,7 +152,7 @@ PODS:
     - AppAuth (< 2.0, >= 1.7.3)
     - GTMAppAuth (< 5.0, >= 4.1.1)
     - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUserMessagingPlatform (2.7.0)
+  - GoogleUserMessagingPlatform (3.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -249,12 +247,14 @@ PODS:
   - permission_handler_apple (9.1.1):
     - Flutter
   - PromisesObjC (2.4.0)
-  - razorpay-pod (1.3.14)
+  - razorpay-pod (1.4.0)
   - razorpay_web (1.1.10):
     - Flutter
     - razorpay-pod
   - ReachabilitySwift (5.2.4)
   - RecaptchaInterop (100.0.0)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -267,8 +267,6 @@ PODS:
     - Flutter
     - Singular-SDK (= 12.6.0)
   - smart_auth (0.0.1):
-    - Flutter
-  - social_share (0.0.1):
     - Flutter
   - speech_to_text (0.0.1):
     - Flutter
@@ -302,7 +300,6 @@ DEPENDENCIES:
   - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
-  - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
@@ -313,12 +310,12 @@ DEPENDENCIES:
   - paytm_allinonesdk (from `.symlinks/plugins/paytm_allinonesdk/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - razorpay_web (from `.symlinks/plugins/razorpay_web/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - Singular-SDK
   - singular_flutter_sdk (from `.symlinks/plugins/singular_flutter_sdk/ios`)
   - smart_auth (from `.symlinks/plugins/smart_auth/ios`)
-  - social_share (from `.symlinks/plugins/social_share/ios`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -387,8 +384,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
-  flutter_share:
-    :path: ".symlinks/plugins/flutter_share/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_mobile_ads:
@@ -409,6 +404,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   razorpay_web:
     :path: ".symlinks/plugins/razorpay_web/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sign_in_with_apple:
@@ -417,8 +414,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/singular_flutter_sdk/ios"
   smart_auth:
     :path: ".symlinks/plugins/smart_auth/ios"
-  social_share:
-    :path: ".symlinks/plugins/social_share/ios"
   speech_to_text:
     :path: ".symlinks/plugins/speech_to_text/ios"
   sqflite:
@@ -433,20 +428,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  advertising_id: d5de9e659986092d7ca50977dc50f4f4fcd4c30a
-  app_tracking_transparency: 3d84f147f67ca82d3c15355c36b1fa6b66ca7c92
+  advertising_id: ea8a9b898196a0673bad1b0fe6c50541d9295d02
+  app_tracking_transparency: e169b653478da7bb15a6c61209015378ca73e375
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  connectivity_plus: 481668c94744c30c53b8895afb39159d1e619bdf
-  device_info_plus: d668d0dcad87727e865495c472b911b15d7ee26a
+  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   FBAEMKit: 6c7b5eb77c96861bb59e040842c6e55bf39512ce
   FBSDKCoreKit: 5e4dd478947ab1bcc887e8cfadeae0727af1a942
   FBSDKCoreKit_Basics: cd7b5f5d1e8868c26706917919d058999ca672c3
   FBSDKLoginKit: 572cca0bc6c90067ef197187697cb3b584310c52
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
-  firebase_analytics: fd0e997e527ef523ebc44631450b6e38ebb65d71
-  firebase_auth: ed634eac54cae965d7b1d9193a8a656f4d307347
-  firebase_core: 57b95c740b96d3bbb3d8b189eab85d5258f8e138
-  firebase_messaging: 171a17826d092abf0864ce518dd8cedb8c41af07
+  firebase_analytics: f153c564d6a7675e56e4f171454b9f1b3e7b6601
+  firebase_auth: b62e99e6ece589afe88ebe8919eb9563b52c384c
+  firebase_core: 28e84c2a4fcf6a50ef83f47b145ded8c1fa331e4
+  firebase_messaging: 91ec967913a5d144f951b3c3ac17a57796d38735
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
   FirebaseAppCheckInterop: 6a1757cfd4067d8e00fccd14fcc1b8fd78cfac07
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
@@ -455,51 +450,50 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseMessaging: 0c0ae1eb722ef0c07f7801e5ded8dccd1357d6d4
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_downloader: 78da0da1084e709cbfd3b723c7ea349c71681f09
-  flutter_facebook_auth: 81e624a905d30b1f97ebffb8b2feaf9e5330537a
-  flutter_inappwebview: 180a2f38c18dfbfb8f0c12f7bd42ce02dfd6c765
-  flutter_secure_storage: 2c2ff13db9e0a5647389bff88b0ecac56e3f3418
-  flutter_share: 5a4282210b5f6fbc1d4185a4cc1f54644f32ff32
-  fluttertoast: eaafdac812d1d69931004e881c87a8643b1c9111
+  flutter_downloader: b7301ae057deadd4b1650dc7c05375f10ff12c39
+  flutter_facebook_auth: c8700ab1770f3d8e5e7456220e4f3bbcdb831454
+  flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
   Google-Mobile-Ads-SDK: 58b4fda3f9758fc1ed210aa5cf7777b5eb55d47e
-  google_mobile_ads: c49bca7ce6656c411965e56b4e24893466fef840
-  google_sign_in_ios: 8c4b89589e876fc9fcf22035d6208077008f6c03
+  google_mobile_ads: 511febb4768edc860ee455a9e201ff52de385908
+  google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
-  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
+  GoogleUserMessagingPlatform: f8d0cdad3ca835406755d0a69aa634f00e76d576
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  image_picker_ios: 85f2b3c9fb98c09d63725c4d12ebd585b56ec35d
+  image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  onesignal_flutter: b50d8f61d10d111e4e883ba8bda301d3b79e35f3
+  onesignal_flutter: 7a501ebce03915c8d19f2e5aa85d531c21382ac2
   OneSignalXCFramework: f6533cc1f7a5ddded80ee5fe183901a99ad46f4f
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  package_info_plus: ae4a63389b62b5be8544b36bfc5b069617938813
-  path_provider_foundation: 608fcb11be570ce83519b076ab6a1fffe2474f05
-  paytm_allinonesdk: 50af2171a313e3a2d82f0185d3eaeee31fbe1595
-  permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  paytm_allinonesdk: 3771d12451cf9328d1474768b11120362958bbe6
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  razorpay-pod: ffee2198928e2a5ed2556863af4db6b79722cea3
-  razorpay_web: 68599dcbf77288a5795ec4759fd3041745440886
+  razorpay-pod: cb5b5439697bdda9c57d68a92b3e5b0ce1d2f2f3
+  razorpay_web: 4338051683c7e262b1defcf27c29d121ad7049d4
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  shared_preferences_foundation: 0b09b969fb36da5551c0bc4a2dbd9d0ff9387478
-  sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   Singular-SDK: d17a339dfdf8f4b51da713505e6ffa6d916c990d
-  singular_flutter_sdk: 0eec3ae468e710a109c23870e5f922672217ea81
-  smart_auth: 33668081c5f646af84f10492a067d25fdcd16951
-  social_share: 259bc93230d3dd70c1b035026f66a8b7bafe5c40
-  speech_to_text: ae2abc312e619ff1c53e675a9fc4d785a15c03bb
-  sqflite: c35dad70033b8862124f8337cc994a809fcd9fa3
+  singular_flutter_sdk: 5e5a189ca544a6bcfde9bd25db8c5ac7956e8647
+  smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2
+  speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
-  url_launcher_ios: a1c1f2bf89969cb13cce46d0333c7257d346e169
-  video_player_avfoundation: 74584d47d3e53b88362a9948ab61d4a0d2aa42d2
-  wakelock: cc82bb76a8260a57c002d11c0a508b434618379f
-  webview_flutter_wkwebview: 75789e80e2ad25e78ac88a17e5c2f82019277c53
+  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
+  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: fe700a87ded87895908589fa76b4e5c5f3db4a87
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
