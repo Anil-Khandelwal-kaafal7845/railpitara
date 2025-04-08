@@ -3969,65 +3969,66 @@ class HomeState extends State<Home> with RouteAware {
                   ),
                 ),
 
-                // // Rent Tag
-                // Visibility(
-                //   visible: sectionDataList?[index].isRent == 1 &&
-                //       sectionDataList?[index].isPremium == 0,
-                //   child: _buildTag('assets/images/rupee.png'),
-                // ),
+                // Rent Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: _buildTag('assets/images/rupee.png'),
+                ),
 
-                // // Premium Tag
-                // Visibility(
-                //   visible: sectionDataList?[index].isPremium == 1,
-                //   child: _buildTag('assets/images/crown.png'),
-                // ),
+                // Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
 
-                // // Both Rent & Premium Tag
-                // Visibility(
-                //   visible: sectionDataList?[index].isRent == 1 &&
-                //       sectionDataList?[index].isPremium == 1,
-                //   child: _buildTag('assets/images/crown.png'),
-                // ),
+                // Both Rent & Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
 
-                // // Live Indicator
-                // Visibility(
-                //   visible: sectionDataList?[index].isLiveUrl == 1,
-                //   child: Positioned(
-                //     top: 8,
-                //     right: 8,
-                //     child: Container(
-                //       padding: const EdgeInsets.symmetric(
-                //           horizontal: 8, vertical: 4),
-                //       decoration: BoxDecoration(
-                //         color: Colors.red,
-                //         borderRadius: BorderRadius.circular(12),
-                //         boxShadow: [
-                //           BoxShadow(color: Colors.black26, blurRadius: 4)
-                //         ],
-                //       ),
-                //       child: Row(
-                //         children: [
-                //           Container(
-                //             height: 6,
-                //             width: 6,
-                //             margin: const EdgeInsets.only(right: 5),
-                //             decoration: BoxDecoration(
-                //               color: Colors.white,
-                //               borderRadius: BorderRadius.circular(10),
-                //             ),
-                //           ),
-                //           const Text(
-                //             "LIVE",
-                //             style: TextStyle(
-                //                 color: Colors.white,
-                //                 fontSize: 12,
-                //                 fontWeight: FontWeight.bold),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                // Live Indicator
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            
               ],
             ),
           );

@@ -658,7 +658,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ),
                               const SizedBox(width: 5),
                               MyText(
-                                color: white,
+                                color: primaryLight,
                                 text: "primetag",
                                 textalign: TextAlign.start,
                                 fontsizeNormal: 10,
@@ -688,7 +688,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             
                               const SizedBox(width: 5),
                               MyText(
-                                color: white.withOpacity(0.5),
+                                color: primaryLight,
                                 text: "renttag",
                                 textalign: TextAlign.center,
                                 fontsizeNormal: 10,
@@ -723,7 +723,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ),
                               const SizedBox(width: 5),
                               MyText(
-                                color: white,
+                                color: primaryLight,
                                 text: "cointag",
                                 textalign: TextAlign.center,
                                 fontsizeNormal: 10,

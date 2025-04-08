@@ -194,574 +194,410 @@ class LoginViaSocialState extends State<LoginViaSocial> {
     print("EMAIL KYA H ---${generalProvider.isEmail}");
     return Scaffold(
         backgroundColor: appBgColor,
-        body: Stack(
-          children: [
-            Positioned(
-              top: MediaQuery.of(context).size.height *
-                  0.11, // Adjust position to center
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.center, // Center the image
-                child: SizedBox(
-                  height: 250, // Same size as before
-                  width: 250,
-                  child: Image.asset(
-                    "assets/images/loginimage.png", // Updated to use asset image
-                    fit: BoxFit.contain, // Ensure it scales properly
-                  ),
+        resizeToAvoidBottomInset: true, // Ensures UI shifts above keyboard
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context)
+                .unfocus(), // To dismiss keyboard on outside tap
+            child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-              ),
-            ),
-            Positioned(
-                top: MediaQuery.of(context).size.height * 0.4,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  // height: MediaQuery.of(context).size.height *
-                  //     0.5, // Remaining height for the login form
-                  width: MediaQuery.of(context).size.width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(80),
-                      topRight: Radius.circular(0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 10,
-                        spreadRadius: 3,
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    Center(
+                      child: SizedBox(
+                        height: 250,
+                        width: 250,
+                        child: Image.asset(
+                          "assets/images/loginimage.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        generalProvider.isMobileLogin == "1"
-                            ? Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        Container(
-                                          width: 200,
-                                          height: 90,
-                                          alignment: Alignment.center,
-                                          child: MyImage(
-                                            fit: BoxFit.fill,
-                                            imagePath: "appicon.png",
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 15),
+                    ),
+                  
+                  
+                    Container(
+                      width: double.infinity,
+                      // constraints: BoxConstraints(
+                      //   minHeight: MediaQuery.of(context).size.height * 0.05,
+                      // ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80),
+                          topRight: Radius.circular(0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            spreadRadius: 3,
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height * 0.65,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Container(
+                            margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize:
+                                  MainAxisSize.min, // important for scroll
 
-                                    Text(
-                                      "Login With Phone Number",
-                                      style: TextStyle(
-                                          color: black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: white,
-                                          width: 0.7,
-                                        ),
-                                        color: Colors.black.withOpacity(
-                                            0.3), // Black shade with transparency
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(5),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Row(
+                              children: [
+                                generalProvider.isMobileLogin == "1"
+                                    ? Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            // Country code field
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Container(
+                                                  width: 200,
+                                                  height: 90,
+                                                  alignment: Alignment.center,
+                                                  child: MyImage(
+                                                    fit: BoxFit.fill,
+                                                    imagePath: "appicon.png",
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Text(
+                                              "Login With Phone Number",
+                                              style: TextStyle(
+                                                  color: black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            const SizedBox(height: 15),
                                             Container(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 5),
-                                              width:
-                                                  45, // Adjust width according to your design
-                                              child: TextField(
-                                                controller:
-                                                    TextEditingController(
-                                                        text: '+91'),
-                                                enabled:
-                                                    false, // Disable editing of country code
-                                                textAlignVertical:
-                                                    TextAlignVertical.center,
-                                                style: TextStyle(
-                                                    fontSize: 16, color: black),
-                                                decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  hintText: '+91',
-                                                  hintStyle: TextStyle(
-                                                    color:
-                                                        black.withOpacity(0.3),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: white,
+                                                  width: 0.7,
+                                                ),
+                                                color: Colors.black.withOpacity(
+                                                    0.3), // Black shade with transparency
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(5),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
+                                                child: Row(
+                                                  children: [
+                                                    // Country code field
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 5),
+                                                      width:
+                                                          45, // Adjust width according to your design
+                                                      child: TextField(
+                                                        controller:
+                                                            TextEditingController(
+                                                                text: '+91'),
+                                                        enabled:
+                                                            false, // Disable editing of country code
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: black),
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              InputBorder.none,
+                                                          hintText: '+91',
+                                                          hintStyle: TextStyle(
+                                                            color: black
+                                                                .withOpacity(
+                                                                    0.3),
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        width:
+                                                            3), // Add spacing between country code and phone number
+                                                    // Phone number field
+                                                    Expanded(
+                                                      child: TextField(
+                                                        controller:
+                                                            numberController,
+                                                        keyboardType:
+                                                            TextInputType.phone,
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(
+                                                              10), // Limit input to 10 digits
+                                                          FilteringTextInputFormatter
+                                                              .digitsOnly, // Only allow digits
+                                                        ],
+                                                        style: TextStyle(
+                                                            color: black),
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              InputBorder.none,
+                                                          filled:
+                                                              false, // No extra background fill
+                                                          hintStyle: TextStyle(
+                                                            color: black
+                                                                .withOpacity(
+                                                                    0.3),
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                          hintText:
+                                                              'Enter your mobile number',
+                                                        ),
+                                                        onChanged: (phone) {
+                                                          setState(() {
+                                                            mobileNumber =
+                                                                phone;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                                width:
-                                                    3), // Add spacing between country code and phone number
-                                            // Phone number field
-                                            Expanded(
-                                              child: TextField(
-                                                controller: numberController,
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                inputFormatters: [
-                                                  LengthLimitingTextInputFormatter(
-                                                      10), // Limit input to 10 digits
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly, // Only allow digits
-                                                ],
-                                                style: TextStyle(color: black),
-                                                decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  filled:
-                                                      false, // No extra background fill
-                                                  hintStyle: TextStyle(
-                                                    color:
-                                                        black.withOpacity(0.3),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
+                                            const SizedBox(height: 25),
+                                            InkWell(
+                                              onTap: () {
+                                                debugPrint(
+                                                    "Click mobileNumber ==> $mobileNumber");
+
+                                                if (numberController.text
+                                                        .trim()
+                                                        .isEmpty ||
+                                                    numberController
+                                                            .text.length <
+                                                        10) {
+                                                  // Show Snackbar if phone number is empty or less than 10 digits
+                                                  Utils.showSnackbar(
+                                                      context,
+                                                      "info",
+                                                      "login_with_mobile_note",
+                                                      true);
+                                                } else if (phoneRegExp.hasMatch(
+                                                    numberController.text
+                                                        .trim())) {
+                                                  // Check if the entered phone number is valid
+                                                  String phoneNumberToSend =
+                                                      '+91' +
+                                                          numberController.text
+                                                              .trim();
+                                                  print(
+                                                      "NOW NUMBER WITH IS --${phoneNumberToSend}");
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          OTPVerify(
+                                                              phoneNumberToSend ??
+                                                                  "",
+                                                              "phone",
+                                                              ""),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Show an error message if the phone number is invalid
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                        content: Text(
+                                                            'Please enter a valid Indian mobile number')),
+                                                  );
+                                                }
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(18),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.3,
+                                                height: 45,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    colors: [
+                                                      primaryDark,
+                                                      primaryLight
+                                                    ],
+                                                    begin: FractionalOffset(
+                                                        0.0, 0.0),
+                                                    end: FractionalOffset(
+                                                        1.0, 0.0),
+                                                    stops: [0.0, 1.0],
+                                                    tileMode: TileMode.clamp,
                                                   ),
-                                                  hintText:
-                                                      'Enter your mobile number',
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
-                                                onChanged: (phone) {
-                                                  setState(() {
-                                                    mobileNumber = phone;
-                                                  });
-                                                },
+                                                alignment: Alignment.center,
+                                                child: MyText(
+                                                  color: white,
+                                                  text: "login",
+                                                  multilanguage: true,
+                                                  fontsizeNormal: 15,
+                                                  fontsizeWeb: 17,
+                                                  fontweight: FontWeight.w600,
+                                                  maxline: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textalign: TextAlign.center,
+                                                  fontstyle: FontStyle.normal,
+                                                ),
                                               ),
                                             ),
+                                            const SizedBox(height: 20),
+
+                                            /* Or */
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 80,
+                                                  height: 1,
+                                                  color: colorAccent,
+                                                ),
+                                                const SizedBox(width: 15),
+                                                MyText(
+                                                  color: otherColor,
+                                                  text: "or",
+                                                  multilanguage: true,
+                                                  fontsizeNormal: 14,
+                                                  fontsizeWeb: 16,
+                                                  fontweight: FontWeight.w500,
+                                                  maxline: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textalign: TextAlign.center,
+                                                  fontstyle: FontStyle.normal,
+                                                ),
+                                                const SizedBox(width: 15),
+                                                Container(
+                                                  width: 80,
+                                                  height: 1,
+                                                  color: colorAccent,
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 20),
                                           ],
                                         ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 25),
-                                    InkWell(
-                                      onTap: () {
-                                        debugPrint(
-                                            "Click mobileNumber ==> $mobileNumber");
-
-                                        if (numberController.text
-                                                .trim()
-                                                .isEmpty ||
-                                            numberController.text.length < 10) {
-                                          // Show Snackbar if phone number is empty or less than 10 digits
-                                          Utils.showSnackbar(context, "info",
-                                              "login_with_mobile_note", true);
-                                        } else if (phoneRegExp.hasMatch(
-                                            numberController.text.trim())) {
-                                          // Check if the entered phone number is valid
-                                          String phoneNumberToSend = '+91' +
-                                              numberController.text.trim();
-                                          print(
-                                              "NOW NUMBER WITH IS --${phoneNumberToSend}");
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => OTPVerify(
-                                                  phoneNumberToSend ?? "",
-                                                  "phone",
-                                                  ""),
-                                            ),
-                                          );
-                                        } else {
-                                          // Show an error message if the phone number is invalid
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content: Text(
-                                                    'Please enter a valid Indian mobile number')),
-                                          );
-                                        }
-                                      },
-                                      borderRadius: BorderRadius.circular(18),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2.3,
-                                        height: 45,
-                                        decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                            colors: [primaryDark, primaryLight],
-                                            begin: FractionalOffset(0.0, 0.0),
-                                            end: FractionalOffset(1.0, 0.0),
-                                            stops: [0.0, 1.0],
-                                            tileMode: TileMode.clamp,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: MyText(
-                                          color: white,
-                                          text: "login",
-                                          multilanguage: true,
-                                          fontsizeNormal: 15,
-                                          fontsizeWeb: 17,
-                                          fontweight: FontWeight.w600,
-                                          maxline: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textalign: TextAlign.center,
-                                          fontstyle: FontStyle.normal,
-                                        ),
-                                      ),
-                                    ),
-                                    // const SizedBox(height: 10),
-                                    // if (strPrivacyAndTNC != null)
-                                    //   Utils.htmlTexts(strPrivacyAndTNC),
-                                    const SizedBox(height: 20),
-
-                                    /* Or */
-                                    Row(
+                                      )
+                                    : SizedBox.shrink(),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      30), // Clipping to round the edges
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          width: 80,
-                                          height: 1,
-                                          color: colorAccent,
-                                        ),
-                                        const SizedBox(width: 15),
-                                        MyText(
-                                          color: otherColor,
-                                          text: "or",
-                                          multilanguage: true,
-                                          fontsizeNormal: 14,
-                                          fontsizeWeb: 16,
-                                          fontweight: FontWeight.w500,
-                                          maxline: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textalign: TextAlign.center,
-                                          fontstyle: FontStyle.normal,
-                                        ),
-                                        const SizedBox(width: 15),
-                                        Container(
-                                          width: 80,
-                                          height: 1,
-                                          color: colorAccent,
-                                        ),
+                                        if (generalProvider.isGoogleLogin ==
+                                            "1")
+                                          _buildSocialButton(
+                                            imagePath: "ic_google.png",
+                                            onTap: _gmailLogin,
+                                            bgColor: Colors.white,
+                                          ),
+                                        if (generalProvider.isEmail == "1")
+                                          _buildSocialButton(
+                                            icon: CupertinoIcons.mail_solid,
+                                            iconColor: Colors.red,
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginViaSocialEmail()),
+                                              );
+                                            },
+                                            bgColor: Colors.white,
+                                          ),
+                                        if (generalProvider.isGoogleLogin ==
+                                            "1")
+                                          if (Platform.isIOS)
+                                            _buildSocialButton(
+                                              imagePath: "ic_apple.png",
+                                              onTap: signInWithApple,
+                                              bgColor: Colors.white,
+                                            ),
+                                        if (generalProvider.isFbLogin == "1")
+                                          _buildSocialButton(
+                                            imagePath: "ic_facebook.png",
+                                            onTap: () async {
+                                              final LoginResult result =
+                                                  await FacebookAuth.instance
+                                                      .login();
+                                              if (result.status ==
+                                                  LoginStatus.success) {
+                                                final userData =
+                                                    await FacebookAuth.instance
+                                                        .getUserData();
+                                                print(userData);
+                                              } else {
+                                                print(result.status);
+                                                print(result.message);
+                                              }
+                                            },
+                                            bgColor: Colors.blue,
+                                          ),
                                       ],
                                     ),
-                                    const SizedBox(height: 20),
-                                  ],
+                                  ),
                                 ),
-                              )
-                            : SizedBox.shrink(),
-
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              30), // Clipping to round the edges
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (generalProvider.isGoogleLogin == "1")
-                                  _buildSocialButton(
-                                    imagePath: "ic_google.png",
-                                    onTap: _gmailLogin,
-                                    bgColor: Colors.white,
-                                  ),
-                                if (generalProvider.isEmail == "1")
-                                  _buildSocialButton(
-                                    icon: CupertinoIcons.mail_solid,
-                                    iconColor: Colors.red,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginViaSocialEmail()),
-                                      );
-                                    },
-                                    bgColor: Colors.white,
-                                  ),
-
-                                  if (generalProvider.isGoogleLogin == "1")
-                                if (Platform.isIOS)
-                                  _buildSocialButton(
-                                    imagePath: "ic_apple.png",
-                                    onTap: signInWithApple,
-                                    bgColor: Colors.white,
-                                  ),
-                               
-                               
-                               
-                                if (generalProvider.isFbLogin == "1")
-                                  _buildSocialButton(
-                                    imagePath: "ic_facebook.png",
-                                    onTap: () async {
-                                      final LoginResult result =
-                                          await FacebookAuth.instance.login();
-                                      if (result.status ==
-                                          LoginStatus.success) {
-                                        final userData = await FacebookAuth
-                                            .instance
-                                            .getUserData();
-                                        print(userData);
-                                      } else {
-                                        print(result.status);
-                                        print(result.message);
-                                      }
-                                    },
-                                    bgColor: Colors.blue,
-                                  ),
                               ],
                             ),
                           ),
                         ),
-
-                        // /* Google Login Button */
-                        // generalProvider.isGoogleLogin == "1"
-                        //     ? Container(
-                        //         width: MediaQuery.of(context).size.width,
-                        //         height: 52,
-                        //         padding:
-                        //             const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        //         margin: const EdgeInsets.only(bottom: 15),
-                        //         decoration: BoxDecoration(
-                        //           color: white,
-                        //           borderRadius: BorderRadius.circular(26),
-                        //         ),
-                        //         alignment: Alignment.center,
-                        //         child: InkWell(
-                        //           onTap: () {
-                        //             debugPrint(
-                        //                 "Clicked on : ====> loginWith Google");
-                        //             _gmailLogin();
-                        //           },
-                        //           borderRadius: BorderRadius.circular(26),
-                        //           child: Row(
-                        //             mainAxisAlignment:
-                        //                 MainAxisAlignment.center,
-                        //             children: [
-                        //               MyImage(
-                        //                 width: 30,
-                        //                 height: 30,
-                        //                 imagePath: "ic_google.png",
-                        //                 fit: BoxFit.contain,
-                        //               ),
-                        //               const SizedBox(width: 30),
-                        //               MyText(
-                        //                 color: black,
-                        //                 text: "loginwithgoogle",
-                        //                 fontsizeNormal: 14,
-                        //                 fontsizeWeb: 16,
-                        //                 multilanguage: true,
-                        //                 fontweight: FontWeight.w600,
-                        //                 maxline: 1,
-                        //                 overflow: TextOverflow.ellipsis,
-                        //                 textalign: TextAlign.center,
-                        //                 fontstyle: FontStyle.normal,
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       )
-                        //     : SizedBox.shrink(),
-                        // const SizedBox(height: 5),
-                        // generalProvider.isEmail == "1"
-                        //     ? Container(
-                        //         width: MediaQuery.of(context).size.width,
-                        //         height: 52,
-                        //         padding:
-                        //             const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        //         margin: const EdgeInsets.only(bottom: 15),
-                        //         decoration: BoxDecoration(
-                        //           color: white,
-                        //           borderRadius: BorderRadius.circular(26),
-                        //         ),
-                        //         alignment: Alignment.center,
-                        //         child: InkWell(
-                        //           onTap: () {
-                        //             Navigator.push(
-                        //               context,
-                        //               MaterialPageRoute(
-                        //                   builder: (context) =>
-                        //                       LoginViaSocialEmail()),
-                        //             );
-
-                        //             // _gmailLogin();
-                        //           },
-                        //           borderRadius: BorderRadius.circular(26),
-                        //           child: Row(
-                        //             mainAxisAlignment:
-                        //                 MainAxisAlignment.center,
-                        //             children: [
-                        //               Icon(
-                        //                 CupertinoIcons
-                        //                     .mail_solid, // Cupertino icon
-                        //                 size: 28, // Adjust the size as needed
-                        //                 color: Colors
-                        //                     .red, // Adjust the color as needed
-                        //               ),
-                        //               const SizedBox(width: 30),
-                        //               MyText(
-                        //                 color: black,
-                        //                 text: "loginwithemail",
-                        //                 fontsizeNormal: 14,
-                        //                 fontsizeWeb: 16,
-                        //                 multilanguage: true,
-                        //                 fontweight: FontWeight.w600,
-                        //                 maxline: 1,
-                        //                 overflow: TextOverflow.ellipsis,
-                        //                 textalign: TextAlign.center,
-                        //                 fontstyle: FontStyle.normal,
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       )
-                        //     : SizedBox.shrink(),
-
-                        // /* Apple Login Button */
-                        // if (Platform.isIOS)
-                        //   Container(
-                        //     width: MediaQuery.of(context).size.width,
-                        //     height: 52,
-                        //     padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        //     margin: const EdgeInsets.only(bottom: 15),
-                        //     decoration: BoxDecoration(
-                        //       color: white,
-                        //       borderRadius: BorderRadius.circular(26),
-                        //     ),
-                        //     alignment: Alignment.center,
-                        //     child: InkWell(
-                        //       onTap: () {
-                        //         debugPrint(
-                        //             "Clicked on : ====> loginWith Apple");
-                        //         signInWithApple();
-                        //       },
-                        //       borderRadius: BorderRadius.circular(26),
-                        //       child: Row(
-                        //         mainAxisAlignment: MainAxisAlignment.center,
-                        //         children: [
-                        //           MyImage(
-                        //             width: 30,
-                        //             height: 30,
-                        //             imagePath: "ic_apple.png",
-                        //             fit: BoxFit.contain,
-                        //           ),
-                        //           const SizedBox(width: 30),
-                        //           MyText(
-                        //             color: black,
-                        //             text: "loginwithapple",
-                        //             fontsizeNormal: 14,
-                        //             fontsizeWeb: 16,
-                        //             multilanguage: true,
-                        //             fontweight: FontWeight.w600,
-                        //             maxline: 1,
-                        //             overflow: TextOverflow.ellipsis,
-                        //             textalign: TextAlign.center,
-                        //             fontstyle: FontStyle.normal,
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-
-                        // /* Facebook Login Button */
-                        // generalProvider.isFbLogin == "1"
-                        //     ? Container(
-                        //         width: MediaQuery.of(context).size.width,
-                        //         height: 52,
-                        //         padding:
-                        //             const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        //         margin: const EdgeInsets.only(top: 5),
-                        //         decoration: BoxDecoration(
-                        //           color: white,
-                        //           borderRadius: BorderRadius.circular(26),
-                        //         ),
-                        //         alignment: Alignment.center,
-                        //         child: InkWell(
-                        //           onTap: () async {
-                        //             debugPrint(
-                        //                 "Clicked on : ====> loginWith Facebook");
-                        //             final LoginResult result =
-                        //                 await FacebookAuth.instance.login();
-
-                        //             if (result.status ==
-                        //                 LoginStatus.success) {
-                        //               // Get the user data
-                        //               final userData = await FacebookAuth
-                        //                   .instance
-                        //                   .getUserData();
-                        //               print(userData);
-                        //             } else {
-                        //               print(result.status);
-                        //               print(result.message);
-                        //             }
-                        //             // facebookLogin();
-                        //           },
-                        //           borderRadius: BorderRadius.circular(26),
-                        //           child: Row(
-                        //             mainAxisAlignment:
-                        //                 MainAxisAlignment.center,
-                        //             children: [
-                        //               MyImage(
-                        //                 width: 30,
-                        //                 height: 30,
-                        //                 imagePath: "ic_facebook.png",
-                        //                 fit: BoxFit.contain,
-                        //               ),
-                        //               const SizedBox(width: 30),
-                        //               MyText(
-                        //                 color: black,
-                        //                 text: "loginwithfacebook",
-                        //                 fontsizeNormal: 14,
-                        //                 fontsizeWeb: 16,
-                        //                 multilanguage: true,
-                        //                 fontweight: FontWeight.w600,
-                        //                 maxline: 1,
-                        //                 overflow: TextOverflow.ellipsis,
-                        //                 textalign: TextAlign.center,
-                        //                 fontstyle: FontStyle.normal,
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       )
-                        //     : SizedBox.shrink()
-                      ],
-                    ),
-                  ),
+                      ),
+                    )
+                
+                
+                 ],
                 )),
-          ],
+          ),
         ));
+ 
   }
 
   Widget _buildSocialButton({

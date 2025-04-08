@@ -336,7 +336,7 @@ class SettingState extends State<Setting> {
 
                 Visibility(
                     visible: forceUpdateData!.result!.showPackage == 1,
-                    child: _buildLine(16.0, 16.0)),
+                    child: _buildLine(7.0, 7.0)),
 
                 /* MaltiLanguage */
                 _buildSettingButton(

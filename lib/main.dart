@@ -466,6 +466,9 @@ class _MyAppState extends State<MyApp> {
 
     debugPrint("Device Type =======================> ${Constant.deviceType}");
   }
+
+
+
 }
 
 //TO BUILD APK

@@ -166,6 +166,8 @@ class AllPaymentState extends State<AllPayment>
           await channelSectionProvider.updatePrimiumPurchase();
           await videoDetailsProvider.updateRentPurchase();
           await showDetailsProvider.updateRentPurchase();
+          print("Payment DONE 1 ----");
+
           Singular.eventWithArgs('Razorpay Payment Success', {
             'event_name': 'Razorpay Payment Success',
             "packageId": packageId,
@@ -181,10 +183,13 @@ class AllPaymentState extends State<AllPayment>
           });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
-          Navigator.pop(context);
         } else {
-          Singular.eventWithArgs('Razorpay Payment Success', {
-            'event_name': 'Razorpay Payment Success',
+          isPaymentDone = false;
+
+          print("Payment DONE 2 ----");
+
+          Singular.eventWithArgs('Razorpay Payment Failed', {
+            'event_name': 'Razorpay Payment Failed',
             "packageId": packageId,
             "description": description,
             "amount": amount,
@@ -198,11 +203,13 @@ class AllPaymentState extends State<AllPayment>
           });
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
-          Navigator.pop(context);
         }
       } else {
+        print("Payment failed ----");
         isPaymentDone = false;
         if (!mounted) return;
+        Navigator.pop(context, isPaymentDone);
+
         Utils.showSnackbar(
             context, "info", paymentProvider.successModel.message ?? "", false);
       }
@@ -247,8 +254,8 @@ class AllPaymentState extends State<AllPayment>
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         } else {
-          Singular.eventWithArgs('Razorpay Payment Success', {
-            'event_name': 'Razorpay Payment Success',
+          Singular.eventWithArgs('Razorpay Payment Failed', {
+            'event_name': 'Razorpay Payment Failed',
             "videoId": videoId,
             "amount": amount,
             "typeId": typeId,
