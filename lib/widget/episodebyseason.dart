@@ -253,7 +253,9 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                           .pop(); // Close the dialog
                                                     },
                                                     style: TextButton.styleFrom(
-                                                      foregroundColor: Colors.black, backgroundColor:
+                                                      foregroundColor:
+                                                          Colors.black,
+                                                      backgroundColor:
                                                           colorPrimary,
                                                       padding:
                                                           EdgeInsets.symmetric(
@@ -269,7 +271,9 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                           .pop(); // Close the dialog and do nothing
                                                     },
                                                     style: TextButton.styleFrom(
-                                                      foregroundColor: Colors.white, side: BorderSide(
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      side: BorderSide(
                                                           color: Colors.white),
                                                       padding:
                                                           EdgeInsets.symmetric(
@@ -423,7 +427,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                   // User not logged in, navigate to the login screen
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const LoginViaSocial(),
+                                      builder: (context) =>
+                                          const LoginViaSocial(),
                                     ),
                                   );
                                 }
@@ -689,7 +694,10 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
             onTap: () {
               debugPrint("===> index $index");
               openPlayer(
-                  "Show", index, episodeProvider.episodeBySeasonModel.result);
+                "Show",
+                index,
+                episodeProvider.episodeBySeasonModel.result,
+              );
             },
             child: Container(
               width: Dimens.widthLand,
@@ -718,6 +726,8 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   /* ========= Open Player ========= */
   openPlayer(
       String playType, int epiPos, List<episode.Result>? episodeList) async {
+   
+   
     if ((episodeList?.length ?? 0) > 0) {
       /* CHECK SUBSCRIPTION */
       if (playType != "Trailer") {
@@ -838,7 +848,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         }
       }
 
-      // Case 2: Only Premium Video
+         // Case 2: Only Premium Video
       else if ((episodeProvider
                   .episodeBySeasonModel.result?[epiPos].isPremium ??
               0) ==
@@ -864,6 +874,55 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
           return false;
         }
       }
+
+
+
+
+      // Case 2: Only rent Video
+      else if ((showDetailsProvider.sectionDetailModel.result?.isRent ??
+              0) ==
+          1) {
+        debugPrint('Case 2: Only rent Video');
+        debugPrint(
+            'is rent : ${showDetailsProvider.sectionDetailModel.result?.isPremium}');
+        if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+            1) {
+          debugPrint('User can access the video');
+          return true;
+        } else {
+          debugPrint('User can not access the video');
+
+           dynamic isRented = await Utils.paymentForRent(
+            context: context,
+            videoId:
+                showDetailsProvider.sectionDetailModel.result?.id.toString() ??
+                    '',
+            rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
+                    .toString() ??
+                '',
+            vTitle: showDetailsProvider.sectionDetailModel.result?.name
+                    .toString() ??
+                '',
+            typeId: showDetailsProvider.sectionDetailModel.result?.typeId
+                    .toString() ??
+                '',
+            vType: showDetailsProvider.sectionDetailModel.result?.videoType
+                    .toString() ??
+                '',
+          );
+        
+        
+          if (isRented != null && isRented == true) {
+            getAllEpisode();
+          }
+          return false;
+        }
+      }
+
+
+
+      //case - only rent video ---
+      
 
       // Case 3: Rent Video with Coin Option but isRent == 0
       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ?? 0) ==
@@ -995,6 +1054,9 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
         return false; // User needs to take an action
       }
+
+
+
 
       // Case 4: Only Rent Video with Coin Option
       else if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ??
@@ -1205,6 +1267,43 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
       // General Case: Access allowed by default
       debugPrint('General Case: Access allowed');
       return true;
+    }
+
+    // Case 5: Only Rent Video (No coin option available)
+    else if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ??
+            0) ==
+        1) {
+      debugPrint('Case 5: Rent Video with No Coin Option');
+
+      if ((episodeProvider.episodeBySeasonModel.result?[epiPos].rentBuy ?? 0) ==
+          1) {
+        debugPrint('Video already rented');
+        return true;
+      } else {
+        debugPrint('---RENT KRO SHOW KO');
+        dynamic isRented = await Utils.paymentForRent(
+          context: context,
+          videoId:
+              showDetailsProvider.sectionDetailModel.result?.id.toString() ??
+                  '',
+          rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
+                  .toString() ??
+              '',
+          vTitle:
+              showDetailsProvider.sectionDetailModel.result?.name.toString() ??
+                  '',
+          typeId: showDetailsProvider.sectionDetailModel.result?.typeId
+                  .toString() ??
+              '',
+          vType: showDetailsProvider.sectionDetailModel.result?.videoType
+                  .toString() ??
+              '',
+        );
+        if (isRented != null && isRented == true) {
+          getAllEpisode();
+        }
+        return false;
+      }
     } else {
       if ((kIsWeb || Constant.isTV)) {
         Utils.buildWebAlertDialog(context, "login", "").then((value) {
@@ -1224,102 +1323,6 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
     }
   }
 
-  // Future<bool> _checkSubsRentLogin(
-  //     int epiPos, List<episode.Result>? episodeList) async {
-  //   if (Constant.userID != null) {
-  //     if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium ??
-  //                 0) ==
-  //             1 &&
-  //         (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
-  //       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
-  //               1 ||
-  //           (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
-  //               1) {
-  //         return true;
-  //       } else {
-  //         dynamic isSubscribed = await Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) {
-  //               return const Subscription();
-  //             },
-  //           ),
-  //         );
-  //         if (isSubscribed != null && isSubscribed == true) {
-  //           getAllEpisode();
-  //         }
-  //         return false;
-  //       }
-  //     } else if ((episodeProvider
-  //                 .episodeBySeasonModel.result?[epiPos].isPremium ??
-  //             0) ==
-  //         1) {
-  //       if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
-  //           1) {
-  //         return true;
-  //       } else {
-  //         dynamic isSubscribed = await Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) {
-  //               return const Subscription();
-  //             },
-  //           ),
-  //         );
-  //         if (isSubscribed != null && isSubscribed == true) {
-  //           getAllEpisode();
-  //         }
-  //         return false;
-  //       }
-  //     } else if ((showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) ==
-  //         1) {
-  //       if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
-  //           1) {
-  //         return true;
-  //       } else {
-  //         dynamic isRented = await Utils.paymentForRent(
-  //           context: context,
-  //           videoId:
-  //               showDetailsProvider.sectionDetailModel.result?.id.toString() ??
-  //                   '',
-  //           rentPrice: showDetailsProvider.sectionDetailModel.result?.rentPrice
-  //                   .toString() ??
-  //               '',
-  //           vTitle: showDetailsProvider.sectionDetailModel.result?.name
-  //                   .toString() ??
-  //               '',
-  //           typeId: showDetailsProvider.sectionDetailModel.result?.typeId
-  //                   .toString() ??
-  //               '',
-  //           vType: showDetailsProvider.sectionDetailModel.result?.videoType
-  //                   .toString() ??
-  //               '',
-  //         );
-  //         if (isRented != null && isRented == true) {
-  //           getAllEpisode();
-  //         }
-  //         return false;
-  //       }
-  //     } else {
-  //       return true;
-  //     }
-  //   } else {
-  //     if ((kIsWeb || Constant.isTV)) {
-  //       Utils.buildWebAlertDialog(context, "login", "").then((value) {
-  //         getAllEpisode();
-  //       });
-  //       return false;
-  //     }
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) {
-  //           return const LoginViaSocial();
-  //         },
-  //       ),
-  //     );
-  //     return false;
-  //   }
-  // }
-  // /* ========= Open Player ========= */
+
+
 }

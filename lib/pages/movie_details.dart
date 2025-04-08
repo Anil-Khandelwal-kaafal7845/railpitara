@@ -537,10 +537,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
             children: [
               /* Poster */
               _buildMobilePoster(),
-
-       
               Container(
-          
                 child: Column(
                   children: [
                     Padding(
@@ -566,13 +563,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             fontstyle: FontStyle.normal,
                           ),
                           const SizedBox(height: 5),
-                         
                         ],
                       ),
                     ),
 
-                   
-                    
                     Container(
                       width: MediaQuery.of(context).size.width,
                       margin: const EdgeInsets.fromLTRB(12, 0, 20, 0),
@@ -637,7 +631,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           : _buildWatchNow(),
                     ),
 
-
 // SizedBox(height: 10,) ,
                     Wrap(
                       spacing: 10, // Space between each tag
@@ -651,10 +644,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                               Text(
+                              Text(
                                 "•", // Bullet point
                                 style: TextStyle(
-                                    color: white.withOpacity(0.7), fontSize: 14),
+                                    color: white.withOpacity(0.7),
+                                    fontSize: 14),
                               ),
                               const SizedBox(width: 5),
                               MyText(
@@ -680,12 +674,12 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                               Text(
+                              Text(
                                 "•", // Bullet point
                                 style: TextStyle(
-                                    color: white.withOpacity(0.7), fontSize: 14),
+                                    color: white.withOpacity(0.7),
+                                    fontSize: 14),
                               ),
-                            
                               const SizedBox(width: 5),
                               MyText(
                                 color: primaryLight,
@@ -711,10 +705,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                               Text(
+                              Text(
                                 "•", // Bullet point
                                 style: TextStyle(
-                                    color: white.withOpacity(0.7), fontSize: 14),
+                                    color: white.withOpacity(0.7),
+                                    fontSize: 14),
                               ),
                               const SizedBox(width: 5),
                               AnimatedGifWidget(
@@ -746,8 +741,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             ],
                           ),
                       ],
-                    )
-,
+                    ),
 
                     Container(
                       margin: EdgeInsets.only(left: 12, top: 12),
@@ -772,8 +766,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         ),
                       ),
                     ),
-
-
 
                     /* Included Features buttons */
                     if (widget.videoType != 5)
@@ -996,7 +988,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         ),
                       ),
 
-                  
                     /* AdMob Banner */
 
                     Utils.showBannerAd(context),
@@ -2338,7 +2329,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         .pop(); // Close the dialog
                                   },
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black, backgroundColor: colorPrimary,
+                                    foregroundColor: Colors.black,
+                                    backgroundColor: colorPrimary,
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
                                   ),
@@ -2351,7 +2343,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         .pop(); // Close the dialog and do nothing
                                   },
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
+                                    foregroundColor: Colors.white,
+                                    side: BorderSide(color: Colors.white),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
                                   ),
@@ -2565,7 +2558,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         .pop(); // Close the dialog
                                   },
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black, backgroundColor: colorPrimary,
+                                    foregroundColor: Colors.black,
+                                    backgroundColor: colorPrimary,
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
                                   ),
@@ -2578,7 +2572,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         .pop(); // Close the dialog and do nothing
                                   },
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white, side: BorderSide(color: Colors.white),
+                                    foregroundColor: Colors.white,
+                                    side: BorderSide(color: Colors.white),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
                                   ),
@@ -3135,7 +3130,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   Widget _buildTabs() {
     return Column(
       children: [
-        
         Container(
           height: 0.5,
           color: otherColor,
@@ -3146,25 +3140,24 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           ),
         ),
         /* Data */
-      
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /* Customers also watched */
-              RelatedVideoShow(
-                relatedDataList:
-                    videoDetailsProvider.sectionDetailModel.getRelatedVideo,
-              ),
-              /* Cast & Crew */
-              CastCrew(castList: videoDetailsProvider.sectionDetailModel.cast),
-              /* Director */
-              _buildDirector(),
-            ],
-          )
-       
-    ],
+
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /* Customers also watched */
+            RelatedVideoShow(
+              relatedDataList:
+                  videoDetailsProvider.sectionDetailModel.getRelatedVideo,
+            ),
+            /* Cast & Crew */
+            CastCrew(castList: videoDetailsProvider.sectionDetailModel.cast),
+            /* Director */
+            _buildDirector(),
+          ],
+        )
+      ],
     );
   }
 
