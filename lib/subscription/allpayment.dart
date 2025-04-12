@@ -166,7 +166,7 @@ class AllPaymentState extends State<AllPayment>
           await channelSectionProvider.updatePrimiumPurchase();
           await videoDetailsProvider.updateRentPurchase();
           await showDetailsProvider.updateRentPurchase();
-          print("Payment DONE 1 ----");
+          print("Payment DONE 1 ----${orderStatus}");
 
           Singular.eventWithArgs('Razorpay Payment Success', {
             'event_name': 'Razorpay Payment Success',
@@ -186,7 +186,9 @@ class AllPaymentState extends State<AllPayment>
         } else {
           isPaymentDone = false;
 
-          print("Payment DONE 2 ----");
+
+          print("Payment DONE 2 ----${orderStatus}");
+
 
           Singular.eventWithArgs('Razorpay Payment Failed', {
             'event_name': 'Razorpay Payment Failed',
@@ -206,6 +208,8 @@ class AllPaymentState extends State<AllPayment>
         }
       } else {
         print("Payment failed ----");
+          print("Payment DONE 3 ----${orderStatus}");
+
         isPaymentDone = false;
         if (!mounted) return;
         Navigator.pop(context, isPaymentDone);
@@ -1444,7 +1448,11 @@ class AllPaymentState extends State<AllPayment>
     }
   }
 
+
+
   void handlePaymentErrorResponse(PaymentFailureResponse response) async {
+            debugPrint("============ Payment Failed event hit--- ============");
+
     analytics.logEvent(
       name: "Razorpay Payment Faild",
       parameters: {
@@ -1490,6 +1498,8 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+        debugPrint("============ Success paykment event hit--- ============");
+
     analytics.logEvent(
       name: "Razorpay Payment Success",
       parameters: {
@@ -1526,7 +1536,7 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handleExternalWalletSelected(ExternalWalletResponse response) {
-    debugPrint("============ External Wallet Selected ============");
+    debugPrint("============ External Wallet event hit--- ============");
     if (widget.payType == "Package") {
       addTransaction(
           widget.itemId,
@@ -1541,6 +1551,8 @@ class AllPaymentState extends State<AllPayment>
           widget.typeId, widget.videoType, "external");
     }
   }
+
+
 
   /* ********* Razorpay END ********* */
 

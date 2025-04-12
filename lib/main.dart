@@ -58,18 +58,19 @@ Future<void> getInstallReferrer() async {
 
     print('------------------------------');
     print('✅ Install Referrer: ${referrerDetails.installReferrer}');
-    print('📌 Referrer Click Timestamp: ${referrerDetails.referrerClickTimestampSeconds}');
-    print('⏳ Install Begin Timestamp: ${referrerDetails.installBeginTimestampSeconds}');
+    print(
+        '📌 Referrer Click Timestamp: ${referrerDetails.referrerClickTimestampSeconds}');
+    print(
+        '⏳ Install Begin Timestamp: ${referrerDetails.installBeginTimestampSeconds}');
     print('------------------------------');
   } catch (e) {
     print('❌ Error retrieving install referrer: $e');
   }
 }
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-      await getInstallReferrer();  // Call this on app startup
+  await getInstallReferrer(); // Call this on app startup
 
   if (!kIsWeb) {
     await FlutterDownloader.initialize();
@@ -102,10 +103,11 @@ Future<void> main() async {
     'vi'
   ]);
 
-    // Initialize Singular SDK
+  // Initialize Singular SDK
 
   // Request App Tracking Transparency Permission
-  final trackingStatus = await AppTrackingTransparency.requestTrackingAuthorization();
+  final trackingStatus =
+      await AppTrackingTransparency.requestTrackingAuthorization();
   debugPrint("Tracking Authorization Status: $trackingStatus");
 
   SingularConfig config = SingularConfig('ott_snap_37c31355',
@@ -178,7 +180,7 @@ Future<void> main() async {
   );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown, 
+    DeviceOrientation.portraitDown,
   ]);
 }
 
@@ -205,7 +207,7 @@ class _MyAppState extends State<MyApp> {
     // _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
     if (!kIsWeb) _getDeviceInfo();
-        getAdvertisingId();
+    getAdvertisingId();
     super.initState();
   }
 
@@ -410,7 +412,7 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 
-    Future<void> getAdvertisingId() async {
+  Future<void> getAdvertisingId() async {
     try {
       // Check the platform (Android or iOS)
       if (kIsWeb) {
@@ -450,7 +452,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-
   _getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
@@ -466,9 +467,6 @@ class _MyAppState extends State<MyApp> {
 
     debugPrint("Device Type =======================> ${Constant.deviceType}");
   }
-
-
-
 }
 
 //TO BUILD APK

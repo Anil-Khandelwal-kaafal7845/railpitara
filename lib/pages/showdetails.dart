@@ -110,28 +110,42 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   /// Called when the top route has been popped off, and the current route
   /// shows up.
+  /// 
+  
+   void _fetchDataAgain() async {
+     showDetailsProvider =
+        Provider.of<ShowDetailsProvider>(context, listen: false);
+    episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+   
+    _getData();
+    setState(() {});
+  }
   @override
   void didPopNext() {
     debugPrint("didPopNext");
-    if (showDetailsProvider.sectionDetailModel.result?.trailerType ==
-        "youtube") {
-      if (_trailerYoutubeController == null) {
-        loadTrailer(
-            showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-            showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-      } else {
-        if (_trailerYoutubeController != null) {
-          _trailerYoutubeController?.seekTo(seconds: 0.0);
-          _trailerYoutubeController?.playVideo();
-        }
-      }
-    } else {
-      if (_trailerNormalController == null) {
-        loadTrailer(
-            showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-            showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-      }
-    }
+   _fetchDataAgain();
+   
+
+    // if (showDetailsProvider.sectionDetailModel.result?.trailerType ==
+    //     "youtube") {
+    //   if (_trailerYoutubeController == null) {
+    //     loadTrailer(
+    //         showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+    //         showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+    //   } else {
+    //     if (_trailerYoutubeController != null) {
+    //       _trailerYoutubeController?.seekTo(seconds: 0.0);
+    //       _trailerYoutubeController?.playVideo();
+    //     }
+    //   }
+    // } else {
+    //   if (_trailerNormalController == null) {
+    //     loadTrailer(
+    //         showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
+    //         showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
+    //   }
+    // }
+
     super.didPopNext();
   }
 
@@ -164,6 +178,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         widget.typeId, widget.videoType, widget.videoId, widget.upcomingType);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.result != null) {
+        episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
+        // print("EPSOID API CXALL ---");
+          getAllEpisode(showDetailsProvider.seasonPos,
+            showDetailsProvider.sectionDetailModel.session);
+
         /* Trailer set-up */
         // _setUpTrailer();
       }
@@ -2282,6 +2301,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                         );
                       },
                     );
+                  } else {
+                    openPlayer("Show");
                   }
                 } else {
                   Navigator.push(
@@ -2323,18 +2344,13 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                           color: black,
                         ),
                         const SizedBox(width: 10),
-                        MyText(
-                          color: black,
-                          text: "watch_now",
-                          multilanguage: true,
-                          textalign: TextAlign.center,
-                          fontsizeNormal: 13,
-                          fontweight: FontWeight.w600,
-                          fontsizeWeb: 13,
-                          maxline: 1,
-                          overflow: TextOverflow.ellipsis,
-                          fontstyle: FontStyle.normal,
-                        ),
+                        Text(
+                          "Watch Episode 1",
+                          style: TextStyle(
+                              color: black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13),
+                        )
                       ],
                     ),
                   ),
@@ -2457,6 +2473,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                           );
                         },
                       );
+                    } else {
+                      openPlayer("Show");
                     }
                   } else {
                     Navigator.push(
@@ -3758,13 +3776,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   Future<bool> _checkSubsRentLogin() async {
     if (Constant.userID != null) {
-      if ((episodeProvider.episodeBySeasonModel
-                      .result?[showDetailsProvider.mCurrentEpiPos].isPremium ??
+      if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
                   0) ==
               1 &&
           (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
-        if ((episodeProvider.episodeBySeasonModel
-                        .result?[showDetailsProvider.mCurrentEpiPos].isBuy ??
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ??
                     0) ==
                 1 ||
             (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
@@ -3784,12 +3800,10 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           }
           return false;
         }
-      } else if ((episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].isPremium ??
+      } else if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
               0) ==
           1) {
-        if ((episodeProvider.episodeBySeasonModel
-                    .result?[showDetailsProvider.mCurrentEpiPos].isBuy ??
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ??
                 0) ==
             1) {
           return true;
@@ -3857,4 +3871,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       return false;
     }
   }
+
+
+
 }

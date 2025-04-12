@@ -88,6 +88,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
   @override
   void didPopNext() {
     _fetchDataBalance();
+    getAllEpisode();
   }
 
   getAllEpisode() async {
