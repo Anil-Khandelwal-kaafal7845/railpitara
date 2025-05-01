@@ -810,24 +810,24 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
       int epiPos, List<episode.Result>? episodeList) async {
     if (Constant.userID != null) {
       // Case 1: Premium + Rent Video with Coin Option
-      if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium ??
+      if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
                   0) ==
               1 &&
-          (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1 &&
+          (episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ?? 0) == 1 &&
           (episodeProvider.episodeBySeasonModel.result?[epiPos]
                       .isabaletocoinpurches ??
                   0) ==
               1) {
         debugPrint('Case 1: Premium + Rent Video with Coin Option');
         debugPrint(
-            'isPremium: ${episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium}');
+            'isPremium: ${showDetailsProvider.sectionDetailModel.result?.isPremium}');
         debugPrint(
-            'isRent: ${showDetailsProvider.sectionDetailModel.result?.isRent}');
+            'isRent: ${episodeProvider.episodeBySeasonModel.result?[epiPos].isRent}');
         debugPrint(
             'isabaletocoinpurches: ${showDetailsProvider.sectionDetailModel.result?.isabaletocoinpurches}');
-        if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) ==
                 1 ||
-            (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+            (episodeProvider.episodeBySeasonModel.result?[epiPos].rentBuy ?? 0) ==
                 1 ||
             (episodeProvider.episodeBySeasonModel.result?[epiPos].iscoinbuy ??
                     0) ==
@@ -850,14 +850,13 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
       }
 
          // Case 2: Only Premium Video
-      else if ((episodeProvider
-                  .episodeBySeasonModel.result?[epiPos].isPremium ??
+      else if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
               0) ==
           1) {
         debugPrint('Case 2: Only Premium Video');
         debugPrint(
-            'isPremium: ${episodeProvider.episodeBySeasonModel.result?[epiPos].isPremium}');
-        if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isBuy ?? 0) ==
+            'isPremium: ${showDetailsProvider.sectionDetailModel.result?.isPremium}');
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) ==
             1) {
           debugPrint('User can access the video');
           return true;
@@ -880,13 +879,13 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
 
       // Case 2: Only rent Video
-      else if ((showDetailsProvider.sectionDetailModel.result?.isRent ??
+      else if ((episodeProvider.episodeBySeasonModel.result?[epiPos].isRent ??
               0) ==
           1) {
         debugPrint('Case 2: Only rent Video');
         debugPrint(
-            'is rent : ${showDetailsProvider.sectionDetailModel.result?.isPremium}');
-        if ((showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
+            'is rent : ${episodeProvider.episodeBySeasonModel.result?[epiPos].isRent}');
+        if ((episodeProvider.episodeBySeasonModel.result?[epiPos].rentBuy ?? 0) ==
             1) {
           debugPrint('User can access the video');
           return true;

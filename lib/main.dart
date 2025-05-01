@@ -52,25 +52,10 @@ import 'package:singular_flutter_sdk/singular.dart';
 import 'package:singular_flutter_sdk/singular_config.dart';
 import 'package:wakelock/wakelock.dart';
 
-Future<void> getInstallReferrer() async {
-  try {
-    final referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
 
-    print('------------------------------');
-    print('✅ Install Referrer: ${referrerDetails.installReferrer}');
-    print(
-        '📌 Referrer Click Timestamp: ${referrerDetails.referrerClickTimestampSeconds}');
-    print(
-        '⏳ Install Begin Timestamp: ${referrerDetails.installBeginTimestampSeconds}');
-    print('------------------------------');
-  } catch (e) {
-    print('❌ Error retrieving install referrer: $e');
-  }
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await getInstallReferrer(); // Call this on app startup
 
   if (!kIsWeb) {
     await FlutterDownloader.initialize();
@@ -127,26 +112,26 @@ Future<void> main() async {
 
 // Initialize Singular done ---
 
-  if (!kIsWeb) {
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    // Initialize OneSignal
-    OneSignal.initialize(Constant.oneSignalAppId);
-    OneSignal.Notifications.requestPermission(true);
-    OneSignal.Notifications.addPermissionObserver((state) {
-      debugPrint("Has permission ==> $state");
-    });
-    OneSignal.User.pushSubscription.addObserver((state) {
-      debugPrint(
-          "pushSubscription state ==> ${state.current.jsonRepresentation()}");
-    });
-    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      /// preventDefault to not display the notification
-      event.preventDefault();
-      // Do async work
-      /// notification.display() to display after preventing default
-      event.notification.display();
-    });
-  }
+  // if (!kIsWeb) {
+  //   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  //   // Initialize OneSignal
+  //   OneSignal.initialize(Constant.oneSignalAppId);
+  //   // OneSignal.Notifications.requestPermission(true);
+  //   OneSignal.Notifications.addPermissionObserver((state) {
+  //     debugPrint("Has permission ==> $state");
+  //   });
+  //   OneSignal.User.pushSubscription.addObserver((state) {
+  //     debugPrint(
+  //         "pushSubscription state ==> ${state.current.jsonRepresentation()}");
+  //   });
+  //   OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+  //     /// preventDefault to not display the notification
+  //     event.preventDefault();
+  //     // Do async work
+  //     /// notification.display() to display after preventing default
+  //     event.notification.display();
+  //   });
+  // }
   runApp(
     MultiProvider(
       providers: [

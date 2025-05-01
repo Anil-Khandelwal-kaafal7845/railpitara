@@ -1661,6 +1661,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
     );
   }
 
+
   Widget _buildSeasonBtn() {
     if (showDetailsProvider.sectionDetailModel.session != null &&
         (showDetailsProvider.sectionDetailModel.session?.length ?? 0) > 0) {
@@ -1765,7 +1766,8 @@ class TVShowDetailsState extends State<TVShowDetails> {
     }
   }
 
-  List<DropdownMenuItem<Session>>? _buildWebDropDownItems() {
+
+ List<DropdownMenuItem<Session>>? _buildWebDropDownItems() {
     return showDetailsProvider.sectionDetailModel.session
         ?.map<DropdownMenuItem<Session>>(
       (Session value) {

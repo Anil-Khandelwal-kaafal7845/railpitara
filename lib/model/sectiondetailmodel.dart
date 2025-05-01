@@ -158,6 +158,7 @@ class Result {
       this.channelId,
       this.categoryId,
       this.languageId,
+      this.playerVideoUrl,
       this.castId,
       this.isabaletocoinpurches,
       this.coinvalue,
@@ -238,6 +239,7 @@ class Result {
   dynamic isLiveUrl;
   dynamic providerId;
  dynamic isAstroUrl;
+ dynamic playerVideoUrl;
  dynamic iscoinbuy;
  dynamic isadshow;
  dynamic isabaletocoinpurches;
@@ -313,6 +315,7 @@ class Result {
         fullWidth: json["full_width"],
             isadshow: json["is_ads_show"],
         thumbnail1: json["thumbnail_1"],
+        playerVideoUrl:json["video_url"],
         landscape1: json["landscape_1"],
         isLiveUrl: json["is_live_url"],
         providerId: json["provider_id"],
@@ -394,6 +397,7 @@ class Result {
         "category_id": categoryId,
         "language_id": languageId,
         "is_coin_buy":iscoinbuy,
+        "video_url": playerVideoUrl,
         "is_coin_purchase":isabaletocoinpurches,
         "no_of_coin_purchase":coinvalue,
         "cast_id": castId,
