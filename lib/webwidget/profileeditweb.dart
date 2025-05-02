@@ -28,7 +28,7 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
   String? userId, userName;
   final nameController = TextEditingController();
   late ProfileProvider profileProvider;
-
+  bool isImageRemoved = false;
   @override
   void initState() {
     profileProvider = Provider.of<ProfileProvider>(context, listen: false);
@@ -104,7 +104,12 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
                           fit: BoxFit.cover,
                           height: 90,
                           width: 90,
-                        )
+                        ) : isImageRemoved
+                      ? Container(
+                    height: 90,
+                    width: 90,
+                    color: Colors.white, // White color for removed image
+                  )
                       : MyNetworkImage(
                           imageUrl: profileProvider.profileModel.status == 200
                               ? profileProvider.profileModel.result != null
@@ -195,8 +200,8 @@ class _ProfileEditWebState extends State<ProfileEditWeb> {
                   }
                   await sharePref.save(
                       "username", nameController.text.toString());
-                  if (pickedImageFile != null) {
-                    await profileProvider.getImageUpload(pickedImageFile);
+                  if (pickedImageFile != null || isImageRemoved) {
+                    await profileProvider.getImageUpload(pickedImageFile); // will send empty
                   }
                   await profileProvider
                       .getUpdateProfile(nameController.text.toString());

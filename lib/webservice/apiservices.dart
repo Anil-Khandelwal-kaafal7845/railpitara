@@ -389,6 +389,11 @@ class ApiService {
       '$baseUrl$uploadImage',
       data: FormData.fromMap({
         'id': Constant.userID,
+        // 'image': (profileImg?.path ?? "").isNotEmpty
+        //     ? await MultipartFile.fromFile(profileImg!.path,
+        //     filename: profileImg.path.split('/').last)
+        //     : "",
+
         'image': (profileImg?.path ?? "").isNotEmpty
             ? await MultipartFile.fromFile(
                 profileImg?.path ?? "",

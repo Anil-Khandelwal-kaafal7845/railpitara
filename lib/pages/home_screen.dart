@@ -436,6 +436,7 @@ class HomeState extends State<Home> with RouteAware {
     await homeProvider.setLoading(true);
     await homeProvider.getSectionType();
     await homeProvider.fetchUserWalletBalance(Constant.userID ?? "");
+    if (!mounted) return;
     findProvider = Provider.of<FindProvider>(context, listen: false);
     if (!homeProvider.loading) {
       if (homeProvider.sectionTypeModel.status == 200 &&
@@ -4568,45 +4569,45 @@ class HomeState extends State<Home> with RouteAware {
         physics: const BouncingScrollPhysics(),
         separatorBuilder: (_, __) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
-          return Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(8),
-                onTap: () {
-                  debugPrint("Clicked on: ${sectionDataList?[index].video320}");
+          return InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () {
+              debugPrint("Clicked on: ${sectionDataList?[index].video320}");
 
-                  if (sectionDataList?[index].isLiveUrl == 1) {
-                    if (Constant.userID == null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginViaSocial()),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TestPlayerWeb(
-                            loadURL: sectionDataList![index].video320!,
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    openDetailPage(
-                      (sectionDataList?[index].videoType ?? 0) == 2
-                          ? "showdetail"
-                          : "videodetail",
-                      sectionDataList?[index].id ?? 0,
-                      upcomingType ?? 0,
-                      sectionDataList?[index].videoType ?? 0,
-                      sectionDataList?[index].typeId ?? 0,
-                      sectionDataList?[index].name ?? "",
-                    );
-                  }
-                },
-                child: Container(
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginViaSocial()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TestPlayerWeb(
+                        loadURL: sectionDataList![index].video320!,
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                openDetailPage(
+                  (sectionDataList?[index].videoType ?? 0) == 2
+                      ? "showdetail"
+                      : "videodetail",
+                  sectionDataList?[index].id ?? 0,
+                  upcomingType ?? 0,
+                  sectionDataList?[index].videoType ?? 0,
+                  sectionDataList?[index].typeId ?? 0,
+                  sectionDataList?[index].name ?? "",
+                );
+              }
+            },
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Container(
                   width: Dimens.widthTopTen,
                   height: Dimens.heightTopTen,
                   decoration: BoxDecoration(
@@ -4628,30 +4629,88 @@ class HomeState extends State<Home> with RouteAware {
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                left: 0,
-                bottom: -18,
-                child: Container(
-                  child: RichText(
-                    text: TextSpan(children: <TextSpan>[
-                      TextSpan(
-                        text: '${index + 1} ',
-                        style: GoogleFonts.outfit(
-                          fontSize: getAdaptiveTextSize(
-                            context,
-                            75,
-                          ),
-                          fontStyle: FontStyle.normal,
-                          color: topTen,
-                          fontWeight: FontWeight.w600,
-                        ),
+                // Rent Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: _buildTag('assets/images/rupee.png'),
+                ),
+                // Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Both Rent & Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Live Indicator
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
                       ),
-                    ]),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              )
-            ],
+                Positioned(
+                  left: 0,
+                  bottom: -18,
+                  child: Container(
+                    child: RichText(
+                      text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                          text: '${index + 1} ',
+                          style: GoogleFonts.outfit(
+                            fontSize: getAdaptiveTextSize(
+                              context,
+                              75,
+                            ),
+                            fontStyle: FontStyle.normal,
+                            color: topTen,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ]),
+                    ),
+                  ),
+                )
+              ],
+            ),
           );
         },
       ),

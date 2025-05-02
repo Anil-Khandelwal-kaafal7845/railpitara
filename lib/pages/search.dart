@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -37,7 +38,7 @@ class SearchState extends State<Search> {
 
   @override
   void initState() {
-    _initSpeech();
+   // _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
     searchController.text = widget.searchText ?? "";
     _getData();
@@ -53,7 +54,39 @@ class SearchState extends State<Search> {
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
+    if (_speechToText.isListening) {
+      await _speechToText.stop();
+    }
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.bluetoothConnect,
+    ].request();
 
+    // Check individual permissions
+    var micStatus = statuses[Permission.microphone]!;
+    var connectStatus = statuses[Permission.bluetoothConnect]!;
+
+    if (micStatus.isPermanentlyDenied ||
+        connectStatus.isPermanentlyDenied) {
+     // _showPermissionDialog();
+      return;
+    }
+
+    if (!micStatus.isGranted || !connectStatus.isGranted) {
+      // You can show a message if needed
+      //  Utils.showSnackbar(context, "info", "Required permissions not granted", true);
+      return;
+    }
+
+// Initialize speech recognition here
+//     if (!_speechToText.isAvailable) {
+//       speechEnabled = await _speechToText.initialize();
+//     }
+
+    if (!speechEnabled) {
+      // Utils.showSnackbar(context, "info", "Microphone permission denied", true);
+      return;
+    }
     // Show a listening animation dialog
     showDialog(
       context: context,
@@ -166,7 +199,10 @@ class SearchState extends State<Search> {
 
   @override
   void dispose() {
-    _stopListening();
+    if (_speechToText.isListening) {
+      _speechToText.stop();
+    }
+   // _stopListening();
     searchController.dispose();
     searchProvider.clearProvider();
     super.dispose();
@@ -425,54 +461,55 @@ class SearchState extends State<Search> {
                   ),
                 );
               } else {
-                return InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () {
-                    if (_isListening) {
-                      _stopListening();
-                    } else {
-                      _startListening();
-                    }
-                  },
-                  child: _isListening
-                      ? AvatarGlow(
-                          glowColor: primaryLight,
-                          endRadius: 25,
-                          duration: const Duration(milliseconds: 2000),
-                          repeat: true,
-                          showTwoGlows: true,
-                          repeatPauseDuration:
-                              const Duration(milliseconds: 100),
-                          child: Material(
-                            elevation: 5,
-                            color: transparentColor,
-                            shape: const CircleBorder(),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              color: transparentColor,
-                              padding: const EdgeInsets.all(15),
-                              alignment: Alignment.center,
-                              child: MyImage(
-                                imagePath: "ic_voice.png",
-                                color: black,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: 50,
-                          height: 50,
-                          padding: const EdgeInsets.all(15),
-                          alignment: Alignment.center,
-                          child: MyImage(
-                            imagePath: "ic_voice.png",
-                            color: black,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                );
+                return const SizedBox.shrink();
+                // return InkWell(
+                //   borderRadius: BorderRadius.circular(5),
+                //   onTap: () {
+                //     if (_isListening) {
+                //   //    _stopListening();
+                //     } else {
+                //   //    _startListening();
+                //     }
+                //   },
+                //   child: _isListening
+                //       ? AvatarGlow(
+                //           glowColor: primaryLight,
+                //           endRadius: 25,
+                //           duration: const Duration(milliseconds: 2000),
+                //           repeat: true,
+                //           showTwoGlows: true,
+                //           repeatPauseDuration:
+                //               const Duration(milliseconds: 100),
+                //           child: Material(
+                //             elevation: 5,
+                //             color: transparentColor,
+                //             shape: const CircleBorder(),
+                //             child: Container(
+                //               width: 50,
+                //               height: 50,
+                //               color: transparentColor,
+                //               padding: const EdgeInsets.all(15),
+                //               alignment: Alignment.center,
+                //               child: MyImage(
+                //                 imagePath: "ic_voice.png",
+                //                 color: black,
+                //                 fit: BoxFit.fill,
+                //               ),
+                //             ),
+                //           ),
+                //         )
+                //       : Container(
+                //           width: 50,
+                //           height: 50,
+                //           padding: const EdgeInsets.all(15),
+                //           alignment: Alignment.center,
+                //           child: MyImage(
+                //             imagePath: "ic_voice.png",
+                //             color: black,
+                //             fit: BoxFit.fill,
+                //           ),
+                //         ),
+                // );
               }
             },
           ),

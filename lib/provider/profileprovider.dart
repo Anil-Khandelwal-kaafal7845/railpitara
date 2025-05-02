@@ -55,6 +55,8 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   clearProvider() {
     profileModel = ProfileModel();
     successNameModel = SuccessModel();

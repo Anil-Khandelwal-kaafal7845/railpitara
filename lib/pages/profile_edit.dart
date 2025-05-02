@@ -33,6 +33,7 @@ class ProfileEditState extends State<ProfileEdit> {
   bool? isSwitched;
   String? userId, userName;
   final nameController = TextEditingController();
+  bool isImageRemoved = false;
 
   @override
   void initState() {
@@ -96,32 +97,37 @@ class ProfileEditState extends State<ProfileEdit> {
             children: [
               /* Profile Image */
               Consumer<ProfileProvider>(
-                builder: (context, value, child) {
+                builder: (context, profileProvider, child) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(45),
                     clipBehavior: Clip.antiAlias,
                     child: pickedImageFile != null
                         ? Image.file(
-                            pickedImageFile!,
-                            fit: BoxFit.cover,
-                            height: 90,
-                            width: 90,
-                          )
+                      pickedImageFile!,
+                      fit: BoxFit.cover,
+                      height: 90,
+                      width: 90,
+                    )
+                        : isImageRemoved
+                        ? Container(
+                      height: 90,
+                      width: 90,
+                      color: Colors.white, // White color for removed image
+                    )
                         : MyUserNetworkImage(
-                            imageUrl: profileProvider.profileModel.status == 200
-                                ? profileProvider.profileModel.result != null
-                                    ? (profileProvider
-                                            .profileModel.result?[0].image ??
-                                        "")
-                                    : ""
-                                : "",
-                            fit: BoxFit.cover,
-                            imgHeight: 90,
-                            imgWidth: 90,
-                          ),
+                      imageUrl: profileProvider.profileModel.status == 200
+                          ? profileProvider.profileModel.result != null
+                          ? (profileProvider.profileModel.result?[0].image ?? "")
+                          : ""
+                          : "",
+                      fit: BoxFit.cover,
+                      imgHeight: 90,
+                      imgWidth: 90,
+                    ),
                   );
                 },
               ),
+
               const SizedBox(height: 8),
               /* Change Button */
               InkWell(
@@ -189,9 +195,16 @@ class ProfileEditState extends State<ProfileEdit> {
                       Utils.showProgress(context, prDialog);
                       await sharePref.save(
                           "username", nameController.text.toString());
-                      if (pickedImageFile != null) {
-                        await profileProvider.getImageUpload(pickedImageFile);
+
+
+                      // if (pickedImageFile != null) {
+                      //   await profileProvider.getImageUpload(pickedImageFile);
+                      // }
+
+                      if (pickedImageFile != null || isImageRemoved) {
+                        await profileProvider.getImageUpload(pickedImageFile); // will send empty
                       }
+
                       await profileProvider
                           .getUpdateProfile(nameController.text.toString());
                       if (!mounted) return;
@@ -412,6 +425,50 @@ class ProfileEditState extends State<ProfileEdit> {
                       ),
                     ),
                   ),
+
+
+                  /* Remove Image */
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(5),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //     setState(() {
+                  //       pickedImageFile = null;
+                  //       isImageRemoved = true; // Mark as removed
+                  //     });
+                  //     debugPrint("Profile image removed by user.");
+                  //   },
+                  //
+                  //   child: Container(
+                  //     constraints: BoxConstraints(
+                  //       minWidth: MediaQuery.of(context).size.width,
+                  //     ),
+                  //     height: 48,
+                  //     padding: const EdgeInsets.only(left: 10, right: 10),
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //       border: Border.all(
+                  //         color: Colors.redAccent,
+                  //         width: .5,
+                  //       ),
+                  //       color: Colors.red.shade900,
+                  //       borderRadius: BorderRadius.circular(5),
+                  //     ),
+                  //     child: MyText(
+                  //       color: white,
+                  //       text: "removephoto", // Add this to your localization if needed
+                  //       textalign: TextAlign.center,
+                  //       fontsizeNormal: 16,
+                  //       multilanguage: true,
+                  //       maxline: 1,
+                  //       overflow: TextOverflow.ellipsis,
+                  //       fontweight: FontWeight.w500,
+                  //       fontstyle: FontStyle.normal,
+                  //     ),
+                  //   ),
+                  // ),
+
+
                   const SizedBox(
                     height: 20,
                   ),

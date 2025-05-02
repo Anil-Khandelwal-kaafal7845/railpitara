@@ -47,6 +47,8 @@ class OTPVerifyState extends State<OTPVerify> {
   late Timer _resendTimer;
   int _resendCountdown = 30;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     print("EMNAIL AA GYI ---${widget.email}");
@@ -106,250 +108,265 @@ class OTPVerifyState extends State<OTPVerify> {
       backgroundColor: appBgColor,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-          child: GestureDetector(
-        onTap: () => FocusScope.of(context)
-            .unfocus(), // To dismiss keyboard on outside tap
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Center(
-                child: SizedBox(
-                  height: 250,
-                  width: 250,
-                  child: Image.asset(
-                    "assets/images/otpscreenimage.png",
-                    fit: BoxFit.contain,
+
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return GestureDetector(
+                onTap: () => FocusScope.of(context)
+                    .unfocus(),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                // constraints: BoxConstraints(
-                //   minHeight: MediaQuery.of(context).size.height * 0.05,
-                // ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(80),
-                    topRight: Radius.circular(0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 3,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
-                  ],
-                ),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height * 0.65,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min, // important for scroll
-
+                    child: IntrinsicHeight(
+                    child:  Column(
                         children: [
-                          const SizedBox(height: 30),
-
-                          widget.mobileNumber.isNotEmpty
-                              ? MyText(
-                                  color: black.withOpacity(0.4),
-                                  text: "code_sent_desc",
-                                  fontsizeNormal: 16,
-                                  fontweight: FontWeight.w500,
-                                  maxline: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  textalign: TextAlign.center,
-                                  multilanguage: true,
-                                  fontstyle: FontStyle.normal,
-                                )
-                              : MyText(
-                                  color: black.withOpacity(0.4),
-                                  text: "code_sent_desc_email",
-                                  fontsizeNormal: 16,
-                                  fontweight: FontWeight.w500,
-                                  maxline: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  textalign: TextAlign.center,
-                                  multilanguage: true,
-                                  fontstyle: FontStyle.normal,
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                          Center(
+                            child: SizedBox(
+                              height: 250,
+                              width: 250,
+                              child: Image.asset(
+                                "assets/images/otpscreenimage.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            // constraints: BoxConstraints(
+                            //   minHeight: MediaQuery.of(context).size.height * 0.05,
+                            // ),
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(80),
+                                topRight: Radius.circular(0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 10,
+                                  spreadRadius: 3,
                                 ),
-                          SizedBox(
-                            height: 5,
-                          ),
-
-                          MyText(
-                            color: black.withOpacity(0.3),
-                            text: widget.mobileNumber.isNotEmpty
-                                ? widget.mobileNumber
-                                : widget.email,
-                            fontsizeNormal: 13,
-                            fontweight: FontWeight.w500,
-                            maxline: 3,
-                            overflow: TextOverflow.ellipsis,
-                            textalign: TextAlign.center,
-                            multilanguage: false,
-                            fontstyle: FontStyle.normal,
-                          ),
-
-                          const SizedBox(height: 40),
-
-                          /* Enter Received OTP */
-                          Pinput(
-                            length: 4,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            controller: pinPutController,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            defaultPinTheme: PinTheme(
-                              width: 45,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: white, width: 0.7),
-                                shape: BoxShape.rectangle,
-                                color: black.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              textStyle: GoogleFonts.montserrat(
-                                color: black,
-                                fontSize: 16,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 30),
-
-                          /* Confirm Button */
-                          InkWell(
-                            borderRadius: BorderRadius.circular(26),
-                            onTap: () {
-                              debugPrint(
-                                  "Clicked sms Code =====> ${pinPutController.text}");
-                              if (pinPutController.text.toString().isEmpty) {
-                                Utils.showSnackbar(
-                                    context, "info", "enterreceivedotp", true);
-                              } else {
-                                // if (verificationId == null || verificationId == "") {
-                                //   Utils.showSnackbar(
-                                //       context, "info", "otp_not_working", true);
-                                //   return;
-                                // }
-                                // Utils.showProgress(context, prDialog);
-                                _checkOTPAndLogin();
-                              }
-                            },
                             child: Container(
-                              width: MediaQuery.of(context).size.width / 2.3,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [primaryDark, primaryLight],
-                                  begin: FractionalOffset(0.0, 0.0),
-                                  end: FractionalOffset(1.0, 0.0),
-                                  stops: [0.0, 1.0],
-                                  tileMode: TileMode.clamp,
+                              constraints: BoxConstraints(
+                                minHeight: MediaQuery.of(context).size.height * 0.65,
+                              ),
+                              child: IntrinsicHeight(
+                                child: Container(
+                                  margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min, // important for scroll
+
+                                    children: [
+                                      const SizedBox(height: 30),
+
+                                      widget.mobileNumber.isNotEmpty
+                                          ? MyText(
+                                        color: black.withOpacity(0.4),
+                                        text: "code_sent_desc",
+                                        fontsizeNormal: 16,
+                                        fontweight: FontWeight.w500,
+                                        maxline: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        textalign: TextAlign.center,
+                                        multilanguage: true,
+                                        fontstyle: FontStyle.normal,
+                                      )
+                                          : MyText(
+                                        color: black.withOpacity(0.4),
+                                        text: "code_sent_desc_email",
+                                        fontsizeNormal: 16,
+                                        fontweight: FontWeight.w500,
+                                        maxline: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        textalign: TextAlign.center,
+                                        multilanguage: true,
+                                        fontstyle: FontStyle.normal,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+
+                                      MyText(
+                                        color: black.withOpacity(0.3),
+                                        text: widget.mobileNumber.isNotEmpty
+                                            ? widget.mobileNumber
+                                            : widget.email,
+                                        fontsizeNormal: 13,
+                                        fontweight: FontWeight.w500,
+                                        maxline: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        textalign: TextAlign.center,
+                                        multilanguage: false,
+                                        fontstyle: FontStyle.normal,
+                                      ),
+
+                                      const SizedBox(height: 40),
+
+                                      /* Enter Received OTP */
+                                      Pinput(
+                                        length: 4,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.next,
+                                        controller: pinPutController,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        defaultPinTheme: PinTheme(
+                                          width: 45,
+                                          height: 45,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: white, width: 0.7),
+                                            shape: BoxShape.rectangle,
+                                            color: black.withOpacity(0.3),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          textStyle: GoogleFonts.montserrat(
+                                            color: black,
+                                            fontSize: 16,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 30),
+
+                                      /* Confirm Button */
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(26),
+                                        onTap: () {
+                                          debugPrint(
+                                              "Clicked sms Code =====> ${pinPutController.text}");
+                                          if (pinPutController.text.toString().isEmpty) {
+                                            Utils.showSnackbar(
+                                                context, "info", "enterreceivedotp", true);
+                                          } else {
+                                            // if (verificationId == null || verificationId == "") {
+                                            //   Utils.showSnackbar(
+                                            //       context, "info", "otp_not_working", true);
+                                            //   return;
+                                            // }
+                                            // Utils.showProgress(context, prDialog);
+                                            // _checkOTPAndLogin();
+                                            _isLoading ? null : _checkOTPAndLogin();
+                                          }
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width / 2.3,
+                                          height: 45,
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [primaryDark, primaryLight],
+                                              begin: FractionalOffset(0.0, 0.0),
+                                              end: FractionalOffset(1.0, 0.0),
+                                              stops: [0.0, 1.0],
+                                              tileMode: TileMode.clamp,
+                                            ),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: MyText(
+                                            color: white,
+                                            text: "confirm",
+                                            fontsizeNormal: 15,
+                                            multilanguage: true,
+                                            fontweight: FontWeight.w600,
+                                            maxline: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            textalign: TextAlign.center,
+                                            fontstyle: FontStyle.normal,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+
+                                      /* Resend */
+                                      // InkWell(
+                                      //   borderRadius: BorderRadius.circular(10),
+                                      //   onTap: () {
+                                      //     _sendWhatsappOTP();
+
+                                      //     // if (!codeResended) {
+                                      //     //   codeSend(true);
+                                      //     // }
+                                      //   },
+                                      //   child: Container(
+                                      //     constraints: const BoxConstraints(minWidth: 70),
+                                      //     padding: const EdgeInsets.all(5),
+                                      //     child: MyText(
+                                      //       color: white,
+                                      //       text: "resend",
+                                      //       multilanguage: true,
+                                      //       fontsizeNormal: 16,
+                                      //       fontweight: FontWeight.w700,
+                                      //       maxline: 1,
+                                      //       overflow: TextOverflow.ellipsis,
+                                      //       textalign: TextAlign.center,
+                                      //       fontstyle: FontStyle.normal,
+                                      //     ),
+                                      //   ),
+                                      // ),
+
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: _resendCountdown == 0
+                                            ? () {
+                                          _sendWhatsappOTP();
+                                          setState(() {
+                                            _resendCountdown =
+                                            30; // Reset the countdown
+                                          });
+                                          startResendTimer(); // Start the countdown again
+                                        }
+                                            : null,
+                                        child: Container(
+                                          constraints: const BoxConstraints(minWidth: 70),
+                                          padding: const EdgeInsets.all(5),
+                                          child: _resendCountdown == 0
+                                              ? Text(
+                                            "Resend",
+                                            style: TextStyle(
+                                                color: black.withOpacity(0.4),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15),
+                                          )
+                                              : Text(
+                                            "Resend OTP in 00:${_resendCountdown.toString().padLeft(2, '0')} second",
+                                            style: TextStyle(
+                                                color: black.withOpacity(0.8),
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              alignment: Alignment.center,
-                              child: MyText(
-                                color: white,
-                                text: "confirm",
-                                fontsizeNormal: 15,
-                                multilanguage: true,
-                                fontweight: FontWeight.w600,
-                                maxline: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textalign: TextAlign.center,
-                                fontstyle: FontStyle.normal,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          /* Resend */
-                          // InkWell(
-                          //   borderRadius: BorderRadius.circular(10),
-                          //   onTap: () {
-                          //     _sendWhatsappOTP();
-
-                          //     // if (!codeResended) {
-                          //     //   codeSend(true);
-                          //     // }
-                          //   },
-                          //   child: Container(
-                          //     constraints: const BoxConstraints(minWidth: 70),
-                          //     padding: const EdgeInsets.all(5),
-                          //     child: MyText(
-                          //       color: white,
-                          //       text: "resend",
-                          //       multilanguage: true,
-                          //       fontsizeNormal: 16,
-                          //       fontweight: FontWeight.w700,
-                          //       maxline: 1,
-                          //       overflow: TextOverflow.ellipsis,
-                          //       textalign: TextAlign.center,
-                          //       fontstyle: FontStyle.normal,
-                          //     ),
-                          //   ),
-                          // ),
-
-                          InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: _resendCountdown == 0
-                                ? () {
-                                    _sendWhatsappOTP();
-                                    setState(() {
-                                      _resendCountdown =
-                                          30; // Reset the countdown
-                                    });
-                                    startResendTimer(); // Start the countdown again
-                                  }
-                                : null,
-                            child: Container(
-                              constraints: const BoxConstraints(minWidth: 70),
-                              padding: const EdgeInsets.all(5),
-                              child: _resendCountdown == 0
-                                  ? Text(
-                                      "Resend",
-                                      style: TextStyle(
-                                          color: black.withOpacity(0.4),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15),
-                                    )
-                                  : Text(
-                                      "Resend OTP in 00:${_resendCountdown.toString().padLeft(2, '0')} second",
-                                      style: TextStyle(
-                                          color: black.withOpacity(0.8),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14),
-                                    ),
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
+              );
+            },
           ),
-        ),
-      )),
+
+      ),
     );
   }
 
@@ -406,68 +423,116 @@ class OTPVerifyState extends State<OTPVerify> {
   }
 
   _checkOTPAndLogin() async {
-    // bool error = false;
-    // UserCredential? userCredential;
+    if (_isLoading) return; // Prevent multiple taps
+
+    setState(() {
+      _isLoading = true;
+    });
 
     debugPrint("_checkOTPAndLogin verificationId =====> $verificationId");
     debugPrint("_checkOTPAndLogin smsCode =====> ${pinPutController.text}");
 
-    // Create a PhoneAuthCredential with the code
-    // PhoneAuthCredential? phoneAuthCredential = PhoneAuthProvider.credential(
-    //   verificationId: verificationId ?? "",
-    //   smsCode: pinPutController.text.toString(),
-    // );
+    try {
+      bool value = await ApiService().verifyLoginWithWhatsapp(
+          widget.mobileNumber, pinPutController.text, widget.email);
 
-    // debugPrint(
-    //     "phoneAuthCredential.smsCode        =====> ${phoneAuthCredential.smsCode}");
-    // debugPrint(
-    //     "phoneAuthCredential.verificationId =====> ${phoneAuthCredential.verificationId}");
-
-    await ApiService()
-        .verifyLoginWithWhatsapp(
-            widget.mobileNumber, pinPutController.text, widget.email)
-        .then((value) async {
       if (value) {
         _login(widget.mobileNumber.toString(), widget.email.toString());
       } else {
         await prDialog.hide();
         if (!mounted) return;
         Utils.showSnackbar(context, "info", "otp_invalid", true);
-        return;
       }
-    });
-
-    // try {
-    //   userCredential = await _auth.signInWithCredential(phoneAuthCredential);
-    //   debugPrint(
-    //       "_checkOTPAndLogin userCredential =====> ${userCredential.user?.phoneNumber ?? ""}");
-    // } on FirebaseAuthException catch (e) {
-    //   await prDialog.hide();
-    //   debugPrint("_checkOTPAndLogin error Code =====> ${e.code}");
-    //   if (e.code == 'invalid-verification-code' ||
-    //       e.code == 'invalid-verification-id') {
-    //     if (!mounted) return;
-    //     Utils.showSnackbar(context, "info", "otp_invalid", true);
-    //     return;
-    //   } else if (e.code == 'session-expired') {
-    //     if (!mounted) return;
-    //     Utils.showSnackbar(context, "fail", "otp_session_expired", true);
-    //     return;
-    //   } else {
-    //     error = true;
-    //   }
-    // }
-    // debugPrint(
-    //     "Firebase Verification Complated & phoneNumber => ${userCredential?.user?.phoneNumber} and isError => $error");
-
-    // if (!error && userCredential != null) {
-    //   _login(widget.mobileNumber.toString());
-    // } else {
-    //   await prDialog.hide();
-    //   if (!mounted) return;
-    //   Utils.showSnackbar(context, "fail", "otp_login_fail", true);
-    // }
+    } catch (e) {
+      debugPrint("Error during OTP verification: $e");
+      if (mounted) {
+        Utils.showSnackbar(context, "error", "Something went wrong", true);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
+
+  // _checkOTPAndLogin() async {
+  //   if (_isLoading) return; // Prevent multiple taps
+  //
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   // bool error = false;
+  //   // UserCredential? userCredential;
+  //
+  //   debugPrint("_checkOTPAndLogin verificationId =====> $verificationId");
+  //   debugPrint("_checkOTPAndLogin smsCode =====> ${pinPutController.text}");
+  //
+  //   // Create a PhoneAuthCredential with the code
+  //   // PhoneAuthCredential? phoneAuthCredential = PhoneAuthProvider.credential(
+  //   //   verificationId: verificationId ?? "",
+  //   //   smsCode: pinPutController.text.toString(),
+  //   // );
+  //
+  //   // debugPrint(
+  //   //     "phoneAuthCredential.smsCode        =====> ${phoneAuthCredential.smsCode}");
+  //   // debugPrint(
+  //   //     "phoneAuthCredential.verificationId =====> ${phoneAuthCredential.verificationId}");
+  //
+  //   ///
+  //   await ApiService()
+  //       .verifyLoginWithWhatsapp(
+  //       widget.mobileNumber, pinPutController.text, widget.email)
+  //       .then((value) async {
+  //     if (value) {
+  //       _login(widget.mobileNumber.toString(), widget.email.toString());
+  //     } else {
+  //       await prDialog.hide();
+  //       if (!mounted) return;
+  //       Utils.showSnackbar(context, "info", "otp_invalid", true);
+  //       return;
+  //     }
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     }
+  //   });
+  //
+  //   ///
+  //
+  //   // try {
+  //   //   userCredential = await _auth.signInWithCredential(phoneAuthCredential);
+  //   //   debugPrint(
+  //   //       "_checkOTPAndLogin userCredential =====> ${userCredential.user?.phoneNumber ?? ""}");
+  //   // } on FirebaseAuthException catch (e) {
+  //   //   await prDialog.hide();
+  //   //   debugPrint("_checkOTPAndLogin error Code =====> ${e.code}");
+  //   //   if (e.code == 'invalid-verification-code' ||
+  //   //       e.code == 'invalid-verification-id') {
+  //   //     if (!mounted) return;
+  //   //     Utils.showSnackbar(context, "info", "otp_invalid", true);
+  //   //     return;
+  //   //   } else if (e.code == 'session-expired') {
+  //   //     if (!mounted) return;
+  //   //     Utils.showSnackbar(context, "fail", "otp_session_expired", true);
+  //   //     return;
+  //   //   } else {
+  //   //     error = true;
+  //   //   }
+  //   // }
+  //   // debugPrint(
+  //   //     "Firebase Verification Complated & phoneNumber => ${userCredential?.user?.phoneNumber} and isError => $error");
+  //
+  //   // if (!error && userCredential != null) {
+  //   //   _login(widget.mobileNumber.toString());
+  //   // } else {
+  //   //   await prDialog.hide();
+  //   //   if (!mounted) return;
+  //   //   Utils.showSnackbar(context, "fail", "otp_login_fail", true);
+  //   // }
+  // }
 
   _login(String mobile, String email) async {
     debugPrint("click on Submit mobile => $mobile");
@@ -478,7 +543,7 @@ class OTPVerifyState extends State<OTPVerify> {
     }
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     final sectionDataProvider =
-        Provider.of<SectionDataProvider>(context, listen: false);
+    Provider.of<SectionDataProvider>(context, listen: false);
     await generalProvider.loginWithOTP(mobile, email);
 
     if (!generalProvider.loading) {
@@ -491,10 +556,10 @@ class OTPVerifyState extends State<OTPVerify> {
           userName: generalProvider.loginOTPModel.result?[0].name.toString(),
           userEmail: generalProvider.loginOTPModel.result?[0].email.toString(),
           userMobile:
-              generalProvider.loginOTPModel.result?[0].mobile.toString(),
+          generalProvider.loginOTPModel.result?[0].mobile.toString(),
           userImage: generalProvider.loginOTPModel.result?[0].image.toString(),
           userPremium:
-              generalProvider.loginOTPModel.result?[0].isBuy.toString(),
+          generalProvider.loginOTPModel.result?[0].isBuy.toString(),
           userType: generalProvider.loginOTPModel.result?[0].type.toString(),
         );
 
@@ -513,7 +578,7 @@ class OTPVerifyState extends State<OTPVerify> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const Bottombar()),
-          (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
         );
       } else {
         await prDialog.hide();

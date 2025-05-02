@@ -88,19 +88,19 @@ class LoginViaSocialState extends State<LoginViaSocial> {
           generalProvider.pagesModel.result != null) {
         if ((generalProvider.pagesModel.result?.length ?? 0) > 0) {
           for (var i = 0;
-              i < (generalProvider.pagesModel.result?.length ?? 0);
-              i++) {
+          i < (generalProvider.pagesModel.result?.length ?? 0);
+          i++) {
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("privacy")) {
               privacyUrl =
-                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
+              '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
             if ((generalProvider.pagesModel.result?[i].pageName ?? "")
                 .toLowerCase()
                 .contains("terms")) {
               termsConditionUrl =
-                  '$baseUrl${generalProvider.pagesModel.result?[i].url}';
+              '$baseUrl${generalProvider.pagesModel.result?[i].url}';
             }
           }
         }
@@ -196,73 +196,80 @@ class LoginViaSocialState extends State<LoginViaSocial> {
         backgroundColor: appBgColor,
         resizeToAvoidBottomInset: true, // Ensures UI shifts above keyboard
         body: SafeArea(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context)
-                .unfocus(), // To dismiss keyboard on outside tap
-            child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Center(
-                      child: SizedBox(
-                        height: 250,
-                        width: 250,
-                        child: Image.asset(
-                          "assets/images/loginimage.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return GestureDetector(
+                onTap: () => FocusScope.of(context)
+                    .unfocus(),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
-                  
-                  
-                    Container(
-                      width: double.infinity,
-                      // constraints: BoxConstraints(
-                      //   minHeight: MediaQuery.of(context).size.height * 0.05,
-                      // ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(80),
-                          topRight: Radius.circular(0),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 10,
-                            spreadRadius: 3,
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                          Center(
+                            child: SizedBox(
+                              height: 250,
+                              width: 250,
+                              child: Image.asset(
+                                "assets/images/loginimage.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Container(
-                        constraints: BoxConstraints(
-                          minHeight: MediaQuery.of(context).size.height * 0.65,
-                        ),
-                        child: IntrinsicHeight(
-                          child: Container(
-                            margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize:
-                                  MainAxisSize.min, // important for scroll
 
-                              children: [
-                                generalProvider.isMobileLogin == "1"
-                                    ? Container(
+
+                          Container(
+                            width: double.infinity,
+                            // constraints: BoxConstraints(
+                            //   minHeight: MediaQuery.of(context).size.height * 0.05,
+                            // ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(80),
+                                topRight: Radius.circular(0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 10,
+                                  spreadRadius: 3,
+                                ),
+                              ],
+                            ),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                minHeight: MediaQuery.of(context).size.height * 0.65,
+                              ),
+                              child: IntrinsicHeight(
+                                child: Container(
+                                  margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize:
+                                    MainAxisSize.min, // important for scroll
+
+                                    children: [
+                                      generalProvider.isMobileLogin == "1"
+                                          ? Container(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                               children: [
                                                 SizedBox(
                                                   height: 15,
@@ -303,14 +310,14 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                 color: Colors.black.withOpacity(
                                                     0.3), // Black shade with transparency
                                                 borderRadius:
-                                                    const BorderRadius.all(
+                                                const BorderRadius.all(
                                                   Radius.circular(5),
                                                 ),
                                               ),
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
                                                 child: Row(
                                                   children: [
                                                     // Country code field
@@ -318,45 +325,45 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                       padding: EdgeInsets.only(
                                                           bottom: 5),
                                                       width:
-                                                          45, // Adjust width according to your design
+                                                      45, // Adjust width according to your design
                                                       child: TextField(
                                                         controller:
-                                                            TextEditingController(
-                                                                text: '+91'),
+                                                        TextEditingController(
+                                                            text: '+91'),
                                                         enabled:
-                                                            false, // Disable editing of country code
+                                                        false, // Disable editing of country code
                                                         textAlignVertical:
-                                                            TextAlignVertical
-                                                                .center,
+                                                        TextAlignVertical
+                                                            .center,
                                                         style: TextStyle(
                                                             fontSize: 16,
                                                             color: black),
                                                         decoration:
-                                                            InputDecoration(
+                                                        InputDecoration(
                                                           border:
-                                                              InputBorder.none,
+                                                          InputBorder.none,
                                                           hintText: '+91',
                                                           hintStyle: TextStyle(
                                                             color: black
                                                                 .withOpacity(
-                                                                    0.3),
+                                                                0.3),
                                                             fontSize: 14,
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                            FontWeight.w500,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     SizedBox(
                                                         width:
-                                                            3), // Add spacing between country code and phone number
+                                                        3), // Add spacing between country code and phone number
                                                     // Phone number field
                                                     Expanded(
                                                       child: TextField(
                                                         controller:
-                                                            numberController,
+                                                        numberController,
                                                         keyboardType:
-                                                            TextInputType.phone,
+                                                        TextInputType.phone,
                                                         inputFormatters: [
                                                           LengthLimitingTextInputFormatter(
                                                               10), // Limit input to 10 digits
@@ -366,21 +373,21 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                         style: TextStyle(
                                                             color: black),
                                                         decoration:
-                                                            InputDecoration(
+                                                        InputDecoration(
                                                           border:
-                                                              InputBorder.none,
+                                                          InputBorder.none,
                                                           filled:
-                                                              false, // No extra background fill
+                                                          false, // No extra background fill
                                                           hintStyle: TextStyle(
                                                             color: black
                                                                 .withOpacity(
-                                                                    0.3),
+                                                                0.3),
                                                             fontSize: 14,
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                            FontWeight.w500,
                                                           ),
                                                           hintText:
-                                                              'Enter your mobile number',
+                                                          'Enter your mobile number',
                                                         ),
                                                         onChanged: (phone) {
                                                           setState(() {
@@ -401,10 +408,10 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                     "Click mobileNumber ==> $mobileNumber");
 
                                                 if (numberController.text
-                                                        .trim()
-                                                        .isEmpty ||
+                                                    .trim()
+                                                    .isEmpty ||
                                                     numberController
-                                                            .text.length <
+                                                        .text.length <
                                                         10) {
                                                   // Show Snackbar if phone number is empty or less than 10 digits
                                                   Utils.showSnackbar(
@@ -443,16 +450,16 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                 }
                                               },
                                               borderRadius:
-                                                  BorderRadius.circular(18),
+                                              BorderRadius.circular(18),
                                               child: Container(
                                                 width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
+                                                    .size
+                                                    .width /
                                                     2.3,
                                                 height: 45,
                                                 decoration: BoxDecoration(
                                                   gradient:
-                                                      const LinearGradient(
+                                                  const LinearGradient(
                                                     colors: [
                                                       primaryDark,
                                                       primaryLight
@@ -465,7 +472,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                     tileMode: TileMode.clamp,
                                                   ),
                                                   borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  BorderRadius.circular(12),
                                                 ),
                                                 alignment: Alignment.center,
                                                 child: MyText(
@@ -477,7 +484,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                   fontweight: FontWeight.w600,
                                                   maxline: 1,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textalign: TextAlign.center,
                                                   fontstyle: FontStyle.normal,
                                                 ),
@@ -488,7 +495,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                             /* Or */
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                               children: [
                                                 Container(
                                                   width: 80,
@@ -505,7 +512,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                                   fontweight: FontWeight.w500,
                                                   maxline: 1,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textalign: TextAlign.center,
                                                   fontstyle: FontStyle.normal,
                                                 ),
@@ -521,83 +528,88 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                           ],
                                         ),
                                       )
-                                    : SizedBox.shrink(),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      30), // Clipping to round the edges
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        if (generalProvider.isGoogleLogin ==
-                                            "1")
-                                          _buildSocialButton(
-                                            imagePath: "ic_google.png",
-                                            onTap: _gmailLogin,
-                                            bgColor: Colors.white,
-                                          ),
-                                        if (generalProvider.isEmail == "1")
-                                          _buildSocialButton(
-                                            icon: CupertinoIcons.mail_solid,
-                                            iconColor: Colors.red,
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LoginViaSocialEmail()),
-                                              );
-                                            },
-                                            bgColor: Colors.white,
-                                          ),
-                                        if (generalProvider.isGoogleLogin ==
-                                            "1")
-                                          if (Platform.isIOS)
-                                            _buildSocialButton(
-                                              imagePath: "ic_apple.png",
-                                              onTap: signInWithApple,
-                                              bgColor: Colors.white,
-                                            ),
-                                        if (generalProvider.isFbLogin == "1")
-                                          _buildSocialButton(
-                                            imagePath: "ic_facebook.png",
-                                            onTap: () async {
-                                              final LoginResult result =
-                                                  await FacebookAuth.instance
-                                                      .login();
-                                              if (result.status ==
-                                                  LoginStatus.success) {
-                                                final userData =
+                                          : SizedBox.shrink(),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            30), // Clipping to round the edges
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              if (generalProvider.isGoogleLogin ==
+                                                  "1")
+                                                _buildSocialButton(
+                                                  imagePath: "ic_google.png",
+                                                  onTap: _gmailLogin,
+                                                  bgColor: Colors.white,
+                                                ),
+                                              if (generalProvider.isEmail == "1")
+                                                _buildSocialButton(
+                                                  icon: CupertinoIcons.mail_solid,
+                                                  iconColor: Colors.red,
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginViaSocialEmail()),
+                                                    );
+                                                  },
+                                                  bgColor: Colors.white,
+                                                ),
+                                              if (generalProvider.isGoogleLogin ==
+                                                  "1")
+                                                if (Platform.isIOS)
+                                                  _buildSocialButton(
+                                                    imagePath: "ic_apple.png",
+                                                    onTap: signInWithApple,
+                                                    bgColor: Colors.white,
+                                                  ),
+                                              if (generalProvider.isFbLogin == "1")
+                                                _buildSocialButton(
+                                                  imagePath: "ic_facebook.png",
+                                                  onTap: () async {
+                                                    final LoginResult result =
                                                     await FacebookAuth.instance
-                                                        .getUserData();
-                                                print(userData);
-                                              } else {
-                                                print(result.status);
-                                                print(result.message);
-                                              }
-                                            },
-                                            bgColor: Colors.blue,
+                                                        .login();
+                                                    if (result.status ==
+                                                        LoginStatus.success) {
+                                                      final userData =
+                                                      await FacebookAuth.instance
+                                                          .getUserData();
+                                                      print(userData);
+                                                    } else {
+                                                      print(result.status);
+                                                      print(result.message);
+                                                    }
+                                                  },
+                                                  bgColor: Colors.blue,
+                                                ),
+                                            ],
                                           ),
-                                      ],
-                                    ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    )
-                
-                
-                 ],
-                )),
+                          )
+
+
+                        ],
+                      )
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ));
- 
+
   }
 
   Widget _buildSocialButton({
@@ -625,16 +637,16 @@ class LoginViaSocialState extends State<LoginViaSocial> {
             child: Center(
               child: imagePath != null
                   ? MyImage(
-                      width: 27,
-                      height: 27,
-                      imagePath: imagePath,
-                      fit: BoxFit.contain,
-                    )
+                width: 27,
+                height: 27,
+                imagePath: imagePath,
+                fit: BoxFit.contain,
+              )
                   : Icon(
-                      icon,
-                      size: 26,
-                      color: iconColor,
-                    ),
+                icon,
+                size: 26,
+                color: iconColor,
+              ),
             ),
           ),
         ),
@@ -660,7 +672,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
     UserCredential userCredential;
     try {
       GoogleSignInAuthentication googleSignInAuthentication =
-          await user.authentication;
+      await user.authentication;
       AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
@@ -677,7 +689,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
 
       /* Save PhotoUrl in File */
       mProfileImg =
-          await Utils.saveImageInStorage(userCredential.user?.photoURL ?? "");
+      await Utils.saveImageInStorage(userCredential.user?.photoURL ?? "");
       debugPrint('mProfileImg :===> $mProfileImg');
 
       checkAndNavigate(user.email, user.displayName ?? "", "2");
@@ -736,8 +748,8 @@ class LoginViaSocialState extends State<LoginViaSocial> {
 
       // Initialize variables
       String? displayName =
-          '${appleCredential.givenName ?? ""} ${appleCredential.familyName ?? ""}'
-              .trim();
+      '${appleCredential.givenName ?? ""} ${appleCredential.familyName ?? ""}'
+          .trim();
       String userEmail = firebaseUser?.email ?? "";
       String? firebasedId = firebaseUser?.uid;
 
@@ -780,9 +792,9 @@ class LoginViaSocialState extends State<LoginViaSocial> {
     }
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     final sectionDataProvider =
-        Provider.of<SectionDataProvider>(context, listen: false);
+    Provider.of<SectionDataProvider>(context, listen: false);
     final generalProvider =
-        Provider.of<GeneralProvider>(context, listen: false);
+    Provider.of<GeneralProvider>(context, listen: false);
     await generalProvider.loginWithSocial(
         email, userName, strType, mProfileImg);
     debugPrint('checkAndNavigate loading ==>> ${generalProvider.loading}');
@@ -793,17 +805,17 @@ class LoginViaSocialState extends State<LoginViaSocial> {
         Utils.saveUserCreds(
           userID: generalProvider.LoginViaSocialModel.result?[0].id.toString(),
           userName:
-              generalProvider.LoginViaSocialModel.result?[0].name.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].name.toString(),
           userEmail:
-              generalProvider.LoginViaSocialModel.result?[0].email.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].email.toString(),
           userMobile:
-              generalProvider.LoginViaSocialModel.result?[0].mobile.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].mobile.toString(),
           userImage:
-              generalProvider.LoginViaSocialModel.result?[0].image.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].image.toString(),
           userPremium:
-              generalProvider.LoginViaSocialModel.result?[0].isBuy.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].isBuy.toString(),
           userType:
-              generalProvider.LoginViaSocialModel.result?[0].type.toString(),
+          generalProvider.LoginViaSocialModel.result?[0].type.toString(),
         );
 
         // Set UserID for Next
@@ -822,7 +834,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const Bottombar()),
-          (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
         );
       } else {
         // Hide Progress Dialog
