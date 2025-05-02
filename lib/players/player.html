@@ -20,6 +20,8 @@
       position: absolute;
       top: 0;
       left: 0;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
     #my_player {
@@ -51,9 +53,10 @@
 <body>
   <iframe
     id="my_player"
-    src="https://Chull .tv/unviiplayer.html?url=https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+    src="https://Chull.tv/unviiplayer.html?url=https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
     allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-    allowfullscreen>
+    allowfullscreen
+  >
   </iframe>
 
   <script>

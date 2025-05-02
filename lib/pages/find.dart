@@ -11,6 +11,7 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -36,24 +37,55 @@ class FindState extends State<Find> {
     super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
-    _initSpeech();
+
   }
 
-  /// Initialize speech recognition
-  void _initSpeech() async {
-    speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
+
 
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.bluetoothConnect,
+    ].request();
+
+    // Check individual permissions
+    var micStatus = statuses[Permission.microphone]!;
+    var connectStatus = statuses[Permission.bluetoothConnect]!;
+
+    if (micStatus.isPermanentlyDenied ||
+        connectStatus.isPermanentlyDenied) {
+      _showPermissionDialog();
+      return;
+    }
+
+    if (!micStatus.isGranted || !connectStatus.isGranted) {
+      // You can show a message if needed
+    //  Utils.showSnackbar(context, "info", "Required permissions not granted", true);
+      return;
+    }
+    // Always re-initialize before listening
+    speechEnabled = await _speechToText.initialize(
+      onStatus: (status) => debugPrint("Speech status: $status"),
+      onError: (error) => debugPrint("Speech error: $error"),
+    );
+
+// Initialize speech recognition here
+    if (!_speechToText.isAvailable) {
+      speechEnabled = await _speechToText.initialize();
+    }
+
+    if (!speechEnabled) {
+     // Utils.showSnackbar(context, "info", "Microphone permission denied", true);
+      return;
+    }
 
     // Show a listening animation dialog
     showDialog(
       context: context,
       barrierDismissible:
-          false, // Prevents dismissing the dialog by tapping outside
+          true, // Prevents dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         dialogContext = context; // Save the dialog context to close it later
         return AlertDialog(
@@ -93,10 +125,34 @@ class FindState extends State<Find> {
     // Delay logic to check if speech input is available
     Future.delayed(const Duration(seconds: 5), () {
       if (_isListening && searchController.text.toString().isEmpty) {
-        Utils.showSnackbar(context, "info", "speechnotavailable", true);
+       // Utils.showSnackbar(context, "info", "speechnotavailable", true);
         _stopListening();
       }
     });
+  }
+
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Permission Required'),
+        content: const Text(
+            'Microphone permission is permanently denied. Please enable it from app settings.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              openAppSettings(); // Opens system app settings
+              Navigator.pop(context);
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
   }
 
   /// Stop listening to speech
@@ -179,7 +235,10 @@ class FindState extends State<Find> {
 
   @override
   void dispose() {
-    _stopListening();
+    if (_isListening) {
+      _stopListening();
+    }
+   // _stopListening();
     searchController.dispose();
     findProvider.clearProvider();
     super.dispose();

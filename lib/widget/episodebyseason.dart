@@ -214,7 +214,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                               ),
                                               SizedBox(height: 14),
                                               Text(
-                                                'You must be 18+ to access this content.',
+                                                'May contain mature content, nudity, violence, foul language, substances.',
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.white,
@@ -228,7 +228,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                'Please verify your age.',
+                                                'I Confirm that i am 18 years and above',
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.white,

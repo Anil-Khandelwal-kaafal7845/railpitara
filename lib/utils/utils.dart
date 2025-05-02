@@ -1167,25 +1167,26 @@ class Utils {
     return convTime;
   }
 
-static String convertTimeToText(int timeInSeconds) {
-  // Convert milliseconds to seconds if input is too large
-  if (timeInSeconds > 86400 * 100) { // More than 100 days in seconds
-    timeInSeconds ~/= 1000; // Convert from milliseconds to seconds
+  static String convertTimeToText(int time) {
+    // If the time is more than 24 hours in seconds, assume it's in milliseconds
+    if (time > 86400) {
+      time = time ~/ 1000; // Convert ms to seconds
+    }
+
+    if (time <= 0) return "0";
+
+    int hours = time ~/ 3600;
+    int minutes = (time % 3600) ~/ 60;
+
+    if (hours > 0 && minutes > 0) {
+      return "$hours h $minutes m";
+    } else if (hours > 0) {
+      return "$hours h";
+    } else {
+      return "$minutes m";
+    }
   }
 
-  if (timeInSeconds <= 0) return "0";
-
-  int hours = timeInSeconds ~/ 3600;
-  int minutes = (timeInSeconds % 3600) ~/ 60;
-
-  if (hours > 0 && minutes > 0) {
-    return "$hours h $minutes m";
-  } else if (hours > 0) {
-    return "$hours h";
-  } else {
-    return "$minutes m";
-  }
-}
 
   static String remainTimeInMin(int remainWatch) {
     String convTime = "";

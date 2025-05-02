@@ -130,6 +130,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
           <!DOCTYPE html>
           <html>
           <head>
+          
             <style>
               html, body {
                 margin: 0;
@@ -182,12 +183,14 @@ class _PlayerVideoState extends State<PlayerVideo> {
           disableContextMenu: true,
           useOnLoadResource: true,
           javaScriptEnabled: true,
+          useShouldOverrideUrlLoading: true,
           mediaPlaybackRequiresUserGesture: false,
           userAgent: 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+
         ),
       ),
     ),
-    
+
     // Flutter Back Button (Only in Normal Mode)
     Positioned(
       top: 40.0,
@@ -258,8 +261,8 @@ class _PlayerVideoState extends State<PlayerVideo> {
           <body>
             <iframe
               id="videoFrame"
-              src="https://chull.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true"
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
+              src="https://chull.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=true&preload=true&responsive=true"
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
               allowfullscreen>
             </iframe>
 

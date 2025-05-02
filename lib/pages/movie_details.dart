@@ -407,6 +407,15 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+
+
+    debugPrint(
+        "timeee: ${videoDetailsProvider
+            .sectionDetailModel
+            .result
+            ?.videoDuration }");
+
+
     debugPrint(
         "Back button pressed. Can pop: ${Navigator.of(context).canPop()}");
 
@@ -616,7 +625,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           .result
                                           ?.videoDuration ??
                                       0),
+
                                 ),
+
+
                             ],
                           ),
                         ],

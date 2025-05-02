@@ -31,6 +31,8 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 
+import '../widget/myusernetworkimg.dart';
+
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
 
@@ -52,9 +54,20 @@ class SettingState extends State<Setting> {
     walletProvider = Provider.of<WalletProvider>(context, listen: false);
     generalProvider.getGeneralsetting(context);
     getUserData();
+    getUserDataProfile();
+
     super.initState();
   }
 
+  void getUserDataProfile() async {
+    final profileProvider =
+    Provider.of<ProfileProvider>(context, listen: false);
+    await profileProvider.getProfile(context);
+    Future.delayed(Duration.zero).then((value) {
+      if (!mounted) return;
+      setState(() {});
+    });
+  }
   toggleSwitch(bool value) async {
     if (isSwitched == false) {
       setState(() {
@@ -78,6 +91,7 @@ class SettingState extends State<Setting> {
 
   getUserData() async {
     userName = await sharedPref.read("username");
+
     userType = await sharedPref.read("usertype");
     userMobileNo = await sharedPref.read("usermobile");
     debugPrint('getUserData userName ==> $userName');
@@ -120,9 +134,11 @@ class SettingState extends State<Setting> {
             margin: EdgeInsets.all(22),
             child: Column(
               children: [
+
                 profileCardWidget(
                   userID: Constant.userID,
                   userName: userName,
+                  profile: 'H',
                   userMobileNo: userMobileNo,
                   userType: userType,
                   onDeleteAccountPressed: () {
@@ -192,7 +208,7 @@ class SettingState extends State<Setting> {
                 // ),
 
                 Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
+                  visible: forceUpdateData?.result?.showPackage == 1,
                   child: _buildSettingButton(
                     title: 'rent_store',
                     subTitle: 'view_your_rentvideo',
@@ -220,8 +236,9 @@ class SettingState extends State<Setting> {
                 ),
 
                 Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
-                  child: _buildLine(7.0, 7.0),
+                    visible: forceUpdateData?.result?.showPackage == 1,
+
+                    child: _buildLine(7.0, 7.0),
                 ),
 
                 /* Watchlist */
@@ -250,7 +267,8 @@ class SettingState extends State<Setting> {
 
                 /* Purchases */
                 Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
+                  visible: forceUpdateData?.result?.showPackage == 1,
+
                   child: _buildSettingButton(
                     title: 'purchases',
                     subTitle: 'view_your_purchases',
@@ -275,7 +293,8 @@ class SettingState extends State<Setting> {
                 ),
 
                 Visibility(
-                    visible: forceUpdateData!.result!.showPackage == 1,
+                    visible: forceUpdateData?.result?.showPackage == 1,
+
                     child: _buildLine(7.0, 7.0)),
 
                 /* Coin--- */
@@ -310,7 +329,8 @@ class SettingState extends State<Setting> {
 
                 /* Subscription */
                 Visibility(
-                  visible: forceUpdateData!.result!.showPackage == 1,
+                  visible: forceUpdateData?.result?.showPackage == 1,
+
                   child: _buildSettingButton(
                     title: 'subsciption',
                     subTitle: 'subsciptionnotes',
@@ -335,7 +355,8 @@ class SettingState extends State<Setting> {
                 ),
 
                 Visibility(
-                    visible: forceUpdateData!.result!.showPackage == 1,
+                    visible: forceUpdateData?.result?.showPackage == 1,
+
                     child: _buildLine(7.0, 7.0)),
 
                 /* MaltiLanguage */
@@ -717,6 +738,7 @@ Widget profileCardWidget({
   required String? userName,
   required String? userMobileNo,
   required String? userType,
+  required String? profile,
   required VoidCallback onLoginPressed,
   required VoidCallback onLogoutPressed,
   required VoidCallback onDeleteAccountPressed,
@@ -726,13 +748,26 @@ Widget profileCardWidget({
   bool isLoggedIn = userID != null && userID.isNotEmpty;
 
   /// Get Safe Initials
+  // String getInitials(String? name) {
+  //   if (name == null || name.trim().isEmpty) return "NA";
+  //   List<String> nameParts = name.trim().split(" ");
+  //   return nameParts.length > 1
+  //       ? "${nameParts[0][0]}${nameParts[1][0]}"
+  //       : nameParts[0][0];
+  // }
+
+
   String getInitials(String? name) {
     if (name == null || name.trim().isEmpty) return "NA";
-    List<String> nameParts = name.trim().split(" ");
-    return nameParts.length > 1
-        ? "${nameParts[0][0]}${nameParts[1][0]}"
-        : nameParts[0][0];
+    List<String> nameParts = name.trim().split(" ").where((part) => part.isNotEmpty).toList();
+    if (nameParts.isEmpty) return "NA";
+    String firstInitial = nameParts[0].isNotEmpty ? nameParts[0][0] : '';
+    String secondInitial = nameParts.length > 1 && nameParts[1].isNotEmpty
+        ? nameParts[1][0]
+        : '';
+    return (firstInitial + secondInitial).toUpperCase();
   }
+
 
   /// Dynamic Gradient Colors for Profile Circle
   final List<Color> gradientColors = [
@@ -776,27 +811,39 @@ Widget profileCardWidget({
             Row(
               children: [
                 /// Profile Icon with Gradient
-                Container(
-                  width: 65,
-                  height: 65,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [gradientStartColor, gradientEndColor],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    isLoggedIn ? getInitials(userName).toUpperCase() : "NA",
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                ClipOval(
+                  child: MyUserNetworkImage(
+                    imageUrl: Provider.of<ProfileProvider>(context, listen: false).profileModel.status == 200
+                        ? Provider.of<ProfileProvider>(context, listen: false).profileModel.result != null
+                        ? (Provider.of<ProfileProvider>(context, listen: false).profileModel.result?[0].image ?? "")
+                        : ""
+                        : "",
+                    fit: BoxFit.cover,
+                    imgHeight: 90,
+                    imgWidth: 90,
                   ),
                 ),
+                // Container(
+                //   width: 65,
+                //   height: 65,
+                //   decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     gradient: LinearGradient(
+                //       colors: [gradientStartColor, gradientEndColor],
+                //       begin: Alignment.topLeft,
+                //       end: Alignment.bottomRight,
+                //     ),
+                //   ),
+                //   alignment: Alignment.center,
+                //   child: Text(
+                //     isLoggedIn ? getInitials(profile).toUpperCase() : "NA",
+                //     style: const TextStyle(
+                //       fontSize: 22,
+                //       fontWeight: FontWeight.bold,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(width: 16),
 
                 /// User Info
@@ -1820,7 +1867,7 @@ Widget profileCardWidget({
                       children: [
                         MyText(
                           color: white,
-                          text: "confirm_delete_account",
+                          text: "confirmsognout",
                           multilanguage: true,
                           textalign: TextAlign.center,
                           fontsizeNormal: 16,
@@ -1832,7 +1879,7 @@ Widget profileCardWidget({
                         const SizedBox(height: 3),
                         MyText(
                           color: white,
-                          text: "delete_account_msg",
+                          text: "areyousurewanrtosignout",
                           multilanguage: true,
                           textalign: TextAlign.center,
                           fontsizeNormal: 12,
@@ -1861,7 +1908,7 @@ Widget profileCardWidget({
                         ),
                         const SizedBox(width: 20),
                         _buildDialogBtn(
-                          title: 'delete',
+                          title: 'sign_out',
                           isPositive: true,
                           isMultilang: true,
                           onClick: () async {
