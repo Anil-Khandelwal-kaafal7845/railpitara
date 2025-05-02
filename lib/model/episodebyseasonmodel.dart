@@ -4,141 +4,154 @@
 
 import 'dart:convert';
 
-EpisodeBySeasonModel episodeBySeasonModelFromJson(String str) => EpisodeBySeasonModel.fromJson(json.decode(str));
+EpisodeBySeasonModel episodeBySeasonModelFromJson(String str) =>
+    EpisodeBySeasonModel.fromJson(json.decode(str));
 
-String episodeBySeasonModelToJson(EpisodeBySeasonModel data) => json.encode(data.toJson());
+String episodeBySeasonModelToJson(EpisodeBySeasonModel data) =>
+    json.encode(data.toJson());
 
 class EpisodeBySeasonModel {
-    int? status;
-    String? message;
-    List<Result>? result;
+  int? status;
+  String? message;
+  List<Result>? result;
 
-    EpisodeBySeasonModel({
-        this.status,
-        this.message,
-        this.result,
-    });
+  EpisodeBySeasonModel({
+    this.status,
+    this.message,
+    this.result,
+  });
 
-    factory EpisodeBySeasonModel.fromJson(Map<String, dynamic> json) => EpisodeBySeasonModel(
+  factory EpisodeBySeasonModel.fromJson(Map<String, dynamic> json) =>
+      EpisodeBySeasonModel(
         status: json["status"],
         message: json["message"],
-        result: json["result"] == null ? [] : List<Result>.from(json["result"]!.map((x) => Result.fromJson(x))),
-    );
+        result: json["result"] == null
+            ? []
+            : List<Result>.from(json["result"]!.map((x) => Result.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "result": result == null ? [] : List<dynamic>.from(result!.map((x) => x.toJson())),
-    };
+        "result": result == null
+            ? []
+            : List<dynamic>.from(result!.map((x) => x.toJson())),
+      };
 }
 
 class Result {
-    int? id;
-    int? showId;
-    int? sessionId;
-    String? videoType;
-    String? name;
-    String? thumbnail;
-    String? landscape;
-    dynamic fullWidth;
-    String? description;
-    int? isPremium;
-    String? isTitle;
-    int? download;
-    String? videoUploadType;
-    String? video320;
-    String? video480;
-    String? video720;
-    String? video1080;
-    String? videoExtension;
-    int? videoDuration;
-    String? subtitleType;
-    String? subtitleLang1;
-    String? subtitle1;
-    String? subtitleLang2;
-    String? subtitle2;
-    String? subtitleLang3;
-    String? subtitle3;
-    dynamic isadshow;
-    int? view;
-    int? status;
-    DateTime? createdAt;
-    DateTime? updatedAt;
-    int? episode;
-    dynamic videoLibraryId;
-    dynamic urlVideoId;
-    int? stopTime;
-    int? isDownloaded;
-    int? isBookmark;
-    int? rentBuy;
-    int? isRent;
-    int? rentPrice;
-    int? isBuy;
-    String? categoryName;
-    int? upcomingType;
-     dynamic iscoinbuy;
- dynamic isabaletocoinpurches;
- dynamic coinvalue;
- 
-    
+  int? id;
+  int? showId;
+  int? sessionId;
 
-    Result({
-        this.id,
-        this.showId,
-        this.sessionId,
-        this.videoType,
-          this.isabaletocoinpurches,
-      this.coinvalue,
-      this.iscoinbuy,
-        this.name,
-        this.thumbnail,
-        this.isadshow,
-        this.landscape,
-        this.fullWidth,
-        this.description,
-        this.isPremium,
-        this.isTitle,
-        this.download,
-        this.videoUploadType,
-        this.video320,
-        this.video480,
-        this.video720,
-        this.video1080,
-        this.videoExtension,
-        this.videoDuration,
-        this.subtitleType,
-        this.subtitleLang1,
-        this.subtitle1,
-        this.subtitleLang2,
-        this.subtitle2,
-        this.subtitleLang3,
-        this.subtitle3,
-        this.view,
-        this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.episode,
-        this.videoLibraryId,
-        this.urlVideoId,
-        this.stopTime,
-        this.isDownloaded,
-        this.isBookmark,
-        this.rentBuy,
-        this.isRent,
-        this.rentPrice,
-        this.isBuy,
-        this.categoryName,
-        this.upcomingType,
-    });
+  String? videoType;
+  String? name;
+  String? thumbnail;
+  String? landscape;
+  dynamic fullWidth;
+  String? description;
+  int? isPremium;
+  String? isTitle;
+  int? download;
+  String? videoUploadType;
+  String? video320;
+  String? video480;
+  String? video720;
+  String? video1080;
+  String? videoExtension;
+  int? videoDuration;
+  String? subtitleType;
+  String? subtitleLang1;
+  String? subtitle1;
+  String? subtitleLang2;
+  String? subtitle2;
+  String? subtitleLang3;
+  String? subtitle3;
+  dynamic isadshow;
+  int? view;
+  int? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? episode;
+  dynamic videoLibraryId;
+  dynamic urlVideoId;
+  int? stopTime;
+  int? isDownloaded;
+  int? isBookmark;
+  int? rentBuy;
+  int? isRent;
+  int? rentPrice;
+  int? isBuy;
+  String? categoryName;
+  int? upcomingType;
+  dynamic iscoinbuy;
+  dynamic isabaletocoinpurches;
+  dynamic coinvalue;
+  dynamic playerVideoUrl;
 
-    factory Result.fromJson(Map<String, dynamic> json) => Result(
+  dynamic playerTrailerUrl;
+
+  Result({
+    this.id,
+    this.showId,
+    this.sessionId,
+    this.videoType,
+    this.playerVideoUrl,
+    this.playerTrailerUrl,
+    this.isabaletocoinpurches,
+    this.coinvalue,
+    this.iscoinbuy,
+    this.name,
+    this.thumbnail,
+    this.isadshow,
+    this.landscape,
+    this.fullWidth,
+    this.description,
+    this.isPremium,
+    this.isTitle,
+    this.download,
+    this.videoUploadType,
+    this.video320,
+    this.video480,
+    this.video720,
+    this.video1080,
+    this.videoExtension,
+    this.videoDuration,
+    this.subtitleType,
+    this.subtitleLang1,
+    this.subtitle1,
+    this.subtitleLang2,
+    this.subtitle2,
+    this.subtitleLang3,
+    this.subtitle3,
+    this.view,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.episode,
+    this.videoLibraryId,
+    this.urlVideoId,
+    this.stopTime,
+    this.isDownloaded,
+    this.isBookmark,
+    this.rentBuy,
+    this.isRent,
+    this.rentPrice,
+    this.isBuy,
+    this.categoryName,
+    this.upcomingType,
+  });
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
         showId: json["show_id"],
         sessionId: json["session_id"],
         videoType: json["video_type"],
         name: json["name"],
+        playerVideoUrl: json["video_url"],
+        playerTrailerUrl: json["trailer_video_url"],
         thumbnail: json["thumbnail"],
-          iscoinbuy: json["is_coin_buy"],
+        iscoinbuy: json["is_coin_buy"],
         isabaletocoinpurches: json["is_coin_purchase"],
         coinvalue: json["no_of_coin_purchase"],
         isadshow: json["is_ads_show"],
@@ -164,8 +177,12 @@ class Result {
         subtitle3: json["subtitle_3"],
         view: json["view"],
         status: json["status"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
         episode: json["episode"],
         videoLibraryId: json["video_library_id"],
         urlVideoId: json["url_video_id"],
@@ -178,21 +195,22 @@ class Result {
         isBuy: json["is_buy"],
         categoryName: json["category_name"],
         upcomingType: json["upcoming_type"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "show_id": showId,
         "session_id": sessionId,
         "video_type": videoType,
         "name": name,
+        "video_url": playerVideoUrl,
         "thumbnail": thumbnail,
-        "is_ads_show":isadshow,
+        "is_ads_show": isadshow,
         "landscape": landscape,
         "full_width": fullWidth,
-         "is_coin_buy":iscoinbuy,
-        "is_coin_purchase":isabaletocoinpurches,
-        "no_of_coin_purchase":coinvalue,
+        "is_coin_buy": iscoinbuy,
+        "is_coin_purchase": isabaletocoinpurches,
+        "no_of_coin_purchase": coinvalue,
         "description": description,
         "is_premium": isPremium,
         "is_title": isTitle,
@@ -201,6 +219,7 @@ class Result {
         "video_320": video320,
         "video_480": video480,
         "video_720": video720,
+        "trailer_video_url": playerTrailerUrl,
         "video_1080": video1080,
         "video_extension": videoExtension,
         "video_duration": videoDuration,
@@ -227,5 +246,5 @@ class Result {
         "is_buy": isBuy,
         "category_name": categoryName,
         "upcoming_type": upcomingType,
-    };
+      };
 }

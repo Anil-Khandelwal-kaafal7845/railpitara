@@ -2827,7 +2827,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
       /* Set-up Quality URLs */
       Utils.setQualityURLs(
         video320:
-            (videoDetailsProvider.sectionDetailModel.result?.video320 ?? ""),
+            (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
         video480:
             (videoDetailsProvider.sectionDetailModel.result?.video480 ?? ""),
         video720:
@@ -2836,7 +2836,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
             (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
       );
 
-      vUrl = (videoDetailsProvider.sectionDetailModel.result?.video320 ?? "");
+      vUrl = (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? "");
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.videoUploadType ??
               "");

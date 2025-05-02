@@ -155,6 +155,7 @@ class HomeState extends State<Home> with RouteAware {
   @override
   void initState() {
     print("-----${Constant.userID}");
+    
     Provider.of<GeneralProvider>(context, listen: false);
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
 
@@ -1407,7 +1408,9 @@ class HomeState extends State<Home> with RouteAware {
       },
       body: homeProvider.loading
           ? ShimmerUtils.buildHomeMobileShimmer(context)
+
           : (homeProvider.sectionTypeModel.status == 200)
+
               ? (homeProvider.sectionTypeModel.result != null ||
                       (homeProvider.sectionTypeModel.result?.length ?? 0) > 0)
                   ? Stack(
@@ -1422,8 +1425,9 @@ class HomeState extends State<Home> with RouteAware {
                         ),
                       ],
                     )
-                  : const NoData(title: '', subTitle: '')
-              : const NoData(title: '', subTitle: ''),
+                  : ShimmerUtils.buildHomeMobileShimmer(context)
+              
+              : ShimmerUtils.buildHomeMobileShimmer(context),
     );
   }
 
@@ -1918,6 +1922,7 @@ class HomeState extends State<Home> with RouteAware {
               },
             ),
           ),
+      
         ],
       );
     } else {
@@ -3400,6 +3405,9 @@ class HomeState extends State<Home> with RouteAware {
     }
   }
 
+
+
+
   Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -4029,6 +4037,7 @@ class HomeState extends State<Home> with RouteAware {
                     ),
                   ),
                 ),
+            
             
               ],
             ),

@@ -537,7 +537,7 @@ class SettingState extends State<Setting> {
                 GestureDetector(
                     onTap: () {
                       if (Constant.userID != null) {
-                        deleteConfirmDialog();
+                  logoutConfirmDialog();
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -787,8 +787,8 @@ Widget profileCardWidget({
   String loginText = !isLoggedIn
       ? "You are not signed in"
       : (userType == "3" && (userName ?? "").isEmpty)
-          ? "Signed in as ${userMobileNo ?? ""}"
-          : "Signed in as ${userName ?? ""}";
+          ? "${userMobileNo ?? ""}"
+          : "${userName ?? ""}";
 
   return Container(
     width: double.infinity,
