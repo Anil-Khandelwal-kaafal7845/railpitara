@@ -3075,7 +3075,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
         /* Set-up Quality URLs */
         Utils.setQualityURLs(
           video320: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
+                  .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
               ""),
           video480: (episodeProvider.episodeBySeasonModel
                   .result?[showDetailsProvider.mCurrentEpiPos].video480 ??

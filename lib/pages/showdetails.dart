@@ -3643,9 +3643,9 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           0);
       int? vType = widget.videoType;
       int? vTypeID = widget.typeId;
-      dynamic showTrailerLibraryId,
+      dynamic iframeTrailerUrl,
           showTrailerVideoId,
-          showVideoLibraryId,
+          iframeVideoUrl,
           showVideoUrlId;
       int? stopTime;
       if (playType == "startOver" || playType == "Trailer") {
@@ -3671,8 +3671,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             (showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
         vUrl =
             (showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
-        showTrailerLibraryId =
-            showDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+        iframeTrailerUrl =
+            showDetailsProvider.sectionDetailModel.result?.playerTrailerUrl ??
                 "";
         showTrailerVideoId =
             showDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "";
@@ -3680,7 +3680,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         /* Set-up Quality URLs */
         Utils.setQualityURLs(
           video320: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
+                  .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
               ""),
           video480: (episodeProvider.episodeBySeasonModel
                   .result?[showDetailsProvider.mCurrentEpiPos].video480 ??
@@ -3695,11 +3695,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         showVideoUrlId = episodeProvider.episodeBySeasonModel
                 .result?[showDetailsProvider.mCurrentEpiPos].urlVideoId ??
             "";
-        showVideoLibraryId = episodeProvider.episodeBySeasonModel
-                .result?[showDetailsProvider.mCurrentEpiPos].videoLibraryId ??
+        iframeVideoUrl = episodeProvider.episodeBySeasonModel
+                .result?[showDetailsProvider.mCurrentEpiPos].playerVideoUrl ??
             "";
         vUrl = (episodeProvider.episodeBySeasonModel
-                .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
+                .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
             "");
         vUploadType = (episodeProvider.episodeBySeasonModel
                 .result?[showDetailsProvider.mCurrentEpiPos].videoUploadType ??
@@ -3732,9 +3732,9 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         uploadType: vUploadType,
         videoThumb: videoThumb,
         vStopTime: stopTime,
-        trailerLibraryId: showTrailerLibraryId,
+        iframeTrailerUrl: iframeTrailerUrl,
         trailerUrlVideoId: showTrailerVideoId,
-        videoLibraryId: showVideoLibraryId,
+        iframeVideoUrl: iframeVideoUrl,
         videoUrlVideoId: showVideoUrlId,
       );
 
@@ -3786,7 +3786,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             uploadType: vUploadType,
             videoThumb: videoThumb,
             vStopTime: stopTime,
-            trailerLibraryId: showTrailerLibraryId,
+            iframeTrailerUrl: showTrailerLibraryId,
             trailerUrlVideoId: showTrailerVideoId);
       } else {
         if (!mounted) return;

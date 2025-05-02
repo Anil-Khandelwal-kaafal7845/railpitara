@@ -1981,7 +1981,7 @@ class TVHomeState extends State<TVHome> {
       otherId: (continueWatchingList?[index].videoType ?? 0) == 2
           ? (continueWatchingList?[index].showId ?? 0)
           : 0,
-      videoUrl: continueWatchingList?[index].video320 ?? "",
+      videoUrl: continueWatchingList?[index].video1080 ?? "",
       trailerUrl: continueWatchingList?[index].trailerUrl ?? "",
       uploadType: continueWatchingList?[index].videoUploadType ?? "",
       videoThumb: continueWatchingList?[index].landscape ?? "",

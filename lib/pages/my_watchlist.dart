@@ -1063,7 +1063,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
     /* Set-up Quality URLs */
     Utils.setQualityURLs(
       video320:
-          (watchlistProvider.watchlistModel.result?[position].video320 ?? ""),
+          (watchlistProvider.watchlistModel.result?[position].video1080 ?? ""),
       video480:
           (watchlistProvider.watchlistModel.result?[position].video480 ?? ""),
       video720:
@@ -1102,7 +1102,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
         typeId: watchlistProvider.watchlistModel.result?[position].typeId ?? 0,
         otherId: 0,
         videoUrl:
-            watchlistProvider.watchlistModel.result?[position].video320 ?? "",
+            watchlistProvider.watchlistModel.result?[position].video1080 ?? "",
         trailerUrl:
             watchlistProvider.watchlistModel.result?[position].trailerUrl ?? "",
         uploadType: watchlistProvider

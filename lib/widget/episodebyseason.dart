@@ -740,15 +740,15 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
 
       int? epiID = (episodeList?[epiPos].id ?? 0);
       int? showID = (episodeList?[epiPos].showId ?? 0);
-      dynamic showVideoLibraryId, showVideoUrlId;
+      dynamic iframeVideoUrl, showVideoUrlId;
       int? vType =
           (showDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
       int? vTypeID = widget.typeId;
       int? stopTime = (episodeList?[epiPos].stopTime ?? 0);
       String? vUploadType = (episodeList?[epiPos].videoUploadType ?? "");
       String? videoThumb = (episodeList?[epiPos].landscape ?? "");
-      String? epiUrl = (episodeList?[epiPos].video320 ?? "");
-      showVideoLibraryId = episodeList![epiPos].videoLibraryId ?? "";
+      String? epiUrl = (episodeList?[epiPos].video1080 ?? "");
+      iframeVideoUrl = episodeList![epiPos].playerVideoUrl ?? "";
       showVideoUrlId = episodeList[epiPos].urlVideoId ?? "";
       debugPrint("epiID ========> $epiID");
       debugPrint("showID =======> $showID");
@@ -795,7 +795,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
         uploadType: vUploadType,
         videoThumb: videoThumb,
         vStopTime: stopTime,
-        videoLibraryId: showVideoLibraryId,
+        iframeVideoUrl: iframeVideoUrl,
         videoUrlVideoId: showVideoUrlId,
       );
 
