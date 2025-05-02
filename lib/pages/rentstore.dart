@@ -95,29 +95,29 @@ class RentStoreState extends State<RentStore> {
             _getData();
           });
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: (rentStoreProvider.loading)
-              ? ShimmerUtils.buildRentShimmer(
-                  context, Dimens.heightLand, Dimens.widthLand)
-              : ((rentStoreProvider.rentModel.status == 200)
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        _buildRentVideos(),
-                        /* AdMob Banner */
-                        const SizedBox(height: 11),
-                        Utils.showBannerAd(context),
-                        const SizedBox(height: 11),
-                        _buildRentTVShows(),
-                        const SizedBox(height: 20),
-
-                        /* Web Footer */
-                        kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
-                      ],
-                    )
-                  : const NoData(title: '', subTitle: '')),
-        ),
+        child: (rentStoreProvider.loading)
+            ? ShimmerUtils.buildRentShimmer(
+                context, Dimens.heightLand, Dimens.widthLand)
+            : ((rentStoreProvider.rentModel.status == 200)
+                ? ((rentStoreProvider.rentModel.result?.isNotEmpty ?? false) ||
+                        (rentStoreProvider.rentModel.video?.isNotEmpty ??
+                            false) ||
+                        (rentStoreProvider.rentModel.tvshow?.isNotEmpty ??
+                            false))
+                    ? Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          _buildRentVideos(),
+                          const SizedBox(height: 11),
+                          Utils.showBannerAd(context),
+                          const SizedBox(height: 11),
+                          _buildRentTVShows(),
+                          const SizedBox(height: 20),
+                          kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
+                        ],
+                      )
+                    : const NoData(title: '', subTitle: '')
+                : const NoData(title: '', subTitle: '')),
       ),
     );
   }

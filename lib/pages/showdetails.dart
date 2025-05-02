@@ -110,21 +110,21 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   /// Called when the top route has been popped off, and the current route
   /// shows up.
-  /// 
-  
-   void _fetchDataAgain() async {
-     showDetailsProvider =
+  ///
+
+  void _fetchDataAgain() async {
+    showDetailsProvider =
         Provider.of<ShowDetailsProvider>(context, listen: false);
     episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
-   
+
     _getData();
     setState(() {});
   }
+
   @override
   void didPopNext() {
     debugPrint("didPopNext");
-   _fetchDataAgain();
-   
+    _fetchDataAgain();
 
     // if (showDetailsProvider.sectionDetailModel.result?.trailerType ==
     //     "youtube") {
@@ -180,7 +180,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       if (showDetailsProvider.sectionDetailModel.result != null) {
         episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
         // print("EPSOID API CXALL ---");
-          getAllEpisode(showDetailsProvider.seasonPos,
+        getAllEpisode(showDetailsProvider.seasonPos,
             showDetailsProvider.sectionDetailModel.session);
 
         /* Trailer set-up */
@@ -569,42 +569,47 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     : _buildWatchNow(),
               ),
 
-              Wrap(
-                spacing: 10, // Space between each tag
-                runSpacing: 5, // Space between lines if wrapped
-                children: [
-                  /* Prime TAG */
-                  if ((episodeProvider
-                              .episodeBySeasonModel
-                              .result?[showDetailsProvider.mCurrentEpiPos]
-                              .isPremium ??
-                          0) ==
-                      1)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "•", // Bullet point
-                          style: TextStyle(
-                              color: white.withOpacity(0.7), fontSize: 14),
-                        ),
-                        const SizedBox(width: 5),
-                        MyText(
-                          color: primaryLight,
-                          text: "primetag",
-                          textalign: TextAlign.start,
-                          fontsizeNormal: 10,
-                          fontsizeWeb: 15,
-                          fontweight: FontWeight.w500,
-                          multilanguage: true,
-                          maxline: 1,
-                          overflow: TextOverflow.ellipsis,
-                          fontstyle: FontStyle.normal,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+              if ((episodeProvider.episodeBySeasonModel.result?.isNotEmpty ??
+                      false) &&
+                  showDetailsProvider.mCurrentEpiPos <
+                      (episodeProvider.episodeBySeasonModel.result?.length ??
+                          0))
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 5,
+                  children: [
+                    if (episodeProvider
+                            .episodeBySeasonModel
+                            .result?[showDetailsProvider.mCurrentEpiPos]
+                            .isPremium ==
+                        1)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "•",
+                            style: TextStyle(
+                              color: white.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          MyText(
+                            color: primaryLight,
+                            text: "primetag",
+                            textalign: TextAlign.start,
+                            fontsizeNormal: 10,
+                            fontsizeWeb: 15,
+                            fontweight: FontWeight.w500,
+                            multilanguage: true,
+                            maxline: 1,
+                            overflow: TextOverflow.ellipsis,
+                            fontstyle: FontStyle.normal,
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
 
               Container(
                 margin: EdgeInsets.only(left: 12, top: 12),
@@ -663,20 +668,20 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                           ),
                         ),
 
-                        /* Download */
-                        if (!(kIsWeb) || !(Constant.isTV))
-                          Consumer<EpisodeProvider>(
-                            builder: (context, episodeProvider, child) {
-                              if ((episodeProvider.episodeBySeasonModel
-                                          .result?[0].download ??
-                                      0) ==
-                                  1) {
-                                return _buildDownloadWithSubCheck();
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                          ),
+                        // /* Download */
+                        // if (!(kIsWeb) || !(Constant.isTV))
+                        //   Consumer<EpisodeProvider>(
+                        //     builder: (context, episodeProvider, child) {
+                        //       if ((episodeProvider.episodeBySeasonModel
+                        //                   .result?[0].download ??
+                        //               0) ==
+                        //           1) {
+                        //         return _buildDownloadWithSubCheck();
+                        //       } else {
+                        //         return const SizedBox.shrink();
+                        //       }
+                        //     },
+                        //   ),
 
                         /* Watchlist */
                         Expanded(
@@ -2177,14 +2182,29 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   Widget _buildWatchNow() {
     return Consumer<EpisodeProvider>(
       builder: (context, episodeProvider, child) {
+        // if (showDetailsProvider.mCurrentEpiPos != -1 &&
+        //     (episodeProvider.episodeBySeasonModel
+        //                 .result?[showDetailsProvider.mCurrentEpiPos].stopTime ??
+        //             0) >
+        //         0 &&
+        //     episodeProvider
+        //             .episodeBySeasonModel
+        //             .result?[showDetailsProvider.mCurrentEpiPos]
+        //             .videoDuration !=
+        //         null)
+
         if (showDetailsProvider.mCurrentEpiPos != -1 &&
+            episodeProvider.episodeBySeasonModel.result != null &&
+            episodeProvider.episodeBySeasonModel.result!.isNotEmpty &&
+            showDetailsProvider.mCurrentEpiPos <
+                episodeProvider.episodeBySeasonModel.result!.length &&
             (episodeProvider.episodeBySeasonModel
-                        .result?[showDetailsProvider.mCurrentEpiPos].stopTime ??
+                        .result![showDetailsProvider.mCurrentEpiPos].stopTime ??
                     0) >
                 0 &&
             episodeProvider
                     .episodeBySeasonModel
-                    .result?[showDetailsProvider.mCurrentEpiPos]
+                    .result![showDetailsProvider.mCurrentEpiPos]
                     .videoDuration !=
                 null) {
           return Container(
@@ -2315,6 +2335,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                   );
                 }
               },
+
               //focusColor:: white,
               borderRadius: BorderRadius.circular(5),
               child: Padding(
@@ -3565,37 +3586,38 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       ),
     );
   }
-  /* ========= Dialogs ========= */
 
+  /* ========= Dialogs ========= */
   Future<void> getAllEpisode(int position, List<Session>? seasonList) async {
     debugPrint("position ====> $position");
     debugPrint("seasonList seasonID ====> ${seasonList?[position].id}");
+
     await episodeProvider.getEpisodeBySeason(
         seasonList?[position].id ?? 0, widget.videoId);
 
     if (episodeProvider.episodeBySeasonModel.status == 200) {
-      if (episodeProvider.episodeBySeasonModel.result != null) {
-        /* Set-up Subtitle URLs */
+      final results = episodeProvider.episodeBySeasonModel.result;
+
+      if (results != null &&
+          results.isNotEmpty &&
+          showDetailsProvider.mCurrentEpiPos < results.length) {
+        // Safe to access the episode now
         Utils.setSubtitleURLs(
-          subtitleUrl1: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitle1 ??
-              ""),
-          subtitleUrl2: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitle2 ??
-              ""),
-          subtitleUrl3: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitle3 ??
-              ""),
-          subtitleLang1: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitleLang1 ??
-              ""),
-          subtitleLang2: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitleLang2 ??
-              ""),
-          subtitleLang3: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].subtitleLang3 ??
-              ""),
+          subtitleUrl1:
+              results[showDetailsProvider.mCurrentEpiPos].subtitle1 ?? "",
+          subtitleUrl2:
+              results[showDetailsProvider.mCurrentEpiPos].subtitle2 ?? "",
+          subtitleUrl3:
+              results[showDetailsProvider.mCurrentEpiPos].subtitle3 ?? "",
+          subtitleLang1:
+              results[showDetailsProvider.mCurrentEpiPos].subtitleLang1 ?? "",
+          subtitleLang2:
+              results[showDetailsProvider.mCurrentEpiPos].subtitleLang2 ?? "",
+          subtitleLang3:
+              results[showDetailsProvider.mCurrentEpiPos].subtitleLang3 ?? "",
         );
+      } else {
+        debugPrint("No episodes or invalid episode index");
       }
     }
   }
@@ -3621,9 +3643,9 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           0);
       int? vType = widget.videoType;
       int? vTypeID = widget.typeId;
-      dynamic showTrailerLibraryId,
+      dynamic iframeTrailerUrl,
           showTrailerVideoId,
-          showVideoLibraryId,
+          iframeVideoUrl,
           showVideoUrlId;
       int? stopTime;
       if (playType == "startOver" || playType == "Trailer") {
@@ -3649,8 +3671,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             (showDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
         vUrl =
             (showDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
-        showTrailerLibraryId =
-            showDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+        iframeTrailerUrl =
+            showDetailsProvider.sectionDetailModel.result?.playerTrailerUrl ??
                 "";
         showTrailerVideoId =
             showDetailsProvider.sectionDetailModel.result?.trailerVideoId ?? "";
@@ -3658,7 +3680,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         /* Set-up Quality URLs */
         Utils.setQualityURLs(
           video320: (episodeProvider.episodeBySeasonModel
-                  .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
+                  .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
               ""),
           video480: (episodeProvider.episodeBySeasonModel
                   .result?[showDetailsProvider.mCurrentEpiPos].video480 ??
@@ -3673,11 +3695,11 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         showVideoUrlId = episodeProvider.episodeBySeasonModel
                 .result?[showDetailsProvider.mCurrentEpiPos].urlVideoId ??
             "";
-        showVideoLibraryId = episodeProvider.episodeBySeasonModel
-                .result?[showDetailsProvider.mCurrentEpiPos].videoLibraryId ??
+        iframeVideoUrl = episodeProvider.episodeBySeasonModel
+                .result?[showDetailsProvider.mCurrentEpiPos].playerVideoUrl ??
             "";
         vUrl = (episodeProvider.episodeBySeasonModel
-                .result?[showDetailsProvider.mCurrentEpiPos].video320 ??
+                .result?[showDetailsProvider.mCurrentEpiPos].video1080 ??
             "");
         vUploadType = (episodeProvider.episodeBySeasonModel
                 .result?[showDetailsProvider.mCurrentEpiPos].videoUploadType ??
@@ -3710,9 +3732,9 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
         uploadType: vUploadType,
         videoThumb: videoThumb,
         vStopTime: stopTime,
-        trailerLibraryId: showTrailerLibraryId,
+        iframeTrailerUrl: iframeTrailerUrl,
         trailerUrlVideoId: showTrailerVideoId,
-        videoLibraryId: showVideoLibraryId,
+        iframeVideoUrl: iframeVideoUrl,
         videoUrlVideoId: showVideoUrlId,
       );
 
@@ -3764,7 +3786,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             uploadType: vUploadType,
             videoThumb: videoThumb,
             vStopTime: stopTime,
-            trailerLibraryId: showTrailerLibraryId,
+            iframeTrailerUrl: showTrailerLibraryId,
             trailerUrlVideoId: showTrailerVideoId);
       } else {
         if (!mounted) return;
@@ -3776,13 +3798,10 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   Future<bool> _checkSubsRentLogin() async {
     if (Constant.userID != null) {
-      if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
-                  0) ==
+      if ((showDetailsProvider.sectionDetailModel.result?.isPremium ?? 0) ==
               1 &&
           (showDetailsProvider.sectionDetailModel.result?.isRent ?? 0) == 1) {
-        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ??
-                    0) ==
-                1 ||
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1 ||
             (showDetailsProvider.sectionDetailModel.result?.rentBuy ?? 0) ==
                 1) {
           return true;
@@ -3803,9 +3822,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       } else if ((showDetailsProvider.sectionDetailModel.result?.isPremium ??
               0) ==
           1) {
-        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ??
-                0) ==
-            1) {
+        if ((showDetailsProvider.sectionDetailModel.result?.isBuy ?? 0) == 1) {
           return true;
         } else {
           dynamic isSubscribed = await Navigator.push(
@@ -3871,7 +3888,4 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       return false;
     }
   }
-
-
-
 }

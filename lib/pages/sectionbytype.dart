@@ -166,90 +166,122 @@ class SectionByTypeState extends State<SectionByType> {
   }
 
   Widget homebanner(List<banner.Result>? sectionBannerList) {
+    final isTablet = MediaQuery.of(context).size.width >= 600;
+
     if ((sectionBannerList?.length ?? 0) > 0) {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: double.infinity,
             height: Dimens.homeBanner,
             child: CarouselSlider.builder(
-              itemCount: (sectionBannerList?.length ?? 0),
+              itemCount: sectionBannerList?.length ?? 0,
               carouselController: carouselController,
               options: CarouselOptions(
                 initialPage: 0,
                 height: Dimens.homeBanner,
-                enlargeCenterPage: false,
+                enlargeCenterPage: true,
                 autoPlay: true,
-                autoPlayCurve: Curves.linear,
+                autoPlayCurve: Curves.easeInOut,
                 enableInfiniteScroll: true,
                 autoPlayInterval:
                     Duration(milliseconds: Constant.bannerDuration),
                 autoPlayAnimationDuration:
                     Duration(milliseconds: Constant.animationDuration),
-                viewportFraction: 1.0,
+                viewportFraction: isTablet ? 1.0 : 0.70,
                 onPageChanged: (val, _) async {
                   await sectionByTypeProvider.setCurrentBanner(val);
                 },
               ),
-              itemBuilder:
-                  (BuildContext context, int index, int pageViewIndex) {
-                return InkWell(
+              itemBuilder: (context, index, realIndex) {
+                final bannerItem = sectionBannerList?[index];
+                final imageUrl = isTablet
+                    ? bannerItem?.fullWidth ?? ""
+                    : bannerItem?.thumbnail ?? "";
+
+                return GestureDetector(
                   onTap: () {
-                    debugPrint("Clicked on index ==> $index");
-                    Utils.openDetails(
-                      context: context,
-                      videoId: sectionBannerList?[index].id ?? 0,
-                      upcomingType: sectionBannerList?[index].upcomingType ?? 0,
-                      videoType: sectionBannerList?[index].videoType ?? 0,
-                      typeId: sectionBannerList?[index].typeId ?? 0,
-                    );
-                  },
-                  child: Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: Dimens.homeBanner,
-                        child: MyNetworkImage(
-                          imageUrl: sectionBannerList?[index].landscape ?? "",
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        width: MediaQuery.of(context).size.width,
-                        height: Dimens.homeBanner,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.center,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              transparentColor,
-                              transparentColor,
-                              appBgColor,
-                            ],
+                    debugPrint("Clicked on banner: ${bannerItem?.video320}");
+
+                    if (bannerItem?.isLiveUrl == 1) {
+                      if (Constant.userID == null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginViaSocial()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TestPlayerWeb(
+                              loadURL: bannerItem?.videoUrl ?? "",
+                            ),
                           ),
-                        ),
+                        );
+                      }
+                    } else if (bannerItem?.bannerBacklink != null &&
+                        bannerItem!.bannerBacklink!.isNotEmpty) {
+                      launchUrl(Uri.parse(bannerItem.bannerBacklink!));
+                    } else {
+                      Utils.openDetails(
+                        context: context,
+                        videoId: sectionBannerList?[index].id ?? 0,
+                        upcomingType:
+                            sectionBannerList?[index].upcomingType ?? 0,
+                        videoType: sectionBannerList?[index].videoType ?? 0,
+                        typeId: sectionBannerList?[index].typeId ?? 0,
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 5,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: MyNetworkImageTwo(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: _buildBannerBadge(bannerItem),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 );
               },
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             child: Consumer<SectionByTypeProvider>(
-              builder: (context, sectionByTypeProvider, child) {
+              builder: (context, sectionDataProvider, child) {
                 return AnimatedSmoothIndicator(
-                  count: (sectionBannerList?.length ?? 0),
-                  activeIndex: sectionByTypeProvider.cBannerIndex ?? 0,
-                  effect: const ScrollingDotsEffect(
+                  count: sectionBannerList?.length ?? 0,
+                  activeIndex: sectionDataProvider.cBannerIndex ?? 0,
+                  effect: const ExpandingDotsEffect(
                     spacing: 8,
-                    radius: 4,
-                    activeDotColor: dotsActiveColor,
+                    radius: 6,
+                    activeDotColor: colorPrimary,
                     dotColor: dotsDefaultColor,
                     dotHeight: 8,
                     dotWidth: 8,
@@ -263,6 +295,51 @@ class SectionByTypeState extends State<SectionByType> {
     } else {
       return const SizedBox.shrink();
     }
+  }
+
+  Widget _badge(String text, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+
+  Widget _iconBadge(String assetPath) {
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: Colors.black54,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Image.asset(
+        assetPath,
+        height: 15,
+        width: 15,
+      ),
+    );
+  }
+
+  Widget _buildBannerBadge(banner.Result? bannerItem) {
+    if (bannerItem == null) return SizedBox.shrink();
+    if (bannerItem.isLiveUrl == 1) {
+      return _badge("LIVE", Colors.red);
+    } else if (bannerItem.isRent == 1 && bannerItem.isPremium == 0) {
+      return _iconBadge('assets/images/rupee.png');
+    } else if (bannerItem.isPremium == 1) {
+      return _iconBadge('assets/images/crown.png');
+    }
+    return SizedBox.shrink();
   }
 
   Widget setSectionByType(List<list.Result>? sectionList) {
@@ -542,6 +619,27 @@ class SectionByTypeState extends State<SectionByType> {
     }
   }
 
+// Tag Widget for Rent & Premium badges
+  Widget _buildTag(String iconPath) {
+    return Positioned(
+      top: 8,
+      left: 8,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        child: Image.asset(
+          iconPath,
+          height: 16,
+          width: 16,
+        ),
+      ),
+    );
+  }
+
   Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -549,35 +647,29 @@ class SectionByTypeState extends State<SectionByType> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        physics: const AlwaysScrollableScrollPhysics(),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            //focusColor:: white,
-            borderRadius: BorderRadius.circular(6),
-
+            borderRadius: BorderRadius.circular(10),
             onTap: () {
               debugPrint("Clicked userid ==> ${Constant.userID}");
               debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginViaSocial()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                  //           sectionDataList?[index].video320, 0, "", "")),
-                  // );
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TestPlayerWeb(
-                          loadURL: sectionDataList![index].video320!)));
+                    builder: (context) => TestPlayerWeb(
+                        loadURL: sectionDataList![index].video320!),
+                  ));
                 }
               } else {
                 Utils.openDetails(
@@ -589,193 +681,106 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-
-            // onTap: () {
-            //   debugPrint("Clicked userid ==> ${Constant.userID}");
-            //   debugPrint(
-            //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-            //   if (Constant.userID == null) {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-            //     );
-
-            //     // Utils.buildWebAlertDialog(context, "login", "");
-            //   } else {
-            //     sectionDataList?[index].isLiveUrl == 1
-            //         ? Navigator.push(
-            //             context,
-            //             MaterialPageRoute(
-            //                 builder: (context) => PlayerVideo(
-            //                     '',
-            //                     0,
-            //                     0,
-            //                     typeId,
-            //                     0,
-            //                     sectionDataList?[index].video320,
-            //                     0,
-            //                     "",
-            //                     "")),
-            //           )
-            //         : openDetailPage(
-            //             (sectionDataList?[index].videoType ?? 0) == 2
-            //                 ? "showdetail"
-            //                 : "videodetail",
-            //             sectionDataList?[index].id ?? 0,
-            //             upcomingType ?? 0,
-            //             sectionDataList?[index].videoType ?? 0,
-            //             sectionDataList?[index].typeId ?? 0,
-            //           );
-            //   }
-            // },
-
             child: Stack(
               alignment: Alignment.topRight,
               children: [
+                // Background image with gradient overlay for better visibility
                 Container(
                   width: Dimens.widthLand,
                   height: Dimens.heightLand,
-                  alignment: Alignment.center,
                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 5)
+                    ],
+                  ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: MyNetworkImage(
-                      imageUrl:
-                          sectionDataList?[index].landscape.toString() ?? "",
-                      fit: BoxFit.cover,
-                      imgHeight: MediaQuery.of(context).size.height,
-                      imgWidth: MediaQuery.of(context).size.width,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].landscape.toString() ??
+                                  "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.6),
+                                Colors.transparent
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
+                // Rent Tag
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 0,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/rupee.png',
-                              height: 13,
-                              width: 13,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/rupee.png'),
                 ),
+
+                // Premium Tag
                 Visibility(
                   visible: sectionDataList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 15,
-                              width: 15,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/crown.png'),
                 ),
+
+                // Both Rent & Premium Tag
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 15,
-                              width: 15,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/crown.png'),
                 ),
+
+                // Live Indicator
                 Visibility(
                   visible: sectionDataList?[index].isLiveUrl == 1,
-                  child: FittedBox(
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
                     child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        // decoration: const BoxDecoration(
-                        //   color: colorPrimary,
-                        //   borderRadius: BorderRadius.only(
-                        //       topLeft: Radius.circular(3),
-                        //       topRight: Radius.circular(4),
-                        //       bottomLeft: Radius.circular(8),
-                        //       bottomRight: Radius.circular(3)),
-                        // ),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 5,
-                              width: 5,
-                              margin: EdgeInsets.only(right: 3),
-                              decoration: BoxDecoration(
-                                color: redColor,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            Text(
-                              "LIVE",
-                              style: TextStyle(
-                                  color: redColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        )),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -786,42 +791,280 @@ class SectionByTypeState extends State<SectionByType> {
     );
   }
 
+  // Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: Dimens.heightLand,
+  //     child: ListView.separated(
+  //       itemCount: sectionDataList?.length ?? 0,
+  //       shrinkWrap: true,
+  //       physics: const AlwaysScrollableScrollPhysics(),
+  //       padding: const EdgeInsets.only(left: 20, right: 20),
+  //       scrollDirection: Axis.horizontal,
+  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return InkWell(
+  //           //focusColor:: white,
+  //           borderRadius: BorderRadius.circular(6),
+
+  //           onTap: () {
+  //             debugPrint("Clicked userid ==> ${Constant.userID}");
+  //             debugPrint(
+  //                 "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //             if (sectionDataList?[index].isLiveUrl == 1) {
+  //               if (Constant.userID == null) {
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //                 );
+  //               } else {
+  //                 // Navigator.push(
+  //                 //   context,
+  //                 //   MaterialPageRoute(
+  //                 //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+  //                 //           sectionDataList?[index].video320, 0, "", "")),
+  //                 // );
+  //                 Navigator.of(context).push(MaterialPageRoute(
+  //                     builder: (context) => TestPlayerWeb(
+  //                         loadURL: sectionDataList![index].video320!)));
+  //               }
+  //             } else {
+  //               Utils.openDetails(
+  //                 context: context,
+  //                 videoId: sectionDataList?[index].id ?? 0,
+  //                 upcomingType: upcomingType ?? 0,
+  //                 videoType: sectionDataList?[index].videoType ?? 0,
+  //                 typeId: sectionDataList?[index].typeId ?? 0,
+  //               );
+  //             }
+  //           },
+
+  //           // onTap: () {
+  //           //   debugPrint("Clicked userid ==> ${Constant.userID}");
+  //           //   debugPrint(
+  //           //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //           //   if (Constant.userID == null) {
+  //           //     Navigator.push(
+  //           //       context,
+  //           //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //           //     );
+
+  //           //     // Utils.buildWebAlertDialog(context, "login", "");
+  //           //   } else {
+  //           //     sectionDataList?[index].isLiveUrl == 1
+  //           //         ? Navigator.push(
+  //           //             context,
+  //           //             MaterialPageRoute(
+  //           //                 builder: (context) => PlayerVideo(
+  //           //                     '',
+  //           //                     0,
+  //           //                     0,
+  //           //                     typeId,
+  //           //                     0,
+  //           //                     sectionDataList?[index].video320,
+  //           //                     0,
+  //           //                     "",
+  //           //                     "")),
+  //           //           )
+  //           //         : openDetailPage(
+  //           //             (sectionDataList?[index].videoType ?? 0) == 2
+  //           //                 ? "showdetail"
+  //           //                 : "videodetail",
+  //           //             sectionDataList?[index].id ?? 0,
+  //           //             upcomingType ?? 0,
+  //           //             sectionDataList?[index].videoType ?? 0,
+  //           //             sectionDataList?[index].typeId ?? 0,
+  //           //           );
+  //           //   }
+  //           // },
+
+  //           child: Stack(
+  //             alignment: Alignment.topRight,
+  //             children: [
+  //               Container(
+  //                 width: Dimens.widthLand,
+  //                 height: Dimens.heightLand,
+  //                 alignment: Alignment.center,
+  //                 padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                 child: ClipRRect(
+  //                   borderRadius: BorderRadius.circular(4),
+  //                   clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                   child: MyNetworkImage(
+  //                     imageUrl:
+  //                         sectionDataList?[index].landscape.toString() ?? "",
+  //                     fit: BoxFit.cover,
+  //                     imgHeight: MediaQuery.of(context).size.height,
+  //                     imgWidth: MediaQuery.of(context).size.width,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Visibility(
+  //                 visible: sectionDataList?[index].isRent == 1 &&
+  //                     sectionDataList?[index].isPremium == 0,
+  //                 child: FittedBox(
+  //                   child: Container(
+  //                       constraints: const BoxConstraints(
+  //                         minHeight: 15,
+  //                         minWidth: 30,
+  //                       ),
+  //                       alignment: Alignment.center,
+  //                       padding: const EdgeInsets.all(5),
+  //                       decoration: const BoxDecoration(
+  //                         color: colorPrimary,
+  //                         borderRadius: BorderRadius.only(
+  //                             topLeft: Radius.circular(3),
+  //                             topRight: Radius.circular(4),
+  //                             bottomLeft: Radius.circular(8),
+  //                             bottomRight: Radius.circular(3)),
+  //                       ),
+  //                       child: Row(
+  //                         children: [
+  //                           Image.asset(
+  //                             'assets/images/rupee.png',
+  //                             height: 13,
+  //                             width: 13,
+  //                           ),
+  //                         ],
+  //                       )),
+  //                 ),
+  //               ),
+  //               Visibility(
+  //                 visible: sectionDataList?[index].isPremium == 1,
+  //                 child: FittedBox(
+  //                   child: Container(
+  //                       constraints: const BoxConstraints(
+  //                         minHeight: 15,
+  //                         minWidth: 30,
+  //                       ),
+  //                       alignment: Alignment.center,
+  //                       padding: const EdgeInsets.all(5),
+  //                       decoration: const BoxDecoration(
+  //                         color: colorPrimary,
+  //                         borderRadius: BorderRadius.only(
+  //                             topLeft: Radius.circular(3),
+  //                             topRight: Radius.circular(4),
+  //                             bottomLeft: Radius.circular(8),
+  //                             bottomRight: Radius.circular(3)),
+  //                       ),
+  //                       child: Row(
+  //                         children: [
+  //                           Image.asset(
+  //                             'assets/images/crown.png',
+  //                             height: 15,
+  //                             width: 15,
+  //                           ),
+  //                         ],
+  //                       )),
+  //                 ),
+  //               ),
+  //               Visibility(
+  //                 visible: sectionDataList?[index].isRent == 1 &&
+  //                     sectionDataList?[index].isPremium == 1,
+  //                 child: FittedBox(
+  //                   child: Container(
+  //                       constraints: const BoxConstraints(
+  //                         minHeight: 15,
+  //                         minWidth: 30,
+  //                       ),
+  //                       alignment: Alignment.center,
+  //                       padding: const EdgeInsets.all(5),
+  //                       decoration: const BoxDecoration(
+  //                         color: colorPrimary,
+  //                         borderRadius: BorderRadius.only(
+  //                             topLeft: Radius.circular(3),
+  //                             topRight: Radius.circular(4),
+  //                             bottomLeft: Radius.circular(8),
+  //                             bottomRight: Radius.circular(3)),
+  //                       ),
+  //                       child: Row(
+  //                         children: [
+  //                           Image.asset(
+  //                             'assets/images/crown.png',
+  //                             height: 15,
+  //                             width: 15,
+  //                           ),
+  //                         ],
+  //                       )),
+  //                 ),
+  //               ),
+  //               Visibility(
+  //                 visible: sectionDataList?[index].isLiveUrl == 1,
+  //                 child: FittedBox(
+  //                   child: Container(
+  //                       constraints: const BoxConstraints(
+  //                         minHeight: 15,
+  //                         minWidth: 30,
+  //                       ),
+  //                       alignment: Alignment.center,
+  //                       padding: const EdgeInsets.all(5),
+  //                       // decoration: const BoxDecoration(
+  //                       //   color: colorPrimary,
+  //                       //   borderRadius: BorderRadius.only(
+  //                       //       topLeft: Radius.circular(3),
+  //                       //       topRight: Radius.circular(4),
+  //                       //       bottomLeft: Radius.circular(8),
+  //                       //       bottomRight: Radius.circular(3)),
+  //                       // ),
+  //                       child: Row(
+  //                         children: [
+  //                           Container(
+  //                             height: 5,
+  //                             width: 5,
+  //                             margin: EdgeInsets.only(right: 3),
+  //                             decoration: BoxDecoration(
+  //                               color: redColor,
+  //                               borderRadius: BorderRadius.circular(30),
+  //                             ),
+  //                           ),
+  //                           Text(
+  //                             "LIVE",
+  //                             style: TextStyle(
+  //                                 color: redColor,
+  //                                 fontSize: 10,
+  //                                 fontWeight: FontWeight.w700),
+  //                           )
+  //                         ],
+  //                       )),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
   Widget landscapeTwo(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: Dimens.heightLand,
+      height: Dimens.heightLandTwo,
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        physics:
-            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        physics: const AlwaysScrollableScrollPhysics(),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            //focusColor:: white,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(10),
             onTap: () {
               debugPrint("Clicked userid ==> ${Constant.userID}");
               debugPrint(
-                  "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginViaSocial()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                  //           sectionDataList?[index].video320, 0, "", "")),
-                  // );
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TestPlayerWeb(
-                          loadURL: sectionDataList![index].video320!)));
+                    builder: (context) => TestPlayerWeb(
+                        loadURL: sectionDataList![index].video320!),
+                  ));
                 }
               } else {
                 Utils.openDetails(
@@ -833,191 +1076,106 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-            // onTap: () {
-            //   debugPrint("Clicked userid ==> ${Constant.userID}");
-            //   debugPrint(
-            //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-            //   if (Constant.userID == null) {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-            //     );
-
-            //     // Utils.buildWebAlertDialog(context, "login", "");
-            //   } else {
-            //     sectionDataList?[index].isLiveUrl == 1
-            //         ? Navigator.push(
-            //             context,
-            //             MaterialPageRoute(
-            //                 builder: (context) => PlayerVideo(
-            //                     '',
-            //                     0,
-            //                     0,
-            //                     typeId,
-            //                     0,
-            //                     sectionDataList?[index].video320,
-            //                     0,
-            //                     "",
-            //                     "")),
-            //           )
-            //         : openDetailPage(
-            //             (sectionDataList?[index].videoType ?? 0) == 2
-            //                 ? "showdetail"
-            //                 : "videodetail",
-            //             sectionDataList?[index].id ?? 0,
-            //             upcomingType ?? 0,
-            //             sectionDataList?[index].videoType ?? 0,
-            //             sectionDataList?[index].typeId ?? 0,
-            //           );
-            //   }
-            // },
             child: Stack(
               alignment: Alignment.topRight,
               children: [
+                // Background image with gradient overlay for better visibility
                 Container(
                   width: Dimens.widthLandTwo,
                   height: Dimens.heightLandTwo,
-                  alignment: Alignment.center,
                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 5)
+                    ],
+                  ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: MyNetworkImage(
-                      imageUrl:
-                          sectionDataList?[index].landscape1.toString() ?? "",
-                      fit: BoxFit.fill,
-                      imgHeight: MediaQuery.of(context).size.height,
-                      imgWidth: MediaQuery.of(context).size.width,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].landscape1.toString() ??
+                                  "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.6),
+                                Colors.transparent
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
+                // Rent Tag
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 0,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/rupee.png',
-                              height: 13,
-                              width: 13,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/rupee.png'),
                 ),
+
+                // Premium Tag
                 Visibility(
                   visible: sectionDataList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 15,
-                              width: 15,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/crown.png'),
                 ),
+
+                // Both Rent & Premium Tag
                 Visibility(
                   visible: sectionDataList?[index].isRent == 1 &&
                       sectionDataList?[index].isPremium == 1,
-                  child: FittedBox(
-                    child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: colorPrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(3),
-                              topRight: Radius.circular(4),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/crown.png',
-                              height: 15,
-                              width: 15,
-                            ),
-                          ],
-                        )),
-                  ),
+                  child: _buildTag('assets/images/crown.png'),
                 ),
+
+                // Live Indicator
                 Visibility(
                   visible: sectionDataList?[index].isLiveUrl == 1,
-                  child: FittedBox(
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
                     child: Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 15,
-                          minWidth: 30,
-                        ),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(5),
-                        // decoration: const BoxDecoration(
-                        //   color: colorPrimary,
-                        //   borderRadius: BorderRadius.only(
-                        //       topLeft: Radius.circular(3),
-                        //       topRight: Radius.circular(4),
-                        //       bottomLeft: Radius.circular(8),
-                        //       bottomRight: Radius.circular(3)),
-                        // ),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 5,
-                              width: 5,
-                              margin: EdgeInsets.only(right: 3),
-                              decoration: BoxDecoration(
-                                color: redColor,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            Text(
-                              "LIVE",
-                              style: TextStyle(
-                                  color: redColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        )),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -1035,234 +1193,145 @@ class SectionByTypeState extends State<SectionByType> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         physics: const AlwaysScrollableScrollPhysics(),
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              //focusColor:: white,
-              borderRadius: BorderRadius.circular(4),
-              // onTap: () {
-              //   debugPrint("Clicked userid ==> ${Constant.userID}");
-              //   debugPrint(
-              //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              //   if (Constant.userID == null) {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-              //     );
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
 
-              //     // Utils.buildWebAlertDialog(context, "login", "");
-              //   } else {
-              //     sectionDataList?[index].isLiveUrl == 1
-              //         ? Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => PlayerVideo(
-              //                     '',
-              //                     0,
-              //                     0,
-              //                     typeId,
-              //                     0,
-              //                     sectionDataList?[index].video320,
-              //                     0,
-              //                     "",
-              //                     "")),
-              //           )
-              //         : openDetailPage(
-              //             (sectionDataList?[index].videoType ?? 0) == 2
-              //                 ? "showdetail"
-              //                 : "videodetail",
-              //             sectionDataList?[index].id ?? 0,
-              //             upcomingType ?? 0,
-              //             sectionDataList?[index].videoType ?? 0,
-              //             sectionDataList?[index].typeId ?? 0,
-              //           );
-              //   }
-              // },
-              onTap: () {
-                debugPrint("Clicked userid ==> ${Constant.userID}");
-                debugPrint(
-                    "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-                if (sectionDataList?[index].isLiveUrl == 1) {
-                  if (Constant.userID == null) {
-                    Navigator.push(
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
-                    );
-                  } else {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                    //           sectionDataList?[index].video320, 0, "", "")),
-                    // );
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => TestPlayerWeb(
-                            loadURL: sectionDataList![index].video320!)));
-                  }
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
                 } else {
-                  Utils.openDetails(
-                    context: context,
-                    videoId: sectionDataList?[index].id ?? 0,
-                    upcomingType: upcomingType ?? 0,
-                    videoType: sectionDataList?[index].videoType ?? 0,
-                    typeId: sectionDataList?[index].typeId ?? 0,
-                  );
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TestPlayerWeb(
+                        loadURL: sectionDataList![index].video320!),
+                  ));
                 }
-              },
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Container(
-                    width: Dimens.widthPort,
-                    height: Dimens.heightPort,
-                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                    alignment: Alignment.center,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: MyNetworkImage(
-                        imageUrl:
-                            sectionDataList?[index].thumbnail.toString() ?? "",
-                        fit: BoxFit.cover,
-                        imgHeight: MediaQuery.of(context).size.height,
-                        imgWidth: MediaQuery.of(context).size.width,
+              } else {
+                Utils.openDetails(
+                  context: context,
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: upcomingType ?? 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                );
+              }
+            },
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                // Background image with gradient overlay for better visibility
+                Container(
+                  width: Dimens.widthPort,
+                  height: Dimens.heightPort,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 5)
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].thumbnail.toString() ??
+                                  "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.6),
+                                Colors.transparent
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Rent Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: _buildTag('assets/images/rupee.png'),
+                ),
+
+                // Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Both Rent & Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Live Indicator
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 0,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/rupee.png',
-                                height: 13,
-                                width: 13,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          // decoration: const BoxDecoration(
-                          //   color: colorPrimary,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(3),
-                          //       topRight: Radius.circular(4),
-                          //       bottomLeft: Radius.circular(8),
-                          //       bottomRight: Radius.circular(3)),
-                          // ),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 5,
-                                width: 5,
-                                margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(
-                                  color: redColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ),
-                              Text(
-                                "LIVE",
-                                style: TextStyle(
-                                    color: redColor,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
-                          )),
-                    ),
-                  ),
-                ],
-              ));
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
@@ -1275,238 +1344,629 @@ class SectionByTypeState extends State<SectionByType> {
       child: ListView.separated(
         itemCount: sectionDataList?.length ?? 0,
         shrinkWrap: true,
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 5),
         scrollDirection: Axis.horizontal,
         physics: const AlwaysScrollableScrollPhysics(),
-        separatorBuilder: (context, index) => const SizedBox(width: 5),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              //focusColor:: white,
-              borderRadius: BorderRadius.circular(4),
-              onTap: () {
-                debugPrint("Clicked userid ==> ${Constant.userID}");
-                debugPrint(
-                    "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-                if (sectionDataList?[index].isLiveUrl == 1) {
-                  if (Constant.userID == null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginViaSocial()),
-                    );
-                  } else {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-                    //           sectionDataList?[index].video320, 0, "", "")),
-                    // );
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => TestPlayerWeb(
-                            loadURL: sectionDataList![index].video320!)));
-                  }
-                } else {
-                  Utils.openDetails(
-                    context: context,
-                    videoId: sectionDataList?[index].id ?? 0,
-                    upcomingType: upcomingType ?? 0,
-                    videoType: sectionDataList?[index].videoType ?? 0,
-                    typeId: sectionDataList?[index].typeId ?? 0,
-                  );
-                }
-              },
-              // onTap: () {
-              //   debugPrint("Clicked userid ==> ${Constant.userID}");
-              //   debugPrint(
-              //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-              //   if (Constant.userID == null) {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-              //     );
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {
+              debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
 
-              //     // Utils.buildWebAlertDialog(context, "login", "");
-              //   } else {
-              //     sectionDataList?[index].isLiveUrl == 1
-              //         ? Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => PlayerVideo(
-              //                     '',
-              //                     0,
-              //                     0,
-              //                     typeId,
-              //                     0,
-              //                     sectionDataList?[index].video320,
-              //                     0,
-              //                     "",
-              //                     "")),
-              //           )
-              //         : openDetailPage(
-              //             (sectionDataList?[index].videoType ?? 0) == 2
-              //                 ? "showdetail"
-              //                 : "videodetail",
-              //             sectionDataList?[index].id ?? 0,
-              //             upcomingType ?? 0,
-              //             sectionDataList?[index].videoType ?? 0,
-              //             sectionDataList?[index].typeId ?? 0,
-              //           );
-              //   }
-              // },
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Container(
-                    width: Dimens.widthPortTwo,
-                    height: Dimens.heightPortTwo,
-                    padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-                    alignment: Alignment.center,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: MyNetworkImage(
-                        imageUrl:
-                            sectionDataList?[index].thumbnail1.toString() ?? "",
-                        fit: BoxFit.cover,
-                        imgHeight: MediaQuery.of(context).size.height,
-                        imgWidth: MediaQuery.of(context).size.width,
+              if (sectionDataList?[index].isLiveUrl == 1) {
+                if (Constant.userID == null) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginViaSocial()));
+                } else {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TestPlayerWeb(
+                        loadURL: sectionDataList![index].video320!),
+                  ));
+                }
+              } else {
+                Utils.openDetails(
+                  context: context,
+                  videoId: sectionDataList?[index].id ?? 0,
+                  upcomingType: upcomingType ?? 0,
+                  videoType: sectionDataList?[index].videoType ?? 0,
+                  typeId: sectionDataList?[index].typeId ?? 0,
+                );
+              }
+            },
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                // Background image with gradient overlay for better visibility
+                Container(
+                  width: Dimens.widthPortTwo,
+                  height: Dimens.heightPortTwo,
+                  padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 5)
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        MyNetworkImage(
+                          imageUrl:
+                              sectionDataList?[index].thumbnail1.toString() ??
+                                  "",
+                          fit: BoxFit.cover,
+                          imgHeight: MediaQuery.of(context).size.height,
+                          imgWidth: MediaQuery.of(context).size.width,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.6),
+                                Colors.transparent
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Rent Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 0,
+                  child: _buildTag('assets/images/rupee.png'),
+                ),
+
+                // Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Both Rent & Premium Tag
+                Visibility(
+                  visible: sectionDataList?[index].isRent == 1 &&
+                      sectionDataList?[index].isPremium == 1,
+                  child: _buildTag('assets/images/crown.png'),
+                ),
+
+                // Live Indicator
+                Visibility(
+                  visible: sectionDataList?[index].isLiveUrl == 1,
+                  child: Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 4)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 6,
+                            width: 6,
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          const Text(
+                            "LIVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 0,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/rupee.png',
-                                height: 13,
-                                width: 13,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isRent == 1 &&
-                        sectionDataList?[index].isPremium == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                topRight: Radius.circular(4),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/crown.png',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: sectionDataList?[index].isLiveUrl == 1,
-                    child: FittedBox(
-                      child: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 15,
-                            minWidth: 30,
-                          ),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5),
-                          // decoration: const BoxDecoration(
-                          //   color: colorPrimary,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(3),
-                          //       topRight: Radius.circular(4),
-                          //       bottomLeft: Radius.circular(8),
-                          //       bottomRight: Radius.circular(3)),
-                          // ),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 5,
-                                width: 5,
-                                margin: EdgeInsets.only(right: 3),
-                                decoration: BoxDecoration(
-                                  color: redColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ),
-                              Text(
-                                "LIVE",
-                                style: TextStyle(
-                                    color: redColor,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
-                          )),
-                    ),
-                  ),
-                ],
-              ));
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
   }
+
+  // Widget portrait(int? upcomingType, List<Datum>? sectionDataList) {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: Dimens.heightPort,
+  //     child: ListView.separated(
+  //       itemCount: sectionDataList?.length ?? 0,
+  //       shrinkWrap: true,
+  //       padding: const EdgeInsets.only(left: 20, right: 20),
+  //       scrollDirection: Axis.horizontal,
+  //       physics: const AlwaysScrollableScrollPhysics(),
+  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return InkWell(
+  //             //focusColor:: white,
+  //             borderRadius: BorderRadius.circular(4),
+  //             // onTap: () {
+  //             //   debugPrint("Clicked userid ==> ${Constant.userID}");
+  //             //   debugPrint(
+  //             //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //             //   if (Constant.userID == null) {
+  //             //     Navigator.push(
+  //             //       context,
+  //             //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //             //     );
+
+  //             //     // Utils.buildWebAlertDialog(context, "login", "");
+  //             //   } else {
+  //             //     sectionDataList?[index].isLiveUrl == 1
+  //             //         ? Navigator.push(
+  //             //             context,
+  //             //             MaterialPageRoute(
+  //             //                 builder: (context) => PlayerVideo(
+  //             //                     '',
+  //             //                     0,
+  //             //                     0,
+  //             //                     typeId,
+  //             //                     0,
+  //             //                     sectionDataList?[index].video320,
+  //             //                     0,
+  //             //                     "",
+  //             //                     "")),
+  //             //           )
+  //             //         : openDetailPage(
+  //             //             (sectionDataList?[index].videoType ?? 0) == 2
+  //             //                 ? "showdetail"
+  //             //                 : "videodetail",
+  //             //             sectionDataList?[index].id ?? 0,
+  //             //             upcomingType ?? 0,
+  //             //             sectionDataList?[index].videoType ?? 0,
+  //             //             sectionDataList?[index].typeId ?? 0,
+  //             //           );
+  //             //   }
+  //             // },
+  //             onTap: () {
+  //               debugPrint("Clicked userid ==> ${Constant.userID}");
+  //               debugPrint(
+  //                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //               if (sectionDataList?[index].isLiveUrl == 1) {
+  //                 if (Constant.userID == null) {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //                   );
+  //                 } else {
+  //                   // Navigator.push(
+  //                   //   context,
+  //                   //   MaterialPageRoute(
+  //                   //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+  //                   //           sectionDataList?[index].video320, 0, "", "")),
+  //                   // );
+  //                   Navigator.of(context).push(MaterialPageRoute(
+  //                       builder: (context) => TestPlayerWeb(
+  //                           loadURL: sectionDataList![index].video320!)));
+  //                 }
+  //               } else {
+  //                 Utils.openDetails(
+  //                   context: context,
+  //                   videoId: sectionDataList?[index].id ?? 0,
+  //                   upcomingType: upcomingType ?? 0,
+  //                   videoType: sectionDataList?[index].videoType ?? 0,
+  //                   typeId: sectionDataList?[index].typeId ?? 0,
+  //                 );
+  //               }
+  //             },
+  //             child: Stack(
+  //               alignment: Alignment.topRight,
+  //               children: [
+  //                 Container(
+  //                   width: Dimens.widthPort,
+  //                   height: Dimens.heightPort,
+  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                   alignment: Alignment.center,
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(4),
+  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                     child: MyNetworkImage(
+  //                       imageUrl:
+  //                           sectionDataList?[index].thumbnail.toString() ?? "",
+  //                       fit: BoxFit.cover,
+  //                       imgHeight: MediaQuery.of(context).size.height,
+  //                       imgWidth: MediaQuery.of(context).size.width,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isRent == 1 &&
+  //                       sectionDataList?[index].isPremium == 0,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/rupee.png',
+  //                               height: 13,
+  //                               width: 13,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isPremium == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/crown.png',
+  //                               height: 15,
+  //                               width: 15,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isRent == 1 &&
+  //                       sectionDataList?[index].isPremium == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/crown.png',
+  //                               height: 15,
+  //                               width: 15,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isLiveUrl == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         // decoration: const BoxDecoration(
+  //                         //   color: colorPrimary,
+  //                         //   borderRadius: BorderRadius.only(
+  //                         //       topLeft: Radius.circular(3),
+  //                         //       topRight: Radius.circular(4),
+  //                         //       bottomLeft: Radius.circular(8),
+  //                         //       bottomRight: Radius.circular(3)),
+  //                         // ),
+  //                         child: Row(
+  //                           children: [
+  //                             Container(
+  //                               height: 5,
+  //                               width: 5,
+  //                               margin: EdgeInsets.only(right: 3),
+  //                               decoration: BoxDecoration(
+  //                                 color: redColor,
+  //                                 borderRadius: BorderRadius.circular(30),
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               "LIVE",
+  //                               style: TextStyle(
+  //                                   color: redColor,
+  //                                   fontSize: 10,
+  //                                   fontWeight: FontWeight.w700),
+  //                             )
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ));
+  //       },
+  //     ),
+  //   );
+  // }
+
+  // Widget portraitTwo(int? upcomingType, List<Datum>? sectionDataList) {
+  //   return SizedBox(
+  //     width: MediaQuery.of(context).size.width,
+  //     height: Dimens.heightPortTwo,
+  //     child: ListView.separated(
+  //       itemCount: sectionDataList?.length ?? 0,
+  //       shrinkWrap: true,
+  //       padding: const EdgeInsets.only(left: 20, right: 20),
+  //       scrollDirection: Axis.horizontal,
+  //       physics: const AlwaysScrollableScrollPhysics(),
+  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return InkWell(
+  //             //focusColor:: white,
+  //             borderRadius: BorderRadius.circular(4),
+  //             onTap: () {
+  //               debugPrint("Clicked userid ==> ${Constant.userID}");
+  //               debugPrint(
+  //                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //               if (sectionDataList?[index].isLiveUrl == 1) {
+  //                 if (Constant.userID == null) {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //                   );
+  //                 } else {
+  //                   // Navigator.push(
+  //                   //   context,
+  //                   //   MaterialPageRoute(
+  //                   //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
+  //                   //           sectionDataList?[index].video320, 0, "", "")),
+  //                   // );
+  //                   Navigator.of(context).push(MaterialPageRoute(
+  //                       builder: (context) => TestPlayerWeb(
+  //                           loadURL: sectionDataList![index].video320!)));
+  //                 }
+  //               } else {
+  //                 Utils.openDetails(
+  //                   context: context,
+  //                   videoId: sectionDataList?[index].id ?? 0,
+  //                   upcomingType: upcomingType ?? 0,
+  //                   videoType: sectionDataList?[index].videoType ?? 0,
+  //                   typeId: sectionDataList?[index].typeId ?? 0,
+  //                 );
+  //               }
+  //             },
+  //             // onTap: () {
+  //             //   debugPrint("Clicked userid ==> ${Constant.userID}");
+  //             //   debugPrint(
+  //             //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+  //             //   if (Constant.userID == null) {
+  //             //     Navigator.push(
+  //             //       context,
+  //             //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
+  //             //     );
+
+  //             //     // Utils.buildWebAlertDialog(context, "login", "");
+  //             //   } else {
+  //             //     sectionDataList?[index].isLiveUrl == 1
+  //             //         ? Navigator.push(
+  //             //             context,
+  //             //             MaterialPageRoute(
+  //             //                 builder: (context) => PlayerVideo(
+  //             //                     '',
+  //             //                     0,
+  //             //                     0,
+  //             //                     typeId,
+  //             //                     0,
+  //             //                     sectionDataList?[index].video320,
+  //             //                     0,
+  //             //                     "",
+  //             //                     "")),
+  //             //           )
+  //             //         : openDetailPage(
+  //             //             (sectionDataList?[index].videoType ?? 0) == 2
+  //             //                 ? "showdetail"
+  //             //                 : "videodetail",
+  //             //             sectionDataList?[index].id ?? 0,
+  //             //             upcomingType ?? 0,
+  //             //             sectionDataList?[index].videoType ?? 0,
+  //             //             sectionDataList?[index].typeId ?? 0,
+  //             //           );
+  //             //   }
+  //             // },
+  //             child: Stack(
+  //               alignment: Alignment.topRight,
+  //               children: [
+  //                 Container(
+  //                   width: Dimens.widthPortTwo,
+  //                   height: Dimens.heightPortTwo,
+  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+  //                   alignment: Alignment.center,
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(4),
+  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
+  //                     child: MyNetworkImage(
+  //                       imageUrl:
+  //                           sectionDataList?[index].thumbnail1.toString() ?? "",
+  //                       fit: BoxFit.cover,
+  //                       imgHeight: MediaQuery.of(context).size.height,
+  //                       imgWidth: MediaQuery.of(context).size.width,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isRent == 1 &&
+  //                       sectionDataList?[index].isPremium == 0,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/rupee.png',
+  //                               height: 13,
+  //                               width: 13,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isPremium == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/crown.png',
+  //                               height: 15,
+  //                               width: 15,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isRent == 1 &&
+  //                       sectionDataList?[index].isPremium == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         decoration: const BoxDecoration(
+  //                           color: colorPrimary,
+  //                           borderRadius: BorderRadius.only(
+  //                               topLeft: Radius.circular(3),
+  //                               topRight: Radius.circular(4),
+  //                               bottomLeft: Radius.circular(8),
+  //                               bottomRight: Radius.circular(3)),
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               'assets/images/crown.png',
+  //                               height: 15,
+  //                               width: 15,
+  //                             ),
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 Visibility(
+  //                   visible: sectionDataList?[index].isLiveUrl == 1,
+  //                   child: FittedBox(
+  //                     child: Container(
+  //                         constraints: const BoxConstraints(
+  //                           minHeight: 15,
+  //                           minWidth: 30,
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         padding: const EdgeInsets.all(5),
+  //                         // decoration: const BoxDecoration(
+  //                         //   color: colorPrimary,
+  //                         //   borderRadius: BorderRadius.only(
+  //                         //       topLeft: Radius.circular(3),
+  //                         //       topRight: Radius.circular(4),
+  //                         //       bottomLeft: Radius.circular(8),
+  //                         //       bottomRight: Radius.circular(3)),
+  //                         // ),
+  //                         child: Row(
+  //                           children: [
+  //                             Container(
+  //                               height: 5,
+  //                               width: 5,
+  //                               margin: EdgeInsets.only(right: 3),
+  //                               decoration: BoxDecoration(
+  //                                 color: redColor,
+  //                                 borderRadius: BorderRadius.circular(30),
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               "LIVE",
+  //                               style: TextStyle(
+  //                                   color: redColor,
+  //                                   fontSize: 10,
+  //                                   fontWeight: FontWeight.w700),
+  //                             )
+  //                           ],
+  //                         )),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ));
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget square(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(

@@ -181,14 +181,22 @@ class AllPaymentState extends State<AllPayment>
             'is_revenue_event': true,
             'currencyCode': currencyCode
           });
+//revenue event-----
+          Singular.eventWithArgs('__iap__', {
+            'product_id': packageId.toString(),
+            'price': amount,
+            'revenue': amount,
+            'currency': currencyCode,
+            'order_id': orderId,
+            'user_id': Constant.userID.toString(),
+          });
+
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         } else {
           isPaymentDone = false;
 
-
           print("Payment DONE 2 ----${orderStatus}");
-
 
           Singular.eventWithArgs('Razorpay Payment Failed', {
             'event_name': 'Razorpay Payment Failed',
@@ -208,7 +216,7 @@ class AllPaymentState extends State<AllPayment>
         }
       } else {
         print("Payment failed ----");
-          print("Payment DONE 3 ----${orderStatus}");
+        print("Payment DONE 3 ----${orderStatus}");
 
         isPaymentDone = false;
         if (!mounted) return;
@@ -255,6 +263,18 @@ class AllPaymentState extends State<AllPayment>
             'user_id': Constant.userID.toString(),
             'is_revenue_event': true,
           });
+
+          // ✅ Required __iap__ revenue event for Singular
+          Singular.eventWithArgs('__iap__', {
+            'product_id': videoId.toString(),
+            'price': amount,
+            'revenue': amount,
+            'currency': 'INR', // or use dynamic currencyCode if available
+            'order_id': orderId,
+            'user_id': Constant.userID.toString(),
+            'couponCode': '${strCouponCode}',
+          });
+
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         } else {
@@ -1448,10 +1468,8 @@ class AllPaymentState extends State<AllPayment>
     }
   }
 
-
-
   void handlePaymentErrorResponse(PaymentFailureResponse response) async {
-            debugPrint("============ Payment Failed event hit--- ============");
+    debugPrint("============ Payment Failed event hit--- ============");
 
     analytics.logEvent(
       name: "Razorpay Payment Faild",
@@ -1498,7 +1516,7 @@ class AllPaymentState extends State<AllPayment>
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
-        debugPrint("============ Success paykment event hit--- ============");
+    debugPrint("============ Success paykment event hit--- ============");
 
     analytics.logEvent(
       name: "Razorpay Payment Success",
@@ -1551,8 +1569,6 @@ class AllPaymentState extends State<AllPayment>
           widget.typeId, widget.videoType, "external");
     }
   }
-
-
 
   /* ********* Razorpay END ********* */
 

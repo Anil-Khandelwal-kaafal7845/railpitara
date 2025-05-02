@@ -4356,9 +4356,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     int? vType =
         (videoDetailsProvider.sectionDetailModel.result?.videoType ?? 0);
     int? vTypeID = widget.typeId;
-    dynamic trailerLibraryId,
+    dynamic iframeTrailerUrl,
         trailerUrlVideoId,
-        videoLibraryId,
+        iframeVideoUrl,
         videoUrlId,
         isLive;
     int? stopTime;
@@ -4379,19 +4379,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           (videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
       vUrl = (videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "");
 
-      trailerLibraryId =
-          (videoDetailsProvider.sectionDetailModel.result?.trailerLibraryId ??
+      iframeTrailerUrl =
+          (videoDetailsProvider.sectionDetailModel.result?.playerTrailerUrl ??
               "");
       trailerUrlVideoId =
           (videoDetailsProvider.sectionDetailModel.result?.trailerVideoId ??
               "");
-      print("Trailer Library Id>>>>>>>>>>>:${trailerLibraryId}");
+      print("Trailer Library Id>>>>>>>>>>>:${iframeTrailerUrl}");
       print("Trailer video Id>>>>>>>>>:${trailerUrlVideoId}");
     } else {
       /* Set-up Quality URLs */
       Utils.setQualityURLs(
         video320:
-            (videoDetailsProvider.sectionDetailModel.result?.video320 ?? ""),
+            (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
         video480:
             (videoDetailsProvider.sectionDetailModel.result?.video480 ?? ""),
         video720:
@@ -4399,13 +4399,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         video1080:
             (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? ""),
       );
-      videoLibraryId =
-          (videoDetailsProvider.sectionDetailModel.result?.videoLibraryId ??
+      iframeVideoUrl =
+          (videoDetailsProvider.sectionDetailModel.result?.playerVideoUrl ??
               "");
       videoUrlId =
           (videoDetailsProvider.sectionDetailModel.result?.urlVideoId ?? "");
 
-      vUrl = (videoDetailsProvider.sectionDetailModel.result?.video320 ?? "");
+      vUrl = (videoDetailsProvider.sectionDetailModel.result?.video1080 ?? "");
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.videoUploadType ??
               "");
@@ -4414,6 +4414,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
     debugPrint("vUploadType ===> $vUploadType");
     debugPrint("stopTime ===> $stopTime");
+    debugPrint("player url ifreme  ===> $iframeVideoUrl");
+
 
     if (!mounted) return;
     if (vUrl.isEmpty || vUrl == "") {
@@ -4438,9 +4440,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
         uploadType: vUploadType,
         videoThumb: videoThumb,
         vStopTime: stopTime,
-        trailerLibraryId: trailerLibraryId,
+        iframeTrailerUrl: iframeTrailerUrl,
         trailerUrlVideoId: trailerUrlVideoId,
-        videoLibraryId: videoLibraryId,
+        iframeVideoUrl: iframeVideoUrl,
         videoUrlVideoId: videoUrlId,
         isLive: isLive);
     debugPrint("isContinue ===> $isContinue");
@@ -4932,4 +4934,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return await _checkSubsRentLogin();
     }
   }
+
+
 }

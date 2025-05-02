@@ -158,6 +158,8 @@ class Result {
       this.channelId,
       this.categoryId,
       this.languageId,
+      this.playerVideoUrl,
+      this.playerTrailerUrl,
       this.castId,
       this.isabaletocoinpurches,
       this.coinvalue,
@@ -233,11 +235,13 @@ class Result {
   dynamic urlVideoId;
   dynamic trailerLibraryId;
   dynamic trailerVideoId;
+  dynamic playerTrailerUrl;
  dynamic thumbnail1;
   dynamic landscape1;
   dynamic isLiveUrl;
   dynamic providerId;
  dynamic isAstroUrl;
+ dynamic playerVideoUrl;
  dynamic iscoinbuy;
  dynamic isadshow;
  dynamic isabaletocoinpurches;
@@ -308,11 +312,13 @@ class Result {
         trailerLibraryId: json["trailer_library_id"],
         trailerVideoId: json["trailer_video_id"],
          iscoinbuy: json["is_coin_buy"],
+         playerTrailerUrl:json["trailer_video_url"],
         isabaletocoinpurches: json["is_coin_purchase"],
         coinvalue: json["no_of_coin_purchase"],
         fullWidth: json["full_width"],
             isadshow: json["is_ads_show"],
         thumbnail1: json["thumbnail_1"],
+        playerVideoUrl:json["video_url"],
         landscape1: json["landscape_1"],
         isLiveUrl: json["is_live_url"],
         providerId: json["provider_id"],
@@ -382,6 +388,7 @@ class Result {
         "full_width": fullWidth,
         "is_live_url": isLiveUrl,
         "upcoming_type": upcomingType,
+        "trailer_video_url":playerTrailerUrl,
         "video_library_id": videoLibraryId,
         "url_video_id": urlVideoId,
         "trailer_library_id": trailerLibraryId,
@@ -394,6 +401,7 @@ class Result {
         "category_id": categoryId,
         "language_id": languageId,
         "is_coin_buy":iscoinbuy,
+        "video_url": playerVideoUrl,
         "is_coin_purchase":isabaletocoinpurches,
         "no_of_coin_purchase":coinvalue,
         "cast_id": castId,
