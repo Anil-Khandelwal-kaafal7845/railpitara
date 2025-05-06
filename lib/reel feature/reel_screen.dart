@@ -186,7 +186,7 @@ Future<void> fetchReels({int? page}) async {
 
   setState(() => isLoading = true);
 
-  final url = Uri.parse('https://chull.ottsnap.in/api/reels-video');
+  final url = Uri.parse('${Constant.baseurl}reels-video');
   final requestBody = {
     "type_id": widget.typeId,
     "video_type": widget.videoType,

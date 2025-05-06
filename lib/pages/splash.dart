@@ -53,7 +53,7 @@ class SplashState extends State<Splash> {
       });
 
     // Simulating a delay of 5 seconds before proceeding to the next screen
-    Future.delayed(const Duration(seconds: 7)).then((value) {
+    Future.delayed(const Duration(seconds: 4)).then((value) {
       if (!mounted) return;
       isFirstCheck();
     });

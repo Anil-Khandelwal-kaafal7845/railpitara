@@ -1321,7 +1321,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
             ),
           ),
         ),
-        if (!kIsWeb)
+        if (!widget.isDynamicLink)
           Positioned(
             top: 15,
             left: 15,

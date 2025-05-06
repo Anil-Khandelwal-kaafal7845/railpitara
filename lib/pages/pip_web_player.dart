@@ -110,71 +110,73 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          // WebView to load the player
-          Positioned.fill(
-            child: InAppWebView(
-              initialData: InAppWebViewInitialData(data: htmlPlayer),
-              initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-                  supportZoom: false, // Disable zoom
-                  disableVerticalScroll: true, // Prevent vertical scrolling
-                  disableHorizontalScroll: true, // Prevent horizontal scrolling
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // WebView to load the player
+            Positioned.fill(
+              child: InAppWebView(
+                initialData: InAppWebViewInitialData(data: htmlPlayer),
+                initialOptions: InAppWebViewGroupOptions(
+                  crossPlatform: InAppWebViewOptions(
+                    supportZoom: false, // Disable zoom
+                    disableVerticalScroll: true, // Prevent vertical scrolling
+                    disableHorizontalScroll: true, // Prevent horizontal scrolling
+                  ),
+                ),
+                onWebViewCreated: (InAppWebViewController controller) {
+                  webViewController = controller;
+                },
+                onLoadStart: (controller, url) {
+                  setState(() {
+                    _isLoading = true; // Web view is still loading
+                  });
+                },
+                onLoadStop: (controller, url) async {
+                  setState(() {
+                    _isLoading = false; // Web view finished loading
+                  });
+                },
+                onConsoleMessage: (controller, consoleMessage) {
+                  print("Console message: ${consoleMessage.message}");
+                },
+              ),
+            ),
+      
+            // Black background with a loading indicator while the web view is loading
+            if (_isLoading)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-              onWebViewCreated: (InAppWebViewController controller) {
-                webViewController = controller;
-              },
-              onLoadStart: (controller, url) {
-                setState(() {
-                  _isLoading = true; // Web view is still loading
-                });
-              },
-              onLoadStop: (controller, url) async {
-                setState(() {
-                  _isLoading = false; // Web view finished loading
-                });
-              },
-              onConsoleMessage: (controller, consoleMessage) {
-                print("Console message: ${consoleMessage.message}");
-              },
-            ),
-          ),
-
-          // Black background with a loading indicator while the web view is loading
-          if (_isLoading)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black,
-                child: Center(
-                  child: CircularProgressIndicator(
+      
+            // Back button positioned on top, even in full-screen mode
+            Positioned(
+              top: 30.0, // Adjust as per your design
+              left: 12.0,
+              child: GestureDetector(
+                onTap: () {
+                  // When the back button is pressed, navigate back
+                  Navigator.pop(context); // Exit the screen
+                },
+                child: Container(
+                  padding: EdgeInsets.all(0),
+                  child: Icon(
+                    CupertinoIcons.back,
                     color: Colors.white,
+                    size: 30.0,
                   ),
                 ),
               ),
             ),
-
-          // Back button positioned on top, even in full-screen mode
-          Positioned(
-            top: 50.0, // Adjust as per your design
-            left: 16.0,
-            child: GestureDetector(
-              onTap: () {
-                // When the back button is pressed, navigate back
-                Navigator.pop(context); // Exit the screen
-              },
-              child: Container(
-                padding: EdgeInsets.all(0),
-                child: Icon(
-                  CupertinoIcons.back,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

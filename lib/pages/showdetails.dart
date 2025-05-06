@@ -2114,7 +2114,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             ),
           ),
         ),
-        if (!kIsWeb)
+        if (!widget.isDynamicLink)
           Positioned(
             top: 15,
             left: 15,

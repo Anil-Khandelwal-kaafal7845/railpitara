@@ -1,4 +1,4 @@
-package com.ott.chulltvott
+package com.ott.qtv
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

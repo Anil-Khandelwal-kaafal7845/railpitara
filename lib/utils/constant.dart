@@ -5,13 +5,13 @@ import 'package:dtlive/model/subtitlemodel.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class Constant {
-  static const String baseurl = 'https://chull.ottsnap.in/api/';
-  static const String dynamicBaseUrl = 'https://chull.tv/';
-  static const String baseurlwithoutapi = 'https://chull.ottsnap.in';
-  static String appName = "Chull";
-  static String appPackageName = "com.ott.chulltvott";
+  static const String baseurl = 'https://qtv.ottsnap.in/api/';
+  static const String dynamicBaseUrl = 'https://qtv.ottpeople.com/';
+  static const String baseurlwithoutapi = 'https://qtv.ottsnap.in';
+  static String appName = "QTV";
+  static String appPackageName = "com.ott.qtv";
   static String appleAppId = "";
-  static double curentAppVersion = 9;
+  static double curentAppVersion = 1;
   static dynamic curentiosAppVersion = 1;
 
   /* OneSignal App ID */

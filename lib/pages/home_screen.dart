@@ -245,7 +245,7 @@ class HomeState extends State<Home> with RouteAware {
                         if (Platform.isAndroid || Platform.isIOS) {
                           final url = Uri.parse(
                             Platform.isAndroid
-                                ? "https://play.google.com/store/apps/details?id=com.ott.Chull tvott&hl=en_IN"
+                            ?"${Constant.androidAppUrl}"
                                 : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
                           );
                           launchUrl(
@@ -3129,6 +3129,9 @@ class HomeState extends State<Home> with RouteAware {
               sectionList[index].videoType == 4 ||
               sectionList[index].videoType == 6;
           bool isReelShow = sectionList[index].videoType == 7;
+
+          bool isFMSection = sectionList[index].title == "FM";
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3151,7 +3154,7 @@ class HomeState extends State<Home> with RouteAware {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
-                  if (!isGenreOrLanguage && !isReelShow)
+                  if (!isFMSection && !isGenreOrLanguage && !isReelShow)
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(

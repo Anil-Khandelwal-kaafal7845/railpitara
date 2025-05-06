@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:advertising_id/advertising_id.dart';
-import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
@@ -45,7 +44,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:singular_flutter_sdk/singular.dart';
@@ -70,7 +68,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'qtv-ott', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',
