@@ -37,34 +37,25 @@ class FindState extends State<Find> {
     super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
-
   }
-
-
 
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.microphone,
-      Permission.bluetoothConnect,
-    ].request();
+    // ✅ Request ONLY microphone permission
+    var micStatus = await Permission.microphone.request();
 
-    // Check individual permissions
-    var micStatus = statuses[Permission.microphone]!;
-    var connectStatus = statuses[Permission.bluetoothConnect]!;
-
-    if (micStatus.isPermanentlyDenied ||
-        connectStatus.isPermanentlyDenied) {
+    if (micStatus.isPermanentlyDenied) {
       _showPermissionDialog();
       return;
     }
 
-    if (!micStatus.isGranted || !connectStatus.isGranted) {
-      // You can show a message if needed
-    //  Utils.showSnackbar(context, "info", "Required permissions not granted", true);
+    if (!micStatus.isGranted) {
+      // Optional: show message if permission not granted
+      // Utils.showSnackbar(context, "info", "Microphone permission not granted", true);
       return;
     }
+
     // Always re-initialize before listening
     speechEnabled = await _speechToText.initialize(
       onStatus: (status) => debugPrint("Speech status: $status"),
@@ -77,7 +68,7 @@ class FindState extends State<Find> {
     }
 
     if (!speechEnabled) {
-     // Utils.showSnackbar(context, "info", "Microphone permission denied", true);
+      // Utils.showSnackbar(context, "info", "Microphone permission denied", true);
       return;
     }
 
@@ -125,7 +116,7 @@ class FindState extends State<Find> {
     // Delay logic to check if speech input is available
     Future.delayed(const Duration(seconds: 5), () {
       if (_isListening && searchController.text.toString().isEmpty) {
-       // Utils.showSnackbar(context, "info", "speechnotavailable", true);
+        // Utils.showSnackbar(context, "info", "speechnotavailable", true);
         _stopListening();
       }
     });
@@ -238,7 +229,7 @@ class FindState extends State<Find> {
     if (_isListening) {
       _stopListening();
     }
-   // _stopListening();
+    // _stopListening();
     searchController.dispose();
     findProvider.clearProvider();
     super.dispose();
