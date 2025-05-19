@@ -45,7 +45,7 @@
         android:required="false"/>
 
    <application
-        android:label="QTV"
+        android:label="QTV Online"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:keepScreenOn="true"

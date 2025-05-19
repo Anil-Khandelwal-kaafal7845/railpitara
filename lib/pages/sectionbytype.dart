@@ -166,45 +166,44 @@ class SectionByTypeState extends State<SectionByType> {
   }
 
   Widget homebanner(List<banner.Result>? sectionBannerList) {
-    final isTablet = MediaQuery.of(context).size.width >= 600;
-
     if ((sectionBannerList?.length ?? 0) > 0) {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
           SizedBox(
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             height: Dimens.homeBanner,
             child: CarouselSlider.builder(
-              itemCount: sectionBannerList?.length ?? 0,
+              itemCount: (sectionBannerList?.length ?? 0),
               carouselController: carouselController,
               options: CarouselOptions(
                 initialPage: 0,
                 height: Dimens.homeBanner,
-                enlargeCenterPage: true,
+                enlargeCenterPage: false,
                 autoPlay: true,
-                autoPlayCurve: Curves.easeInOut,
+                autoPlayCurve: Curves.linear,
                 enableInfiniteScroll: true,
                 autoPlayInterval:
                     Duration(milliseconds: Constant.bannerDuration),
                 autoPlayAnimationDuration:
                     Duration(milliseconds: Constant.animationDuration),
-                viewportFraction: isTablet ? 1.0 : 0.70,
+                viewportFraction: 1.0,
                 onPageChanged: (val, _) async {
                   await sectionByTypeProvider.setCurrentBanner(val);
                 },
               ),
-              itemBuilder: (context, index, realIndex) {
-                final bannerItem = sectionBannerList?[index];
-                final imageUrl = isTablet
-                    ? bannerItem?.fullWidth ?? ""
-                    : bannerItem?.thumbnail ?? "";
-
+              itemBuilder:
+                  (BuildContext context, int index, int pageViewIndex) {
                 return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  // focusColor: white,
+                  // borderRadius: BorderRadius.circular(0),
                   onTap: () {
-                    debugPrint("Clicked on banner: ${bannerItem?.video320}");
-
-                    if (bannerItem?.isLiveUrl == 1) {
+                    debugPrint("Clicked userid ==> ${Constant.userID}");
+                    debugPrint(
+                        "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
+                    if (sectionBannerList?[index].isLiveUrl == 1) {
                       if (Constant.userID == null) {
                         Navigator.push(
                           context,
@@ -212,20 +211,34 @@ class SectionByTypeState extends State<SectionByType> {
                               builder: (context) => LoginViaSocial()),
                         );
                       } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => PlayerVideo(
+                        //           '',
+                        //           0,
+                        //           0,
+                        //           typeId,
+                        //           0,
+                        //           sectionBannerList?[index].videoUrl,
+                        //           0,
+                        //           "",
+                        //           "")),
+                        // );
+                        Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => TestPlayerWeb(
-                              loadURL: bannerItem?.videoUrl ?? "",
-                            ),
-                          ),
-                        );
+                                loadURL: sectionBannerList?[index].videoUrl!)));
                       }
-                    } else if (bannerItem?.bannerBacklink != null &&
-                        bannerItem!.bannerBacklink!.isNotEmpty) {
-                      launchUrl(Uri.parse(bannerItem.bannerBacklink!));
+                    } else if (sectionBannerList?[index].bannerBacklink !=
+                            null &&
+                        sectionBannerList![index]
+                            .bannerBacklink
+                            .toString()
+                            .isNotEmpty) {
+                      launchUrl(Uri.parse(
+                          sectionBannerList[index].bannerBacklink.toString()));
                     } else {
-                      Utils.openDetails(
+                     Utils.openDetails(
                         context: context,
                         videoId: sectionBannerList?[index].id ?? 0,
                         upcomingType:
@@ -236,41 +249,157 @@ class SectionByTypeState extends State<SectionByType> {
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 5,
-                                  spreadRadius: 2,
+                    padding: const EdgeInsets.only(
+                        top: 0, bottom: 0, left: 10, right: 10),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      // alignment: AlignmentDirectional.bottomCenter,
+                      children: [
+                        SizedBox(
+                          height: Dimens.homeBanner,
+                          child: MyNetworkImageTwo(
+                            imageUrl: sectionBannerList?[index].landscape ?? "",
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Visibility(
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 0,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
                                 ),
-                              ],
-                            ),
-                            child: MyNetworkImageTwo(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.cover,
-                            ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/rupee.png',
+                                      height: 13,
+                                      width: 13,
+                                    ),
+                                  ],
+                                )),
                           ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: _buildBannerBadge(bannerItem),
+                        ),
+                        Visibility(
+                          visible: sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 15,
+                                      width: 15,
+                                    ),
+                                  ],
+                                )),
                           ),
-                        ],
-                      ),
+                        ),
+                        Visibility(
+                          visible: sectionBannerList?[index].isRent == 1 &&
+                              sectionBannerList?[index].isPremium == 1,
+                          child: FittedBox(
+                            child: Container(
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      topRight: Radius.circular(4),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(3)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      height: 15,
+                                      width: 15,
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
+                        Visibility(
+                          visible: sectionBannerList?[index].isLiveUrl == 1,
+                          child: FittedBox(
+                            child: Container(
+                                margin: EdgeInsets.only(right: 8),
+                                constraints: const BoxConstraints(
+                                  minHeight: 15,
+                                  minWidth: 30,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                // decoration: const BoxDecoration(
+                                //   color: colorPrimary,
+                                //   borderRadius: BorderRadius.only(
+                                //       topLeft: Radius.circular(3),
+                                //       topRight: Radius.circular(4),
+                                //       bottomLeft: Radius.circular(8),
+                                //       bottomRight: Radius.circular(3)),
+                                // ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 7,
+                                      width: 7,
+                                      margin: EdgeInsets.only(right: 3),
+                                      decoration: BoxDecoration(
+                                        color: redColor,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                    ),
+                                    Text(
+                                      "LIVE",
+                                      style: TextStyle(
+                                          color: redColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
               },
             ),
           ),
+          const SizedBox(height: 5.5),
           Positioned(
             bottom: 10,
             child: Consumer<SectionByTypeProvider>(
@@ -290,12 +419,15 @@ class SectionByTypeState extends State<SectionByType> {
               },
             ),
           ),
+        
+        
         ],
       );
     } else {
       return const SizedBox.shrink();
     }
   }
+
 
   Widget _badge(String text, Color color) {
     return Container(

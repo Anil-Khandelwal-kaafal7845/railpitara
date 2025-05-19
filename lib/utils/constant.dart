@@ -8,7 +8,7 @@ class Constant {
   static const String baseurl = 'https://qtv.ottsnap.in/api/';
   static const String dynamicBaseUrl = 'https://qtv.ottpeople.com/';
   static const String baseurlwithoutapi = 'https://qtv.ottsnap.in';
-  static String appName = "QTV";
+  static String appName = "QTV Online";
   static String appPackageName = "com.ott.qtv";
   static String appleAppId = "";
   static double curentAppVersion = 1;

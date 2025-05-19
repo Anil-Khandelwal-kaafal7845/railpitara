@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:advertising_id/advertising_id.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
@@ -190,7 +189,7 @@ class _MyAppState extends State<MyApp> {
     // _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
     if (!kIsWeb) _getDeviceInfo();
-    getAdvertisingId();
+    // getAdvertisingId();
     super.initState();
   }
 
@@ -395,45 +394,45 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 
-  Future<void> getAdvertisingId() async {
-    try {
-      // Check the platform (Android or iOS)
-      if (kIsWeb) {
-        debugPrint("Web platform does not support advertising ID");
-        return;
-      }
+  // Future<void> getAdvertisingId() async {
+  //   try {
+  //     // Check the platform (Android or iOS)
+  //     if (kIsWeb) {
+  //       debugPrint("Web platform does not support advertising ID");
+  //       return;
+  //     }
 
-      // For Android
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        final advertisingId =
-            await AdvertisingId.id(false); // Pass false to not limit tracking
-        if (advertisingId != null) {
-          debugPrint("Google Advertising ID (GAID): $advertisingId");
+  //     // For Android
+  //     if (defaultTargetPlatform == TargetPlatform.android) {
+  //       final advertisingId =
+  //           await AdvertisingId.id(false); // Pass false to not limit tracking
+  //       if (advertisingId != null) {
+  //         debugPrint("Google Advertising ID (GAID): $advertisingId");
 
-          // Pass GAID to Singular SDK
-          Singular.setCustomUserId(advertisingId);
-        } else {
-          debugPrint("Failed to retrieve Google Advertising ID (GAID)");
-        }
-      }
+  //         // Pass GAID to Singular SDK
+  //         Singular.setCustomUserId(advertisingId);
+  //       } else {
+  //         debugPrint("Failed to retrieve Google Advertising ID (GAID)");
+  //       }
+  //     }
 
-      // For iOS
-      else if (defaultTargetPlatform == TargetPlatform.iOS) {
-        final deviceInfo = DeviceInfoPlugin();
-        final iosInfo = await deviceInfo.iosInfo;
-        final idfv = iosInfo.identifierForVendor;
-        debugPrint("iOS Identifier for Vendor (IDFV): $idfv");
+  //     // For iOS
+  //     else if (defaultTargetPlatform == TargetPlatform.iOS) {
+  //       final deviceInfo = DeviceInfoPlugin();
+  //       final iosInfo = await deviceInfo.iosInfo;
+  //       final idfv = iosInfo.identifierForVendor;
+  //       debugPrint("iOS Identifier for Vendor (IDFV): $idfv");
 
-        // If you need to get the IDFA (Advertising Identifier)
-        // Note: IDFA requires user permission starting iOS 14.
-        // You may use the package 'idfa' to get it, or check the permission status.
-      } else {
-        debugPrint("Platform not supported for advertising ID retrieval");
-      }
-    } catch (e) {
-      debugPrint("Error fetching Advertising ID: $e");
-    }
-  }
+  //       // If you need to get the IDFA (Advertising Identifier)
+  //       // Note: IDFA requires user permission starting iOS 14.
+  //       // You may use the package 'idfa' to get it, or check the permission status.
+  //     } else {
+  //       debugPrint("Platform not supported for advertising ID retrieval");
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error fetching Advertising ID: $e");
+  //   }
+  // }
 
   _getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
