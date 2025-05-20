@@ -67,7 +67,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'qtv-ott', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'qtv-android-app', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

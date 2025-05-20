@@ -1,4 +1,4 @@
-package com.ott.qtv
+package com.ott.qtvonline
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

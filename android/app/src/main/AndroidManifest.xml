@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ott.qtv">
+    package="com.ott.qtvonline">
 
     <uses-feature
         android:name="android.hardware.camera2.full"
