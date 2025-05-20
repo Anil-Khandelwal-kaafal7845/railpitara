@@ -67,7 +67,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'qtv-android-app', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

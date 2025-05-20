@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>188395223241-18fu9it4gsaonmog9prnr3mtqq106ihv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.188395223241-18fu9it4gsaonmog9prnr3mtqq106ihv</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>188395223241-1c63iksddu87f2v8dorh5jjua2fng0l4.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDtnvD1N_MNEh_WVpDtaMXVtzLKx73uQA4</string>
+	<string>AIzaSyC3xbbflZr438bgFI7yp329OPpEoAmY7kI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>123998209952</string>
+	<string>188395223241</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ott.qtvonline</string>
+	<string>com.ott.chulbull</string>
 	<key>PROJECT_ID</key>
-	<string>qtv-android-app</string>
+	<string>chulltv</string>
 	<key>STORAGE_BUCKET</key>
-	<string>qtv-android-app.firebasestorage.app</string>
+	<string>chulltv.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:123998209952:ios:11542ebef81d6bbd9506c5</string>
+	<string>1:188395223241:ios:aa43b8a56eece82862b518</string>
 </dict>
 </plist>

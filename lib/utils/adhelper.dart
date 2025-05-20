@@ -26,7 +26,7 @@ class AdHelper {
   static RewardedAd? _rewardedAd;
 
   static AdRequest request = AdRequest(
-    keywords: <String>[Constant.appName, 'QTV Online'],
+    keywords: <String>[Constant.appName, 'ChullBull'],
     contentUrl: 'https://flutter.io',
     nonPersonalizedAds: true,
   );

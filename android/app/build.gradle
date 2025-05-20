@@ -53,7 +53,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ott.qtvonline"
+        applicationId "com.ott.chulbull"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1

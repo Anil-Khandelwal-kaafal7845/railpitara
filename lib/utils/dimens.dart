@@ -51,8 +51,8 @@ static double widthTopTen = 120;   // Adjusted to maintain proportion
   static double heightWatchlist = 110;
   static double upcomingHeight = 90;
 
-  // static double homeBanner = 400;
-    static double homeBanner = 210;
+  static double homeBanner = 400;
+    // static double homeBanner = 210;
 
   static double homeWebBanner = 350;
   static double webBannerImgPr = 0.59; // Should be less than 1.0

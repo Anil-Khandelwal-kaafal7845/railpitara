@@ -44,16 +44,16 @@ class SplashState extends State<Splash> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset("assets/images/splash.mp4")
-      ..initialize().then((_) {
-        setState(() {
-          _initialized = true;
-        });
-        _controller.play();
-      });
+    // _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+    //   ..initialize().then((_) {
+    //     setState(() {
+    //       _initialized = true;
+    //     });
+    //     _controller.play();
+    //   });
 
     // Simulating a delay of 5 seconds before proceeding to the next screen
-    Future.delayed(const Duration(seconds: 5)).then((value) {
+    Future.delayed(const Duration(seconds: 2)).then((value) {
       if (!mounted) return;
       isFirstCheck();
     });
@@ -89,12 +89,7 @@ class SplashState extends State<Splash> {
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
         color: Colors.transparent,
-        child: _initialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              )
-            : MyImage(
+        child:  MyImage(
                 imagePath:
                     (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
                 fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,

@@ -1796,45 +1796,62 @@ class HomeState extends State<Home> with RouteAware {
 
 // animated banner ----
 
+// animated banner ----
   Widget _mobileHomeBanner(List<banner.Result>? sectionBannerList) {
+    final isTablet = MediaQuery.of(context).size.width >= 600;
+
     if ((sectionBannerList?.length ?? 0) > 0) {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: double.infinity,
             height: Dimens.homeBanner,
             child: CarouselSlider.builder(
-              itemCount: (sectionBannerList?.length ?? 0),
+              itemCount: sectionBannerList?.length ?? 0,
               carouselController: carouselController,
               options: CarouselOptions(
                 initialPage: 0,
                 height: Dimens.homeBanner,
-                enlargeCenterPage: false,
+                enlargeCenterPage: true,
                 autoPlay: true,
-                autoPlayCurve: Curves.linear,
+                autoPlayCurve: Curves.easeInOut,
                 enableInfiniteScroll: true,
                 autoPlayInterval:
                     Duration(milliseconds: Constant.bannerDuration),
                 autoPlayAnimationDuration:
                     Duration(milliseconds: Constant.animationDuration),
-                viewportFraction: 1.0,
+                viewportFraction: isTablet ? 1.0 : 0.70,
                 onPageChanged: (val, _) async {
                   await sectionDataProvider.setCurrentBanner(val);
                 },
               ),
-              itemBuilder:
-                  (BuildContext context, int index, int pageViewIndex) {
+              itemBuilder: (context, index, realIndex) {
+                final bannerItem = sectionBannerList?[index];
+                final imageUrl = isTablet
+                    ? bannerItem?.fullWidth ?? ""
+                    : bannerItem?.thumbnail ?? "";
+
                 return GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  // focusColor: white,
-                  // borderRadius: BorderRadius.circular(0),
                   onTap: () {
-                    debugPrint("Clicked userid ==> ${Constant.userID}");
-                    debugPrint(
-                        "Clicked on link is  ==> ${sectionBannerList?[index].video320.toString()}");
-                    if (sectionBannerList?[index].isLiveUrl == 1) {
+                    // final timestamp = DateTime.now().toIso8601String();
+
+                    // final properties = MoEProperties()
+                    //   ..addAttribute('banner_id', sectionBannerList?[index])
+                    //   ..addAttribute('category_name',
+                    //       sectionBannerList?[index].categoryName)
+                    //   ..addAttribute('language', selectedLanguages)
+                    //   ..addAttribute('timestamp', timestamp);
+
+                    // MoEngageService.instance
+                    //     .trackEvent('dynamic_banner_clicked', properties);
+
+                    // print(
+                    //     "MoEngage event tracked with and timestamp: $timestamp");
+
+                    debugPrint("Clicked on banner: ${bannerItem?.video320}");
+
+                    if (bannerItem?.isLiveUrl == 1) {
                       if (Constant.userID == null) {
                         Navigator.push(
                           context,
@@ -1842,207 +1859,90 @@ class HomeState extends State<Home> with RouteAware {
                               builder: (context) => LoginViaSocial()),
                         );
                       } else {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => PlayerVideo(
-                        //           '',
-                        //           0,
-                        //           0,
-                        //           typeId,
-                        //           0,
-                        //           sectionBannerList?[index].videoUrl,
-                        //           0,
-                        //           "",
-                        //           "")),
-                        // );
-                        Navigator.of(context).push(MaterialPageRoute(
+                        // final timestamp = DateTime.now().toIso8601String();
+                        // final properties = MoEProperties()
+                        //   // ..addAttribute('userName', Constant.userID.toString())
+                        //   ..addAttribute('user_id', userMobileNo)
+                        //   ..addAttribute('stream_id', videoType)
+                        //   ..addAttribute('stream_category', typeId)
+                        //   ..addAttribute('timestamp', timestamp);
+
+                        // print(
+                        //     "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                        // MoEngageService.instance
+                        //     .trackEvent('Live_Stream_Joined', properties);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) => TestPlayerWeb(
-                                loadURL: sectionBannerList?[index].videoUrl!)));
+                              loadURL: bannerItem?.videoUrl ?? "",
+                            ),
+                          ),
+                        );
                       }
-                    } else if (sectionBannerList?[index].bannerBacklink !=
-                            null &&
-                        sectionBannerList![index]
-                            .bannerBacklink
-                            .toString()
-                            .isNotEmpty) {
-                      launchUrl(Uri.parse(
-                          sectionBannerList[index].bannerBacklink.toString()));
+                    } else if (bannerItem?.bannerBacklink != null &&
+                        bannerItem!.bannerBacklink!.isNotEmpty) {
+                      launchUrl(Uri.parse(bannerItem.bannerBacklink!));
                     } else {
                       openDetailPage(
-                        (sectionBannerList?[index].videoType ?? 0) == 2
+                        (bannerItem?.videoType ?? 0) == 2
                             ? "showdetail"
                             : "videodetail",
-                        sectionBannerList?[index].id ?? 0,
-                        sectionBannerList?[index].upcomingType ?? 0,
-                        sectionBannerList?[index].videoType ?? 0,
-                        sectionBannerList?[index].typeId ?? 0,
-                        sectionBannerList?[index].name ?? "",
+                        bannerItem?.id ?? 0,
+                        bannerItem?.upcomingType ?? 0,
+                        bannerItem?.videoType ?? 0,
+                        bannerItem?.typeId ?? 0,
+                        bannerItem?.name ?? 0,
                       );
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 0, bottom: 0, left: 10, right: 10),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      // alignment: AlignmentDirectional.bottomCenter,
-                      children: [
-                        SizedBox(
-                          height: Dimens.homeBanner,
-                          child: MyNetworkImageTwo(
-                            imageUrl: sectionBannerList?[index].fullWidth ?? "",
-                            fit: BoxFit.fill,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 5,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: MyNetworkImageTwo(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Visibility(
-                          visible: sectionBannerList?[index].isRent == 1 &&
-                              sectionBannerList?[index].isPremium == 0,
-                          child: FittedBox(
-                            child: Container(
-                                constraints: const BoxConstraints(
-                                  minHeight: 15,
-                                  minWidth: 30,
-                                ),
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  color: colorPrimary,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(3),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(3)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/rupee.png',
-                                      height: 13,
-                                      width: 13,
-                                    ),
-                                  ],
-                                )),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: _buildBannerBadge(bannerItem),
                           ),
-                        ),
-                        Visibility(
-                          visible: sectionBannerList?[index].isPremium == 1,
-                          child: FittedBox(
-                            child: Container(
-                                constraints: const BoxConstraints(
-                                  minHeight: 15,
-                                  minWidth: 30,
-                                ),
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  color: colorPrimary,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(3),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(3)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/crown.png',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                        Visibility(
-                          visible: sectionBannerList?[index].isRent == 1 &&
-                              sectionBannerList?[index].isPremium == 1,
-                          child: FittedBox(
-                            child: Container(
-                                constraints: const BoxConstraints(
-                                  minHeight: 15,
-                                  minWidth: 30,
-                                ),
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  color: colorPrimary,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(3),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(3)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/crown.png',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                        Visibility(
-                          visible: sectionBannerList?[index].isLiveUrl == 1,
-                          child: FittedBox(
-                            child: Container(
-                                margin: EdgeInsets.only(right: 8),
-                                constraints: const BoxConstraints(
-                                  minHeight: 15,
-                                  minWidth: 30,
-                                ),
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(5),
-                                // decoration: const BoxDecoration(
-                                //   color: colorPrimary,
-                                //   borderRadius: BorderRadius.only(
-                                //       topLeft: Radius.circular(3),
-                                //       topRight: Radius.circular(4),
-                                //       bottomLeft: Radius.circular(8),
-                                //       bottomRight: Radius.circular(3)),
-                                // ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 7,
-                                      width: 7,
-                                      margin: EdgeInsets.only(right: 3),
-                                      decoration: BoxDecoration(
-                                        color: redColor,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                    ),
-                                    Text(
-                                      "LIVE",
-                                      style: TextStyle(
-                                          color: redColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
             ),
           ),
-          const SizedBox(height: 5.5),
           Positioned(
             bottom: 10,
             child: Consumer<SectionDataProvider>(
               builder: (context, sectionDataProvider, child) {
                 return AnimatedSmoothIndicator(
-                  count: (sectionBannerList?.length ?? 0),
+                  count: sectionBannerList?.length ?? 0,
                   activeIndex: sectionDataProvider.cBannerIndex ?? 0,
-                  effect: const ScrollingDotsEffect(
+                  effect: const ExpandingDotsEffect(
                     spacing: 8,
-                    radius: 4,
+                    radius: 6,
                     activeDotColor: colorPrimary,
                     dotColor: dotsDefaultColor,
                     dotHeight: 8,

@@ -50,31 +50,41 @@ class API {
   Dio get sendRequest => _dio;
 }
 
+
 Options optHeaders = Options(headers: <String, dynamic>{
   'Content-Type': 'application/json',
 });
 
 class HomeScreenRepo {
-  API api = API();
+  final API api = API();
 
-  // ignore: body_might_complete_normally_nullable
   Future<ForceUpdatemodel?> forceUpdateApi(BuildContext context) async {
     try {
-      Response response =
-          await api.sendRequest.get("/force_update", options: optHeaders);
+      final appVersion = Platform.isAndroid
+          ? Constant.curentAppVersion
+          : Constant.curentiosAppVersion;
+
+      final deviceType = Constant.deviceType; // e.g., "android_app" or "ios_app"
+
+      Response response = await api.sendRequest.get(
+        "/force_update",
+        queryParameters: {
+          'version': appVersion,
+          'device': deviceType,
+        },
+        options: optHeaders,
+      );
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ForceUpdatemodel featuredData =
-            ForceUpdatemodel.fromJson(response.data);
-        return featuredData;
+        return ForceUpdatemodel.fromJson(response.data);
       } else {
-        Fluttertoast.showToast(msg: "serverError");
-      }
-      if (context.mounted) {
-        Navigator.pop(context);
+        Fluttertoast.showToast(msg: "Server error: ${response.statusCode}");
+        return null;
       }
     } catch (e) {
-      debugPrint("SOME ISSUES IN force update API");
-      throw (e.toString());
+      debugPrint("SOME ISSUES IN forceUpdateApi: $e");
+      Fluttertoast.showToast(msg: "Something went wrong");
+      return null;
     }
   }
 }
