@@ -979,8 +979,7 @@ class AllPaymentState extends State<AllPayment>
                               // }
                             }
                           },
-                          child: _buildPGButton(
-                              "pg_razorpay.png", "Razorpay", 35, 130),
+                          child: _buildPGButtonRazorpay("", "Pay", 35, 130),
                         ),
                       ),
                     )
@@ -1352,6 +1351,61 @@ class AllPaymentState extends State<AllPayment>
     );
   }
 
+  Widget _buildPGButtonRazorpay(
+      String imageName, String pgName, double imgHeight, double imgWidth) {
+    return Container(
+      // margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        border: Border.all(color: colorPrimary, width: 0.7),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.transparent,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          MyImage(
+            imagePath: imageName,
+            fit: BoxFit.contain,
+            height: imgHeight,
+            width: imgWidth,
+          ),
+          const SizedBox(width: 30),
+          Container(
+            decoration: BoxDecoration(
+              color: colorPrimary,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 231, 217, 216), width: 0.5),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                MyText(
+                  color: Colors.white,
+                  text: pgName,
+                  multilanguage: false,
+                  fontsizeNormal: 13,
+                  fontsizeWeb: 14,
+                  fontweight: FontWeight.w600,
+                  textalign: TextAlign.center,
+                ),
+                const SizedBox(width: 6),
+                MyImage(
+                  imagePath: "ic_arrow_right.png",
+                  fit: BoxFit.contain,
+                  height: 18,
+                  width: 18,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   /* ********* Razorpay START ********* */
 
   Future<String> createOrder() async {
@@ -1449,6 +1503,11 @@ class AllPaymentState extends State<AllPayment>
             'external': {
               'wallets': ['paytm']
             },
+            'theme': {
+              'color': '#B80E07',
+            },
+            'image':
+                'https://play-lh.googleusercontent.com/9TNMnjC76gfYthQk69SRgXkDSARSr0UYUvvFmpueSBAL1Njh2vNehZab64nezdoh_-w',
             'autocapture': 1
           };
           razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);

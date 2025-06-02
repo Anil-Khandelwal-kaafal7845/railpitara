@@ -26,7 +26,7 @@ class AdHelper {
   static RewardedAd? _rewardedAd;
 
   static AdRequest request = AdRequest(
-    keywords: <String>[Constant.appName, 'ChullBull'],
+    keywords: <String>[Constant.appName, 'Chull'],
     contentUrl: 'https://flutter.io',
     nonPersonalizedAds: true,
   );

@@ -45,7 +45,7 @@
         android:required="false"/>
 
    <application
-        android:label="ChullBull"
+        android:label="Chull"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:keepScreenOn="true"
@@ -87,7 +87,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="qtv.ottpeople.com"/>
+                <data android:scheme="http" android:host="chull.tv"/>
                 <data android:scheme="https"/>
             </intent-filter>
            

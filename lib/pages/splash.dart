@@ -1,5 +1,4 @@
 import 'package:dtlive/main.dart';
-
 import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/provider/homeprovider.dart';
 import 'package:dtlive/tvpages/tvhome.dart';
@@ -39,24 +38,34 @@ class SplashState extends State<Splash> {
   SharedPre sharedPre = SharedPre();
   bool _initialized = false;
   late VideoPlayerController _controller;
-
+  String? userName, userType, userMobileNo, userEmail;
+  SharedPre sharedPref = SharedPre();
   @override
   void initState() {
     super.initState();
 
-    // _controller = VideoPlayerController.asset("assets/images/splash.mp4")
-    //   ..initialize().then((_) {
-    //     setState(() {
-    //       _initialized = true;
-    //     });
-    //     _controller.play();
-    //   });
+    _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+      ..initialize().then((_) {
+        setState(() {
+          _initialized = true;
+        });
+        _controller.play();
+      });
 
     // Simulating a delay of 5 seconds before proceeding to the next screen
-    Future.delayed(const Duration(seconds: 2)).then((value) {
+    Future.delayed(const Duration(seconds: 7)).then((value) {
       if (!mounted) return;
       isFirstCheck();
     });
+
+    getUserData();
+    // moEngagePlugin();
+  }
+
+  getUserData() async {
+    userMobileNo = await sharedPref.read("usermobile");
+    userEmail = await sharedPref.read("useremail");
+    debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
   }
 
   @override
@@ -89,7 +98,12 @@ class SplashState extends State<Splash> {
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
         color: Colors.transparent,
-        child:  MyImage(
+        child: _initialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )
+            : MyImage(
                 imagePath:
                     (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
                 fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
@@ -137,8 +151,6 @@ class SplashState extends State<Splash> {
               videoType: widget.videoType!,
               typeId: widget.videoId!);
         });
-     
-     
       } else {
         if (seen == "1") {
           Navigator.pushReplacement(

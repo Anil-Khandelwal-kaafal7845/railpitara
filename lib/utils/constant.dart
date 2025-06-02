@@ -8,7 +8,7 @@ class Constant {
    static const String baseurl = 'https://chull.ottsnap.in/api/';
   static const String dynamicBaseUrl = 'https://chull.tv/';
   static const String baseurlwithoutapi = 'https://chull.ottsnap.in';
-  static String appName = "ChullBull";
+  static String appName = "Chull";
   static String appPackageName = "com.ott.chulbull";
   static String appleAppId = "";
   static double curentAppVersion = 1;
