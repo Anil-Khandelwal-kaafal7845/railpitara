@@ -499,7 +499,7 @@ class AllPaymentState extends State<AllPayment>
       backgroundColor: appBgColor,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: appBgColor, // Set the app bar background color
+        backgroundColor: appBgColor, // Set the app bar background color.xml
         title: const Text(
           "Payment Details", // Title of the app bar
           style: TextStyle(
@@ -740,7 +740,7 @@ class AllPaymentState extends State<AllPayment>
   //     margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
   //     padding: const EdgeInsets.only(right: 10),
   //     decoration: BoxDecoration(
-  //       border: Border.all(color: primaryDark, width: 0.5),
+  //       border: Border.all(color.xml: primaryDark, width: 0.5),
   //       borderRadius: BorderRadius.circular(5),
   //     ),
   //     child: Row(
@@ -776,7 +776,7 @@ class AllPaymentState extends State<AllPayment>
   //               keyboardType: TextInputType.text,
   //               maxLines: 1,
   //               style: const TextStyle(
-  //                 color: white,
+  //                 color.xml: white,
   //                 fontSize: 16,
   //                 overflow: TextOverflow.ellipsis,
   //                 fontWeight: FontWeight.w600,
@@ -786,7 +786,7 @@ class AllPaymentState extends State<AllPayment>
   //                 filled: true,
   //                 fillColor: transparentColor,
   //                 hintStyle: TextStyle(
-  //                   color: otherColor,
+  //                   color.xml: otherColor,
   //                   fontSize: 14,
   //                   overflow: TextOverflow.ellipsis,
   //                   fontWeight: FontWeight.w500,
@@ -815,7 +815,7 @@ class AllPaymentState extends State<AllPayment>
   //             decoration: Utils.setBackground(white, 5),
   //             alignment: Alignment.center,
   //             child: MyText(
-  //               color: black,
+  //               color.xml: black,
   //               text: "apply",
   //               multilanguage: true,
   //               fontsizeNormal: 13,
@@ -1544,7 +1544,7 @@ class AllPaymentState extends State<AllPayment>
               'wallets': ['paytm']
             },
             'theme': {
-              'color': '#B80E07',
+              'color.xml': '#B80E07',
             },
             'image':
                 'https://play-lh.googleusercontent.com/9TNMnjC76gfYthQk69SRgXkDSARSr0UYUvvFmpueSBAL1Njh2vNehZab64nezdoh_-w',
@@ -2026,7 +2026,7 @@ class AllPaymentState extends State<AllPayment>
   //             children: [
   //               Icon(
   //                 Icons.cancel,
-  //                 color: Colors.red,
+  //                 color.xml: Colors.red,
   //               ),
   //               Text("Payment Failed"),
   //             ],

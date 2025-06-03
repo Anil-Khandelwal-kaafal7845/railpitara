@@ -36,8 +36,8 @@ class ChullApplication : Application() {
         MoEngage.initialiseDefaultInstance(moEngage)
 
         // ✅ Use 'this' instead of 'context'
-        MoEAnalyticsHelper.setAppStatus(this, AppStatus.INSTALL)
-        MoEAnalyticsHelper.setAppStatus(this, AppStatus.UPDATE)
+//        MoEAnalyticsHelper.setAppStatus(this, AppStatus.INSTALL)
+//        MoEAnalyticsHelper.setAppStatus(this, AppStatus.UPDATE)
 
         MoEInAppHelper.getInstance().showInApp(this)
         MoEInAppHelper.getInstance().showNudge(this)

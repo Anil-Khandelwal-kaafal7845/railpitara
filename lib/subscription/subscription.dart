@@ -365,13 +365,13 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 //               Text(
 //                 'Select Payment Method',
 //                 style: TextStyle(
-//                   color: Colors.white,
+//                   color.xml: Colors.white,
 //                   fontSize: 18,
 //                   fontWeight: FontWeight.bold,
 //                 ),
 //               ),
 //               const SizedBox(height: 10),
-//               const Divider(color: Colors.grey, thickness: 1),
+//               const Divider(color.xml: Colors.grey, thickness: 1),
 
 //               // Rent via Payment option
 //               ListTile(
@@ -382,7 +382,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 //                 ),
 //                 title: const Text(
 //                   'Rent via Payment',
-//                   style: TextStyle(color: Colors.white),
+//                   style: TextStyle(color.xml: Colors.white),
 //                 ),
 //                 onTap: () async {
 //                   // Call the payment function here
@@ -390,7 +390,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 //                   Navigator.pop(context); // Close the bottom sheet
 //                 },
 //               ),
-//               const Divider(color: Colors.grey, thickness: 1),
+//               const Divider(color.xml: Colors.grey, thickness: 1),
 
 //               // Rent via Coin option
 //               ListTile(
@@ -401,7 +401,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 //                 ),
 //                 title: const Text(
 //                   'Rent via Coin',
-//                   style: TextStyle(color: Colors.white),
+//                   style: TextStyle(color.xml: Colors.white),
 //                 ),
 //                 onTap: () async {
 //                   // Call the function to check wallet balance and make payment via coins

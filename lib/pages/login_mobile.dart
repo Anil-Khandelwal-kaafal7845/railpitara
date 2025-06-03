@@ -663,7 +663,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
       child: Material(
         elevation: 2, // Adds elevation to buttons
         shape: CircleBorder(),
-        color: bgColor, // Background color for the button
+        color: bgColor, // Background color.xml for the button
         child: InkWell(
           onTap: onTap,
           customBorder: CircleBorder(),

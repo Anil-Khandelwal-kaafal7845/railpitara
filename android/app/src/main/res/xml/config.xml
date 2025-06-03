@@ -5,7 +5,7 @@
   <!-- Find the following tag -->
   <platform name="android">
 
-    <!-- Copy the color definition -->
+    <!-- Copy the color.xml definition -->
     <resource-file
         src="res/native/android/res/values/colors.xml"
         target="app/src/main/res/values/colors.xml"/>
@@ -27,7 +27,7 @@
         src="res/native/android/res/drawable-xxxhdpi/ic_onesignal_large_icon_default.png"
         target="app/src/main/res/drawable-xxxhdpi/ic_onesignal_large_icon_default.png"/>
 
-    <!-- Configure notification icon and color -->
+    <!-- Configure notification icon and color.xml -->
     <config-file parent="/manifest/application" target="AndroidManifest.xml">
       <meta-data
           android:name="com.google.firebase.messaging.default_notification_icon"

@@ -1,7 +1,7 @@
 
 
 // import 'package:dtlive/pages/bottombar.dart';
-// import 'package:dtlive/utils/color.dart';
+// import 'package:dtlive/utils/color.xml.dart';
 // import 'package:dtlive/widget/myimage.dart';
 // import 'package:dtlive/widget/mytext.dart';
 // import 'package:dtlive/utils/utils.dart';
@@ -52,7 +52,7 @@
 //           Container(
 //             width: MediaQuery.of(context).size.width,
 //             height: MediaQuery.of(context).size.height,
-//             color: black,
+//             color.xml: black,
 //             alignment: Alignment.center,
 //             child: SafeArea(
 //               child: SizedBox(
@@ -139,7 +139,7 @@
 //                                 height: 60,
 //                               ),
 //                               MyText(
-//                                 color: white,
+//                                 color.xml: white,
 //                                 maxline: 4,
 //                                 multilanguage: true,
 //                                 overflow: TextOverflow.ellipsis,
@@ -199,12 +199,12 @@
 //                   padding: const EdgeInsets.all(12),
 //                   alignment: Alignment.center,
 //                   decoration: BoxDecoration(
-//                     color: primaryDark,
+//                     color.xml: primaryDark,
 //                     borderRadius: BorderRadius.circular(5),
 //                     shape: BoxShape.rectangle,
 //                   ),
 //                   child: MyText(
-//                     color: white,
+//                     color.xml: white,
 //                     maxline: 1,
 //                     overflow: TextOverflow.ellipsis,
 //                     multilanguage: true,
@@ -241,7 +241,7 @@
 //                       margin: const EdgeInsets.fromLTRB(0, 0, 20, 20),
 //                       padding: const EdgeInsets.all(15),
 //                       child: MyText(
-//                         color: white,
+//                         color.xml: white,
 //                         maxline: 1,
 //                         overflow: TextOverflow.ellipsis,
 //                         text: "skip",

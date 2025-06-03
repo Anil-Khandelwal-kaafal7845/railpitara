@@ -45,13 +45,12 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:singular_flutter_sdk/singular_config.dart';
 import 'package:wakelock/wakelock.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,7 +90,7 @@ Future<void> main() async {
 
   // Request App Tracking Transparency Permission
   final trackingStatus =
-      await AppTrackingTransparency.requestTrackingAuthorization();
+  await AppTrackingTransparency.requestTrackingAuthorization();
   debugPrint("Tracking Authorization Status: $trackingStatus");
 
   SingularConfig config = SingularConfig('ott_snap_37c31355',
@@ -108,6 +107,7 @@ Future<void> main() async {
   Singular.start(config);
 
   debugPrint("Singular SDK Initialized successfully");
+
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
     // Optionally forward to Crashlytics or other service
@@ -116,7 +116,6 @@ Future<void> main() async {
     properties.addAttribute("App_Crash", details);
     MoEngageService.instance.trackEvent('App_Crash', properties);
   };
-
 // Initialize Singular done ---
 
   // if (!kIsWeb) {
@@ -177,7 +176,7 @@ Future<void> main() async {
 }
 
 final RouteObserver<ModalRoute<void>> routeObserver =
-    RouteObserver<ModalRoute<void>>();
+RouteObserver<ModalRoute<void>>();
 
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -188,9 +187,12 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+// Replace with your actual Workspace ID from MoEngage dashboard
+// final MoEngageFlutter _moengagePlugin = MoEngageFlutter("F2Z5P8P67ZG4GWG42469CTWX");
+
 class _MyAppState extends State<MyApp> {
   final FirebaseAnalyticsObserver analyticsObserver =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   // final _noScreenshot = NoScreenshot.instance;
@@ -199,14 +201,21 @@ class _MyAppState extends State<MyApp> {
     // _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
     if (!kIsWeb) _getDeviceInfo();
-    try {
-      MoEngageService.initialise();
-      print('MoEngageService initialised successfully');
-    } catch (e) {
-      print('MoEngageService initialisation failed: $e');
-    }
-    // getAdvertisingId();
+    MoEngageService.initialise();
+    MoEngageService.instance.requestPushPermissionAndroid();
+    MoEngageService.instance.pushPermissionResponseAndroid(true);
+    getAdvertisingId();
     super.initState();
+    _checkNotificationPermission();
+  }
+
+  Future<void> _checkNotificationPermission() async {
+    final status = await Permission.notification.status;
+
+    if (status.isDenied || status.isPermanentlyDenied) {
+      // Optional: Show a dialog before navigating to settings
+      // MoEngageService.instance.navigateToSettingsAndroid();
+    }
   }
 
   @override
@@ -217,62 +226,62 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
             path: '/',
             builder: (_, __) => LocaleBuilder(
-                  builder: (locale) => MaterialApp(
-                    navigatorKey: navigatorKey,
-                    debugShowCheckedModeBanner: false,
-                    navigatorObservers: [
-                      routeObserver,
-                      analyticsObserver
-                    ], //HERE
-                    theme: ThemeData(
-                      primaryColor: colorPrimary,
-                      primaryColorDark: colorPrimaryDark,
-                      primaryColorLight: primaryLight,
-                      scaffoldBackgroundColor: appBgColor,
-                    ).copyWith(
-                      scrollbarTheme: const ScrollbarThemeData().copyWith(
-                        thumbColor: MaterialStateProperty.all(white),
-                        trackVisibility: MaterialStateProperty.all(true),
-                        trackColor: MaterialStateProperty.all(whiteTransparent),
-                      ),
-                    ),
-                    title: Constant.appName,
-                    localizationsDelegates: Locales.delegates,
-                    supportedLocales: Locales.supportedLocales,
-                    locale: locale,
-                    localeResolutionCallback:
-                        (Locale? locale, Iterable<Locale> supportedLocales) {
-                      return locale;
-                    },
-                    builder: (context, child) {
-                      return ResponsiveBreakpoints.builder(
-                        child: child!,
-                        breakpoints: [
-                          const Breakpoint(start: 0, end: 360, name: MOBILE),
-                          const Breakpoint(start: 361, end: 800, name: TABLET),
-                          const Breakpoint(
-                              start: 801, end: 1000, name: DESKTOP),
-                          const Breakpoint(
-                              start: 1001, end: double.infinity, name: '4K'),
-                        ],
-                      );
-                    },
-                    home: (kIsWeb)
-                        ? const TVHome(pageName: "")
-                        : Splash(
-                            isDynamicLink: false,
-                          ),
-                    scrollBehavior: const MaterialScrollBehavior().copyWith(
-                      dragDevices: {
-                        PointerDeviceKind.mouse,
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.stylus,
-                        PointerDeviceKind.unknown,
-                        PointerDeviceKind.trackpad
-                      },
-                    ),
+              builder: (locale) => MaterialApp(
+                navigatorKey: navigatorKey,
+                debugShowCheckedModeBanner: false,
+                navigatorObservers: [
+                  routeObserver,
+                  analyticsObserver
+                ], //HERE
+                theme: ThemeData(
+                  primaryColor: colorPrimary,
+                  primaryColorDark: colorPrimaryDark,
+                  primaryColorLight: primaryLight,
+                  scaffoldBackgroundColor: appBgColor,
+                ).copyWith(
+                  scrollbarTheme: const ScrollbarThemeData().copyWith(
+                    thumbColor: MaterialStateProperty.all(white),
+                    trackVisibility: MaterialStateProperty.all(true),
+                    trackColor: MaterialStateProperty.all(whiteTransparent),
                   ),
-                )),
+                ),
+                title: Constant.appName,
+                localizationsDelegates: Locales.delegates,
+                supportedLocales: Locales.supportedLocales,
+                locale: locale,
+                localeResolutionCallback:
+                    (Locale? locale, Iterable<Locale> supportedLocales) {
+                  return locale;
+                },
+                builder: (context, child) {
+                  return ResponsiveBreakpoints.builder(
+                    child: child!,
+                    breakpoints: [
+                      const Breakpoint(start: 0, end: 360, name: MOBILE),
+                      const Breakpoint(start: 361, end: 800, name: TABLET),
+                      const Breakpoint(
+                          start: 801, end: 1000, name: DESKTOP),
+                      const Breakpoint(
+                          start: 1001, end: double.infinity, name: '4K'),
+                    ],
+                  );
+                },
+                home: (kIsWeb)
+                    ? const TVHome(pageName: "")
+                    : Splash(
+                  isDynamicLink: false,
+                ),
+                scrollBehavior: const MaterialScrollBehavior().copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.mouse,
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.stylus,
+                    PointerDeviceKind.unknown,
+                    PointerDeviceKind.trackpad
+                  },
+                ),
+              ),
+            )),
         GoRoute(
           path: '/home/:title/:encodedParams',
           builder: (context, state) {
@@ -410,45 +419,45 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 
-  // Future<void> getAdvertisingId() async {
-  //   try {
-  //     // Check the platform (Android or iOS)
-  //     if (kIsWeb) {
-  //       debugPrint("Web platform does not support advertising ID");
-  //       return;
-  //     }
+  Future<void> getAdvertisingId() async {
+    try {
+      // Check the platform (Android or iOS)
+      if (kIsWeb) {
+        debugPrint("Web platform does not support advertising ID");
+        return;
+      }
 
-  //     // For Android
-  //     if (defaultTargetPlatform == TargetPlatform.android) {
-  //       final advertisingId =
-  //           await AdvertisingId.id(false); // Pass false to not limit tracking
-  //       if (advertisingId != null) {
-  //         debugPrint("Google Advertising ID (GAID): $advertisingId");
+      // For Android
+      // if (defaultTargetPlatform == TargetPlatform.android) {
+      //   final advertisingId =
+      //   await AdvertisingId.id(false); // Pass false to not limit tracking
+      //   if (advertisingId != null) {
+      //     debugPrint("Google Advertising ID (GAID): $advertisingId");
+      //
+      //     // Pass GAID to Singular SDK
+      //     Singular.setCustomUserId(advertisingId);
+      //   } else {
+      //     debugPrint("Failed to retrieve Google Advertising ID (GAID)");
+      //   }
+      // }
 
-  //         // Pass GAID to Singular SDK
-  //         Singular.setCustomUserId(advertisingId);
-  //       } else {
-  //         debugPrint("Failed to retrieve Google Advertising ID (GAID)");
-  //       }
-  //     }
+      // For iOS
+      else if (defaultTargetPlatform == TargetPlatform.iOS) {
+        final deviceInfo = DeviceInfoPlugin();
+        final iosInfo = await deviceInfo.iosInfo;
+        final idfv = iosInfo.identifierForVendor;
+        debugPrint("iOS Identifier for Vendor (IDFV): $idfv");
 
-  //     // For iOS
-  //     else if (defaultTargetPlatform == TargetPlatform.iOS) {
-  //       final deviceInfo = DeviceInfoPlugin();
-  //       final iosInfo = await deviceInfo.iosInfo;
-  //       final idfv = iosInfo.identifierForVendor;
-  //       debugPrint("iOS Identifier for Vendor (IDFV): $idfv");
-
-  //       // If you need to get the IDFA (Advertising Identifier)
-  //       // Note: IDFA requires user permission starting iOS 14.
-  //       // You may use the package 'idfa' to get it, or check the permission status.
-  //     } else {
-  //       debugPrint("Platform not supported for advertising ID retrieval");
-  //     }
-  //   } catch (e) {
-  //     debugPrint("Error fetching Advertising ID: $e");
-  //   }
-  // }
+        // If you need to get the IDFA (Advertising Identifier)
+        // Note: IDFA requires user permission starting iOS 14.
+        // You may use the package 'idfa' to get it, or check the permission status.
+      } else {
+        debugPrint("Platform not supported for advertising ID retrieval");
+      }
+    } catch (e) {
+      debugPrint("Error fetching Advertising ID: $e");
+    }
+  }
 
   _getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -469,4 +478,3 @@ class _MyAppState extends State<MyApp> {
 
 //TO BUILD APK
 //flutter build appbundle --target-platform android-arm,android-arm64,android-x64
-

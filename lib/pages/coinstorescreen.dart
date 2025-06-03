@@ -214,7 +214,7 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
   //       'name': 'Coin Purchase',
   //       'prefill': {'contact': userMobileNo, 'email': userEmail},
   //       'order_id': orderId,
-  //       'theme': {'color': '#F37254'},
+  //       'theme': {'color.xml': '#F37254'},
   //     };
 
   //     _razorpay.open(options);
@@ -256,7 +256,7 @@ class _CoinStoreScreenState extends State<CoinStoreScreen> {
         'name': 'Coin Purchase',
         'prefill': {'contact': userMobileNo, 'email': userEmail},
         'order_id': orderId,
-        'theme': {'color': '#F37254'},
+        'theme': {'color.xml': '#F37254'},
       };
 
       _razorpay.open(options);
@@ -479,7 +479,7 @@ Widget build(BuildContext context) {
   //                   padding: EdgeInsets.only(top: 10, bottom: 5),
   //                   height: 55,
   //                   decoration: BoxDecoration(
-  //                     color: shimmerColor,
+  //                     color.xml: shimmerColor,
   //                     borderRadius: BorderRadius.circular(8),
   //                   ),
   //                   child: Row(
@@ -498,14 +498,14 @@ Widget build(BuildContext context) {
   //                             style: TextStyle(
   //                                 fontSize: 12,
   //                                 fontWeight: FontWeight.w300,
-  //                                 color: lightGray),
+  //                                 color.xml: lightGray),
   //                           ),
   //                           SizedBox(height: 5),
   //                           Text(
   //                             '${homeProvider.userWalletBalanceModel?.balance} Coins',
   //                             style: TextStyle(
   //                                 fontSize: 16,
-  //                                 color: Colors.white,
+  //                                 color.xml: Colors.white,
   //                                 fontWeight: FontWeight.w600),
   //                           ),
   //                         ],
@@ -517,7 +517,7 @@ Widget build(BuildContext context) {
   //                               builder: (context) => WalletHistodyScreen()));
   //                         },
   //                         child: Icon(CupertinoIcons.chevron_forward,
-  //                             color: white),
+  //                             color.xml: white),
   //                       ),
   //                       SizedBox(width: 10),
   //                     ],
@@ -531,7 +531,7 @@ Widget build(BuildContext context) {
   //                   style: TextStyle(
   //                       fontSize: 18,
   //                       fontWeight: FontWeight.bold,
-  //                       color: Colors.white),
+  //                       color.xml: Colors.white),
   //                 ),
   //                 SizedBox(height: 20),
 
@@ -559,7 +559,7 @@ Widget build(BuildContext context) {
   //                                       style: TextStyle(
   //                                           fontSize: 16,
   //                                           fontWeight: FontWeight.bold,
-  //                                           color: colorPrimary),
+  //                                           color.xml: colorPrimary),
   //                                     ),
   //                                     SizedBox(height: 5),
   //                                     Text.rich(
@@ -570,14 +570,14 @@ Widget build(BuildContext context) {
   //                                             style: TextStyle(
   //                                                 fontSize: 17,
   //                                                 fontWeight: FontWeight.bold,
-  //                                                 color: Colors.white),
+  //                                                 color.xml: Colors.white),
   //                                           ),
   //                                           TextSpan(
   //                                             text: 'Coins',
   //                                             style: TextStyle(
   //                                                 fontSize: 14,
   //                                                 fontWeight: FontWeight.normal,
-  //                                                 color: Colors.grey),
+  //                                                 color.xml: Colors.grey),
   //                                           ),
   //                                         ],
   //                                       ),
@@ -602,14 +602,14 @@ Widget build(BuildContext context) {
   //                                     padding: EdgeInsets.symmetric(
   //                                         horizontal: 10, vertical: 5),
   //                                     decoration: BoxDecoration(
-  //                                       color: colorPrimary,
+  //                                       color.xml: colorPrimary,
   //                                       borderRadius: BorderRadius.circular(6),
   //                                     ),
   //                                     child: Center(
   //                                       child: Text(
   //                                         '\u{20B9}${package.price}',
   //                                         style: TextStyle(
-  //                                             color: Colors.white,
+  //                                             color.xml: Colors.white,
   //                                             fontSize: 16,
   //                                             fontWeight: FontWeight.w600),
   //                                       ),
@@ -619,7 +619,7 @@ Widget build(BuildContext context) {
   //                               ],
   //                             ),
   //                           ),
-  //                           Divider(color: Colors.grey.shade300),
+  //                           Divider(color.xml: Colors.grey.shade300),
   //                         ],
   //                       );
   //                     },
@@ -631,7 +631,7 @@ Widget build(BuildContext context) {
 
   //                  if (isLoading)
   //           Container(
-  //             color: Colors.black.withOpacity(0.5),
+  //             color.xml: Colors.black.withOpacity(0.5),
   //             child: Center(
   //               child: CircularProgressIndicator(),
   //             ),

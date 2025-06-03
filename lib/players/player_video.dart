@@ -141,7 +141,7 @@
 //                 padding: 0;
 //                 overflow: hidden;
 //                 height: 100%;
-//                 background-color: black;
+//                 background-color.xml: black;
 //               }
 
 //               iframe {
@@ -211,7 +211,7 @@
 //                       },
 //                       child: Icon(
 //                         CupertinoIcons.back,
-//                         color: Colors.white,
+//                         color.xml: Colors.white,
 //                       ),
 //                     ),
 //                   ),
@@ -234,7 +234,7 @@
 //       padding: 0;
 //       overflow: hidden;
 //       height: 100%;
-//       background-color: black;
+//       background-color.xml: black;
 //     }
 
 //     iframe {
@@ -331,7 +331,7 @@
 //                           },
 //                           child: Icon(
 //                             CupertinoIcons.back,
-//                             color: Colors.white,
+//                             color.xml: Colors.white,
 //                           ),
 //                         ),
 //                       ),
@@ -505,7 +505,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
     html, body {
       margin: 0;
       padding: 0;
-      background-color: black;
+      background-color.xml: black;
       height: 100%;
       width: 100%;
       overflow: hidden;
@@ -531,7 +531,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
       left: 15px;
       z-index: 1000;
       cursor: pointer;
-      color: white;
+      color.xml: white;
     }
   </style>
 </head>
@@ -621,7 +621,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
     html, body {
       margin: 0;
       padding: 0;
-      background-color: black;
+      background-color.xml: black;
       height: 100%;
       width: 100%;
       overflow: hidden;
@@ -647,7 +647,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
       left: 15px;
       z-index: 1000;
       cursor: pointer;
-      color: white;
+      color.xml: white;
     }
   </style>
 </head>

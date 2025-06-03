@@ -1028,7 +1028,7 @@ Widget profileCardWidget({
   //       ),
   //       borderRadius: BorderRadius.circular(15),
   //       border: Border.all(
-  //           color: colorPrimary, width: 2), // Border with Primary Color
+  //           color.xml: colorPrimary, width: 2), // Border with Primary Color
   //     ),
   //     child: Stack(
   //       children: [
@@ -1055,7 +1055,7 @@ Widget profileCardWidget({
   //                     style: const TextStyle(
   //                       fontSize: 22,
   //                       fontWeight: FontWeight.bold,
-  //                       color: Colors.white,
+  //                       color.xml: Colors.white,
   //                     ),
   //                   ),
   //                 ),
@@ -1072,7 +1072,7 @@ Widget profileCardWidget({
   //                         style: TextStyle(
   //                           fontSize: 16,
   //                           fontWeight: FontWeight.w600,
-  //                           color: Colors.white.withOpacity(0.7),
+  //                           color.xml: Colors.white.withOpacity(0.7),
   //                         ),
   //                       ),
   //                     ],
@@ -1128,7 +1128,7 @@ Widget profileCardWidget({
   //                       alignment: Alignment.center,
   //                       child: const Icon(
   //                         CupertinoIcons.square_arrow_right, // Logout Icon
-  //                         color: Colors.white,
+  //                         color.xml: Colors.white,
   //                         size: 22,
   //                       ),
   //                     ),
@@ -1158,7 +1158,7 @@ Widget profileCardWidget({
   //             top: 5,
   //             right: -10,
   //             child: IconButton(
-  //               icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+  //               icon: const Icon(CupertinoIcons.pencil, color.xml: Colors.white),
   //               onPressed: onEditProfilePressed,
   //             ),
   //           ),
@@ -1226,7 +1226,7 @@ Widget profileCardWidget({
   //       ),
   //       borderRadius: BorderRadius.circular(15),
   //       border: Border.all(
-  //           color: colorPrimary, width: 2), // Border with Primary Color
+  //           color.xml: colorPrimary, width: 2), // Border with Primary Color
   //     ),
   //     child: Stack(
   //       children: [
@@ -1250,7 +1250,7 @@ Widget profileCardWidget({
   //                 style: const TextStyle(
   //                     fontSize: 22,
   //                     fontWeight: FontWeight.bold,
-  //                     color: Colors.white),
+  //                     color.xml: Colors.white),
   //               ),
   //             ),
 
@@ -1266,7 +1266,7 @@ Widget profileCardWidget({
   //                     style: TextStyle(
   //                         fontSize: 16,
   //                         fontWeight: FontWeight.w600,
-  //                         color: white.withOpacity(0.7)),
+  //                         color.xml: white.withOpacity(0.7)),
   //                   ),
   //                   const SizedBox(height: 8),
   //                   if (isLoggedIn) ...[
@@ -1323,7 +1323,7 @@ Widget profileCardWidget({
   //                   alignment: Alignment.center,
   //                   child: const Icon(
   //                     CupertinoIcons.square_arrow_right, // Logout Icon
-  //                     color: Colors.white,
+  //                     color.xml: Colors.white,
   //                     size: 22,
   //                   ),
   //                 ),
@@ -1336,7 +1336,7 @@ Widget profileCardWidget({
   //           top: 0,
   //           right: 0,
   //           child: IconButton(
-  //             icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+  //             icon: const Icon(CupertinoIcons.pencil, color.xml: Colors.white),
   //             onPressed: onEditProfilePressed,
   //           ),
   //         ),
@@ -1398,14 +1398,14 @@ Widget profileCardWidget({
 //             height: 60,
 //             alignment: Alignment.center,
 //             decoration: BoxDecoration(
-//               color: Colors.primaries[
+//               color.xml: Colors.primaries[
 //                   (userName?.hashCode ?? 0) % Colors.primaries.length],
 //               shape: BoxShape.circle,
 //             ),
 //             child: Text(
 //               isLoggedIn ? getInitials(userName) : "NA",
 //               style: const TextStyle(
-//                   fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+//                   fontSize: 22, fontWeight: FontWeight.bold, color.xml: Colors.white),
 //             ),
 //           ),
 //         ),
@@ -1419,7 +1419,7 @@ Widget profileCardWidget({
 //               Text(
 //                 loginText,
 //                 style: const TextStyle(
-//                     fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+//                     fontSize: 16, fontWeight: FontWeight.w600, color.xml: Colors.white),
 //               ),
 //               const SizedBox(height: 8),
 

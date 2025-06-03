@@ -196,7 +196,7 @@ class BottombarState extends State<Bottombar> {
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.black, // Set background color to black
+            color: Colors.black, // Set background color.xml to black
             // borderRadius: BorderRadius.circular(15),
           ),
           padding: EdgeInsets.all(16.0),

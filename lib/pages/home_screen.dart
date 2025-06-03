@@ -1686,7 +1686,7 @@ class HomeState extends State<Home> with RouteAware {
   //     constraints: const BoxConstraints.expand(),
   //     child: RefreshIndicator(
   //       backgroundColor: white,
-  //       color: complimentryColor,
+  //       color.xml: complimentryColor,
   //       displacement: 80,
   //       onRefresh: () async {
   //         await Future.delayed(const Duration(milliseconds: 1500))
@@ -1760,13 +1760,13 @@ class HomeState extends State<Home> with RouteAware {
   //                             ? continueWatchingLayout(sectionDataProvider
   //                                 .sectionListModel.continueWatching)
 
-  //                             :const Text("ANIL" ,style: TextStyle(color: white ,fontSize: 70),),
+  //                             :const Text("ANIL" ,style: TextStyle(color.xml: white ,fontSize: 70),),
 
   //                         /* Remaining Sections */
   //                         (sectionDataProvider.sectionListModel.result != null)
   //                             ? setSectionByType(
   //                                 sectionDataProvider.sectionListModel.result)
-  //                             : const Text("ANIL" ,style: TextStyle(color: white),),
+  //                             : const Text("ANIL" ,style: TextStyle(color.xml: white),),
   //                       ],
   //                     );
   //                   } else {
@@ -2063,7 +2063,7 @@ class HomeState extends State<Home> with RouteAware {
   //                             borderRadius: BorderRadius.circular(12),
   //                             boxShadow: [
   //                               BoxShadow(
-  //                                 color: Colors.black26,
+  //                                 color.xml: Colors.black26,
   //                                 blurRadius: 5,
   //                                 spreadRadius: 2,
   //                               ),
@@ -2697,7 +2697,7 @@ class HomeState extends State<Home> with RouteAware {
   //                               alignment: Alignment.center,
   //                               padding: const EdgeInsets.all(5),
   //                               decoration: const BoxDecoration(
-  //                                 color: otherIcons,
+  //                                 color.xml: otherIcons,
   //                                 borderRadius: BorderRadius.only(
   //                                     topLeft: Radius.circular(3),
   //                                     topRight: Radius.circular(4),
@@ -2726,7 +2726,7 @@ class HomeState extends State<Home> with RouteAware {
   //                               alignment: Alignment.center,
   //                               padding: const EdgeInsets.all(5),
   //                               decoration: const BoxDecoration(
-  //                                 color: otherIcons,
+  //                                 color.xml: otherIcons,
   //                                 borderRadius: BorderRadius.only(
   //                                     topLeft: Radius.circular(3),
   //                                     topRight: Radius.circular(4),
@@ -2756,7 +2756,7 @@ class HomeState extends State<Home> with RouteAware {
   //                               alignment: Alignment.center,
   //                               padding: const EdgeInsets.all(5),
   //                               decoration: const BoxDecoration(
-  //                                 color: otherIcons,
+  //                                 color.xml: otherIcons,
   //                                 borderRadius: BorderRadius.only(
   //                                     topLeft: Radius.circular(3),
   //                                     topRight: Radius.circular(4),
@@ -2786,7 +2786,7 @@ class HomeState extends State<Home> with RouteAware {
   //                               alignment: Alignment.center,
   //                               padding: const EdgeInsets.all(5),
   //                               // decoration: const BoxDecoration(
-  //                               //   color: colorPrimary,
+  //                               //   color.xml: colorPrimary,
   //                               //   borderRadius: BorderRadius.only(
   //                               //       topLeft: Radius.circular(3),
   //                               //       topRight: Radius.circular(4),
@@ -2800,14 +2800,14 @@ class HomeState extends State<Home> with RouteAware {
   //                                     width: 7,
   //                                     margin: EdgeInsets.only(right: 3),
   //                                     decoration: BoxDecoration(
-  //                                       color: redColor,
+  //                                       color.xml: redColor,
   //                                       borderRadius: BorderRadius.circular(30),
   //                                     ),
   //                                   ),
   //                                   Text(
   //                                     "LIVE",
   //                                     style: TextStyle(
-  //                                         color: redColor,
+  //                                         color.xml: redColor,
   //                                         fontSize: 12,
   //                                         fontWeight: FontWeight.w700),
   //                                   )
@@ -4980,10 +4980,10 @@ class HomeState extends State<Home> with RouteAware {
   //                         //       padding: const EdgeInsets.symmetric(
   //                         //           horizontal: 8, vertical: 4),
   //                         //       decoration: BoxDecoration(
-  //                         //         color: Colors.red,
+  //                         //         color.xml: Colors.red,
   //                         //         borderRadius: BorderRadius.circular(12),
   //                         //         boxShadow: [
-  //                         //           BoxShadow(color: Colors.black26, blurRadius: 4)
+  //                         //           BoxShadow(color.xml: Colors.black26, blurRadius: 4)
   //                         //         ],
   //                         //       ),
   //                         //       child: Row(
@@ -4993,14 +4993,14 @@ class HomeState extends State<Home> with RouteAware {
   //                         //             width: 6,
   //                         //             margin: const EdgeInsets.only(right: 5),
   //                         //             decoration: BoxDecoration(
-  //                         //               color: Colors.white,
+  //                         //               color.xml: Colors.white,
   //                         //               borderRadius: BorderRadius.circular(10),
   //                         //             ),
   //                         //           ),
   //                         //           const Text(
   //                         //             "LIVE",
   //                         //             style: TextStyle(
-  //                         //                 color: Colors.white,
+  //                         //                 color.xml: Colors.white,
   //                         //                 fontSize: 12,
   //                         //                 fontWeight: FontWeight.bold),
   //                         //           ),
@@ -5027,7 +5027,7 @@ class HomeState extends State<Home> with RouteAware {
   //                           60,
   //                         ),
   //                         fontStyle: FontStyle.normal,
-  //                         color: topTen,
+  //                         color.xml: topTen,
   //                         fontWeight: FontWeight.w600,
   //                       ),
   //                     ),

@@ -2677,7 +2677,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                 //     ),
                 //     padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
                 //     decoration: BoxDecoration(
-                //       color: primaryDark,
+                //       color.xml: primaryDark,
                 //       borderRadius: BorderRadius.circular(5),
                 //     ),
                 //     child: Row(
@@ -2692,7 +2692,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                 //         const SizedBox(width: 15),
                 //         Expanded(
                 //           child: MyText(
-                //             color: white,
+                //             color.xml: white,
                 //             text: "Watch Episode 1",
                 //             multilanguage: false,
                 //             textalign: TextAlign.start,

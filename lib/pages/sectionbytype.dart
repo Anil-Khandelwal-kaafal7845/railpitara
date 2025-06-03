@@ -910,7 +910,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                       alignment: Alignment.center,
   //                       padding: const EdgeInsets.all(5),
   //                       decoration: const BoxDecoration(
-  //                         color: colorPrimary,
+  //                         color.xml: colorPrimary,
   //                         borderRadius: BorderRadius.only(
   //                             topLeft: Radius.circular(3),
   //                             topRight: Radius.circular(4),
@@ -939,7 +939,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                       alignment: Alignment.center,
   //                       padding: const EdgeInsets.all(5),
   //                       decoration: const BoxDecoration(
-  //                         color: colorPrimary,
+  //                         color.xml: colorPrimary,
   //                         borderRadius: BorderRadius.only(
   //                             topLeft: Radius.circular(3),
   //                             topRight: Radius.circular(4),
@@ -969,7 +969,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                       alignment: Alignment.center,
   //                       padding: const EdgeInsets.all(5),
   //                       decoration: const BoxDecoration(
-  //                         color: colorPrimary,
+  //                         color.xml: colorPrimary,
   //                         borderRadius: BorderRadius.only(
   //                             topLeft: Radius.circular(3),
   //                             topRight: Radius.circular(4),
@@ -998,7 +998,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                       alignment: Alignment.center,
   //                       padding: const EdgeInsets.all(5),
   //                       // decoration: const BoxDecoration(
-  //                       //   color: colorPrimary,
+  //                       //   color.xml: colorPrimary,
   //                       //   borderRadius: BorderRadius.only(
   //                       //       topLeft: Radius.circular(3),
   //                       //       topRight: Radius.circular(4),
@@ -1012,14 +1012,14 @@ class SectionByTypeState extends State<SectionByType> {
   //                             width: 5,
   //                             margin: EdgeInsets.only(right: 3),
   //                             decoration: BoxDecoration(
-  //                               color: redColor,
+  //                               color.xml: redColor,
   //                               borderRadius: BorderRadius.circular(30),
   //                             ),
   //                           ),
   //                           Text(
   //                             "LIVE",
   //                             style: TextStyle(
-  //                                 color: redColor,
+  //                                 color.xml: redColor,
   //                                 fontSize: 10,
   //                                 fontWeight: FontWeight.w700),
   //                           )
@@ -1604,7 +1604,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1633,7 +1633,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1663,7 +1663,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1692,7 +1692,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         // decoration: const BoxDecoration(
-  //                         //   color: colorPrimary,
+  //                         //   color.xml: colorPrimary,
   //                         //   borderRadius: BorderRadius.only(
   //                         //       topLeft: Radius.circular(3),
   //                         //       topRight: Radius.circular(4),
@@ -1706,14 +1706,14 @@ class SectionByTypeState extends State<SectionByType> {
   //                               width: 5,
   //                               margin: EdgeInsets.only(right: 3),
   //                               decoration: BoxDecoration(
-  //                                 color: redColor,
+  //                                 color.xml: redColor,
   //                                 borderRadius: BorderRadius.circular(30),
   //                               ),
   //                             ),
   //                             Text(
   //                               "LIVE",
   //                               style: TextStyle(
-  //                                   color: redColor,
+  //                                   color.xml: redColor,
   //                                   fontSize: 10,
   //                                   fontWeight: FontWeight.w700),
   //                             )
@@ -1844,7 +1844,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1873,7 +1873,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1903,7 +1903,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         decoration: const BoxDecoration(
-  //                           color: colorPrimary,
+  //                           color.xml: colorPrimary,
   //                           borderRadius: BorderRadius.only(
   //                               topLeft: Radius.circular(3),
   //                               topRight: Radius.circular(4),
@@ -1932,7 +1932,7 @@ class SectionByTypeState extends State<SectionByType> {
   //                         alignment: Alignment.center,
   //                         padding: const EdgeInsets.all(5),
   //                         // decoration: const BoxDecoration(
-  //                         //   color: colorPrimary,
+  //                         //   color.xml: colorPrimary,
   //                         //   borderRadius: BorderRadius.only(
   //                         //       topLeft: Radius.circular(3),
   //                         //       topRight: Radius.circular(4),
@@ -1946,14 +1946,14 @@ class SectionByTypeState extends State<SectionByType> {
   //                               width: 5,
   //                               margin: EdgeInsets.only(right: 3),
   //                               decoration: BoxDecoration(
-  //                                 color: redColor,
+  //                                 color.xml: redColor,
   //                                 borderRadius: BorderRadius.circular(30),
   //                               ),
   //                             ),
   //                             Text(
   //                               "LIVE",
   //                               style: TextStyle(
-  //                                   color: redColor,
+  //                                   color.xml: redColor,
   //                                   fontSize: 10,
   //                                   fontWeight: FontWeight.w700),
   //                             )

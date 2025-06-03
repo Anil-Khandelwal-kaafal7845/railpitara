@@ -805,7 +805,7 @@ class Utils {
     debugPrint('T&C Url =====> $termsConditionUrl');
 
     String strPrivacyAndTNC =
-        "<p style=color:white; > By continuing , I understand and agree with <a href=$privacyUrl>Privacy Policy</a> and <a href=$termsConditionUrl>Terms and Conditions</a> of ${Constant.appName}. </p>";
+        "<p style=color.xml:white; > By continuing , I understand and agree with <a href=$privacyUrl>Privacy Policy</a> and <a href=$termsConditionUrl>Terms and Conditions</a> of ${Constant.appName}. </p>";
 
     debugPrint('strPrivacyAndTNC =====> $strPrivacyAndTNC');
     return strPrivacyAndTNC;

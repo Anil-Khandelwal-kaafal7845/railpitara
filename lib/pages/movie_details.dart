@@ -3136,7 +3136,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                   : MediaQuery.of(context).size.width,
   //             ),
   //             decoration: BoxDecoration(
-  //               color: primaryDark,
+  //               color.xml: primaryDark,
   //               borderRadius: BorderRadius.circular(5),
   //             ),
   //             child: Column(
@@ -3151,7 +3151,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                         width: 18,
   //                         height: 18,
   //                         imagePath: "ic_play.png",
-  //                         color: black,
+  //                         color.xml: black,
   //                       ),
   //                       const SizedBox(width: 15),
   //                       Expanded(
@@ -3160,7 +3160,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
   //                           children: [
   //                             MyText(
-  //                               color: black,
+  //                               color.xml: black,
   //                               text: "continuewatching",
   //                               multilanguage: true,
   //                               textalign: TextAlign.start,
@@ -3174,7 +3174,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                             Row(
   //                               children: [
   //                                 MyText(
-  //                                   color: black,
+  //                                   color.xml: black,
   //                                   text: Utils.remainTimeInMin(
   //                                       ((videoDetailsProvider
   //                                                       .sectionDetailModel
@@ -3198,7 +3198,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                                 ),
   //                                 const SizedBox(width: 5),
   //                                 MyText(
-  //                                   color: black,
+  //                                   color.xml: black,
   //                                   text: "left",
   //                                   textalign: TextAlign.start,
   //                                   fontsizeNormal: 10,
@@ -3424,7 +3424,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //             ),
   //             padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
   //             decoration: BoxDecoration(
-  //               color: primaryDark,
+  //               color.xml: primaryDark,
   //               borderRadius: BorderRadius.circular(5),
   //             ),
   //             child: Row(
@@ -3435,12 +3435,12 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                   width: 18,
   //                   height: 18,
   //                   imagePath: "ic_play.png",
-  //                   color: black,
+  //                   color.xml: black,
   //                 ),
   //                 const SizedBox(width: 15),
   //                 Expanded(
   //                   child: MyText(
-  //                     color: black,
+  //                     color.xml: black,
   //                     text: "watch_now",
   //                     multilanguage: true,
   //                     textalign: TextAlign.start,
@@ -4570,7 +4570,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                   multilanguage: false,
   //                   fontsizeNormal: 18,
   //                   fontsizeWeb: 18,
-  //                   color: white,
+  //                   color.xml: white,
   //                   fontstyle: FontStyle.normal,
   //                   fontweight: FontWeight.w700,
   //                   maxline: 2,
@@ -4598,7 +4598,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                               multilanguage: false,
   //                               fontsizeNormal: 10,
   //                               fontsizeWeb: 12,
-  //                               color: otherColor,
+  //                               color.xml: otherColor,
   //                               fontstyle: FontStyle.normal,
   //                               fontweight: FontWeight.w500,
   //                               maxline: 1,
@@ -4612,7 +4612,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   //                       height: 18,
   //                       imagePath: "ic_comment.png",
   //                       fit: BoxFit.fill,
-  //                       color: lightGray,
+  //                       color.xml: lightGray,
   //                     ),
   //                   ],
   //                 ),
