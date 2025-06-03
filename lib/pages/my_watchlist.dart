@@ -18,9 +18,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class MyWatchlist extends StatefulWidget {
   const MyWatchlist({Key? key}) : super(key: key);
@@ -63,6 +66,13 @@ class _MyWatchlistState extends State<MyWatchlist> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'WatchList Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       // appBar: Utils.myAppBarWithBack(
@@ -732,6 +742,34 @@ class _MyWatchlistState extends State<MyWatchlist> {
                       debugPrint(
                           "isBookmark ====> ${watchlistProvider.watchlistModel.result?[position].isBookmark ?? 0}");
                       if (Constant.userID != null) {
+                        final timestamp = DateTime.now().toIso8601String();
+
+                        final properties = MoEProperties()
+                          ..addAttribute(
+                              'platform', Platform.isIOS ? 'iOS' : 'Android')
+                          ..addAttribute('timestamp', timestamp)
+                          ..addAttribute(
+                              'video_id',
+                              watchlistProvider
+                                  .watchlistModel.result?[position].id)
+                          ..addAttribute(
+                              'video_type',
+                              watchlistProvider
+                                  .watchlistModel.result?[position].videoType)
+                          ..addAttribute(
+                              'type_id',
+                              watchlistProvider
+                                  .watchlistModel.result?[position].typeId)
+                          ..addAttribute(
+                              'content_name',
+                              watchlistProvider
+                                  .watchlistModel.result?[position].name);
+
+                        MoEngageService.instance
+                            .trackEvent('Bookmark_removed', properties);
+
+                        print(
+                            "MoEngage event tracked with and timestamp: $timestamp");
                         await watchlistProvider.setBookMark(
                           context,
                           position,
@@ -800,6 +838,15 @@ class _MyWatchlistState extends State<MyWatchlist> {
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () async {
+                      final timestamp = DateTime.now().toIso8601String();
+
+                      final properties = MoEProperties()
+                        ..addAttribute('user_id', Constant.userID.toString())
+                        ..addAttribute('content_id', 'share_video')
+                        ..addAttribute('timestamp', timestamp);
+
+                      MoEngageService.instance
+                          .trackEvent('Content_Shared', properties);
                       Navigator.pop(context);
                       _buildShareWithDialog(position);
                     },

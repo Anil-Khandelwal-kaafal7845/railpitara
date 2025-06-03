@@ -26,9 +26,12 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+
+import '../utils/moenage_service.dart';
 
 class TVMovieDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
@@ -2365,6 +2368,15 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
               borderRadius: BorderRadius.circular(4),
               //focusColor:: white,
               onTap: () async {
+                final timestamp = DateTime.now().toIso8601String();
+
+                final properties = MoEProperties()
+                  ..addAttribute('user_id', Constant.userID.toString())
+                  ..addAttribute('content_id', relatedDataList?[index].id );
+
+                MoEngageService.instance.trackEvent('Content_watch', properties);
+
+                print("MoEngage event tracked with device ID: and timestamp: $timestamp");
                 debugPrint("Clicked on index ==> $index");
                 if ((relatedDataList?[index].videoType ?? 0) == 5) {
                   if ((relatedDataList?[index].upcomingType ?? 0) == 1) {
@@ -2819,6 +2831,18 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {
+      final timestamp = DateTime.now().toIso8601String();
+
+      final properties = MoEProperties()
+        ..addAttribute('user_id', Constant.userID.toString())
+        ..addAttribute('teaser_id', videoDetailsProvider.sectionDetailModel.result?.id )
+        ..addAttribute('teaser_name', videoDetailsProvider.sectionDetailModel.result?.trailerType)
+        ..addAttribute('category_name', '')
+        ..addAttribute('duration_watched', videoDetailsProvider.sectionDetailModel.result?.stopTime)
+        ..addAttribute('language', audioLanguages)
+        ..addAttribute('timestamp', timestamp);
+
+      MoEngageService.instance.trackEvent('Trailer_watch', properties);
       Utils.clearQualitySubtitle();
       vUploadType =
           (videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");

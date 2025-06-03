@@ -24,9 +24,12 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({
@@ -430,6 +433,12 @@ class SubscriptionState extends State<Subscription> with RouteAware {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('screen_name', 'Subscription Package Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     if (kIsWeb) {
       return Scaffold(
         backgroundColor: appBgColor,

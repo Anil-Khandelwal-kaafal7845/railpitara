@@ -14,11 +14,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+
+import '../utils/moenage_service.dart';
+import '../utils/sharedpre.dart';
 
 class Search extends StatefulWidget {
   final String? searchText;
@@ -35,16 +39,21 @@ class SearchState extends State<Search> {
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
   late BuildContext dialogContext;
-
+  String? userMobileNo;
+  SharedPre sharedPref = SharedPre();
   @override
   void initState() {
    // _initSpeech();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
     searchController.text = widget.searchText ?? "";
     _getData();
+    getUserData();
     super.initState();
   }
-
+  getUserData() async {
+    userMobileNo = await sharedPref.read("usermobile");
+    debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
+  }
   /// Initialize speech recognition
   void _initSpeech() async {
     speechEnabled = await _speechToText.initialize();
@@ -231,6 +240,13 @@ class SearchState extends State<Search> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Search Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appBgColor,
@@ -409,6 +425,19 @@ class SearchState extends State<Search> {
                       'user_id': Constant.userID.toString(),
                     };
                     Singular.eventWithArgs('search_content', screenViewEvent);
+                    final timestamp = DateTime.now().toIso8601String();
+                    MoEngageService.instance
+                        .setUserName(userMobileNo.toString());
+                    final properties = MoEProperties()
+                      ..addAttribute('user_id', Constant.userID.toString())
+                      ..addAttribute('search_query', value)
+                      ..addAttribute('timestamp', timestamp);
+
+                    MoEngageService.instance
+                        .trackEvent('Content_Searched', properties);
+
+                    print(
+                        "MoEngage event tracked with and timestamp: $timestamp");
                   }
                 },
                 textInputAction: TextInputAction.done,

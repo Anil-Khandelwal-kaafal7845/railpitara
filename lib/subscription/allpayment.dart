@@ -24,6 +24,7 @@ import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 // import 'package:payu_checkoutpro_flutter/PayUConstantKeys.dart';
 // import 'package:payu_checkoutpro_flutter/payu_checkoutpro_flutter.dart';
@@ -32,6 +33,8 @@ import 'package:provider/provider.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:uuid/uuid.dart';
+
+import '../utils/moenage_service.dart';
 
 class AllPayment extends StatefulWidget {
   final String? payType,
@@ -190,6 +193,23 @@ class AllPaymentState extends State<AllPayment>
             'order_id': orderId,
             'user_id': Constant.userID.toString(),
           });
+          final timestamp = DateTime.now().toIso8601String();
+          MoEngageService.instance.setPhoneNumber(userMobileNo.toString());
+          final properties = MoEProperties()
+            ..addAttribute('user_id', Constant.userID.toString())
+            ..addAttribute('payment_method', 'Razorpay Payment')
+            ..addAttribute('amount', amount)
+            ..addAttribute('paymentId', paymentId)
+            ..addAttribute('couponCode', '${strCouponCode}')
+            ..addAttribute('orderStatus', orderStatus)
+            ..addAttribute('orderId', orderId)
+            ..addAttribute('packageId', packageId)
+            ..addAttribute('timestamp', timestamp);
+
+          MoEngageService.instance
+              .trackEvent('Razorpay_Payment_Successful', properties);
+
+          print("MoEngage event tracked with and timestamp: $timestamp");
 
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
@@ -211,6 +231,21 @@ class AllPaymentState extends State<AllPayment>
             'is_revenue_event': true,
             'currencyCode': currencyCode
           });
+          final timestamp = DateTime.now().toIso8601String();
+          MoEngageService.instance.setUserName(userMobileNo.toString());
+          final properties = MoEProperties()
+            ..addAttribute('user_id', userMobileNo.toString())
+            ..addAttribute('payment_method', 'Razorpay Payment')
+            ..addAttribute('error_code', orderStatus)
+            ..addAttribute('timestamp', timestamp)
+            ..addAttribute('amount', amount)
+            ..addAttribute('paymentId', paymentId)
+            ..addAttribute('couponCode', '${strCouponCode}')
+            ..addAttribute('orderId', orderId)
+            ..addAttribute('packageId', packageId);
+
+          MoEngageService.instance
+              .trackEvent('Razorpay_Payment_Failed', properties);
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         }
@@ -455,6 +490,11 @@ class AllPaymentState extends State<AllPayment>
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Payment Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -1558,6 +1598,21 @@ class AllPaymentState extends State<AllPayment>
     * 3. Metadata
     * */
     Utils.showSnackbar(context, "fail", "payment_fail", true);
+    final timestamp = DateTime.now().toIso8601String();
+    MoEngageService.instance.setUserName(userMobileNo.toString());
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('cancellation_reason', 'payment_fail')
+      ..addAttribute('PayType', '${widget.payType}')
+      ..addAttribute('price', '${widget.price}')
+      ..addAttribute('name', '${widget.itemTitle}')
+      ..addAttribute('final amount', '${paymentProvider.finalAmount}')
+      ..addAttribute('VID', '${widget.itemId}')
+      ..addAttribute('timestamp', timestamp);
+
+    MoEngageService.instance.trackEvent('Razorpay_payment_fail', properties);
+
+    print("MoEngage event tracked with and timestamp: $timestamp");
     if (widget.payType == "Package") {
       addTransaction(
           widget.itemId,
@@ -1588,6 +1643,24 @@ class AllPaymentState extends State<AllPayment>
         "VId": widget.itemId
       },
     );
+    final timestamp = DateTime.now().toIso8601String();
+    MoEngageService.instance.setUserName(userMobileNo.toString());
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('plan_type ', widget.itemTitle)
+      ..addAttribute('payment_method', widget.payType)
+      ..addAttribute('timestamp', timestamp)
+      ..addAttribute('PayType', '${widget.payType}')
+      ..addAttribute('price', '${widget.price}')
+      ..addAttribute('name', '${widget.itemTitle}')
+      ..addAttribute('final amount', '${paymentProvider.finalAmount}')
+      ..addAttribute('VID', '${widget.itemId}');
+
+
+
+    MoEngageService.instance.trackEvent('Razorpay_Payment_Success', properties);
+
+    print("MoEngage event tracked with and timestamp: $timestamp");
     /*
     * Payment Success Response contains three values:
     * 1. Order ID
@@ -2458,6 +2531,19 @@ class AllPaymentState extends State<AllPayment>
       };
       Singular.eventWithArgs('subscription_canceled', screenViewEvent);
     }
+    final timestamp = DateTime.now().toIso8601String();
+    MoEngageService.instance.setUserName(userMobileNo.toString());
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', timestamp)
+      ..addAttribute('PayType', '${widget.payType}')
+      ..addAttribute('price', '${widget.price}')
+      ..addAttribute('name', '${widget.itemTitle}')
+      ..addAttribute('final amount', '${paymentProvider.finalAmount}')
+      ..addAttribute('VID', '${widget.itemId}')
+      ..addAttribute('timestamp', timestamp);
+
+    MoEngageService.instance.trackEvent('Subscription_Cancelled', properties);
     Navigator.pop(context, isPaymentDone);
     return Future.value(isPaymentDone == true ? true : false);
   }

@@ -33,6 +33,7 @@ import 'package:dtlive/tvpages/tvhome.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
+import 'package:dtlive/utils/moenage_service.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,6 +44,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:singular_flutter_sdk/singular.dart';
@@ -106,6 +108,14 @@ Future<void> main() async {
   Singular.start(config);
 
   debugPrint("Singular SDK Initialized successfully");
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    // Optionally forward to Crashlytics or other service
+
+    MoEProperties properties = MoEProperties();
+    properties.addAttribute("App_Crash", details);
+    MoEngageService.instance.trackEvent('App_Crash', properties);
+  };
 
 // Initialize Singular done ---
 
@@ -189,6 +199,12 @@ class _MyAppState extends State<MyApp> {
     // _noScreenshot.screenshotOff();
     // if (!kIsWeb) Utils.enableScreenCapture();
     if (!kIsWeb) _getDeviceInfo();
+    try {
+      MoEngageService.initialise();
+      print('MoEngageService initialised successfully');
+    } catch (e) {
+      print('MoEngageService initialisation failed: $e');
+    }
     // getAdvertisingId();
     super.initState();
   }

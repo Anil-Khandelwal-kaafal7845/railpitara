@@ -4,7 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/services.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
+import '../utils/sharedpre.dart';
 
 class TestPlayerWeb extends StatefulWidget {
   final String loadURL;
@@ -20,8 +24,11 @@ class TestPlayerWeb extends StatefulWidget {
 
 class _TestPlayerWebState extends State<TestPlayerWeb> {
   InAppWebViewController? webViewController;
-  bool _isLoading = true; // Track if the web view is still loading
-
+  bool _isLoading = true;
+  String? userName, userType, userMobileNo;
+  SharedPre sharedPref = SharedPre();
+  DateTime? videoStartTime; // Track if the web view is still loading
+  DateTime? videoEndTime;
   @override
   void initState() {
     super.initState();
@@ -45,9 +52,28 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    videoEndTime = DateTime.now();
+    _logVideoAnalytics();
     super.dispose();
   }
+  void _logVideoAnalytics() {
+    if (videoStartTime != null && videoEndTime != null) {
+      final watchDuration = videoEndTime!.difference(videoStartTime!).inSeconds;
+      final timestamp = DateTime.now().toIso8601String();
 
+      final properties = MoEProperties()
+        ..addAttribute('user_id', Constant.userID.toString())
+        ..addAttribute('duration_watched', '${watchDuration} Second')
+        ..addAttribute('VideoUrl', widget.loadURL)
+
+        ..addAttribute('timestamp', timestamp);
+
+
+      MoEngageService.instance.trackEvent('Live_Stream_Viewed', properties);
+
+      print("MoEngage event tracked with and timestamp: $timestamp");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     analytics.logEvent(

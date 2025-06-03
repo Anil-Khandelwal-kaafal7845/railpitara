@@ -12,8 +12,11 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class RentStore extends StatefulWidget {
   const RentStore({Key? key}) : super(key: key);
@@ -58,6 +61,13 @@ class RentStoreState extends State<RentStore> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Rent Store')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     if (kIsWeb || Constant.isTV) {
       return Scaffold(
         backgroundColor: appBgColor,

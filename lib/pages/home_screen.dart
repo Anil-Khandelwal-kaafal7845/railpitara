@@ -40,6 +40,7 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -51,6 +52,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import '../model/force_update_model.dart';
+import '../utils/moenage_service.dart';
 import '../webservice/apiservices.dart';
 import '../provider/generalprovider.dart';
 import '../provider/profileprovider.dart';
@@ -175,6 +177,18 @@ class HomeState extends State<Home> with RouteAware {
       _getData();
     });
     if (!kIsWeb) {
+      final timestamp = DateTime.now().toIso8601String();
+
+      final properties = MoEProperties()
+        ..addAttribute('user_id', userMobileNo)
+      // ..addAttribute('notification_type', notification_type)
+        ..addAttribute('timestamp', timestamp);
+
+      MoEngageService.instance.trackEvent('Notification_Received', properties);
+
+      print(
+          "MoEngage event tracked with Constant userID: ${Constant.userID.toString()}");
+      print("MoEngage event tracked with and timestamp: $timestamp");
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
   }
@@ -633,6 +647,13 @@ class HomeState extends State<Home> with RouteAware {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'HomePage')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    print("MoEngage event tracked with Constant userID: ${userMobileNo}");
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: appBgColor,
@@ -1834,20 +1855,23 @@ class HomeState extends State<Home> with RouteAware {
 
                 return GestureDetector(
                   onTap: () {
-                    // final timestamp = DateTime.now().toIso8601String();
+                    final timestamp = DateTime.now().toIso8601String();
 
-                    // final properties = MoEProperties()
-                    //   ..addAttribute('banner_id', sectionBannerList?[index])
-                    //   ..addAttribute('category_name',
-                    //       sectionBannerList?[index].categoryName)
-                    //   ..addAttribute('language', selectedLanguages)
-                    //   ..addAttribute('timestamp', timestamp);
+                    final properties = MoEProperties()
+                      ..addAttribute('banner_id', sectionBannerList?[index])
+                      ..addAttribute('category_name',
+                          sectionBannerList?[index].categoryName)
+                      ..addAttribute(
+                          'banner_name', sectionBannerList?[index].name)
+                      ..addAttribute('user_id', Constant.userID.toString())
+                      ..addAttribute('language', selectedLanguages)
+                      ..addAttribute('timestamp', timestamp);
 
-                    // MoEngageService.instance
-                    //     .trackEvent('dynamic_banner_clicked', properties);
+                    MoEngageService.instance
+                        .trackEvent('dynamic_banner_clicked', properties);
 
-                    // print(
-                    //     "MoEngage event tracked with and timestamp: $timestamp");
+                    print(
+                        "MoEngage event tracked with and timestamp: $timestamp");
 
                     debugPrint("Clicked on banner: ${bannerItem?.video320}");
 
@@ -1859,18 +1883,18 @@ class HomeState extends State<Home> with RouteAware {
                               builder: (context) => LoginViaSocial()),
                         );
                       } else {
-                        // final timestamp = DateTime.now().toIso8601String();
-                        // final properties = MoEProperties()
-                        //   // ..addAttribute('userName', Constant.userID.toString())
-                        //   ..addAttribute('user_id', userMobileNo)
-                        //   ..addAttribute('stream_id', videoType)
-                        //   ..addAttribute('stream_category', typeId)
-                        //   ..addAttribute('timestamp', timestamp);
+                        final timestamp = DateTime.now().toIso8601String();
+                        final properties = MoEProperties()
+                        // ..addAttribute('userName', Constant.userID.toString())
+                          ..addAttribute('user_id', Constant.userID.toString())
+                          ..addAttribute('stream_id', videoType)
+                          ..addAttribute('stream_category', typeId)
+                          ..addAttribute('timestamp', timestamp);
 
-                        // print(
-                        //     "MoEngage event tracked with Constant userID: ${userMobileNo}");
-                        // MoEngageService.instance
-                        //     .trackEvent('Live_Stream_Joined', properties);
+                        print(
+                            "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                        MoEngageService.instance
+                            .trackEvent('Live_Stream_Joined', properties);
 
                         Navigator.push(
                           context,
@@ -2502,6 +2526,16 @@ class HomeState extends State<Home> with RouteAware {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginViaSocial()));
       } else {
+        final timestamp = DateTime.now().toIso8601String();
+        final properties = MoEProperties()
+        // ..addAttribute('userName', Constant.userID.toString())
+          ..addAttribute('user_id', Constant.userID.toString())
+          ..addAttribute('stream_id', videoType)
+          ..addAttribute('stream_category', typeId)
+          ..addAttribute('timestamp', timestamp);
+
+        print("MoEngage event tracked with Constant userID: ${userMobileNo}");
+        MoEngageService.instance.trackEvent('Live_Stream_Joined', properties);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -3466,6 +3500,18 @@ class HomeState extends State<Home> with RouteAware {
                       MaterialPageRoute(
                           builder: (context) => LoginViaSocial()));
                 } else {
+                  final timestamp = DateTime.now().toIso8601String();
+                  final properties = MoEProperties()
+                  // ..addAttribute('userName', Constant.userID.toString())
+                    ..addAttribute('user_id', Constant.userID.toString())
+                    ..addAttribute('stream_id', videoType)
+                    ..addAttribute('stream_category', typeId)
+                    ..addAttribute('timestamp', timestamp);
+
+                  print(
+                      "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                  MoEngageService.instance
+                      .trackEvent('Live_Stream_Joined', properties);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
                         loadURL: sectionDataList![index].video320!),
@@ -3620,6 +3666,18 @@ class HomeState extends State<Home> with RouteAware {
                       MaterialPageRoute(
                           builder: (context) => LoginViaSocial()));
                 } else {
+                  final timestamp = DateTime.now().toIso8601String();
+                  final properties = MoEProperties()
+                  // ..addAttribute('userName', Constant.userID.toString())
+                    ..addAttribute('user_id', Constant.userID.toString())
+                    ..addAttribute('stream_id', videoType)
+                    ..addAttribute('stream_category', typeId)
+                    ..addAttribute('timestamp', timestamp);
+
+                  print(
+                      "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                  MoEngageService.instance
+                      .trackEvent('Live_Stream_Joined', properties);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
                         loadURL: sectionDataList![index].video320!),
@@ -3774,6 +3832,18 @@ class HomeState extends State<Home> with RouteAware {
                       MaterialPageRoute(
                           builder: (context) => LoginViaSocial()));
                 } else {
+                  final timestamp = DateTime.now().toIso8601String();
+                  final properties = MoEProperties()
+                  // ..addAttribute('userName', Constant.userID.toString())
+                    ..addAttribute('user_id', userMobileNo)
+                    ..addAttribute('stream_id', videoType)
+                    ..addAttribute('stream_category', typeId)
+                    ..addAttribute('timestamp', timestamp);
+
+                  print(
+                      "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                  MoEngageService.instance
+                      .trackEvent('Live_Stream_Joined', properties);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
                         loadURL: sectionDataList![index].video320!),
@@ -3949,6 +4019,18 @@ class HomeState extends State<Home> with RouteAware {
                       MaterialPageRoute(
                           builder: (context) => LoginViaSocial()));
                 } else {
+                  final timestamp = DateTime.now().toIso8601String();
+                  final properties = MoEProperties()
+                  // ..addAttribute('userName', Constant.userID.toString())
+                    ..addAttribute('user_id', userMobileNo)
+                    ..addAttribute('stream_id', videoType)
+                    ..addAttribute('stream_category', typeId)
+                    ..addAttribute('timestamp', timestamp);
+
+                  print(
+                      "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                  MoEngageService.instance
+                      .trackEvent('Live_Stream_Joined', properties);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TestPlayerWeb(
                         loadURL: sectionDataList![index].video320!),
@@ -4111,7 +4193,19 @@ class HomeState extends State<Home> with RouteAware {
                     //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
                     //           sectionDataList?[index].video320, 0, "", "")),
                     // );
-                    Navigator.of(context).push(MaterialPageRoute(
+
+                    final timestamp = DateTime.now().toIso8601String();
+                    final properties = MoEProperties()
+                    // ..addAttribute('userName', Constant.userID.toString())
+                      ..addAttribute('user_id', Constant.userID.toString())
+                      ..addAttribute('stream_id', videoType)
+                      ..addAttribute('stream_category', typeId)
+                      ..addAttribute('timestamp', timestamp);
+
+                    print(
+                        "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                    MoEngageService.instance
+                        .trackEvent('Live_Stream_Joined', properties);                    Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => TestPlayerWeb(
                             loadURL: sectionDataList![index].video320!)));
                   }
@@ -4614,6 +4708,18 @@ class HomeState extends State<Home> with RouteAware {
                         builder: (context) => LoginViaSocial()),
                   );
                 } else {
+                  final timestamp = DateTime.now().toIso8601String();
+                  final properties = MoEProperties()
+                  // ..addAttribute('userName', Constant.userID.toString())
+                    ..addAttribute('user_id', Constant.userID.toString())
+                    ..addAttribute('stream_id', videoType)
+                    ..addAttribute('stream_category', typeId)
+                    ..addAttribute('timestamp', timestamp);
+
+                  print(
+                      "MoEngage event tracked with Constant userID: ${userMobileNo}");
+                  MoEngageService.instance
+                      .trackEvent('Live_Stream_Joined', properties);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/pages/login_mobile.dart';
@@ -23,10 +24,13 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class LoginViaSocialEmail extends StatefulWidget {
   const LoginViaSocialEmail({Key? key}) : super(key: key);
@@ -174,6 +178,13 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Login Email')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -401,7 +412,35 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                                 ),
                                                 const SizedBox(height: 25),
                                                 InkWell(
-                                                  onTap: () {
+                                                  onTap: () async {
+                                                    MoEngageService.instance.setUserName(emailController.text.toString());
+                                                    // Get device ID
+                                                    final deviceInfoPlugin = DeviceInfoPlugin();
+                                                    String deviceId;
+
+                                                    if (Platform.isAndroid) {
+                                                      final androidInfo = await deviceInfoPlugin.androidInfo;
+                                                      deviceId = androidInfo.id ?? 'unknown';
+                                                    } else if (Platform.isIOS) {
+                                                      final iosInfo = await deviceInfoPlugin.iosInfo;
+                                                      deviceId = iosInfo.identifierForVendor ?? 'unknown';
+                                                    } else {
+                                                      deviceId = 'unsupported_platform';
+                                                    }
+
+                                                    MoEngageService.instance.identifyUser(mobileNumber.toString());
+                                                    final timestamp = DateTime.now().toIso8601String();
+
+                                                    final properties = MoEProperties()
+                                                      ..addAttribute('user_id ', emailController.text.toString())
+                                                      ..addAttribute('signup_method ', 'email')
+                                                      ..addAttribute('device_id', deviceId)
+                                                      ..addAttribute('timestamp', timestamp);
+
+                                                    MoEngageService.instance.trackEvent('User_Registration', properties);
+
+                                                    print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
+
                                                     String email = emailController.text.toString();
                                                     if (email.isEmpty) {
                                                       // Show snackbar if the email is empty

@@ -27,10 +27,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 
+import '../utils/moenage_service.dart';
 import '../widget/myusernetworkimg.dart';
 
 class Setting extends StatefulWidget {
@@ -107,9 +109,18 @@ class SettingState extends State<Setting> {
       if (!mounted) return;
 
       setState(() {});
+      moEngagePlugin();
     });
   }
+  Future<void> moEngagePlugin() async {
+    final timestamp = DateTime.now().toIso8601String();
+    MoEngageService.instance.setUserName(userName.toString() ?? " ");
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', timestamp);
 
+    MoEngageService.instance.trackEvent('Profile_Updated', properties);
+  }
   @override
   Widget build(BuildContext context) {
     analytics.logEvent(
@@ -124,6 +135,13 @@ class SettingState extends State<Setting> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Setting Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       // appBar: Utils.myAppBar(context, "setting", true),
@@ -155,6 +173,21 @@ class SettingState extends State<Setting> {
                     setState(() {});
                   },
                   onLogoutPressed: () {
+                    MoEngageService.instance.logout();
+                    // Get device ID
+
+                    final timestamp = DateTime.now().toIso8601String();
+
+                    final properties = MoEProperties()
+                      ..addAttribute('user_id', Constant.userID.toString())
+
+                      ..addAttribute('timestamp', timestamp);
+
+                    MoEngageService.instance.trackEvent('Logout', properties);
+
+                    print("userName check ${userName.toString()}");
+                    print(
+                        "MoEngage event tracked with device ID: and timestamp: $timestamp");
                     if (Constant.userID != null) {
                       logoutConfirmDialog();
                     }
@@ -1912,6 +1945,8 @@ Widget profileCardWidget({
                           isPositive: true,
                           isMultilang: true,
                           onClick: () async {
+
+
                             final homeProvider = Provider.of<HomeProvider>(
                                 context,
                                 listen: false);
@@ -1931,6 +1966,20 @@ Widget profileCardWidget({
                               'user_id': Constant.userID.toString(),
                             };
                             Singular.eventWithArgs('LogOut', screenViewEvent);
+                            MoEngageService.instance.logout();
+                            final timestamp = DateTime.now().toIso8601String();
+
+                            final properties = MoEProperties()
+                              ..addAttribute('user_id', Constant.userID.toString())
+
+                              ..addAttribute('timestamp', timestamp);
+
+                            MoEngageService.instance.trackEvent('Logout', properties);
+
+                            print("userName check ${userName.toString()}");
+                            print(
+                                "MoEngage event tracked with device ID: and timestamp: $timestamp");
+
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");

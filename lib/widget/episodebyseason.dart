@@ -10,6 +10,7 @@ import 'package:dtlive/pages/login_mobile.dart';
 import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/sharedpre.dart';
 import 'package:dtlive/widget/animatedgif.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/subscription/subscription.dart';
@@ -28,6 +29,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/videodetailsprovider.dart';
+import '../utils/moenage_service.dart';
 
 class EpisodeBySeason extends StatefulWidget {
   final int? videoId, upcomingType, typeId, seasonPos;
@@ -242,6 +246,21 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                 children: [
                                                   TextButton(
                                                     onPressed: () {
+
+                                                      final timestamp = DateTime.now().toIso8601String();
+
+                                                      final properties = MoEProperties()
+                                                        ..addAttribute('user_id', Constant.userID.toString())
+
+                                                        ..addAttribute('status', 'I am over 18')
+                                                        ..addAttribute('method_used', 'Show')
+                                                        ..addAttribute('language', Provider.of<VideoDetailsProvider>(context, listen: false).sectionDetailModel.language?[0].name)
+                                                        ..addAttribute('timestamp', timestamp);
+
+                                                      MoEngageService.instance.trackEvent('age_verification', properties);
+
+                                                      print("MoEngage event tracked with and timestamp: $timestamp");
+
                                                       // User confirmed they're over 18, open player screen
                                                       openPlayer(
                                                         "Show",
@@ -268,6 +287,17 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                                   SizedBox(width: 10),
                                                   TextButton(
                                                     onPressed: () {
+                                                      final timestamp = DateTime.now().toIso8601String();
+
+                                                      final properties = MoEProperties()
+                                                        ..addAttribute('user_id', Constant.userID.toString())
+                                                        ..addAttribute('reason', 'Age_Verification')
+                                                        ..addAttribute('timestamp', timestamp);
+
+                                                      MoEngageService.instance.trackEvent('age_verification_failed', properties);
+
+                                                      print("MoEngage event tracked with and timestamp: $timestamp");
+
                                                       Navigator.of(context)
                                                           .pop(); // Close the dialog and do nothing
                                                     },
@@ -345,6 +375,17 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
                                       );
                                     } else {
                                       if (isAdShow) {
+                                        final timestamp = DateTime.now().toIso8601String();
+                                        final propertiess = MoEProperties()
+                                          ..addAttribute('user_id', Constant.userID.toString())
+
+                                          ..addAttribute('ad_id',isAdShow)
+                                          ..addAttribute('timestamp', timestamp);
+
+                                        MoEngageService.instance.trackEvent('Ad_Viewed', propertiess);
+
+                                        print("MoEngage event tracked with and timestamp: $timestamp");
+
                                         AdHelper.showRewardedAd(
                                           onAdCompleted: () async {
                                             // Callback when the ad is completed successfully

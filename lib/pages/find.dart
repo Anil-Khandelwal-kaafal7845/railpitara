@@ -10,11 +10,15 @@ import 'package:dtlive/widget/mytext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+
+import '../utils/moenage_service.dart';
+import '../utils/sharedpre.dart';
 
 class Find extends StatefulWidget {
   const Find({Key? key}) : super(key: key);
@@ -30,14 +34,19 @@ class FindState extends State<Find> {
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
   late BuildContext dialogContext;
-
+  String?   userMobileNo;
+  SharedPre sharedPref = SharedPre();
   @override
   void initState() {
     super.initState();
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
+    getUserData();
   }
-
+  getUserData() async {
+    userMobileNo = await sharedPref.read("usermobile");
+    debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
+  }
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
@@ -250,7 +259,13 @@ class FindState extends State<Find> {
     };
 
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Search Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
 
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: appBgColor,
@@ -429,6 +444,19 @@ class FindState extends State<Find> {
                       'user_id': Constant.userID.toString(),
                     };
                     Singular.eventWithArgs('Search_content', screenViewEvent);
+                    final timestamp = DateTime.now().toIso8601String();
+                    MoEngageService.instance
+                        .setUserName(userMobileNo.toString());
+                    final properties = MoEProperties()
+                      ..addAttribute('user_id', Constant.userID.toString())
+                      ..addAttribute('search_query', value)
+                      ..addAttribute('timestamp', timestamp);
+
+                    MoEngageService.instance
+                        .trackEvent('Content_Searched', properties);
+
+                    print(
+                        "MoEngage event tracked with and timestamp: $timestamp");
                     await Navigator.push(
                       context,
                       MaterialPageRoute(

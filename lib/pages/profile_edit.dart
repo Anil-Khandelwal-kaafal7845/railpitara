@@ -14,9 +14,12 @@ import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/widget/mytext.dart';
 import 'package:dtlive/widget/mytextformfield.dart';
 import 'package:flutter/material.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({Key? key}) : super(key: key);
@@ -34,7 +37,8 @@ class ProfileEditState extends State<ProfileEdit> {
   String? userId, userName;
   final nameController = TextEditingController();
   bool isImageRemoved = false;
-
+  SharedPre sharedPref = SharedPre();
+  String? userMobileNo;
   @override
   void initState() {
     prDialog = ProgressDialog(context);
@@ -43,6 +47,8 @@ class ProfileEditState extends State<ProfileEdit> {
   }
 
   void getUserData() async {
+    userMobileNo = await sharedPref.read("usermobile");
+    debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     await profileProvider.getProfile(context);
@@ -182,6 +188,27 @@ class ProfileEditState extends State<ProfileEdit> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () async {
+                      final timestamp = DateTime.now().toIso8601String();
+                      MoEngageService.instance
+                          .setFirstName(nameController.text.toString());
+
+                      MoEngageService.instance
+                          .identifyUser(Constant.userID.toString());
+
+                      MoEngageService.instance
+                          .setPhoneNumber(userMobileNo.toString());
+
+
+                      final properties = MoEProperties()
+                        ..addAttribute('user_id', Constant.userID.toString())
+                        ..addAttribute('updated_fields', pickedImageFile?.path)
+                        ..addAttribute('timestamp', timestamp);
+
+                      MoEngageService.instance
+                          .trackEvent('Profile_Updated', properties);
+
+                      print(
+                          "MoEngage event tracked with and timestamp: $timestamp");
                       debugPrint(
                           "nameController Name ==> ${nameController.text.toString()}");
                       debugPrint(
@@ -210,7 +237,17 @@ class ProfileEditState extends State<ProfileEdit> {
                       if (!mounted) return;
                       await profileProvider.getProfile(context);
                       await prDialog.hide();
+                      final propertiess = MoEProperties()
+                        ..addAttribute('user_id', Constant.userID.toString())
+                        ..addAttribute(
+                            'preference_type', nameController.text.toString())
+                        ..addAttribute('timestamp', timestamp);
 
+                      MoEngageService.instance
+                          .trackEvent('Preference_Saved', propertiess);
+
+                      print(
+                          "MoEngage event tracked with and timestamp: $timestamp");
                       // Navigate to home screen and clear all previous routes
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => Bottombar()),

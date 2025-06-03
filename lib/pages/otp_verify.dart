@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -13,12 +15,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:pinput/pinput.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 
+import '../utils/moenage_service.dart';
 import '../webservice/apiservices.dart';
 
 class OTPVerify extends StatefulWidget {
@@ -571,6 +575,40 @@ class OTPVerifyState extends State<OTPVerify> {
         await homeProvider.setLoading(true);
         await sectionDataProvider.getSectionBanner("0", "1");
         await sectionDataProvider.getSectionList("0", "1", "0");
+        final deviceInfoPlugin = DeviceInfoPlugin();
+        String deviceId;
+
+        if (Platform.isAndroid) {
+          final androidInfo = await deviceInfoPlugin.androidInfo;
+          deviceId = androidInfo.id ?? 'unknown';
+        } else if (Platform.isIOS) {
+          final iosInfo = await deviceInfoPlugin.iosInfo;
+          deviceId = iosInfo.identifierForVendor ?? 'unknown';
+        } else {
+          deviceId = 'unsupported_platform';
+        }
+
+        final timestamp = DateTime.now().toIso8601String();
+
+        MoEngageService.instance.setPhoneNumber(widget.mobileNumber.toString());
+        MoEngageService.instance.setEmail(widget.email.toString());
+        MoEngageService.instance.identifyUser(Constant.userID.toString());
+
+
+
+
+
+        final properties = MoEProperties()
+          ..addAttribute('user_id', Constant.userID.toString())
+          ..addAttribute('user_phone ', widget.mobileNumber.toString())
+          ..addAttribute('user_email', widget.email.toString())
+          ..addAttribute('deviceId', deviceId)
+          ..addAttribute('timestamp', timestamp);
+
+        MoEngageService.instance.trackEvent('login', properties);
+
+
+        print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
 
         await prDialog.hide();
         if (!mounted) return;

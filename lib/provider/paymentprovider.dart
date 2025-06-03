@@ -5,7 +5,10 @@ import 'package:dtlive/model/successmodel.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class PaymentProvider extends ChangeNotifier {
   PaymentOptionModel paymentOptionModel = PaymentOptionModel();
@@ -39,6 +42,17 @@ class PaymentProvider extends ChangeNotifier {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('Apply Package Coupon', screenViewEvent);
+    final timestamp = DateTime.now().toIso8601String();
+
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('couponCode', couponCode)
+      ..addAttribute('packageId', packageId)
+      ..addAttribute('totalAmount', '${couponModel.result?.totalAmount}')
+      ..addAttribute('discountAmount', '${couponModel.result?.discountAmount}')
+      ..addAttribute('timestamp', timestamp);
+
+    MoEngageService.instance.trackEvent('Package_promo_code_Applied', properties);
     debugPrint("applyPackageCouponCode status :==> ${couponModel.status}");
     debugPrint("applyPackageCouponCode message :==> ${couponModel.message}");
     couponLoading = false;
@@ -67,6 +81,20 @@ class PaymentProvider extends ChangeNotifier {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('Apply Rent Coupon', screenViewEvent);
+    final timestamp = DateTime.now().toIso8601String();
+
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('couponCode', couponCode)
+      ..addAttribute('videoId', videoId)
+      ..addAttribute('typeId', typeId)
+      ..addAttribute('videoType', videoType)
+      ..addAttribute('price', price)
+      ..addAttribute('totalAmount', '${couponModel.result?.totalAmount}')
+      ..addAttribute('discountAmount', '${couponModel.result?.discountAmount}')
+      ..addAttribute('timestamp', timestamp);
+
+    MoEngageService.instance.trackEvent('Rent_promo_code_Applied', properties);
     debugPrint("applyRentCouponCode status :==> ${couponModel.status}");
     debugPrint("applyRentCouponCode message :==> ${couponModel.message}");
     couponLoading = false;

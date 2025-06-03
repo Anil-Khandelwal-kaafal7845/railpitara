@@ -347,7 +347,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class PlayerVideo extends StatefulWidget {
   final int? videoId, videoType, typeId, otherId, stopTime;
@@ -447,6 +450,21 @@ class _PlayerVideoState extends State<PlayerVideo> {
         'user_id': Constant.userID.toString(),
       };
       Singular.eventWithArgs('video_watch_event', screenViewEvent);
+      final timestamp = DateTime.now().toIso8601String();
+
+      final properties = MoEProperties()
+        ..addAttribute('user_id', Constant.userID.toString())
+        ..addAttribute('content_id', widget.videoId)
+        ..addAttribute('content_type', widget.videoType)
+        ..addAttribute('play_type', '${widget.playType}')
+        ..addAttribute('video_url', widget.videoUrl)
+      // ..addAttribute('genre', widget.isLive)
+        ..addAttribute('duration_watched', '${watchDuration} Second')
+        ..addAttribute('timestamp', timestamp);
+
+      MoEngageService.instance.trackEvent('Content_Viewed', properties);
+
+      print("MoEngage event tracked with and timestamp: $timestamp");
     }
   }
 
@@ -464,6 +482,14 @@ class _PlayerVideoState extends State<PlayerVideo> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Player Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
         body: widget.playType == "Trailer"
             ? Stack(

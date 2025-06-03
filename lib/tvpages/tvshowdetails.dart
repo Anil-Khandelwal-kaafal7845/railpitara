@@ -29,10 +29,14 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
+import '../utils/sharedpre.dart';
 
 class TVShowDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
@@ -51,7 +55,8 @@ class TVShowDetailsState extends State<TVShowDetails> {
   late ShowDetailsProvider showDetailsProvider;
   late EpisodeProvider episodeProvider;
   late GeneralProvider generalProvider;
-
+  String?   userMobileNo;
+  SharedPre sharedPref = SharedPre();
   @override
   void initState() {
     showDetailsProvider =
@@ -64,8 +69,12 @@ class TVShowDetailsState extends State<TVShowDetails> {
     debugPrint("initState videoType ==> ${widget.videoType}");
     debugPrint("initState typeId ==> ${widget.typeId}");
     _getData();
+    getUserData();
   }
-
+  getUserData() async {
+    userMobileNo = await sharedPref.read("usermobile");
+    debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
+  }
   Future<void> _getData() async {
     Utils.getCurrencySymbol();
     await showDetailsProvider.getSectionDetails(
@@ -132,6 +141,11 @@ class TVShowDetailsState extends State<TVShowDetails> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Tv Show')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -880,6 +894,17 @@ class TVShowDetailsState extends State<TVShowDetails> {
                           constraints: const BoxConstraints(minWidth: 50),
                           child: InkWell(
                             onTap: () async {
+                              final timestamp = DateTime.now().toIso8601String();
+                              MoEngageService.instance.setUserName(userMobileNo.toString());
+                              final properties = MoEProperties()
+                                ..addAttribute('user_id', Constant.userID.toString())
+                                ..addAttribute('search_query', widget.videoType)
+                                ..addAttribute('timestamp', timestamp);
+
+                              MoEngageService.instance.trackEvent('Content_Bookmarked', properties);
+
+                              print("MoEngage event tracked with and timestamp: $timestamp");
+
                               debugPrint(
                                   "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                               if (Constant.userID != null) {
@@ -1370,6 +1395,17 @@ class TVShowDetailsState extends State<TVShowDetails> {
                               constraints: const BoxConstraints(minWidth: 50),
                               child: InkWell(
                                 onTap: () async {
+                                  final timestamp = DateTime.now().toIso8601String();
+                                  MoEngageService.instance.setUserName(userMobileNo.toString());
+                                  final properties = MoEProperties()
+                                    ..addAttribute('user_id', Constant.userID.toString())
+                                    ..addAttribute('search_query', widget.videoType)
+                                    ..addAttribute('timestamp', timestamp);
+
+                                  MoEngageService.instance.trackEvent('Content_Bookmarked', properties);
+
+                                  print("MoEngage event tracked with and timestamp: $timestamp");
+
                                   debugPrint(
                                       "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                                   if (Constant.userID != null) {

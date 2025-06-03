@@ -4,13 +4,16 @@ import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:flutter/material.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../provider/channelsectionprovider.dart';
 import 'package:dtlive/model/channelsectionmodel.dart';
-import 'package:flutter/cupertino.dart'; // Import Cupertino icons
+import 'package:flutter/cupertino.dart';
+
+import '../utils/moenage_service.dart'; // Import Cupertino icons
 
 class NewLivePlayer extends StatefulWidget {
   const NewLivePlayer({super.key});
@@ -155,6 +158,11 @@ class _NewLivePlayerState extends State<NewLivePlayer>
     };
 
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Live Channels Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
 
     log("LENGTHHH ${channelSectionProvider.channelSectionModel.result?.length}");
     final List<Result>? validResults = channelSectionProvider

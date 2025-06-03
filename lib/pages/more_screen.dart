@@ -1,5 +1,6 @@
 import 'package:dtlive/main.dart';
 import 'package:flutter/material.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/utils/color.dart';
@@ -7,6 +8,7 @@ import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import '../utils/constant.dart';
+import '../utils/moenage_service.dart';
 
 class MoreScreen extends StatefulWidget {
   final String appBarTitle;
@@ -39,7 +41,11 @@ class MoreScreenState extends State<MoreScreen> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'More Section Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
+    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),

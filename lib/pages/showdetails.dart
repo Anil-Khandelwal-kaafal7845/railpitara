@@ -38,12 +38,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+import '../utils/moenage_service.dart';
 
 class ShowDetails extends StatefulWidget {
   final int videoId, upcomingType, videoType, typeId;
@@ -363,6 +366,12 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Tv Show Details')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {
@@ -658,6 +667,22 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                             //focusColor:: gray.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(5),
                             onTap: () {
+                              final timestamp = DateTime.now().toIso8601String();
+
+                              final properties = MoEProperties()
+                                ..addAttribute('user_id', Constant.userID.toString())
+                                ..addAttribute('trailer_id', widget.videoId)
+                                ..addAttribute('trailer_name',
+                                    showDetailsProvider.sectionDetailModel.result?.name)
+                                ..addAttribute('category_name',
+                                    showDetailsProvider.sectionDetailModel.result?.categoryName)
+                                ..addAttribute('duration_watched',
+                                    showDetailsProvider.sectionDetailModel.result?.stopTime)
+                                ..addAttribute('duration_watched',
+                                    showDetailsProvider.sectionDetailModel.result?.languageId)
+                                ..addAttribute('timestamp', timestamp);
+
+                              MoEngageService.instance.trackEvent('trailer_watched', properties);
                               openPlayer("Trailer");
                             },
                             child: _buildFeatureBtn(
@@ -692,6 +717,40 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
 
                               if (Constant.userID != null) {
+                                final isBookmarked = showDetailsProvider
+                                    .sectionDetailModel
+                                    .result
+                                    ?.isBookmark ??
+                                    0;
+                                final timestamp =
+                                DateTime.now().toIso8601String();
+
+                                final properties = MoEProperties()
+                                  ..addAttribute('platform',
+                                      Platform.isIOS ? 'iOS' : 'Android')
+                                  ..addAttribute(
+                                      'user_id', Constant.userID.toString())
+                                  ..addAttribute('timestamp', timestamp)
+                                  ..addAttribute('video_id', widget.videoId)
+                                  ..addAttribute('video_type', widget.videoType)
+                                  ..addAttribute(
+                                      'content_name',
+                                      showDetailsProvider
+                                          .sectionDetailModel.result?.name)
+                                  ..addAttribute('type_id', widget.typeId);
+
+                                if (isBookmarked == 1) {
+                                  // User is removing the bookmark
+                                  MoEngageService.instance.trackEvent(
+                                      'bookmark_removed', properties);
+                                } else {
+                                  // User is adding a bookmark
+                                  MoEngageService.instance
+                                      .trackEvent('bookmark_added', properties);
+                                }
+
+                                print(
+                                    "MoEngage event tracked with and timestamp: $timestamp");
                                 await showDetailsProvider.setBookMark(
                                   context,
                                   widget.typeId,
@@ -1421,6 +1480,22 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                         //focusColor:: gray.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(5),
                         onTap: () {
+                          final timestamp = DateTime.now().toIso8601String();
+
+                          final properties = MoEProperties()
+                            ..addAttribute('user_id', Constant.userID.toString())
+                            ..addAttribute('trailer_id', widget.videoId)
+                            ..addAttribute('trailer_name',
+                                showDetailsProvider.sectionDetailModel.result?.name)
+                            ..addAttribute('category_name',
+                                showDetailsProvider.sectionDetailModel.result?.categoryName)
+                            ..addAttribute('duration_watched',
+                                showDetailsProvider.sectionDetailModel.result?.stopTime)
+                            ..addAttribute('duration_watched',
+                                showDetailsProvider.sectionDetailModel.result?.languageId)
+                            ..addAttribute('timestamp', timestamp);
+
+                          MoEngageService.instance.trackEvent('trailer_watched', properties);
                           openPlayer("Trailer");
                         },
                         child: _buildFeatureBtn(
@@ -1543,6 +1618,21 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
 
   Widget _buildSeasonBtn() {
     if ((kIsWeb || Constant.isTV)) {
+      final properties = MoEProperties()
+        ..addAttribute('user_id', Constant.userID.toString())
+        ..addAttribute(
+            'series_id',
+            showDetailsProvider
+                .sectionDetailModel.session?[showDetailsProvider.seasonPos].id)
+        ..addAttribute(
+            'episode_count', showDetailsProvider.sectionDetailModel.session)
+        ..addAttribute('total_duration',
+            showDetailsProvider.sectionDetailModel.result?.videoDuration)
+        ..addAttribute(
+            'language', showDetailsProvider.sectionDetailModel.language)
+        ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+      MoEngageService.instance.trackEvent('content_binge_watched', properties);
       if (showDetailsProvider.sectionDetailModel.session != null &&
           (showDetailsProvider.sectionDetailModel.session?.length ?? 0) > 0) {
         return Consumer<ShowDetailsProvider>(
@@ -2102,6 +2192,22 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
           borderRadius: BorderRadius.circular(30),
           //focusColor:: white,
           onTap: () {
+            final timestamp = DateTime.now().toIso8601String();
+
+            final properties = MoEProperties()
+              ..addAttribute('user_id', Constant.userID.toString())
+              ..addAttribute('trailer_id', widget.videoId)
+              ..addAttribute('trailer_name',
+                  showDetailsProvider.sectionDetailModel.result?.name)
+              ..addAttribute('category_name',
+                  showDetailsProvider.sectionDetailModel.result?.categoryName)
+              ..addAttribute('duration_watched',
+                  showDetailsProvider.sectionDetailModel.result?.stopTime)
+              ..addAttribute('duration_watched',
+                  showDetailsProvider.sectionDetailModel.result?.languageId)
+              ..addAttribute('timestamp', timestamp);
+
+            MoEngageService.instance.trackEvent('trailer_watched', properties);
             openPlayer("Trailer");
           },
           child: Padding(
@@ -2129,6 +2235,22 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       alignment: Alignment.centerLeft,
       child: InkWell(
         onTap: () {
+          final timestamp = DateTime.now().toIso8601String();
+
+          final properties = MoEProperties()
+            ..addAttribute('user_id', Constant.userID.toString())
+            ..addAttribute('trailer_id', widget.videoId)
+            ..addAttribute('trailer_name',
+                showDetailsProvider.sectionDetailModel.result?.name)
+            ..addAttribute('category_name',
+                showDetailsProvider.sectionDetailModel.result?.categoryName)
+            ..addAttribute('duration_watched',
+                showDetailsProvider.sectionDetailModel.result?.stopTime)
+            ..addAttribute('duration_watched',
+                showDetailsProvider.sectionDetailModel.result?.languageId)
+            ..addAttribute('timestamp', timestamp);
+
+          MoEngageService.instance.trackEvent('trailer_watched', properties);
           openPlayer("Trailer");
         },
         //focusColor:: white,
@@ -2283,6 +2405,23 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                 children: [
                                   TextButton(
                                     onPressed: () {
+                                      final timestamp =
+                                      DateTime.now().toIso8601String();
+
+                                      final properties = MoEProperties()
+                                        ..addAttribute('user_id',
+                                            Constant.userID.toString())
+                                        ..addAttribute(
+                                            'reason', 'Age_Verification')
+                                        ..addAttribute('method_used', 'Show')
+                                        ..addAttribute('timestamp', timestamp);
+
+                                      MoEngageService.instance.trackEvent(
+                                          'age_verification', properties);
+
+                                      print(
+                                          "MoEngage event tracked with and timestamp: $timestamp");
+
                                       // User confirmed they're over 18, open player screen
                                       openPlayer("Show");
                                       Navigator.of(context)
@@ -2456,6 +2595,23 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   children: [
                                     TextButton(
                                       onPressed: () {
+                                        final timestamp =
+                                        DateTime.now().toIso8601String();
+
+                                        final properties = MoEProperties()
+                                          ..addAttribute('user_id',
+                                              Constant.userID.toString())
+                                          ..addAttribute(
+                                              'reason', 'Age_Verification')
+                                          ..addAttribute('method_used', 'Show')
+                                          ..addAttribute('timestamp', timestamp);
+
+                                        MoEngageService.instance.trackEvent(
+                                            'age_verification', properties);
+
+                                        print(
+                                            "MoEngage event tracked with and timestamp: $timestamp");
+
                                         // User confirmed they're over 18, open player screen
                                         openPlayer("Show");
                                         Navigator.of(context)
@@ -3440,6 +3596,18 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {
                       Navigator.pop(context);
+                      final timestamp = DateTime.now().toIso8601String();
+
+                      final properties = MoEProperties()
+                        ..addAttribute('content_id', widget.typeId)
+                        ..addAttribute('user_id', Constant.userID.toString())
+                        ..addAttribute(
+                            'platform', Platform.isIOS ? 'iOS' : 'Android')
+                        ..addAttribute('share_type', 'share_video_copy_link')
+                        ..addAttribute('timestamp', timestamp);
+
+                      MoEngageService.instance
+                          .trackEvent('content_shared', properties);
                       Utils.shareApp(
                         Platform.isIOS
                             ? "Hey! I'm watching ${showDetailsProvider.sectionDetailModel.result?.name ?? ""}. \nCheck it out now: ${Constant.dynamicBaseUrl}home/${showDetailsProvider.sectionDetailModel.result?.name?.toLowerCase().replaceAll(" ", "-")}/${base64Encode(utf8.encode('${widget.videoId}-${widget.typeId}-${widget.videoType}-${widget.upcomingType}'))} \n"

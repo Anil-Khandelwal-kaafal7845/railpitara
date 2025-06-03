@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/pages/login_email.dart';
@@ -23,10 +24,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+
+import '../utils/moenage_service.dart';
 
 class LoginViaSocial extends StatefulWidget {
   const LoginViaSocial({Key? key}) : super(key: key);
@@ -191,6 +195,12 @@ class LoginViaSocialState extends State<LoginViaSocial> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Login Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('screen_view', properties);
     print("EMAIL KYA H ---${generalProvider.isEmail}");
     return Scaffold(
         backgroundColor: appBgColor,
@@ -403,7 +413,36 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                             ),
                                             const SizedBox(height: 25),
                                             InkWell(
-                                              onTap: () {
+                                              onTap: () async {
+
+                                                MoEngageService.instance.setUserName(mobileNumber.toString());
+                                                // Get device ID
+                                                final deviceInfoPlugin = DeviceInfoPlugin();
+                                                String deviceId;
+
+                                                if (Platform.isAndroid) {
+                                                  final androidInfo = await deviceInfoPlugin.androidInfo;
+                                                  deviceId = androidInfo.id ?? 'unknown';
+                                                } else if (Platform.isIOS) {
+                                                  final iosInfo = await deviceInfoPlugin.iosInfo;
+                                                  deviceId = iosInfo.identifierForVendor ?? 'unknown';
+                                                } else {
+                                                  deviceId = 'unsupported_platform';
+                                                }
+
+                                                MoEngageService.instance.identifyUser(mobileNumber.toString());
+                                                final timestamp = DateTime.now().toIso8601String();
+
+                                                final properties = MoEProperties()
+                                                  ..addAttribute('user_id ', mobileNumber.toString())
+                                                  ..addAttribute('signup_method ', 'mobileNumber')
+                                                  ..addAttribute('device_id', deviceId)
+                                                  ..addAttribute('timestamp', timestamp);
+
+                                                MoEngageService.instance.trackEvent('User_Registration', properties);
+
+                                                print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
+
                                                 debugPrint(
                                                     "Click mobileNumber ==> $mobileNumber");
 

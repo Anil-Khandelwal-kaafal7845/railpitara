@@ -16,7 +16,10 @@ import 'package:dtlive/widget/nodata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/moenage_service.dart';
 
 
 class MyDownloads extends StatefulWidget {
@@ -587,6 +590,14 @@ class _MyDownloadsState extends State<MyDownloads> {
                   InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () async {
+                      final timestamp = DateTime.now().toIso8601String();
+
+                      final properties = MoEProperties()
+                        ..addAttribute('user_id',Constant.userID.toString())
+                        ..addAttribute('content_id',  myDownloadsList?[position].videoType)
+                        ..addAttribute('timestamp', timestamp);
+
+                      MoEngageService.instance.trackEvent('Content_Shared', properties);
                       Navigator.pop(context);
                       _buildShareWithDialog(position);
                     },

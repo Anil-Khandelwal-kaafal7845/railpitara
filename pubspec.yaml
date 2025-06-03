@@ -142,6 +142,7 @@ dependencies:
   share_plus: ^6.3.4
   android_play_install_referrer: ^0.4.0
   curved_navigation_bar: ^1.0.6
+  moengage_flutter: ^9.2.1
   #test
 
 
