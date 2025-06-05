@@ -428,7 +428,7 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                                       deviceId = 'unsupported_platform';
                                                     }
 
-                                                    MoEngageService.instance.identifyUser(mobileNumber.toString());
+                                                    MoEngageService.instance.identifyUser(emailController.text.toString());
                                                     final timestamp = DateTime.now().toIso8601String();
 
                                                     final properties = MoEProperties()

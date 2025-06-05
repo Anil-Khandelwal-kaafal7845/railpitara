@@ -1599,18 +1599,18 @@ class AllPaymentState extends State<AllPayment>
     * */
     Utils.showSnackbar(context, "fail", "payment_fail", true);
     final timestamp = DateTime.now().toIso8601String();
-    MoEngageService.instance.setUserName(userMobileNo.toString());
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('cancellation_reason', 'payment_fail')
-      ..addAttribute('PayType', '${widget.payType}')
-      ..addAttribute('price', '${widget.price}')
-      ..addAttribute('name', '${widget.itemTitle}')
-      ..addAttribute('final amount', '${paymentProvider.finalAmount}')
-      ..addAttribute('VID', '${widget.itemId}')
-      ..addAttribute('timestamp', timestamp);
-
-    MoEngageService.instance.trackEvent('Razorpay_payment_fail', properties);
+    // MoEngageService.instance.setUserName(userMobileNo.toString());
+    // final properties = MoEProperties()
+    //   ..addAttribute('user_id', Constant.userID.toString())
+    //   ..addAttribute('cancellation_reason', 'payment_fail')
+    //   ..addAttribute('PayType', '${widget.payType}')
+    //   ..addAttribute('price', '${widget.price}')
+    //   ..addAttribute('name', '${widget.itemTitle}')
+    //   ..addAttribute('final amount', '${paymentProvider.finalAmount}')
+    //   ..addAttribute('VID', '${widget.itemId}')
+    //   ..addAttribute('timestamp', timestamp);
+    //
+    // MoEngageService.instance.trackEvent('Razorpay_payment_fail', properties);
 
     print("MoEngage event tracked with and timestamp: $timestamp");
     if (widget.payType == "Package") {

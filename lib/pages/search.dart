@@ -49,6 +49,27 @@ class SearchState extends State<Search> {
     _getData();
     getUserData();
     super.initState();
+    trackMoEngageEventOnce();
+  }
+
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Search Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+
+    // Optional delay
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
@@ -240,13 +261,7 @@ class SearchState extends State<Search> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Search Screen')
-      ..addAttribute('user_id', Constant.userID.toString())
 
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appBgColor,

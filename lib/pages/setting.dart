@@ -59,6 +59,23 @@ class SettingState extends State<Setting> {
     getUserDataProfile();
 
     super.initState();
+    trackMoEngageEventOnce();
+  }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Setting Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+    // Optional delay
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+      moEngagePlugin();
+    });
   }
 
   void getUserDataProfile() async {
@@ -109,7 +126,7 @@ class SettingState extends State<Setting> {
       if (!mounted) return;
 
       setState(() {});
-      moEngagePlugin();
+      // moEngagePlugin();
     });
   }
   Future<void> moEngagePlugin() async {
@@ -135,13 +152,7 @@ class SettingState extends State<Setting> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Setting Screen')
-      ..addAttribute('user_id', Constant.userID.toString())
 
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       // appBar: Utils.myAppBar(context, "setting", true),
@@ -173,21 +184,21 @@ class SettingState extends State<Setting> {
                     setState(() {});
                   },
                   onLogoutPressed: () {
-                    MoEngageService.instance.logout();
-                    // Get device ID
-
-                    final timestamp = DateTime.now().toIso8601String();
-
-                    final properties = MoEProperties()
-                      ..addAttribute('user_id', Constant.userID.toString())
-
-                      ..addAttribute('timestamp', timestamp);
-
-                    MoEngageService.instance.trackEvent('Logout', properties);
-
-                    print("userName check ${userName.toString()}");
-                    print(
-                        "MoEngage event tracked with device ID: and timestamp: $timestamp");
+                    // MoEngageService.instance.logout();
+                    // // Get device ID
+                    //
+                    // final timestamp = DateTime.now().toIso8601String();
+                    //
+                    // final properties = MoEProperties()
+                    //   ..addAttribute('user_id', Constant.userID.toString())
+                    //
+                    //   ..addAttribute('timestamp', timestamp);
+                    //
+                    // MoEngageService.instance.trackEvent('Logout', properties);
+                    //
+                    // print("userName check ${userName.toString()}");
+                    // print(
+                    //     "MoEngage event tracked with device ID: and timestamp: $timestamp");
                     if (Constant.userID != null) {
                       logoutConfirmDialog();
                     }
@@ -1966,7 +1977,7 @@ Widget profileCardWidget({
                               'user_id': Constant.userID.toString(),
                             };
                             Singular.eventWithArgs('LogOut', screenViewEvent);
-                            MoEngageService.instance.logout();
+                            // MoEngageService.instance.logout();
                             final timestamp = DateTime.now().toIso8601String();
 
                             final properties = MoEProperties()

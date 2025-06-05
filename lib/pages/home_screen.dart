@@ -177,20 +177,39 @@ class HomeState extends State<Home> with RouteAware {
       _getData();
     });
     if (!kIsWeb) {
-      final timestamp = DateTime.now().toIso8601String();
-
-      final properties = MoEProperties()
-        ..addAttribute('user_id', userMobileNo)
-      // ..addAttribute('notification_type', notification_type)
-        ..addAttribute('timestamp', timestamp);
-
-      MoEngageService.instance.trackEvent('Notification_Received', properties);
-
-      print(
-          "MoEngage event tracked with Constant userID: ${Constant.userID.toString()}");
-      print("MoEngage event tracked with and timestamp: $timestamp");
+      // final timestamp = DateTime.now().toIso8601String();
+      //
+      // final properties = MoEProperties()
+      //   ..addAttribute('user_id', userMobileNo)
+      // // ..addAttribute('notification_type', notification_type)
+      //   ..addAttribute('timestamp', timestamp);
+      //
+      // MoEngageService.instance.trackEvent('Notification_Received', properties);
+      //
+      // print(
+      //     "MoEngage event tracked with Constant userID: ${Constant.userID.toString()}");
+      // print("MoEngage event tracked with and timestamp: $timestamp");
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
+    trackMoEngageEventOnce();
+  }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'HomePage')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    print("MoEngage event tracked with Constant userID: ${userMobileNo}");
+
+    // Optional delay
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
 
   fetchForceUpdateData() async {
@@ -647,13 +666,7 @@ class HomeState extends State<Home> with RouteAware {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'HomePage')
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    print("MoEngage event tracked with Constant userID: ${userMobileNo}");
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: appBgColor,
