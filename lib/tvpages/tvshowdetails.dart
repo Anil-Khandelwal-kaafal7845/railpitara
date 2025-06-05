@@ -71,6 +71,21 @@ class TVShowDetailsState extends State<TVShowDetails> {
     _getData();
     getUserData();
   }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Tv Show')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
+  }
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
     debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
@@ -141,11 +156,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Tv Show')
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&
           (showDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {

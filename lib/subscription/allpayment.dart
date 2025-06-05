@@ -308,6 +308,7 @@ class AllPaymentState extends State<AllPayment>
             'order_id': orderId,
             'user_id': Constant.userID.toString(),
             'couponCode': '${strCouponCode}',
+            'is_revenue_event': true,
           });
 
           if (!mounted) return;

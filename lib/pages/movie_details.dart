@@ -112,6 +112,24 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     debugPrint("initState videoType ==> ${widget.videoType}");
     debugPrint("initState typeId ==> ${widget.typeId}");
     _getData();
+    trackMoEngageEventOnce();
+  }
+
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Details Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
 
   @override
@@ -433,12 +451,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Details Screen')
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.cast != null &&
           (videoDetailsProvider.sectionDetailModel.cast?.length ?? 0) > 0) {

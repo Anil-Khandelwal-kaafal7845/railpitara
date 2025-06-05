@@ -63,8 +63,24 @@ class LoginViaSocialState extends State<LoginViaSocial> {
     prDialog = ProgressDialog(context);
     _getDeviceToken();
     _getData();
+    trackMoEngageEventOnce();
   }
+  bool _eventTracked = false;
 
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Login Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
+  }
   _getDeviceToken() async {
     try {
       if (Platform.isAndroid) {
@@ -195,12 +211,7 @@ class LoginViaSocialState extends State<LoginViaSocial> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Login Screen')
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
     print("EMAIL KYA H ---${generalProvider.isEmail}");
     return Scaffold(
         backgroundColor: appBgColor,

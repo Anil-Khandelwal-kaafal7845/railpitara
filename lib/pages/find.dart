@@ -42,6 +42,24 @@ class FindState extends State<Find> {
     _getData();
     findProvider = Provider.of<FindProvider>(context, listen: false);
     getUserData();
+    trackMoEngageEventOnce();
+  }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Search Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
@@ -259,13 +277,7 @@ class FindState extends State<Find> {
     };
 
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Search Screen')
-      ..addAttribute('user_id', Constant.userID.toString())
 
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: appBgColor,
