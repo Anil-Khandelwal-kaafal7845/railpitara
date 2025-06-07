@@ -81,7 +81,6 @@ class TVShowDetailsState extends State<TVShowDetails> {
       ..addAttribute('screen_name', 'Tv Show')
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-
     Future.delayed(Duration(seconds: 2), () {
       MoEngageService.instance.trackEvent('screen_view', properties);
     });

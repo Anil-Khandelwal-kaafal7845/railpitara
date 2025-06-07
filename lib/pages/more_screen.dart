@@ -25,6 +25,24 @@ class MoreScreenState extends State<MoreScreen> {
   void initState() {
     super.initState();
     Provider.of<SectionDataProvider>(context, listen: false).getViewAll(widget.sectionId);
+    trackMoEngageEventOnce();
+  }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'More Section Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+
+    Future.delayed(Duration(seconds: 2), () {
+
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
 
   @override
@@ -41,11 +59,7 @@ class MoreScreenState extends State<MoreScreen> {
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'More Section Screen')
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),

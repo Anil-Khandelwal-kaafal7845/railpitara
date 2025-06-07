@@ -43,6 +43,23 @@ class _NewLivePlayerState extends State<NewLivePlayer>
     channelSectionProvider =
         Provider.of<ChannelSectionProvider>(context, listen: false);
     getData();
+    trackMoEngageEventOnce();
+  }
+  bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Live Channels Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+
+      MoEngageService.instance.trackEvent('screen_view', properties);
+    });
   }
 
   Future<void> getData() async {
@@ -158,11 +175,7 @@ class _NewLivePlayerState extends State<NewLivePlayer>
     };
 
     Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Live Channels Screen')
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
 
     log("LENGTHHH ${channelSectionProvider.channelSectionModel.result?.length}");
     final List<Result>? validResults = channelSectionProvider
