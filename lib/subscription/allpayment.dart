@@ -191,6 +191,17 @@ class AllPaymentState extends State<AllPayment>
             'revenue': amount,
             'currency': currencyCode,
             'order_id': orderId,
+                  'is_revenue_event': true,
+            'user_id': Constant.userID.toString(),
+          });
+
+             Singular.eventWithArgs('__REVENUE__', {
+            'product_id': packageId.toString(),
+            'price': amount,
+            'revenue': amount,
+            'currency': currencyCode,
+            'order_id': orderId,
+                  'is_revenue_event': true,
             'user_id': Constant.userID.toString(),
           });
           final timestamp = DateTime.now().toIso8601String();
@@ -301,6 +312,17 @@ class AllPaymentState extends State<AllPayment>
 
           // ✅ Required __iap__ revenue event for Singular
           Singular.eventWithArgs('__iap__', {
+            'product_id': videoId.toString(),
+            'price': amount,
+            'revenue': amount,
+            'currency': 'INR', // or use dynamic currencyCode if available
+            'order_id': orderId,
+            'user_id': Constant.userID.toString(),
+            'couponCode': '${strCouponCode}',
+            'is_revenue_event': true,
+          });
+
+             Singular.eventWithArgs('__REVENUE__', {
             'product_id': videoId.toString(),
             'price': amount,
             'revenue': amount,
