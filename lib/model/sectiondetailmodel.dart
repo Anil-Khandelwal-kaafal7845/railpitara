@@ -504,6 +504,7 @@ class GetRelatedVideo {
   String? videoUploadType;
   String? video320;
   String? video480;
+  dynamic isLiveUrl;
   String? video720;
   String? video1080;
   String? videoExtension;
@@ -573,6 +574,7 @@ class GetRelatedVideo {
     this.subtitleLang1,
     this.subtitle1,
     this.subtitleLang2,
+    this.isLiveUrl,
     this.subtitle2,
     this.subtitleLang3,
     this.subtitle3,
@@ -630,6 +632,7 @@ class GetRelatedVideo {
         video480: json["video_480"],
         video720: json["video_720"],
         video1080: json["video_1080"],
+        isLiveUrl: json["is_live_url"],
         videoExtension: json["video_extension"],
         videoDuration: json["video_duration"],
         subtitleType: json["subtitle_type"],
@@ -653,6 +656,8 @@ class GetRelatedVideo {
         "language_id": languageId,
         "cast_id": castId,
         "type_id": typeId,
+       "is_live_url": isLiveUrl,
+
         "video_type": videoType,
         "name": name,
         "thumbnail": thumbnail,
