@@ -1,6 +1,7 @@
 import 'package:dtlive/model/episodebyseasonmodel.dart';
 import 'package:dtlive/model/sectiondetailmodel.dart';
 import 'package:dtlive/model/successmodel.dart';
+import 'package:dtlive/provider/watchlistprovider.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:dtlive/webservice/apiservices.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,11 @@ class ShowDetailsProvider extends ChangeNotifier {
   SectionDetailModel sectionDetailModel = SectionDetailModel();
   EpisodeBySeasonModel episodeBySeasonModel = EpisodeBySeasonModel();
 
+
   bool loading = false;
   int seasonPos = 0, mCurrentEpiPos = -1;
   String tabClickedOn = "related";
+
 
   setLoading(isLoading) {
     loading = isLoading;
@@ -63,7 +66,7 @@ class ShowDetailsProvider extends ChangeNotifier {
   }
 
   Future<void> setBookMark(
-      BuildContext context, typeId, videoType, videoId) async {
+      BuildContext context, typeId, videoType, videoId,WatchlistProvider watchlistProvider,) async {
     loading = true;
     if ((sectionDetailModel.result?.isBookmark ?? 0) == 0) {
       sectionDetailModel.result?.isBookmark = 1;
@@ -74,10 +77,10 @@ class ShowDetailsProvider extends ChangeNotifier {
     }
     loading = false;
     notifyListeners();
-    getAddBookMark(typeId, videoType, videoId);
+    await getAddBookMark(context,typeId, videoType, videoId,watchlistProvider);
   }
 
-  Future<void> getAddBookMark(typeId, videoType, videoId) async {
+  Future<void> getAddBookMark(BuildContext context,typeId, videoType, videoId,WatchlistProvider watchlistProvider) async {
     debugPrint("getAddBookMark typeId :==> $typeId");
     debugPrint("getAddBookMark videoType :==> $videoType");
     debugPrint("getAddBookMark videoId :==> $videoId");
@@ -85,6 +88,15 @@ class ShowDetailsProvider extends ChangeNotifier {
         await ApiService().addRemoveBookmark(typeId, videoType, videoId);
     debugPrint("add_remove_bookmark status :==> ${successModel.status}");
     debugPrint("add_remove_bookmark message :==> ${successModel.message}");
+
+
+    if (successModel.status == 200) {
+      await watchlistProvider.getWatchlist(); // refresh the list
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text(successModel.message ?? "Bookmark updated")),
+      // );
+    }
+
   }
 
   setDownloadComplete(

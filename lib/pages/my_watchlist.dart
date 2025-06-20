@@ -37,10 +37,15 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
   @override
   void initState() {
-    watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+    fetchWatchlist();
+
     _getData();
     super.initState();
     trackMoEngageEventOnce();
+  }
+  void fetchWatchlist() {
+    watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+    print("Fetching watchlist...");
   }
   bool _eventTracked = false;
 

@@ -35,6 +35,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:singular_flutter_sdk/singular.dart';
 
+import '../provider/watchlistprovider.dart';
 import '../utils/moenage_service.dart';
 import '../utils/sharedpre.dart';
 
@@ -914,6 +915,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                               MoEngageService.instance.trackEvent('Content_Bookmarked', properties);
 
                               print("MoEngage event tracked with and timestamp: $timestamp");
+                              final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
 
                               debugPrint(
                                   "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
@@ -922,7 +924,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                   context,
                                   widget.typeId,
                                   widget.videoType,
-                                  widget.videoId,
+                                  widget.videoId,watchlistProvider
                                 );
                               } else {
                                 if ((kIsWeb || Constant.isTV)) {
@@ -1415,6 +1417,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                   MoEngageService.instance.trackEvent('Content_Bookmarked', properties);
 
                                   print("MoEngage event tracked with and timestamp: $timestamp");
+                                  final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
 
                                   debugPrint(
                                       "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
@@ -1423,7 +1426,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
                                       context,
                                       widget.typeId,
                                       widget.videoType,
-                                      widget.videoId,
+                                      widget.videoId,watchlistProvider
                                     );
                                   } else {
                                     if ((kIsWeb || Constant.isTV)) {

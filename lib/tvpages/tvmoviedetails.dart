@@ -31,6 +31,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
+import '../provider/watchlistprovider.dart';
 import '../utils/moenage_service.dart';
 
 class TVMovieDetails extends StatefulWidget {
@@ -858,6 +859,8 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                         child: InkWell(
                           //focusColor:: gray.withOpacity(0.5),
                           onTap: () async {
+                            final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+
                             debugPrint(
                                 "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                             if (Constant.userID != null) {
@@ -866,6 +869,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                                 widget.typeId,
                                 widget.videoType,
                                 widget.videoId,
+                                  watchlistProvider
                               );
                             } else {
                               if ((kIsWeb || Constant.isTV)) {
@@ -1355,6 +1359,8 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                               child: InkWell(
                                 //focusColor:: gray.withOpacity(0.5),
                                 onTap: () async {
+                                  final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+
                                   debugPrint(
                                       "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                                   if (Constant.userID != null) {
@@ -1363,6 +1369,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
                                       widget.typeId,
                                       widget.videoType,
                                       widget.videoId,
+                                        watchlistProvider
                                     );
                                   } else {
                                     if ((kIsWeb || Constant.isTV)) {

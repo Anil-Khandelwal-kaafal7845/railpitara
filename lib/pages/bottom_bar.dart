@@ -22,14 +22,15 @@ class Bottombar extends StatefulWidget {
   State<Bottombar> createState() => BottombarState();
 }
 
-int selectedIndex = 0;
+// int selectedIndex = 0;
 
 class BottombarState extends State<Bottombar> {
   SharedPre sharedPre = SharedPre();
-  // int selectedIndex = 0;
   DateTime? currentBackPressTime;
 
-  static List<Widget> widgetOptions = <Widget>[
+  int selectedIndex = 0;
+
+  final List<Widget> _screens = [
     const Home(pageName: ""),
     const Find(),
     const MyWatchlist(),
@@ -44,29 +45,22 @@ class BottombarState extends State<Bottombar> {
     });
   }
 
-  _getData() async {
+  Future<void> _getData() async {
     final generalsetting = Provider.of<GeneralProvider>(context, listen: false);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
     if (Constant.userID != null) {
       await profileProvider.getProfile(context);
     } else {
       Utils.updatePremium("0");
       Utils.loadAds(context);
     }
+
     if (!mounted) return;
     await generalsetting.getGeneralsetting(context);
-    Future.delayed(Duration.zero).then((value) {
-      if (!mounted) return;
-      setState(() {});
-    });
+    setState(() {}); // Update once after loading
   }
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //       selectedIndex = index;
-  //     });
-  // }
   void _onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -79,20 +73,11 @@ class BottombarState extends State<Bottombar> {
       onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: widgetOptions[selectedIndex],
-              ),
-            ),
-            // /* AdMob Banner */
-            // Utils.showBannerAd(context),
-          ],
+        body: IndexedStack(
+          index: selectedIndex,
+          children: _screens,
         ),
-        bottomNavigationBar: 
-         BottomAppBar(
-
+        bottomNavigationBar: BottomAppBar(
           color: appBgColor,
           padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),
           elevation: 5,
@@ -100,13 +85,11 @@ class BottombarState extends State<Bottombar> {
             backgroundColor: appBgColor,
             selectedLabelStyle: GoogleFonts.montserrat(
               fontSize: 10,
-              fontStyle: FontStyle.normal,
               fontWeight: FontWeight.w500,
               color: colorPrimary,
             ),
             unselectedLabelStyle: GoogleFonts.montserrat(
               fontSize: 10,
-              fontStyle: FontStyle.normal,
               fontWeight: FontWeight.w400,
               color: colorPrimary,
             ),
@@ -118,46 +101,28 @@ class BottombarState extends State<Bottombar> {
             selectedItemColor: colorPrimary,
             type: BottomNavigationBarType.fixed,
             items: [
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView1,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_home', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(iconName: 'ic_home', iconColor: gray),
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView2,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_find', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(iconName: 'ic_find', iconColor: gray),
-              ),
-               BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView6,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_plus', iconColor: colorPrimary),
-                icon: _buildBottomNavIcon(iconName: 'ic_plus', iconColor: gray),
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: black,
-                label: bottomView5,
-                activeIcon: _buildBottomNavIcon(
-                    iconName: 'ic_stuff', iconColor: colorPrimary),
-                icon:
-                    _buildBottomNavIcon(iconName: 'ic_stuff', iconColor: gray),
-              ),
+              _buildBarItem('ic_home', bottomView1),
+              _buildBarItem('ic_find', bottomView2),
+              _buildBarItem('ic_plus', bottomView6),
+              _buildBarItem('ic_stuff', bottomView5),
             ],
             onTap: _onItemTapped,
           ),
-        )
-   
+        ),
       ),
     );
   }
 
-  Widget _buildBottomNavIcon(
-      {required String iconName, required Color? iconColor}) {
+  BottomNavigationBarItem _buildBarItem(String icon, String label) {
+    return BottomNavigationBarItem(
+      backgroundColor: black,
+      label: label,
+      activeIcon: _buildBottomNavIcon(iconName: icon, iconColor: colorPrimary),
+      icon: _buildBottomNavIcon(iconName: icon, iconColor: gray),
+    );
+  }
+
+  Widget _buildBottomNavIcon({required String iconName, required Color? iconColor}) {
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -178,15 +143,14 @@ class BottombarState extends State<Bottombar> {
       if (currentBackPressTime == null ||
           now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
         currentBackPressTime = now;
-        // Show bottom sheet instead of snackbar
         return await _showExitBottomSheet();
       } else {
         SystemNavigator.pop();
-        return true; // Allow the back operation
+        return true;
       }
     } else {
       _onItemTapped(0);
-      return false; // Do not allow the back operation
+      return false;
     }
   }
 
@@ -195,61 +159,45 @@ class BottombarState extends State<Bottombar> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          decoration: BoxDecoration(
-            color: Colors.black, // Set background color.xml to black
-            // borderRadius: BorderRadius.circular(15),
-          ),
-          padding: EdgeInsets.all(16.0),
+          color: Colors.black,
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 15),
-              Text(
-                'Are you sure you want to exit ?',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white), // Set text color to white
+              const SizedBox(height: 15),
+              const Text(
+                'Are you sure you want to exit?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context,
-                      false); // Close bottom sheet and indicate not to exit app
-                },
+                onPressed: () => Navigator.pop(context, false),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: colorPrimary, // Set text color to white
-                  minimumSize: Size(
-                      double.infinity, 50), // Set button width to full width
+                  backgroundColor: colorPrimary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
                 ),
-                child: Text(
-                  'No',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: const Text('No', style: TextStyle(fontSize: 18)),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context,
-                      true); // Close bottom sheet and indicate to exit app
-                },
+                onPressed: () => Navigator.pop(context, true),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.transparent, // Set text color to white
-                  side: BorderSide(
-                      color: Colors.white), // Set border color to white
-                  minimumSize: Size(
-                      double.infinity, 50), // Set button width to full width
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  side: const BorderSide(color: Colors.white),
+                  minimumSize: const Size(double.infinity, 50),
                 ),
-                child: Text('Yes', style: TextStyle(fontSize: 18)),
+                child: const Text('Yes', style: TextStyle(fontSize: 18)),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         );
       },
     );
 
-    return result ?? false; // Return false if result is null
+    return result ?? false;
   }
 }
+

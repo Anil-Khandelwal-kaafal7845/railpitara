@@ -153,7 +153,7 @@ class HomeState extends State<Home> with RouteAware {
       setState(() {});
     });
   }
-
+  bool hasFetchedData = false;
   @override
   void initState() {
     print("-----${Constant.userID}");
@@ -165,8 +165,7 @@ class HomeState extends State<Home> with RouteAware {
 
     fetchForceUpdateData();
 
-    sectionDataProvider =
-        Provider.of<SectionDataProvider>(context, listen: false);
+    sectionDataProvider = Provider.of<SectionDataProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     findProvider = Provider.of<FindProvider>(context, listen: false);
     observerController =
@@ -174,21 +173,13 @@ class HomeState extends State<Home> with RouteAware {
     currentPage = widget.pageName ?? "";
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getData();
+      if (!hasFetchedData) {
+        _getData();
+        hasFetchedData = true;
+      }
     });
     if (!kIsWeb) {
-      // final timestamp = DateTime.now().toIso8601String();
-      //
-      // final properties = MoEProperties()
-      //   ..addAttribute('user_id', userMobileNo)
-      // // ..addAttribute('notification_type', notification_type)
-      //   ..addAttribute('timestamp', timestamp);
-      //
-      // MoEngageService.instance.trackEvent('Notification_Received', properties);
-      //
-      // print(
-      //     "MoEngage event tracked with Constant userID: ${Constant.userID.toString()}");
-      // print("MoEngage event tracked with and timestamp: $timestamp");
+
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
     trackMoEngageEventOnce();
@@ -3242,7 +3233,8 @@ class HomeState extends State<Home> with RouteAware {
                                   .toString(), // Pass the section ID
                             );
                           },
-                        ));
+                        )
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(

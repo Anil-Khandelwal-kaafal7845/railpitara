@@ -16,6 +16,7 @@ class WatchlistProvider extends ChangeNotifier {
   Future<void> getWatchlist() async {
     debugPrint("getWatchlist userID :==> ${Constant.userID}");
     loading = true;
+    notifyListeners();
     watchlistModel = await ApiService().watchlist();
     debugPrint("get_bookmark_video status :==> ${watchlistModel.status}");
     debugPrint("get_bookmark_video message :==> ${watchlistModel.message}");

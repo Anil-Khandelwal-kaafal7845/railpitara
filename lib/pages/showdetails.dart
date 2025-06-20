@@ -46,6 +46,7 @@ import 'package:singular_flutter_sdk/singular.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+import '../provider/watchlistprovider.dart';
 import '../utils/moenage_service.dart';
 
 class ShowDetails extends StatefulWidget {
@@ -65,7 +66,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   /* Trailer init */
   VideoPlayerController? _trailerNormalController;
   YoutubePlayerController? _trailerYoutubeController;
-
+  bool _dataLoaded = false;
   /* Download init */
   // late bool _permissionReady;
   late ShowDownloadProvider downloadProvider;
@@ -95,7 +96,10 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     debugPrint("initState videoId ==> ${widget.videoId}");
     debugPrint("initState videoType ==> ${widget.videoType}");
     debugPrint("initState typeId ==> ${widget.typeId}");
-    _getData();
+    if (!_dataLoaded) {
+      _getData();
+      _dataLoaded = true;
+    }
     trackMoEngageEventOnce();
   }
   bool _eventTracked = false;
@@ -192,9 +196,14 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   }
 
   Future<void> _getData() async {
+    if (showDetailsProvider.sectionDetailModel.result != null) {
+      debugPrint("Data already loaded, skipping API call.");
+      return;
+    }
     Utils.getCurrencySymbol();
     await showDetailsProvider.getSectionDetails(
         widget.typeId, widget.videoType, widget.videoId, widget.upcomingType);
+
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.result != null) {
         episodeProvider = Provider.of<EpisodeProvider>(context, listen: false);
@@ -759,6 +768,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   MoEngageService.instance
                                       .trackEvent('bookmark_added', properties);
                                 }
+                                final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
 
                                 print(
                                     "MoEngage event tracked with and timestamp: $timestamp");
@@ -766,7 +776,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                                   context,
                                   widget.typeId,
                                   widget.videoType,
-                                  widget.videoId,
+                                  widget.videoId,watchlistProvider
                                 );
                               } else {
                                 if ((kIsWeb || Constant.isTV)) {
@@ -1524,6 +1534,8 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                       constraints: const BoxConstraints(minWidth: 50),
                       child: InkWell(
                         onTap: () async {
+                          final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+
                           debugPrint(
                               "isBookmark ====> ${showDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                           if (Constant.userID != null) {
@@ -1531,7 +1543,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
                               context,
                               widget.typeId,
                               widget.videoType,
-                              widget.videoId,
+                              widget.videoId,watchlistProvider
                             );
                           } else {
                             if ((kIsWeb || Constant.isTV)) {

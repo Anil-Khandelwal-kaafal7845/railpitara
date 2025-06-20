@@ -34,6 +34,7 @@ import 'package:dtlive/utils/adhelper.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
 import 'package:dtlive/utils/moenage_service.dart';
+import 'package:dtlive/utils/startup_page.dart';
 import 'package:dtlive/utils/utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -266,11 +267,12 @@ class _MyAppState extends State<MyApp> {
                     ],
                   );
                 },
-                home: (kIsWeb)
-                    ? const TVHome(pageName: "")
-                    : Splash(
-                  isDynamicLink: false,
-                ),
+                home: const StartUpPage(),
+
+                // home: (kIsWeb)
+                //     ? const TVHome(pageName: "")
+                //     : Splash(isDynamicLink: false,
+                // ),
                 scrollBehavior: const MaterialScrollBehavior().copyWith(
                   dragDevices: {
                     PointerDeviceKind.mouse,
