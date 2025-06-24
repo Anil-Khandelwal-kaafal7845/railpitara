@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:advertising_id/advertising_id.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
@@ -428,18 +429,18 @@ class _MyAppState extends State<MyApp> {
       }
 
       // For Android
-      // if (defaultTargetPlatform == TargetPlatform.android) {
-      //   final advertisingId =
-      //   await AdvertisingId.id(false); // Pass false to not limit tracking
-      //   if (advertisingId != null) {
-      //     debugPrint("Google Advertising ID (GAID): $advertisingId");
-      //
-      //     // Pass GAID to Singular SDK
-      //     Singular.setCustomUserId(advertisingId);
-      //   } else {
-      //     debugPrint("Failed to retrieve Google Advertising ID (GAID)");
-      //   }
-      // }
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final advertisingId =
+        await AdvertisingId.id(false); // Pass false to not limit tracking
+        if (advertisingId != null) {
+          debugPrint("Google Advertising ID (GAID): $advertisingId");
+      
+          // Pass GAID to Singular SDK
+          Singular.setCustomUserId(advertisingId);
+        } else {
+          debugPrint("Failed to retrieve Google Advertising ID (GAID)");
+        }
+      }
 
       // For iOS
       else if (defaultTargetPlatform == TargetPlatform.iOS) {

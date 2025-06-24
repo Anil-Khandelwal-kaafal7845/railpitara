@@ -11,7 +11,7 @@ class Constant {
   static String appName = "Chull";
   static String appPackageName = "com.ott.chulbull";
   static String appleAppId = "";
-  static double curentAppVersion = 5;
+  static double curentAppVersion = 6;
   static dynamic curentiosAppVersion = 1;
 
   /* OneSignal App ID */
