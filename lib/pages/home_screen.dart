@@ -218,7 +218,7 @@ class HomeState extends State<Home> with RouteAware {
         forceUpdateData = value;
         updateLoading = false;
       });
-      checkForUpdate(context);
+      checkForUpdate();
     });
   }
 
@@ -229,27 +229,79 @@ class HomeState extends State<Home> with RouteAware {
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
-  Future<void> checkForUpdate(BuildContext context) async {
+  // Future<void> checkForUpdate(BuildContext context) async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  //   final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
+
+  //   if (needsUpdate) {
+  //     showDialog(
+  //       barrierDismissible: !isForceUpdate, // Disable dismiss if force update
+  //       context: context,
+  //       builder: (context) {
+  //         return WillPopScope(
+  //           onWillPop: () async => false, // Prevent dialog dismissal on back
+  //           child: AlertDialog(
+  //             contentPadding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+  //             surfaceTintColor: Theme.of(context).colorScheme.background,
+  //             title: const Text("New Update Available!!"),
+  //             content: const Text("A new app update is available"),
+  //             actions: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                 children: [
+  //                   Visibility(
+  //                     visible:
+  //                         !isForceUpdate, // Show Cancel button if not forced
+  //                     child: TextButton(
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: const Text("Cancel"),
+  //                     ),
+  //                   ),
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       if (Platform.isAndroid || Platform.isIOS) {
+  //                         final url = Uri.parse(
+  //                           Platform.isAndroid
+  //                           ?"${Constant.androidAppUrl}"
+  //                               : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
+  //                         );
+  //                         launchUrl(
+  //                           url,
+  //                           mode: LaunchMode.externalApplication,
+  //                         );
+  //                       }
+  //                     },
+  //                     child: const Text("UPDATE"),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+   
+  //   }
+  // }
+
+
+
+  checkForUpdate() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    // Get current app version from API response
-    final int apiAppVersion = forceUpdateData!.result!.appVersion!; // Android
-    final int iosAppVersion = forceUpdateData!.result!.iosappVersion!; // iOS
-    final bool isForceUpdate = forceUpdateData!.result!.forceUpdate == 1;
 
-    // Get the current build number based on platform
-    num currentVersion = Platform.isAndroid
-        ? int.parse(packageInfo.buildNumber) // Android
-        : Constant.curentiosAppVersion; // iOS
-
-    // Determine if an update is needed based on platform
-    bool needsUpdate = Platform.isAndroid
-        ? apiAppVersion > currentVersion // Android
-        : iosAppVersion > currentVersion; // iOS
-
-    if (needsUpdate) {
+    if ((Platform.isAndroid
+            ? forceUpdateData!.result!.appVersion!
+            : forceUpdateData!.result!.appVersionIos!) >
+        num.parse(packageInfo.buildNumber)) {
+    
+    
       showDialog(
-        barrierDismissible: !isForceUpdate, // Disable dismiss if force update
+        barrierDismissible:
+            forceUpdateData!.result!.forceUpdateAndroid == 0 ? false : true,
         context: context,
         builder: (context) {
           return WillPopScope(
@@ -264,8 +316,7 @@ class HomeState extends State<Home> with RouteAware {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Visibility(
-                      visible:
-                          !isForceUpdate, // Show Cancel button if not forced
+                       visible: forceUpdateData!.result!.forceUpdateAndroid == 0,// Show Cancel button if not forced
                       child: TextButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -296,8 +347,13 @@ class HomeState extends State<Home> with RouteAware {
           );
         },
       );
+   
+    
     }
   }
+
+
+
 
   // checkForUpdate() async {
   //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
