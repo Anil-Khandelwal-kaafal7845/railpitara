@@ -5245,7 +5245,7 @@ class HomeState extends State<Home> with RouteAware {
       videoUrl: continueWatchingList?[index].video320 ?? "",
       trailerUrl: continueWatchingList?[index].trailerUrl ?? "",
       uploadType: continueWatchingList?[index].videoUploadType ?? "",
-      videoThumb: continueWatchingList?[index].landscape ?? "",
+      videoThumb: continueWatchingList?[index].name ?? "",
       vStopTime: continueWatchingList?[index].stopTime ?? 0,
     );
     debugPrint("isContinue ===> $isContinue");

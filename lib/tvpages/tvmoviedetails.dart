@@ -2827,7 +2827,7 @@ class TVMovieDetailsState extends State<TVMovieDetails> {
     }
 
     String? videoThumb =
-        (videoDetailsProvider.sectionDetailModel.result?.landscape ?? "");
+        (videoDetailsProvider.sectionDetailModel.result?.name ?? "");
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {

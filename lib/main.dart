@@ -109,14 +109,14 @@ Future<void> main() async {
 
   debugPrint("Singular SDK Initialized successfully");
 
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    // Optionally forward to Crashlytics or other service
+  // FlutterError.onError = (FlutterErrorDetails details) {
+  //   FlutterError.presentError(details);
+  //   // Optionally forward to Crashlytics or other service
 
-    MoEProperties properties = MoEProperties();
-    properties.addAttribute("App_Crash", details);
-    MoEngageService.instance.trackEvent('App_Crash', properties);
-  };
+  //   MoEProperties properties = MoEProperties();
+  //   properties.addAttribute("App_Crash", details);
+  //   MoEngageService.instance.trackEvent('App_Crash', properties);
+  // };
 // Initialize Singular done ---
 
   // if (!kIsWeb) {

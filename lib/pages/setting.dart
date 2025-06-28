@@ -74,7 +74,7 @@ class SettingState extends State<Setting> {
     // Optional delay
     Future.delayed(Duration(seconds: 2), () {
       MoEngageService.instance.trackEvent('screen_view', properties);
-      moEngagePlugin();
+      // moEngagePlugin();
     });
   }
 
@@ -129,15 +129,7 @@ class SettingState extends State<Setting> {
       // moEngagePlugin();
     });
   }
-  Future<void> moEngagePlugin() async {
-    final timestamp = DateTime.now().toIso8601String();
-    MoEngageService.instance.setUserName(userName.toString() ?? " ");
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('timestamp', timestamp);
 
-    MoEngageService.instance.trackEvent('Profile_Updated', properties);
-  }
   @override
   Widget build(BuildContext context) {
     analytics.logEvent(
@@ -184,7 +176,7 @@ class SettingState extends State<Setting> {
                     setState(() {});
                   },
                   onLogoutPressed: () {
-                    // MoEngageService.instance.logout();
+                    MoEngageService.instance.logout();
                     // // Get device ID
                     //
                     // final timestamp = DateTime.now().toIso8601String();
@@ -1852,6 +1844,8 @@ Widget profileCardWidget({
                               'screen_name': 'LogOut',
                               'user_id': Constant.userID.toString(),
                             };
+                             MoEngageService.instance.logout();
+
                             Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
@@ -1977,20 +1971,8 @@ Widget profileCardWidget({
                               'user_id': Constant.userID.toString(),
                             };
                             Singular.eventWithArgs('LogOut', screenViewEvent);
-                            // MoEngageService.instance.logout();
-                            final timestamp = DateTime.now().toIso8601String();
-
-                            final properties = MoEProperties()
-                              ..addAttribute('user_id', Constant.userID.toString())
-
-                              ..addAttribute('timestamp', timestamp);
-
-                            MoEngageService.instance.trackEvent('Logout', properties);
-
-                            print("userName check ${userName.toString()}");
-                            print(
-                                "MoEngage event tracked with device ID: and timestamp: $timestamp");
-
+                            MoEngageService.instance.logout();
+                            
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
@@ -2021,6 +2003,8 @@ Widget profileCardWidget({
       setState(() {});
     });
   }
+
+
 
   Widget _buildDialogBtn({
     required String title,
@@ -2054,4 +2038,6 @@ Widget profileCardWidget({
       ),
     );
   }
+
+
 }

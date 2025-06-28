@@ -595,13 +595,10 @@ class OTPVerifyState extends State<OTPVerify> {
         MoEngageService.instance.identifyUser(Constant.userID.toString());
 
 
-
-
-
         final properties = MoEProperties()
           ..addAttribute('user_id', Constant.userID.toString())
-          // ..addAttribute('user_phone ', widget.mobileNumber.toString())
-          // ..addAttribute('user_email', widget.email.toString())
+          ..addAttribute('user_phone ', widget.mobileNumber.toString())
+          ..addAttribute('user_email', widget.email.toString())
           ..addAttribute('deviceId', deviceId)
           ..addAttribute('timestamp', timestamp);
 

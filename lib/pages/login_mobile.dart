@@ -426,33 +426,33 @@ class LoginViaSocialState extends State<LoginViaSocial> {
                                             InkWell(
                                               onTap: () async {
 
-                                                MoEngageService.instance.setUserName(mobileNumber.toString());
+                                                // MoEngageService.instance.setUserName(mobileNumber.toString());
                                                 // Get device ID
-                                                final deviceInfoPlugin = DeviceInfoPlugin();
-                                                String deviceId;
+                                                // final deviceInfoPlugin = DeviceInfoPlugin();
+                                                // String deviceId;
 
-                                                if (Platform.isAndroid) {
-                                                  final androidInfo = await deviceInfoPlugin.androidInfo;
-                                                  deviceId = androidInfo.id ?? 'unknown';
-                                                } else if (Platform.isIOS) {
-                                                  final iosInfo = await deviceInfoPlugin.iosInfo;
-                                                  deviceId = iosInfo.identifierForVendor ?? 'unknown';
-                                                } else {
-                                                  deviceId = 'unsupported_platform';
-                                                }
+                                                // if (Platform.isAndroid) {
+                                                //   final androidInfo = await deviceInfoPlugin.androidInfo;
+                                                //   deviceId = androidInfo.id ?? 'unknown';
+                                                // } else if (Platform.isIOS) {
+                                                //   final iosInfo = await deviceInfoPlugin.iosInfo;
+                                                //   deviceId = iosInfo.identifierForVendor ?? 'unknown';
+                                                // } else {
+                                                //   deviceId = 'unsupported_platform';
+                                                // }
 
-                                                MoEngageService.instance.identifyUser(mobileNumber.toString());
-                                                final timestamp = DateTime.now().toIso8601String();
+                                                // MoEngageService.instance.identifyUser(mobileNumber.toString());
+                                                // final timestamp = DateTime.now().toIso8601String();
 
-                                                final properties = MoEProperties()
-                                                  ..addAttribute('user_id ', mobileNumber.toString())
-                                                  ..addAttribute('signup_method ', 'mobileNumber')
-                                                  ..addAttribute('device_id', deviceId)
-                                                  ..addAttribute('timestamp', timestamp);
+                                                // final properties = MoEProperties()
+                                                //   ..addAttribute('user_id ', mobileNumber.toString())
+                                                //   ..addAttribute('signup_method ', 'mobileNumber')
+                                                //   ..addAttribute('device_id', deviceId)
+                                                //   ..addAttribute('timestamp', timestamp);
 
-                                                MoEngageService.instance.trackEvent('User_Registration', properties);
+                                                // MoEngageService.instance.trackEvent('User_Registration', properties);
 
-                                                print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
+                                                // print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
 
                                                 debugPrint(
                                                     "Click mobileNumber ==> $mobileNumber");

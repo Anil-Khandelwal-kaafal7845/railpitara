@@ -3835,7 +3835,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
             0);
       }
       String? videoThumb = (episodeProvider.episodeBySeasonModel
-              .result?[showDetailsProvider.mCurrentEpiPos].landscape ??
+              .result?[showDetailsProvider.mCurrentEpiPos].name ??
           "");
       debugPrint("epiID ========> $epiID");
       debugPrint("vType ========> $vType");
@@ -3929,7 +3929,7 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
       if (playType == "Trailer") {
         int? stopTime = 0;
         String? videoThumb =
-            (showDetailsProvider.sectionDetailModel.result?.landscape ?? "");
+            (showDetailsProvider.sectionDetailModel.result?.name ?? "");
         debugPrint("stopTime =====> $stopTime");
         debugPrint("videoThumb ===> $videoThumb");
         Utils.clearQualitySubtitle();

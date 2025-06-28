@@ -1984,7 +1984,7 @@ class TVHomeState extends State<TVHome> {
       videoUrl: continueWatchingList?[index].video1080 ?? "",
       trailerUrl: continueWatchingList?[index].trailerUrl ?? "",
       uploadType: continueWatchingList?[index].videoUploadType ?? "",
-      videoThumb: continueWatchingList?[index].landscape ?? "",
+      videoThumb: continueWatchingList?[index].name ?? "",
       vStopTime: continueWatchingList?[index].stopTime ?? 0,
     );
     if (isContinues != null && isContinues == true) {
