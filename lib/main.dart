@@ -267,12 +267,12 @@ class _MyAppState extends State<MyApp> {
                     ],
                   );
                 },
-                home: const StartUpPage(),
+                // home: const StartUpPage(),
 
-                // home: (kIsWeb)
-                //     ? const TVHome(pageName: "")
-                //     : Splash(isDynamicLink: false,
-                // ),
+                home: (kIsWeb)
+                    ? const TVHome(pageName: "")
+                    : Splash(isDynamicLink: false,
+                ),
                 scrollBehavior: const MaterialScrollBehavior().copyWith(
                   dragDevices: {
                     PointerDeviceKind.mouse,

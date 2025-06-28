@@ -7,6 +7,7 @@ import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/widget/mynetworkimg.dart';
 import 'package:dtlive/provider/sectiondataprovider.dart';
 import 'package:singular_flutter_sdk/singular.dart';
+import '../model/viewallmodel.dart';
 import '../utils/constant.dart';
 import '../utils/moenage_service.dart';
 
@@ -21,13 +22,27 @@ class MoreScreen extends StatefulWidget {
 }
 
 class MoreScreenState extends State<MoreScreen> {
+  late ScrollController _scrollController;
+  bool _eventTracked = false;
+
   @override
   void initState() {
     super.initState();
-    Provider.of<SectionDataProvider>(context, listen: false).getViewAll(widget.sectionId);
+    _scrollController = ScrollController()..addListener(_onScroll);
+    Provider.of<SectionDataProvider>(context, listen: false)
+        .getViewallpagination(widget.sectionId);
+
     trackMoEngageEventOnce();
   }
-  bool _eventTracked = false;
+
+  void _onScroll() {
+    final provider = Provider.of<SectionDataProvider>(context, listen: false);
+    if (!provider.isFetchingviewall &&
+        provider.hasMoreDataviewall &&
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      provider.getViewallpagination(widget.sectionId, loadMore: true);
+    }
+  }
 
   void trackMoEngageEventOnce() {
     if (_eventTracked) return;
@@ -37,12 +52,15 @@ class MoreScreenState extends State<MoreScreen> {
       ..addAttribute('screen_name', 'More Section Screen')
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-
-
-    Future.delayed(Duration(seconds: 2), () {
-
+    Future.delayed(const Duration(seconds: 2), () {
       MoEngageService.instance.trackEvent('screen_view', properties);
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,66 +72,83 @@ class MoreScreenState extends State<MoreScreen> {
         "user_id": Constant.userID,
       },
     );
-    Map<String, Object> screenViewEvent = {
+    Singular.eventWithArgs('screen_view', {
       'screen_name': 'More Section Screen',
       'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
+    });
 
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),
       body: SafeArea(
         child: Consumer<SectionDataProvider>(
-          builder: (context, sectionDataProvider, child) {
-            if (sectionDataProvider.loadingViewAll) {
+          builder: (context, provider, child) {
+            if (provider.loadingViewAll) {
               return const Center(
                 child: CircularProgressIndicator(color: primaryLight),
               );
             }
 
-            final sectionDataList = sectionDataProvider.sectionDataList;
+            final List<VideoData> videoList = provider.sectionDataListviewall
+                .expand<VideoData>((result) => result.data ?? [])
+                .toList();
 
-            return GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 3 columns
-                childAspectRatio: 0.7, // Portrait aspect ratio
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: sectionDataList.length,
-              itemBuilder: (context, index) {
-                final videoData = sectionDataList[index];
-                return InkWell(
-                  borderRadius: BorderRadius.circular(10),
-                  onTap: () {
-                    openDetailPage(
-                      (videoData.videoType ?? 0) == 2 ? "showdetail" : "videodetail",
-                      videoData.id ?? 0,
-                      0,
-                      videoData.videoType ?? 0,
-                      videoData.typeId ?? 0,
+            return Stack(
+              children: [
+                GridView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: videoList.length,
+                  itemBuilder: (context, index) {
+                    final videoData = videoList[index];
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        openDetailPage(
+                          (videoData.videoType ?? 0) == 2 ? "showdetail" : "videodetail",
+                          videoData.id ?? 0,
+                          0,
+                          videoData.videoType ?? 0,
+                          videoData.typeId ?? 0,
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: MyNetworkImage(
+                              imageUrl: videoData.thumbnail1.toString(),
+                              fit: BoxFit.cover,
+                              imgHeight: double.infinity,
+                              imgWidth: double.infinity,
+                            ),
+                          ),
+                          _buildGradientOverlay(),
+                          if (videoData.isPremium == 1) _buildTag('assets/images/crown.png'),
+                          // if (videoData.isLiveUrl == 1) _buildLiveIndicator(),
+                        ],
+                      ),
                     );
                   },
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: MyNetworkImage(
-                          imageUrl: videoData.thumbnail1.toString(),
-                          fit: BoxFit.cover,
-                          imgHeight: double.infinity,
-                          imgWidth: double.infinity,
-                        ),
-                      ),
-                      _buildGradientOverlay(),
-                      if (videoData.isPremium == 1) _buildTag('assets/images/crown.png'),
-                      // if (videoData.isLiveUrl == 1) _buildLiveIndicator(),
-                    ],
+                ),
+
+                /// Bottom loader as overlay
+                if (provider.isFetchingviewall)
+                  const Positioned(
+                    bottom: 16,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator(color: primaryLight),
+                    ),
                   ),
-                );
-              },
+              ],
             );
           },
         ),
@@ -133,9 +168,7 @@ class MoreScreenState extends State<MoreScreen> {
     );
   }
 
- 
-
-    Widget _buildTag(String assetPath) {
+  Widget _buildTag(String assetPath) {
     return Positioned(
       top: 8,
       left: 8,
@@ -188,7 +221,6 @@ class MoreScreenState extends State<MoreScreen> {
   }
 
   void openDetailPage(String pageName, int videoId, int upcomingType, int videoType, int typeId) {
-    debugPrint("pageName =======> $pageName");
     Utils.openDetails(
       context: context,
       videoId: videoId,

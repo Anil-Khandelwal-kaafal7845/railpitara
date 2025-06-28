@@ -1,3 +1,146 @@
+import 'package:flutter/cupertino.dart';
+class ViewAllModelClass {
+  int? status;
+  String? message;
+  List<Result>? result;
+  int? currentPage;
+  String? nextPageUrl;
+  int? total;
+
+  ViewAllModelClass(
+      {this.status,
+        this.message,
+        this.result,
+        this.currentPage,
+        this.nextPageUrl,
+        this.total});
+
+  ViewAllModelClass.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['result'] != null) {
+      result = <Result>[];
+      json['result'].forEach((v) {
+        result!.add(new Result.fromJson(v));
+      });
+    }
+    currentPage = json['current_page'];
+    nextPageUrl = json['next_page_url'];
+    total = json['total'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.result != null) {
+      data['result'] = this.result!.map((v) => v.toJson()).toList();
+    }
+    data['current_page'] = this.currentPage;
+    data['next_page_url'] = this.nextPageUrl;
+    data['total'] = this.total;
+    return data;
+  }
+}
+
+class Result {
+  int? id;
+  int? isHomeScreen;
+  int? typeId;
+  int? videoType;
+  int? upcomingType;
+  String? title;
+  String? videoId;
+  String? screenLayout;
+  int? status;
+  int? sectionOrder;
+  int? bannerId;
+  int? isTop10;
+  Null? ipAddress;
+  String? createdAt;
+  String? updatedAt;
+  String? metaTag;
+  String? metaDescription;
+  String? nameVisible;
+  List<VideoData>? data;
+
+  Result(
+      {this.id,
+        this.isHomeScreen,
+        this.typeId,
+        this.videoType,
+        this.upcomingType,
+        this.title,
+        this.videoId,
+        this.screenLayout,
+        this.status,
+        this.sectionOrder,
+        this.bannerId,
+        this.isTop10,
+        this.ipAddress,
+        this.createdAt,
+        this.updatedAt,
+        this.metaTag,
+        this.metaDescription,
+        this.nameVisible,
+        this.data});
+
+  Result.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    isHomeScreen = json['is_home_screen'];
+    typeId = json['type_id'];
+    videoType = json['video_type'];
+    upcomingType = json['upcoming_type'];
+    title = json['title'];
+    videoId = json['video_id'];
+    screenLayout = json['screen_layout'];
+    status = json['status'];
+    sectionOrder = json['section_order'];
+    bannerId = json['banner_id'];
+    isTop10 = json['is_top_10'];
+    ipAddress = json['ip_address'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    metaTag = json['meta_tag'];
+    metaDescription = json['meta_description'];
+    nameVisible = json['name_visible'];
+    if (json['data'] != null) {
+      data = <VideoData>[];
+      json['data'].forEach((v) {
+        data!.add(new VideoData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['is_home_screen'] = this.isHomeScreen;
+    data['type_id'] = this.typeId;
+    data['video_type'] = this.videoType;
+    data['upcoming_type'] = this.upcomingType;
+    data['title'] = this.title;
+    data['video_id'] = this.videoId;
+    data['screen_layout'] = this.screenLayout;
+    data['status'] = this.status;
+    data['section_order'] = this.sectionOrder;
+    data['banner_id'] = this.bannerId;
+    data['is_top_10'] = this.isTop10;
+    data['ip_address'] = this.ipAddress;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['meta_tag'] = this.metaTag;
+    data['meta_description'] = this.metaDescription;
+    data['name_visible'] = this.nameVisible;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+
+
 class VideoData {
   final dynamic id;
   final dynamic channelId;
@@ -136,4 +279,52 @@ class VideoData {
       upcomingType: json['upcoming_type'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'channel_id': channelId,
+      'category_id': categoryId,
+      'language_id': languageId,
+      'cast_id': castId,
+      'type_id': typeId,
+      'video_type': videoType,
+      'name': name,
+      'thumbnail': thumbnail,
+      'landscape': landscape,
+      'full_width': fullWidth,
+      'thumbnail_1': thumbnail1,
+      'landscape_1': landscape1,
+      'trailer_type': trailerType,
+      'trailer_url': trailerUrl,
+      'description': description,
+      'is_premium': isPremium,
+      'is_title': isTitle,
+      'release_date': releaseDate,
+      'view': view,
+      'imdb_rating': imdbRating,
+      'status': status,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'director_id': directorId,
+      'starring_id': starringId,
+      'supporting_cast_id': supportingCastId,
+      'networks': networks,
+      'maturity_rating': maturityRating,
+      'studios': studios,
+      'content_advisory': contentAdvisory,
+      'viewing_rights': viewingRights,
+      'name_visible': nameVisible,
+      'stop_time': stopTime,
+      'is_downloaded': isDownloaded,
+      'is_bookmark': isBookmark,
+      'rent_buy': rentBuy,
+      'is_rent': isRent,
+      'rent_price': rentPrice,
+      'is_buy': isBuy,
+      'category_name': categoryName,
+      'session_id': sessionId,
+      'upcoming_type': upcomingType,
+    };
+  }
+
 }

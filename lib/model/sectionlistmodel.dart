@@ -15,12 +15,18 @@ class SectionListModel {
     this.message,
     this.result,
     this.continueWatching,
+    this.currentPage,
+    this.nextPageUrl,
+    this.total,
   });
 
   int? status;
   String? message;
   List<Result>? result;
   List<ContinueWatching>? continueWatching;
+  int? currentPage;
+  String? nextPageUrl;
+  int? total;
 
   factory SectionListModel.fromJson(Map<String, dynamic> json) =>
       SectionListModel(
@@ -31,6 +37,9 @@ class SectionListModel {
         continueWatching: List<ContinueWatching>.from(json["continue_watching"]
                 ?.map((x) => ContinueWatching.fromJson(x)) ??
             []),
+        currentPage: json["current_page"],
+        nextPageUrl: json["next_page_url"],
+        total: json["total"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +51,9 @@ class SectionListModel {
         "continue_watching": continueWatching != null
             ? List<dynamic>.from(continueWatching?.map((x) => x.toJson()) ?? [])
             : [],
+    "current_page": currentPage,
+    "next_page_url": nextPageUrl,
+    "total": total,
       };
 }
 

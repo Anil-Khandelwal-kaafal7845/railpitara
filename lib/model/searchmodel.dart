@@ -1,53 +1,61 @@
-// To parse this JSON data, do
-// final searchModel = searchModelFromJson(jsonString);
-
-import 'dart:convert';
-
-SearchModel searchModelFromJson(String str) =>
-    SearchModel.fromJson(json.decode(str));
-
-String searchModelToJson(SearchModel data) => json.encode(data.toJson());
-
 class SearchModel {
-  SearchModel({
-    this.status,
-    this.message,
-    this.result,
-    this.video,
-    this.tvshow,
-  });
-
   int? status;
   String? message;
   List<dynamic>? result;
   List<Video>? video;
   List<Tvshow>? tvshow;
+  int? currentPage;
+  String? nextPageUrl;
 
-  factory SearchModel.fromJson(Map<String, dynamic> json) => SearchModel(
-        status: json["status"],
-        message: json["message"],
-        result: json["result"],
-        video: json["video"] == null
-            ? []
-            : List<Video>.from(
-                json["video"]?.map((x) => Video.fromJson(x)) ?? []),
-        tvshow: json["tvshow"] == null
-            ? []
-            : List<Tvshow>.from(
-                json["tvshow"]?.map((x) => Tvshow.fromJson(x)) ?? []),
-      );
+  SearchModel(
+      {this.status,
+        this.message,
+        this.result,
+        this.video,
+        this.tvshow,
+        this.currentPage,
+        this.nextPageUrl});
 
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "result": result,
-        "video": video == null
-            ? []
-            : List<dynamic>.from(video?.map((x) => x.toJson()) ?? []),
-        "tvshow": tvshow == null
-            ? []
-            : List<dynamic>.from(tvshow?.map((x) => x.toJson()) ?? []),
-      };
+  SearchModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['result'] != null) {
+      result = List<Map<String, dynamic>>.from(json['result']);
+    }
+
+    if (json['video'] != null) {
+      video = <Video>[];
+      json['video'].forEach((v) {
+        video!.add(new Video.fromJson(v));
+      });
+    }
+    if (json['tvshow'] != null) {
+      tvshow = <Tvshow>[];
+      json['tvshow'].forEach((v) {
+        tvshow!.add(new Tvshow.fromJson(v));
+      });
+    }
+    currentPage = json['current_page'];
+    nextPageUrl = json['next_page_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.result != null) {
+      data['result'] = this.result!.map((v) => v.toJson()).toList();
+    }
+    if (this.video != null) {
+      data['video'] = this.video!.map((v) => v.toJson()).toList();
+    }
+    if (this.tvshow != null) {
+      data['tvshow'] = this.tvshow!.map((v) => v.toJson()).toList();
+    }
+    data['current_page'] = this.currentPage;
+    data['next_page_url'] = this.nextPageUrl;
+    return data;
+  }
 }
 
 class Tvshow {
@@ -134,88 +142,88 @@ class Tvshow {
   });
 
   factory Tvshow.fromJson(Map<String, dynamic> json) => Tvshow(
-        id: json["id"],
-        channelId: json["channel_id"],
-        categoryId: json["category_id"],
-        languageId: json["language_id"],
-        castId: json["cast_id"],
-        typeId: json["type_id"],
-        videoType: json["video_type"],
-        name: json["name"],
-        thumbnail: json["thumbnail"],
-        landscape: json["landscape"],
-        trailerType: json["trailer_type"],
-        trailerUrl: json["trailer_url"],
-        description: json["description"],
-        isPremium: json["is_premium"],
-        isTitle: json["is_title"],
-        releaseDate: json["release_date"],
-        view: json["view"],
-        imdbRating: json["imdb_rating"],
-        status: json["status"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-        directorId: json["director_id"],
-        starringId: json["starring_id"],
-        supportingCastId: json["supporting_cast_id"],
-        networks: json["networks"],
-        maturityRating: json["maturity_rating"],
-        studios: json["studios"],
-        contentAdvisory: json["content_advisory"],
-        viewingRights: json["viewing_rights"],
-        stopTime: json["stop_time"],
-        isDownloaded: json["is_downloaded"],
-        isBookmark: json["is_bookmark"],
-        rentBuy: json["rent_buy"],
-        isRent: json["is_rent"],
-        rentPrice: json["rent_price"],
-        isBuy: json["is_buy"],
-        categoryName: json["category_name"],
-        sessionId: json["session_id"],
-        upcomingType: json["upcoming_type"],
-      );
+    id: json["id"],
+    channelId: json["channel_id"],
+    categoryId: json["category_id"],
+    languageId: json["language_id"],
+    castId: json["cast_id"],
+    typeId: json["type_id"],
+    videoType: json["video_type"],
+    name: json["name"],
+    thumbnail: json["thumbnail"],
+    landscape: json["landscape"],
+    trailerType: json["trailer_type"],
+    trailerUrl: json["trailer_url"],
+    description: json["description"],
+    isPremium: json["is_premium"],
+    isTitle: json["is_title"],
+    releaseDate: json["release_date"],
+    view: json["view"],
+    imdbRating: json["imdb_rating"],
+    status: json["status"],
+    createdAt: json["created_at"],
+    updatedAt: json["updated_at"],
+    directorId: json["director_id"],
+    starringId: json["starring_id"],
+    supportingCastId: json["supporting_cast_id"],
+    networks: json["networks"],
+    maturityRating: json["maturity_rating"],
+    studios: json["studios"],
+    contentAdvisory: json["content_advisory"],
+    viewingRights: json["viewing_rights"],
+    stopTime: json["stop_time"],
+    isDownloaded: json["is_downloaded"],
+    isBookmark: json["is_bookmark"],
+    rentBuy: json["rent_buy"],
+    isRent: json["is_rent"],
+    rentPrice: json["rent_price"],
+    isBuy: json["is_buy"],
+    categoryName: json["category_name"],
+    sessionId: json["session_id"],
+    upcomingType: json["upcoming_type"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "channel_id": channelId,
-        "category_id": categoryId,
-        "language_id": languageId,
-        "cast_id": castId,
-        "type_id": typeId,
-        "video_type": videoType,
-        "name": name,
-        "thumbnail": thumbnail,
-        "landscape": landscape,
-        "trailer_type": trailerType,
-        "trailer_url": trailerUrl,
-        "description": description,
-        "is_premium": isPremium,
-        "is_title": isTitle,
-        "release_date": releaseDate,
-        "view": view,
-        "imdb_rating": imdbRating,
-        "status": status,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "director_id": directorId,
-        "starring_id": starringId,
-        "supporting_cast_id": supportingCastId,
-        "networks": networks,
-        "maturity_rating": maturityRating,
-        "studios": studios,
-        "content_advisory": contentAdvisory,
-        "viewing_rights": viewingRights,
-        "stop_time": stopTime,
-        "is_downloaded": isDownloaded,
-        "is_bookmark": isBookmark,
-        "rent_buy": rentBuy,
-        "is_rent": isRent,
-        "rent_price": rentPrice,
-        "is_buy": isBuy,
-        "category_name": categoryName,
-        "session_id": sessionId,
-        "upcoming_type": upcomingType,
-      };
+    "id": id,
+    "channel_id": channelId,
+    "category_id": categoryId,
+    "language_id": languageId,
+    "cast_id": castId,
+    "type_id": typeId,
+    "video_type": videoType,
+    "name": name,
+    "thumbnail": thumbnail,
+    "landscape": landscape,
+    "trailer_type": trailerType,
+    "trailer_url": trailerUrl,
+    "description": description,
+    "is_premium": isPremium,
+    "is_title": isTitle,
+    "release_date": releaseDate,
+    "view": view,
+    "imdb_rating": imdbRating,
+    "status": status,
+    "created_at": createdAt,
+    "updated_at": updatedAt,
+    "director_id": directorId,
+    "starring_id": starringId,
+    "supporting_cast_id": supportingCastId,
+    "networks": networks,
+    "maturity_rating": maturityRating,
+    "studios": studios,
+    "content_advisory": contentAdvisory,
+    "viewing_rights": viewingRights,
+    "stop_time": stopTime,
+    "is_downloaded": isDownloaded,
+    "is_bookmark": isBookmark,
+    "rent_buy": rentBuy,
+    "is_rent": isRent,
+    "rent_price": rentPrice,
+    "is_buy": isBuy,
+    "category_name": categoryName,
+    "session_id": sessionId,
+    "upcoming_type": upcomingType,
+  };
 }
 
 class Video {
@@ -336,120 +344,120 @@ class Video {
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
-        id: json["id"],
-        channelId: json["channel_id"],
-        categoryId: json["category_id"],
-        languageId: json["language_id"],
-        castId: json["cast_id"],
-        typeId: json["type_id"],
-        videoType: json["video_type"],
-        name: json["name"],
-        thumbnail: json["thumbnail"],
-        landscape: json["landscape"],
-        description: json["description"],
-        isPremium: json["is_premium"],
-        isTitle: json["is_title"],
-        download: json["download"],
-        videoUploadType: json["video_upload_type"],
-        video320: json["video_320"],
-        video480: json["video_480"],
-        video720: json["video_720"],
-        video1080: json["video_1080"],
-        videoExtension: json["video_extension"],
-        videoDuration: json["video_duration"],
-        trailerType: json["trailer_type"],
-        trailerUrl: json["trailer_url"],
-        subtitleType: json["subtitle_type"],
-        subtitleLang1: json["subtitle_lang_1"],
-        subtitle1: json["subtitle_1"],
-        subtitleLang2: json["subtitle_lang_2"],
-        subtitle2: json["subtitle_2"],
-        subtitleLang3: json["subtitle_lang_3"],
-        subtitle3: json["subtitle_3"],
-        releaseDate: json["release_date"],
-        releaseYear: json["release_year"],
-        imdbRating: json["imdb_rating"],
-        view: json["view"],
-        status: json["status"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-        directorId: json["director_id"],
-        starringId: json["starring_id"],
-        supportingCastId: json["supporting_cast_id"],
-        networks: json["networks"],
-        maturityRating: json["maturity_rating"],
-        ageRestriction: json["age_restriction"],
-        maxVideoQuality: json["max_video_quality"],
-        releaseTag: json["release_tag"],
-        videoSize: json["video_size"],
-        stopTime: json["stop_time"],
-        isDownloaded: json["is_downloaded"],
-        isBookmark: json["is_bookmark"],
-        rentBuy: json["rent_buy"],
-        isRent: json["is_rent"],
-        rentPrice: json["rent_price"],
-        isBuy: json["is_buy"],
-        categoryName: json["category_name"],
-        sessionId: json["session_id"],
-        upcomingType: json["upcoming_type"],
-      );
+    id: json["id"],
+    channelId: json["channel_id"],
+    categoryId: json["category_id"],
+    languageId: json["language_id"],
+    castId: json["cast_id"],
+    typeId: json["type_id"],
+    videoType: json["video_type"],
+    name: json["name"],
+    thumbnail: json["thumbnail"],
+    landscape: json["landscape"],
+    description: json["description"],
+    isPremium: json["is_premium"],
+    isTitle: json["is_title"],
+    download: json["download"],
+    videoUploadType: json["video_upload_type"],
+    video320: json["video_320"],
+    video480: json["video_480"],
+    video720: json["video_720"],
+    video1080: json["video_1080"],
+    videoExtension: json["video_extension"],
+    videoDuration: json["video_duration"],
+    trailerType: json["trailer_type"],
+    trailerUrl: json["trailer_url"],
+    subtitleType: json["subtitle_type"],
+    subtitleLang1: json["subtitle_lang_1"],
+    subtitle1: json["subtitle_1"],
+    subtitleLang2: json["subtitle_lang_2"],
+    subtitle2: json["subtitle_2"],
+    subtitleLang3: json["subtitle_lang_3"],
+    subtitle3: json["subtitle_3"],
+    releaseDate: json["release_date"],
+    releaseYear: json["release_year"],
+    imdbRating: json["imdb_rating"],
+    view: json["view"],
+    status: json["status"],
+    createdAt: json["created_at"],
+    updatedAt: json["updated_at"],
+    directorId: json["director_id"],
+    starringId: json["starring_id"],
+    supportingCastId: json["supporting_cast_id"],
+    networks: json["networks"],
+    maturityRating: json["maturity_rating"],
+    ageRestriction: json["age_restriction"],
+    maxVideoQuality: json["max_video_quality"],
+    releaseTag: json["release_tag"],
+    videoSize: json["video_size"],
+    stopTime: json["stop_time"],
+    isDownloaded: json["is_downloaded"],
+    isBookmark: json["is_bookmark"],
+    rentBuy: json["rent_buy"],
+    isRent: json["is_rent"],
+    rentPrice: json["rent_price"],
+    isBuy: json["is_buy"],
+    categoryName: json["category_name"],
+    sessionId: json["session_id"],
+    upcomingType: json["upcoming_type"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "channel_id": channelId,
-        "category_id": categoryId,
-        "language_id": languageId,
-        "cast_id": castId,
-        "type_id": typeId,
-        "video_type": videoType,
-        "name": name,
-        "thumbnail": thumbnail,
-        "landscape": landscape,
-        "description": description,
-        "is_premium": isPremium,
-        "is_title": isTitle,
-        "download": download,
-        "video_upload_type": videoUploadType,
-        "video_320": video320,
-        "video_480": video480,
-        "video_720": video720,
-        "video_1080": video1080,
-        "video_extension": videoExtension,
-        "video_duration": videoDuration,
-        "trailer_type": trailerType,
-        "trailer_url": trailerUrl,
-        "subtitle_type": subtitleType,
-        "subtitle_lang_1": subtitleLang1,
-        "subtitle_1": subtitle1,
-        "subtitle_lang_2": subtitleLang2,
-        "subtitle_2": subtitle2,
-        "subtitle_lang_3": subtitleLang3,
-        "subtitle_3": subtitle3,
-        "release_date": releaseDate,
-        "release_year": releaseYear,
-        "imdb_rating": imdbRating,
-        "view": view,
-        "status": status,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "director_id": directorId,
-        "starring_id": starringId,
-        "supporting_cast_id": supportingCastId,
-        "networks": networks,
-        "maturity_rating": maturityRating,
-        "age_restriction": ageRestriction,
-        "max_video_quality": maxVideoQuality,
-        "release_tag": releaseTag,
-        "video_size": videoSize,
-        "stop_time": stopTime,
-        "is_downloaded": isDownloaded,
-        "is_bookmark": isBookmark,
-        "rent_buy": rentBuy,
-        "is_rent": isRent,
-        "rent_price": rentPrice,
-        "is_buy": isBuy,
-        "category_name": categoryName,
-        "session_id": sessionId,
-        "upcoming_type": upcomingType,
-      };
+    "id": id,
+    "channel_id": channelId,
+    "category_id": categoryId,
+    "language_id": languageId,
+    "cast_id": castId,
+    "type_id": typeId,
+    "video_type": videoType,
+    "name": name,
+    "thumbnail": thumbnail,
+    "landscape": landscape,
+    "description": description,
+    "is_premium": isPremium,
+    "is_title": isTitle,
+    "download": download,
+    "video_upload_type": videoUploadType,
+    "video_320": video320,
+    "video_480": video480,
+    "video_720": video720,
+    "video_1080": video1080,
+    "video_extension": videoExtension,
+    "video_duration": videoDuration,
+    "trailer_type": trailerType,
+    "trailer_url": trailerUrl,
+    "subtitle_type": subtitleType,
+    "subtitle_lang_1": subtitleLang1,
+    "subtitle_1": subtitle1,
+    "subtitle_lang_2": subtitleLang2,
+    "subtitle_2": subtitle2,
+    "subtitle_lang_3": subtitleLang3,
+    "subtitle_3": subtitle3,
+    "release_date": releaseDate,
+    "release_year": releaseYear,
+    "imdb_rating": imdbRating,
+    "view": view,
+    "status": status,
+    "created_at": createdAt,
+    "updated_at": updatedAt,
+    "director_id": directorId,
+    "starring_id": starringId,
+    "supporting_cast_id": supportingCastId,
+    "networks": networks,
+    "maturity_rating": maturityRating,
+    "age_restriction": ageRestriction,
+    "max_video_quality": maxVideoQuality,
+    "release_tag": releaseTag,
+    "video_size": videoSize,
+    "stop_time": stopTime,
+    "is_downloaded": isDownloaded,
+    "is_bookmark": isBookmark,
+    "rent_buy": rentBuy,
+    "is_rent": isRent,
+    "rent_price": rentPrice,
+    "is_buy": isBuy,
+    "category_name": categoryName,
+    "session_id": sessionId,
+    "upcoming_type": upcomingType,
+  };
 }

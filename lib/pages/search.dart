@@ -32,25 +32,90 @@ class Search extends StatefulWidget {
   State<Search> createState() => SearchState();
 }
 
-class SearchState extends State<Search> {
-  final searchController = TextEditingController();
-  late SearchProvider searchProvider = SearchProvider();
-  final SpeechToText _speechToText = SpeechToText();
-  bool speechEnabled = false, _isListening = false;
-  String _lastWords = '';
-  late BuildContext dialogContext;
-  String? userMobileNo;
-  SharedPre sharedPref = SharedPre();
-  @override
-  void initState() {
-   // _initSpeech();
-    searchProvider = Provider.of<SearchProvider>(context, listen: false);
-    searchController.text = widget.searchText ?? "";
-    _getData();
-    getUserData();
-    super.initState();
-    trackMoEngageEventOnce();
+  class SearchState extends State<Search> {
+    final ScrollController _scrollController = ScrollController();
+    final ScrollController _videoScrollController = ScrollController();
+    final ScrollController _showScrollController = ScrollController();
+
+    final searchController = TextEditingController();
+
+    late SearchProvider searchProvider = SearchProvider();
+    final SpeechToText _speechToText = SpeechToText();
+    bool speechEnabled = false, _isListening = false;
+    String _lastWords = '';
+    late BuildContext dialogContext;
+    String? userMobileNo;
+    SharedPre sharedPref = SharedPre();
+    @override
+    void initState() {
+      // _initSpeech();
+      searchProvider = Provider.of<SearchProvider>(context, listen: false);
+      searchController.text = widget.searchText ?? "";
+      // _getData();
+      // getUserData();
+      super.initState();
+      // trackMoEngageEventOnce();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _getData();
+        getUserData();
+        trackMoEngageEventOnce();
+      });
+      // _scrollController.addListener(() {
+      //   print("Scroll position: ${_scrollController.position.pixels} / ${_scrollController.position.maxScrollExtent}");
+      //
+      //   if (_scrollController.position.pixels >=
+      //       _scrollController.position.maxScrollExtent - 200 &&
+      //       !searchProvider.isFetchingMore &&
+      //       searchProvider.hasMoreData) {
+      //     print("Pagination triggered!");
+      //     searchProvider.getSearchVideopagination(
+      //       searchController.text,
+      //       '',
+      //       loadMore: true,
+      //     );
+      //   }
+      // });
+
+      _videoScrollController.addListener(() {
+        if (_videoScrollController.position.pixels >=
+            _videoScrollController.position.maxScrollExtent - 200 &&
+            !searchProvider.isFetchingMore &&
+            searchProvider.hasMoreData &&
+            searchProvider.isVideoClick) {
+          debugPrint("Video Pagination triggered!");
+          searchProvider.getSearchVideopagination(
+            searchController.text,
+            '',
+            loadMore: true,
+          );
+        }
+      });
+
+      _showScrollController.addListener(() {
+        if (_showScrollController.position.pixels >=
+            _showScrollController.position.maxScrollExtent - 200 &&
+            !searchProvider.isFetchingMore &&
+            searchProvider.hasMoreData &&
+            searchProvider.isShowClick) {
+          debugPrint("Show Pagination triggered!");
+          searchProvider.getSearchVideopagination(
+            searchController.text,
+            '',
+            loadMore: true,
+          );
+        }
+      });
+    }
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200 && // near bottom
+        !searchProvider.isFetchingMore &&
+        searchProvider.hasMoreData) {
+      // Trigger load more
+      searchProvider.getSearchVideopagination(searchController.text,"", loadMore: true);
+    }
   }
+
 
   bool _eventTracked = false;
 
@@ -98,7 +163,7 @@ class SearchState extends State<Search> {
 
     if (micStatus.isPermanentlyDenied ||
         connectStatus.isPermanentlyDenied) {
-     // _showPermissionDialog();
+      // _showPermissionDialog();
       return;
     }
 
@@ -121,7 +186,7 @@ class SearchState extends State<Search> {
     showDialog(
       context: context,
       barrierDismissible:
-          false, // Prevents dismissing the dialog by tapping outside
+      false, // Prevents dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         dialogContext = context; // Save the dialog context to close it later
         return AlertDialog(
@@ -177,7 +242,7 @@ class SearchState extends State<Search> {
       searchController.text = _lastWords.toString();
 
       // Perform the search after closing the dialog
-      await searchProvider.getSearchVideo(context, _lastWords.toString());
+      // await searchProvider.getSearchVideopagination(context, _lastWords.toString());
 
       // Navigate to the search page with the result
       await Navigator.push(
@@ -232,7 +297,9 @@ class SearchState extends State<Search> {
     if (_speechToText.isListening) {
       _speechToText.stop();
     }
-   // _stopListening();
+    // _stopListening();
+    _videoScrollController.dispose();
+    _showScrollController.dispose();
     searchController.dispose();
     searchProvider.clearProvider();
     super.dispose();
@@ -240,15 +307,20 @@ class SearchState extends State<Search> {
 
   _getData() async {
     if ((widget.searchText ?? "").isNotEmpty) {
-      final searchProvider =
-          Provider.of<SearchProvider>(context, listen: false);
-      await searchProvider.getSearchVideo(searchController.text, "");
+
+      final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+      searchProvider.loading = true;
+      searchProvider.notifyListeners();
+      await  searchProvider.getSearchVideopagination(searchController.text,"", loadMore: true);
+      // await searchProvider.getSearchVideo(searchController.text, "");
       // await searchProvider.getSearchVideo(context,widget.searchText ?? "");
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     analytics.logEvent(
       name: "screen_view",
       parameters: {
@@ -291,12 +363,11 @@ class SearchState extends State<Search> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    searchProvider.setDataVisibility(
-                                        true, false);
+                                    searchProvider.setDataVisibility(true, false);
                                   },
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -319,7 +390,7 @@ class SearchState extends State<Search> {
                                         visible: searchProvider.isVideoClick,
                                         child: Container(
                                           width:
-                                              MediaQuery.of(context).size.width,
+                                          MediaQuery.of(context).size.width,
                                           height: 2,
                                           color: white,
                                         ),
@@ -331,12 +402,11 @@ class SearchState extends State<Search> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    searchProvider.setDataVisibility(
-                                        false, true);
+                                    searchProvider.setDataVisibility(false, true);
                                   },
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -359,7 +429,7 @@ class SearchState extends State<Search> {
                                         visible: searchProvider.isShowClick,
                                         child: Container(
                                           width:
-                                              MediaQuery.of(context).size.width,
+                                          MediaQuery.of(context).size.width,
                                           height: 2,
                                           color: white,
                                         ),
@@ -375,8 +445,8 @@ class SearchState extends State<Search> {
                         searchProvider.isVideoClick
                             ? _buildVideoUI()
                             : searchProvider.isShowClick
-                                ? _buildShowUI()
-                                : const SizedBox.shrink(),
+                            ? _buildShowUI()
+                            : const SizedBox.shrink(),
                       ],
                     );
                   },
@@ -431,9 +501,10 @@ class SearchState extends State<Search> {
               alignment: Alignment.center,
               child: TextField(
                 onChanged: (value) async {
+                   print("Search keyword: $value");
                   if (value.isNotEmpty) {
                     await searchProvider.setLoading(true);
-                    await searchProvider.getSearchVideo(context, value);
+                    await searchProvider.getSearchVideopagination(context, value);
                     Map<String, Object> screenViewEvent = {
                       'screen_name': 'Search_content',
                       "search_item": value,
@@ -490,7 +561,7 @@ class SearchState extends State<Search> {
                     debugPrint("Clear Search!");
                     searchController.clear();
                     await searchProvider.clearProvider();
-                    await searchProvider.notifyProvider();
+                     searchProvider.notifyProvider();
                   },
                   child: Container(
                     width: 50,
@@ -564,21 +635,41 @@ class SearchState extends State<Search> {
 
   Widget _buildVideoUI() {
     if (searchProvider.loading) {
+      print("SHIMMER TRIGGERED");
       return _shimmerSearch();
     } else {
       if (searchProvider.searchModel.status == 200) {
         if (searchProvider.searchModel.video != null &&
             searchProvider.searchModel.video!.isNotEmpty) {
+          print("qqqqqq${searchProvider.searchVideoList.length}");
+          print("aaaaa${searchProvider.searchModel.video?.length }");
           return Expanded(
             child: AlignedGridView.count(
+              controller: _videoScrollController,
               shrinkWrap: true,
               crossAxisCount: 2,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              itemCount: searchProvider.searchModel.video?.length ?? 0,
               padding: const EdgeInsets.only(left: 20, right: 20),
               physics: const AlwaysScrollableScrollPhysics(),
+
+              // Add 1 to show loader item if more data is being fetched
+              itemCount: searchProvider.searchModel.video!.length +
+                  (searchProvider.isFetchingMore ? 1 : 0),
+
               itemBuilder: (BuildContext context, int position) {
+                // If it's the loader position
+                if (position == searchProvider.searchModel.video!.length) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(color: complimentryColor),
+                    ),
+                  );
+                }
+
+                final video = searchProvider.searchModel.video![position];
+
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
@@ -587,15 +678,10 @@ class SearchState extends State<Search> {
                       debugPrint("Clicked on position ==> $position");
                       Utils.openDetails(
                         context: context,
-                        videoId:
-                            searchProvider.searchModel.video?[position].id ?? 0,
+                        videoId: video.id ?? 0,
                         upcomingType: 0,
-                        videoType: searchProvider
-                                .searchModel.video?[position].videoType ??
-                            0,
-                        typeId: searchProvider
-                                .searchModel.video?[position].typeId ??
-                            0,
+                        videoType: video.videoType ?? 0,
+                        typeId: video.typeId ?? 0,
                       );
                     },
                     child: Container(
@@ -606,10 +692,7 @@ class SearchState extends State<Search> {
                         borderRadius: BorderRadius.circular(4),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: MyNetworkImage(
-                          imageUrl: searchProvider
-                                  .searchModel.video?[position].landscape
-                                  .toString() ??
-                              "",
+                          imageUrl: video.landscape?.toString() ?? "",
                           fit: BoxFit.cover,
                           imgHeight: MediaQuery.of(context).size.height,
                           imgWidth: MediaQuery.of(context).size.width,
@@ -621,6 +704,7 @@ class SearchState extends State<Search> {
               },
             ),
           );
+
         } else {
           return const Expanded(
             child: NoData(title: "", subTitle: ""),
@@ -632,6 +716,8 @@ class SearchState extends State<Search> {
     }
   }
 
+
+
   Widget _buildShowUI() {
     if (searchProvider.loading) {
       return _shimmerSearch();
@@ -639,16 +725,30 @@ class SearchState extends State<Search> {
       if (searchProvider.searchModel.status == 200) {
         if (searchProvider.searchModel.tvshow != null &&
             searchProvider.searchModel.tvshow!.isNotEmpty) {
+          print("11111${searchProvider.searchShowList.length}");
+          print("2222${searchProvider.searchModel.tvshow?.length }");
           return Expanded(
             child: AlignedGridView.count(
+              controller: _showScrollController,
               shrinkWrap: true,
               crossAxisCount: 2,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
+              itemCount: searchProvider.searchModel.tvshow!.length + (searchProvider.isFetchingMore ? 1 : 0),
+
+              // itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
               padding: const EdgeInsets.only(left: 20, right: 20),
               physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int position) {
+                if (position == searchProvider.searchModel.tvshow!.length) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(color: complimentryColor),
+                    ),
+                  );
+                }
+                final tvshow = searchProvider.searchModel.tvshow![position];
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
@@ -656,16 +756,10 @@ class SearchState extends State<Search> {
                       debugPrint("Clicked on position ==> $position");
                       Utils.openDetails(
                         context: context,
-                        videoId:
-                            searchProvider.searchModel.tvshow?[position].id ??
-                                0,
+                        videoId:tvshow.id ?? 0,
                         upcomingType: 0,
-                        videoType: searchProvider
-                                .searchModel.tvshow?[position].videoType ??
-                            0,
-                        typeId: searchProvider
-                                .searchModel.tvshow?[position].typeId ??
-                            0,
+                        videoType: tvshow.videoType ?? 0,
+                        typeId: tvshow.typeId ?? 0,
                       );
                     },
                     child: Container(
@@ -678,11 +772,7 @@ class SearchState extends State<Search> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: MyNetworkImage(
-                          imageUrl: searchProvider.searchModel.tvshow
-                                  ?.elementAt(position)
-                                  .landscape
-                                  .toString() ??
-                              "",
+                          imageUrl: tvshow.landscape?.toString() ?? "",
                           fit: BoxFit.cover,
                           imgHeight: MediaQuery.of(context).size.height,
                           imgWidth: MediaQuery.of(context).size.width,

@@ -70,6 +70,7 @@ class Home extends StatefulWidget {
 ForceUpdatemodel? forceUpdateData;
 
 class HomeState extends State<Home> with RouteAware {
+  final ScrollController sectionScrollController = ScrollController();
   // final JSHelper _jsHelper = JSHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SectionDataProvider sectionDataProvider;
@@ -154,10 +155,21 @@ class HomeState extends State<Home> with RouteAware {
     });
   }
   bool hasFetchedData = false;
+  int? lastTappedTab;
+  DateTime? lastTapTime;
   @override
   void initState() {
     print("-----${Constant.userID}");
-    
+    sectionScrollController.addListener(() {
+      final sectionProvider = Provider.of<SectionDataProvider>(context, listen: false);
+      if (sectionScrollController.position.pixels >=
+          sectionScrollController.position.maxScrollExtent - 200 &&
+          !sectionProvider.loadingSection &&
+          sectionProvider.hasMoreData) {
+        print("Triggering Pagination");
+        getTabData(homeProvider.selectedIndex ?? 0, homeProvider.sectionTypeModel.result, loadMore: true);
+      }
+    });
     Provider.of<GeneralProvider>(context, listen: false);
     generalProvider = Provider.of<GeneralProvider>(context, listen: false);
 
@@ -183,6 +195,34 @@ class HomeState extends State<Home> with RouteAware {
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
     trackMoEngageEventOnce();
+  }
+  Future<void> onTabTap(int index) async {
+    final now = DateTime.now();
+    if (lastTappedTab == index &&
+        lastTapTime != null &&
+        now.difference(lastTapTime!) < const Duration(milliseconds: 500)) {
+      return; // ignore if tapped same tab too quickly
+    }
+
+    lastTappedTab = index;
+    lastTapTime = now;
+
+    await getTabData(index, homeProvider.sectionTypeModel.result);
+  }
+  void _scrollListener() {
+    print("SCROLLING - Offset: ${sectionScrollController.position.pixels}");
+    if (sectionScrollController.position.pixels >=
+        sectionScrollController.position.maxScrollExtent - 200 &&
+        !sectionDataProvider.loadingSection &&
+        sectionDataProvider.hasMoreData) {
+      print("TRIGGERING PAGINATION API");
+      final sectionType = homeProvider.sectionTypeModel.result;
+      getTabData(
+        homeProvider.selectedIndex ?? 0,
+        sectionType,
+        loadMore: true,
+      );
+    }
   }
   bool _eventTracked = false;
 
@@ -513,18 +553,46 @@ class HomeState extends State<Home> with RouteAware {
   }
 
   Future<void> getTabData(
-      int position, List<type.Result>? sectionTypeList) async {
+      int position, List<type.Result>? sectionTypeList,
+      {bool loadMore = false}) async {
     debugPrint("getTabData position ====> $position");
+    final currentTab = position;
     await setSelectedTab(position);
-    await sectionDataProvider.setLoading(true);
-    await sectionDataProvider.getSectionBanner(
-        position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
-        position == 0 ? "1" : "2");
-    await sectionDataProvider.getSectionList(
-        position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
-        position == 0 ? "1" : "2",
-        selectedLanguageIds.join(','));
+
+    if (!loadMore) await sectionDataProvider.setLoading(true);
+
+    if (!loadMore) {
+      sectionDataProvider.clearSections();
+      await sectionDataProvider.getSectionBanner(
+          position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
+          position == 0 ? "1" : "2");
+    }
+
+    await sectionDataProvider.getSectionListpagination(
+      position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
+      position == 0 ? "1" : "2",
+      selectedLanguageIds.join(','),
+      loadMore: loadMore,
+    );
+    if (homeProvider.selectedIndex != currentTab) {
+      debugPrint("Tab switched before data loaded — skipping update");
+      return;
+    }
+
   }
+  // Future<void> getTabData(
+  //     int position, List<type.Result>? sectionTypeList) async {
+  //   debugPrint("getTabData position ====> $position");
+  //   await setSelectedTab(position);
+  //   await sectionDataProvider.setLoading(true);
+  //   await sectionDataProvider.getSectionBanner(
+  //       position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
+  //       position == 0 ? "1" : "2");
+  //   await sectionDataProvider.getSectionList(
+  //       position == 0 ? "0" : (sectionTypeList?[position - 1].typeId),
+  //       position == 0 ? "1" : "2",
+  //       selectedLanguageIds.join(','));
+  // }
 
   // reel feature ---
 
@@ -618,7 +686,8 @@ class HomeState extends State<Home> with RouteAware {
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
-
+    sectionScrollController.removeListener(_scrollListener);
+    sectionScrollController.dispose();
     super.dispose();
   }
 
@@ -1505,10 +1574,12 @@ class HomeState extends State<Home> with RouteAware {
                   : (sectionTypeList?[index - 1].name.toString() ?? "");
 
               return InkWell(
-                onTap: () async {
-                  debugPrint("index ===========> $index");
-                  await getTabData(index, homeProvider.sectionTypeModel.result);
-                },
+                // onTap: () async {
+                //   debugPrint("index ===========> $index");
+                //   await getTabData(index, homeProvider.sectionTypeModel.result);
+                // },
+                onTap: () => onTabTap(index),
+
                 child: Container(
                   height: 38, // Set exact height
                   width: 95, // Set exact width
@@ -1564,125 +1635,303 @@ class HomeState extends State<Home> with RouteAware {
     );
   }
 
+  // Widget tabItem(List<type.Result>? sectionTypeList) {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     constraints: const BoxConstraints.expand(),
+  //     child: RefreshIndicator(
+  //       backgroundColor: white,
+  //       color: complimentryColor,
+  //       displacement: 80,
+  //       onRefresh: () async {
+  //         await Future.delayed(const Duration(milliseconds: 1500))
+  //             .then((value) {
+  //           debugPrint(
+  //               "selectedIndex ===========> ${homeProvider.selectedIndex}");
+  //           getTabData(
+  //               homeProvider.selectedIndex > 0
+  //                   ? (homeProvider.selectedIndex)
+  //                   : 0,
+  //               homeProvider.sectionTypeModel.result);
+  //         });
+  //       },
+  //       child: SingleChildScrollView(
+  //         physics: const AlwaysScrollableScrollPhysics(),
+  //         child: Column(
+  //           children: [
+  //             SizedBox(height: Dimens.homeTabHeight),
+  //
+  //             /* Banner */
+  //             Consumer<SectionDataProvider>(
+  //               builder: (context, sectionDataProvider, child) {
+  //                 if (sectionDataProvider.loadingBanner) {
+  //                   return (kIsWeb || Constant.isTV) &&
+  //                           MediaQuery.of(context).size.width > 720
+  //                       ? ShimmerUtils.bannerWeb(context)
+  //                       : ShimmerUtils.bannerMobile(context);
+  //                 } else {
+  //                   if (sectionDataProvider.sectionBannerModel.status == 200 &&
+  //                       sectionDataProvider.sectionBannerModel.result != null) {
+  //                     return (kIsWeb || Constant.isTV) &&
+  //                             MediaQuery.of(context).size.width > 720
+  //                         ? _webHomeBanner(
+  //                             sectionDataProvider.sectionBannerModel.result)
+  //                         : _mobileHomeBanner(
+  //                             sectionDataProvider.sectionBannerModel.result);
+  //                   } else {
+  //                     return const SizedBox.shrink();
+  //                   }
+  //                 }
+  //               },
+  //             ),
+  //
+  //             const SizedBox(height: 5.5),
+  //             // /* AdMob Banner */
+  //             Utils.showBannerAd(context),
+  //
+  //             const SizedBox(height: 5.5),
+  //
+  //             /* Continue Watching & Remaining Sections */
+  //             Consumer<SectionDataProvider>(
+  //               builder: (context, sectionDataProvider, child) {
+  //                 if (sectionDataProvider.loadingSection) {
+  //                   return sectionShimmer();
+  //                 } else {
+  //                   if (sectionDataProvider.sectionListModel.status == 200) {
+  //                     bool allSectionsEmpty = sectionDataProvider
+  //                         .sectionListModel.result!
+  //                         .every((section) => section.data!.isEmpty);
+  //
+  //                     if (allSectionsEmpty) {
+  //                       return Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         crossAxisAlignment: CrossAxisAlignment.center,
+  //                         children: [
+  //                           SizedBox(
+  //                             height: 100,
+  //                           ),
+  //                           MyImage(
+  //                             height: 100,
+  //                             fit: BoxFit.contain,
+  //                             imagePath: "nodata.png",
+  //                           ),
+  //                           SizedBox(
+  //                             height: 100,
+  //                           )
+  //                         ],
+  //                       );
+  //                     } else {
+  //                       return Column(
+  //                         children: [
+  //                           /* Continue Watching */
+  //                           // sectionDataProvider
+  //                           //             .sectionListModel.continueWatching !=
+  //                           //         null
+  //                           //     ? continueWatchingLayout(sectionDataProvider
+  //                           //         .sectionListModel.continueWatching)
+  //                           //     : const SizedBox.shrink(),
+  //
+  //                           /* Remaining Sections */
+  //                           setSectionByType(
+  //                               sectionDataProvider.sectionListModel.result),
+  //                         ],
+  //                       );
+  //                     }
+  //                   } else {
+  //                     return const SizedBox.shrink();
+  //                   }
+  //                 }
+  //               },
+  //             ),
+  //
+  //             const SizedBox(height: 20),
+  //
+  //             /* Web Footer */
+  //             kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget tabItem(List<type.Result>? sectionTypeList) {
     return Container(
       width: MediaQuery.of(context).size.width,
       constraints: const BoxConstraints.expand(),
       child: RefreshIndicator(
-        backgroundColor: white,
-        color: complimentryColor,
-        displacement: 80,
         onRefresh: () async {
-          await Future.delayed(const Duration(milliseconds: 1500))
-              .then((value) {
-            debugPrint(
-                "selectedIndex ===========> ${homeProvider.selectedIndex}");
-            getTabData(
-                homeProvider.selectedIndex > 0
-                    ? (homeProvider.selectedIndex)
-                    : 0,
-                homeProvider.sectionTypeModel.result);
-          });
+          await getTabData(homeProvider.selectedIndex ?? 0, homeProvider.sectionTypeModel.result);
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(height: Dimens.homeTabHeight),
+        child: CustomScrollView(
+          controller: sectionScrollController,
+          slivers: [
+            SliverToBoxAdapter(child: SizedBox(height: Dimens.homeTabHeight)),
 
-              /* Banner */
-              Consumer<SectionDataProvider>(
+            // Banner
+            SliverToBoxAdapter(
+              child: Consumer<SectionDataProvider>(
                 builder: (context, sectionDataProvider, child) {
                   if (sectionDataProvider.loadingBanner) {
-                    return (kIsWeb || Constant.isTV) &&
-                            MediaQuery.of(context).size.width > 720
-                        ? ShimmerUtils.bannerWeb(context)
-                        : ShimmerUtils.bannerMobile(context);
+                    return ShimmerUtils.bannerMobile(context);
                   } else {
-                    if (sectionDataProvider.sectionBannerModel.status == 200 &&
-                        sectionDataProvider.sectionBannerModel.result != null) {
-                      return (kIsWeb || Constant.isTV) &&
-                              MediaQuery.of(context).size.width > 720
-                          ? _webHomeBanner(
-                              sectionDataProvider.sectionBannerModel.result)
-                          : _mobileHomeBanner(
-                              sectionDataProvider.sectionBannerModel.result);
+                    if (sectionDataProvider.sectionBannerModel.status == 200) {
+                      return _mobileHomeBanner(sectionDataProvider.sectionBannerModel.result);
                     } else {
                       return const SizedBox.shrink();
                     }
                   }
                 },
               ),
+            ),
 
-              const SizedBox(height: 5.5),
-              // /* AdMob Banner */
-              Utils.showBannerAd(context),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-              const SizedBox(height: 5.5),
+            // Sections
+            Consumer<SectionDataProvider>(
+              builder: (context, sectionDataProvider, child) {
+                if (sectionDataProvider.loadingSection) {
+                  return SliverToBoxAdapter(child: sectionShimmer());
+                }
 
-              /* Continue Watching & Remaining Sections */
-              Consumer<SectionDataProvider>(
-                builder: (context, sectionDataProvider, child) {
-                  if (sectionDataProvider.loadingSection) {
-                    return sectionShimmer();
-                  } else {
-                    if (sectionDataProvider.sectionListModel.status == 200) {
-                      bool allSectionsEmpty = sectionDataProvider
-                          .sectionListModel.result!
-                          .every((section) => section.data!.isEmpty);
+                if (sectionDataProvider.sectionListModel.status != 200) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
 
-                      if (allSectionsEmpty) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 100,
-                            ),
-                            MyImage(
-                              height: 100,
-                              fit: BoxFit.contain,
-                              imagePath: "nodata.png",
-                            ),
-                            SizedBox(
-                              height: 100,
-                            )
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            /* Continue Watching */
-                            // sectionDataProvider
-                            //             .sectionListModel.continueWatching !=
-                            //         null
-                            //     ? continueWatchingLayout(sectionDataProvider
-                            //         .sectionListModel.continueWatching)
-                            //     : const SizedBox.shrink(),
+                final sections = sectionDataProvider.sectionListModel.result ?? [];
+                if (sections.every((s) => s.data?.isEmpty ?? true)) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 80),
+                          MyImage(imagePath: "nodata.png", height: 100),
+                          const SizedBox(height: 80),
+                        ],
+                      ),
+                    ),
+                  );
+                }
 
-                            /* Remaining Sections */
-                            setSectionByType(
-                                sectionDataProvider.sectionListModel.result),
-                          ],
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      if (index == sections.length && sectionDataProvider.loadingMore) {
+                        return const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(child: CircularProgressIndicator(color: complimentryColor,)),
                         );
                       }
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }
-                },
+
+
+                      final section = sections[index];
+                      if (section.data == null || section.data!.isEmpty) return const SizedBox.shrink();
+
+                      return _buildSection(section); // define separately
+                    },
+                    // childCount: sections.length + (sectionDataProvider.loadingSection ? 1 : 0),
+                    childCount: sections.length + (sectionDataProvider.loadingMore ? 1 : 0),
+
+                  ),
+                );
+              },
+            ),
+
+            // Footer (Optional)
+            if (kIsWeb)
+              const SliverToBoxAdapter(
+                child: FooterWeb(),
               ),
-
-              const SizedBox(height: 20),
-
-              /* Web Footer */
-              kIsWeb ? const FooterWeb() : const SizedBox.shrink(),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildSection(list.Result section) {
+    final bool isBannerVisible = (section.bannerVisible ?? "0") == "1";
+    final bool isGenreOrLanguage =
+        section.videoType == 3 || section.videoType == 4 || section.videoType == 6;
+    final bool isReelShow = section.videoType == 7;
+    final bool isFMSection = section.title == "FM";
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 9, 18, 4),
+              child: MyTextTWO(
+                color: white,
+                text: section.title ?? '',
+                textalign: TextAlign.left,
+                fontsizeNormal: 11,
+                fontweight: FontWeight.w500,
+              ),
+            ),
+            if (!isFMSection && !isGenreOrLanguage && !isReelShow)
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MoreScreen(
+                        section.title.toString(),
+                        section.id.toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MyText(
+                        color: primaryLight,
+                        text: "More",
+                        textalign: TextAlign.center,
+                        fontsizeNormal: 8,
+                        fontweight: FontWeight.w500,
+                        fontsizeWeb: 14,
+                        multilanguage: false,
+                        maxline: 1,
+                        overflow: TextOverflow.ellipsis,
+                        fontstyle: FontStyle.normal,
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        CupertinoIcons.right_chevron,
+                        color: primaryLight,
+                        size: 14,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+        SizedBox(
+          height: getRemainingDataHeight(section.videoType.toString(), section.screenLayout ?? ""),
+          child: setSectionData(sectionList: [section], index: 0),
+        ),
+        if (isBannerVisible)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: GestureDetector(
+              onTap: () {
+                final link = section.bannerBacklink;
+                if ((section.bannerLinkType ?? 0) == 0 && link != null) {
+                  launchUrl(Uri.parse(link));
+                }
+              },
+              child: Image.network(section.bannerImage ?? '', fit: BoxFit.fill),
+            ),
+          ),
+      ],
+    );
+  }
+  ///
 
   // Widget tabItem(List<type.Result>? sectionTypeList) {
   //   return Container(

@@ -469,9 +469,32 @@ class ApiService {
   }
 
   // section_list API
-  Future<SectionListModel> sectionList(typeId, isHomePage, languageId) async {
+  // Future<SectionListModel> sectionList(typeId, isHomePage, languageId) async {
+  //   SectionListModel sectionListModel;
+  //   String sectionList = "v1/section_list";
+  //   Object appVersion = Platform.isAndroid
+  //       ? Constant.curentAppVersion
+  //       : Constant.curentiosAppVersion;
+  //
+  //   Response response = await dio.post(
+  //     '$baseUrl$sectionList',
+  //     options: optHeaders,
+  //     data: {
+  //       'user_id': Constant.userID,
+  //       'type_id': typeId,
+  //       'is_home_page': isHomePage,
+  //       'language_id': languageId,
+  //       'version': appVersion,
+  //       'device': Constant.deviceType
+  //     },
+  //   );
+  //   sectionListModel = SectionListModel.fromJson(response.data);
+  //   return sectionListModel;
+  // }
+  // section_list API
+  Future<SectionListModel> sectionList(typeId, isHomePage, languageId, {int page = 1,}) async {
     SectionListModel sectionListModel;
-    String sectionList = "section_list";
+    String sectionList = "v1/section_list";
     Object appVersion = Platform.isAndroid
         ? Constant.curentAppVersion
         : Constant.curentiosAppVersion;
@@ -485,37 +508,67 @@ class ApiService {
         'is_home_page': isHomePage,
         'language_id': languageId,
         'version': appVersion,
-        'device': Constant.deviceType
+        'device': Constant.deviceType,
+        'page': page,
       },
     );
+    // Print status code
+    debugPrint("Status Code: ${response.statusCode}");
+
+    // Print full response data
+    debugPrint("Response Data: ${response.data}");
     sectionListModel = SectionListModel.fromJson(response.data);
     return sectionListModel;
   }
 
   //viewall api ---
 
-  Future<List<VideoData>> viewAll(String sectionId) async {
-    String viewAllEndpoint = "view-all";
+
+  Future<ViewAllModelClass> viewAll(String sectionId, int page) async {
+    String viewAllEndpoint = "v1/view-all";
     Object appVersion = Platform.isAndroid
         ? Constant.curentAppVersion
         : Constant.curentiosAppVersion;
+
     Response response = await dio.post(
-      '$baseUrl$viewAllEndpoint',
+      '$baseUrl$viewAllEndpoint?page=$page',
       options: optHeaders,
       data: {
         'section_id': sectionId,
         'version': appVersion,
-        'device': Constant.deviceType
+        'device': Constant.deviceType,
       },
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = response.data['result'][0]['data'];
-      return data.map((json) => VideoData.fromJson(json)).toList();
+      return ViewAllModelClass.fromJson(response.data);
     } else {
       throw Exception('Failed to load data');
     }
   }
+
+  // Future<List<VideoData>> viewAll(String sectionId) async {
+  //   String viewAllEndpoint = "v1/view-all";
+  //   Object appVersion = Platform.isAndroid
+  //       ? Constant.curentAppVersion
+  //       : Constant.curentiosAppVersion;
+  //   Response response = await dio.post(
+  //     '$baseUrl$viewAllEndpoint',
+  //     options: optHeaders,
+  //     data: {
+  //       'section_id': sectionId,
+  //       'version': appVersion,
+  //       'device': Constant.deviceType
+  //     },
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = response.data['result'][0]['data'];
+  //     return data.map((json) => VideoData.fromJson(json)).toList();
+  //   } else {
+  //     throw Exception('Failed to load data');
+  //   }
+  // }
 
   // section_detail API
   Future<SectionDetailModel> sectionDetails(
@@ -699,15 +752,39 @@ class ApiService {
   }
 
   // search_video API
-  Future<SearchModel> searchVideo(searchText) async {
+  //   Future<SearchModel> searchVideo(searchText) async {
+  //     debugPrint('searchVideo searchText ==>>> $searchText');
+  //     SearchModel searchModel;
+  //     String search = "v1/search_video";
+  //     Object appVersion = Platform.isAndroid
+  //         ? Constant.curentAppVersion
+  //         : Constant.curentiosAppVersion;
+  //     Response response = await dio.post(
+  //       '$baseUrl$search',
+  //       options: optHeaders,
+  //       data: {
+  //         'name': searchText,
+  //         'user_id': Constant.userID,
+  //         'version': appVersion,
+  //         'device': Constant.deviceType
+  //       },
+  //     );
+  //     searchModel = SearchModel.fromJson(response.data);
+  //     return searchModel;
+  //   }
+
+  Future<SearchModel> searchVideo(searchText, {String? nextPageUrl}) async {
     debugPrint('searchVideo searchText ==>>> $searchText');
     SearchModel searchModel;
-    String search = "search_video";
+    String search = "v1/search_video";
+    String url = nextPageUrl ?? '$baseUrl$search';
+
     Object appVersion = Platform.isAndroid
         ? Constant.curentAppVersion
         : Constant.curentiosAppVersion;
+
     Response response = await dio.post(
-      '$baseUrl$search',
+      url,
       options: optHeaders,
       data: {
         'name': searchText,
@@ -716,9 +793,11 @@ class ApiService {
         'device': Constant.deviceType
       },
     );
+
     searchModel = SearchModel.fromJson(response.data);
     return searchModel;
   }
+
 
   // channel_section_list API
   Future<ChannelSectionModel> channelSectionList() async {
