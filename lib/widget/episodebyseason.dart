@@ -787,7 +787,7 @@ class _EpisodeBySeasonState extends State<EpisodeBySeason> with RouteAware {
       int? vTypeID = widget.typeId;
       int? stopTime = (episodeList?[epiPos].stopTime ?? 0);
       String? vUploadType = (episodeList?[epiPos].videoUploadType ?? "");
-      String? videoThumb = (episodeList?[epiPos].landscape ?? "");
+      String? videoThumb = (episodeList?[epiPos].name ?? "");
       String? epiUrl = (episodeList?[epiPos].video1080 ?? "");
       iframeVideoUrl = episodeList![epiPos].playerVideoUrl ?? "";
       showVideoUrlId = episodeList[epiPos].urlVideoId ?? "";

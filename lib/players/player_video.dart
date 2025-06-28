@@ -397,7 +397,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
   void initState() {
     print("---Video ifreme Url --${widget.iframeVideoUrl}");
     print("---Trailer ifreme Url --${widget.iframeTrailerUrl}");
-
+    print("---name of the content  --${widget.videoThumb}");
     // print("---Video Url --${widget.trailerUrl}");
 
     SystemChrome.setPreferredOrientations([
@@ -455,7 +455,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
       final properties = MoEProperties()
         ..addAttribute('user_id', Constant.userID.toString())
         ..addAttribute('content_id', widget.videoId)
-        ..addAttribute('content_type', widget.videoType)
+        ..addAttribute('content_type', widget.videoThumb)
         ..addAttribute('play_type', '${widget.playType}')
         ..addAttribute('video_url', widget.videoUrl)
       // ..addAttribute('genre', widget.isLive)

@@ -3184,7 +3184,7 @@ class TVShowDetailsState extends State<TVShowDetails> {
       if (playType == "Trailer") {
         int? stopTime = 0;
         String? videoThumb =
-            (showDetailsProvider.sectionDetailModel.result?.landscape ?? "");
+            (showDetailsProvider.sectionDetailModel.result?.name ?? "");
         debugPrint("stopTime =====> $stopTime");
         debugPrint("videoThumb ===> $videoThumb");
         Utils.clearQualitySubtitle();

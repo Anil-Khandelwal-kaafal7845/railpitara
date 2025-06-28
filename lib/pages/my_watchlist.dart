@@ -1173,7 +1173,8 @@ class _MyWatchlistState extends State<MyWatchlist> {
                 .watchlistModel.result?[position].videoUploadType ??
             "",
         videoThumb:
-            watchlistProvider.watchlistModel.result?[position].landscape ?? "",
+        watchlistProvider.watchlistModel.result?[position].name ?? "",
+            // watchlistProvider.watchlistModel.result?[position].landscape ?? "",
         vStopTime:
             watchlistProvider.watchlistModel.result?[position].stopTime ?? 0);
     if (isContinue != null && isContinue == true) {

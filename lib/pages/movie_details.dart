@@ -4800,8 +4800,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           (videoDetailsProvider.sectionDetailModel.result?.stopTime ?? 0);
     }
 
+    // String? videoThumb =
+    //     (videoDetailsProvider.sectionDetailModel.result?.landscape ?? "");
     String? videoThumb =
-        (videoDetailsProvider.sectionDetailModel.result?.landscape ?? "");
+    (videoDetailsProvider.sectionDetailModel.result?.name ?? "");
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {

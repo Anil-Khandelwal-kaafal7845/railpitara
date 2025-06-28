@@ -547,7 +547,8 @@ class _MyDownloadsState extends State<MyDownloads> {
                                         .trailerUploadType ??
                                     "",
                                 videoThumb:
-                                    myDownloadsList?[position].landscapeImg ??
+                                myDownloadsList?[position].name ??
+                                    // myDownloadsList?[position].landscapeImg ??
                                         "",
                                 vStopTime: 0);
                           },

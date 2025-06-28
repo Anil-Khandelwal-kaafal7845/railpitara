@@ -423,33 +423,33 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                                 const SizedBox(height: 25),
                                                 InkWell(
                                                   onTap: () async {
-                                                    MoEngageService.instance.setUserName(emailController.text.toString());
-                                                    // Get device ID
-                                                    final deviceInfoPlugin = DeviceInfoPlugin();
-                                                    String deviceId;
-
-                                                    if (Platform.isAndroid) {
-                                                      final androidInfo = await deviceInfoPlugin.androidInfo;
-                                                      deviceId = androidInfo.id ?? 'unknown';
-                                                    } else if (Platform.isIOS) {
-                                                      final iosInfo = await deviceInfoPlugin.iosInfo;
-                                                      deviceId = iosInfo.identifierForVendor ?? 'unknown';
-                                                    } else {
-                                                      deviceId = 'unsupported_platform';
-                                                    }
-
-                                                    MoEngageService.instance.identifyUser(emailController.text.toString());
-                                                    final timestamp = DateTime.now().toIso8601String();
-
-                                                    final properties = MoEProperties()
-                                                      ..addAttribute('user_id ', emailController.text.toString())
-                                                      ..addAttribute('signup_method ', 'email')
-                                                      ..addAttribute('device_id', deviceId)
-                                                      ..addAttribute('timestamp', timestamp);
-
-                                                    MoEngageService.instance.trackEvent('User_Registration', properties);
-
-                                                    print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
+                                                    // MoEngageService.instance.setUserName(emailController.text.toString());
+                                                    // // Get device ID
+                                                    // final deviceInfoPlugin = DeviceInfoPlugin();
+                                                    // String deviceId;
+                                                    //
+                                                    // if (Platform.isAndroid) {
+                                                    //   final androidInfo = await deviceInfoPlugin.androidInfo;
+                                                    //   deviceId = androidInfo.id ?? 'unknown';
+                                                    // } else if (Platform.isIOS) {
+                                                    //   final iosInfo = await deviceInfoPlugin.iosInfo;
+                                                    //   deviceId = iosInfo.identifierForVendor ?? 'unknown';
+                                                    // } else {
+                                                    //   deviceId = 'unsupported_platform';
+                                                    // }
+                                                    //
+                                                    // MoEngageService.instance.identifyUser(emailController.text.toString());
+                                                    // final timestamp = DateTime.now().toIso8601String();
+                                                    //
+                                                    // final properties = MoEProperties()
+                                                    //   ..addAttribute('user_id ', emailController.text.toString())
+                                                    //   ..addAttribute('signup_method ', 'email')
+                                                    //   ..addAttribute('device_id', deviceId)
+                                                    //   ..addAttribute('timestamp', timestamp);
+                                                    //
+                                                    // MoEngageService.instance.trackEvent('User_Registration', properties);
+                                                    //
+                                                    // print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
 
                                                     String email = emailController.text.toString();
                                                     if (email.isEmpty) {
