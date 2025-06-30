@@ -1,4 +1,3 @@
-
 import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/aboutprivacyterms.dart';
 import 'package:dtlive/pages/coinstorescreen.dart';
@@ -61,6 +60,7 @@ class SettingState extends State<Setting> {
     super.initState();
     trackMoEngageEventOnce();
   }
+
   bool _eventTracked = false;
 
   void trackMoEngageEventOnce() {
@@ -80,13 +80,14 @@ class SettingState extends State<Setting> {
 
   void getUserDataProfile() async {
     final profileProvider =
-    Provider.of<ProfileProvider>(context, listen: false);
+        Provider.of<ProfileProvider>(context, listen: false);
     await profileProvider.getProfile(context);
     Future.delayed(Duration.zero).then((value) {
       if (!mounted) return;
       setState(() {});
     });
   }
+
   toggleSwitch(bool value) async {
     if (isSwitched == false) {
       setState(() {
@@ -155,7 +156,6 @@ class SettingState extends State<Setting> {
             margin: EdgeInsets.all(22),
             child: Column(
               children: [
-
                 profileCardWidget(
                   userID: Constant.userID,
                   userName: userName,
@@ -272,9 +272,8 @@ class SettingState extends State<Setting> {
                 ),
 
                 Visibility(
-                    visible: forceUpdateData?.result?.showPackage == 1,
-
-                    child: _buildLine(7.0, 7.0),
+                  visible: forceUpdateData?.result?.showPackage == 1,
+                  child: _buildLine(7.0, 7.0),
                 ),
 
                 /* Watchlist */
@@ -304,7 +303,6 @@ class SettingState extends State<Setting> {
                 /* Purchases */
                 Visibility(
                   visible: forceUpdateData?.result?.showPackage == 1,
-
                   child: _buildSettingButton(
                     title: 'purchases',
                     subTitle: 'view_your_purchases',
@@ -330,7 +328,6 @@ class SettingState extends State<Setting> {
 
                 Visibility(
                     visible: forceUpdateData?.result?.showPackage == 1,
-
                     child: _buildLine(7.0, 7.0)),
 
                 /* Coin--- */
@@ -366,7 +363,6 @@ class SettingState extends State<Setting> {
                 /* Subscription */
                 Visibility(
                   visible: forceUpdateData?.result?.showPackage == 1,
-
                   child: _buildSettingButton(
                     title: 'subsciption',
                     subTitle: 'subsciptionnotes',
@@ -392,7 +388,6 @@ class SettingState extends State<Setting> {
 
                 Visibility(
                     visible: forceUpdateData?.result?.showPackage == 1,
-
                     child: _buildLine(7.0, 7.0)),
 
                 /* MaltiLanguage */
@@ -573,7 +568,7 @@ class SettingState extends State<Setting> {
                 GestureDetector(
                     onTap: () {
                       if (Constant.userID != null) {
-                  logoutConfirmDialog();
+                        logoutConfirmDialog();
                       } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -769,209 +764,220 @@ class SettingState extends State<Setting> {
     );
   }
 
-Widget profileCardWidget({
-  required String? userID,
-  required String? userName,
-  required String? userMobileNo,
-  required String? userType,
-  required String? profile,
-  required VoidCallback onLoginPressed,
-  required VoidCallback onLogoutPressed,
-  required VoidCallback onDeleteAccountPressed,
-  required VoidCallback onEditProfilePressed,
-}) {
-  const colorPrimary = Color(0xFFB80E07);
-  bool isLoggedIn = userID != null && userID.isNotEmpty;
+  Widget profileCardWidget({
+    required String? userID,
+    required String? userName,
+    required String? userMobileNo,
+    required String? userType,
+    required String? profile,
+    required VoidCallback onLoginPressed,
+    required VoidCallback onLogoutPressed,
+    required VoidCallback onDeleteAccountPressed,
+    required VoidCallback onEditProfilePressed,
+  }) {
+    const colorPrimary = Color(0xFFB80E07);
+    bool isLoggedIn = userID != null && userID.isNotEmpty;
 
-  /// Get Safe Initials
-  // String getInitials(String? name) {
-  //   if (name == null || name.trim().isEmpty) return "NA";
-  //   List<String> nameParts = name.trim().split(" ");
-  //   return nameParts.length > 1
-  //       ? "${nameParts[0][0]}${nameParts[1][0]}"
-  //       : nameParts[0][0];
-  // }
+    /// Get Safe Initials
+    // String getInitials(String? name) {
+    //   if (name == null || name.trim().isEmpty) return "NA";
+    //   List<String> nameParts = name.trim().split(" ");
+    //   return nameParts.length > 1
+    //       ? "${nameParts[0][0]}${nameParts[1][0]}"
+    //       : nameParts[0][0];
+    // }
 
+    String getInitials(String? name) {
+      if (name == null || name.trim().isEmpty) return "NA";
+      List<String> nameParts =
+          name.trim().split(" ").where((part) => part.isNotEmpty).toList();
+      if (nameParts.isEmpty) return "NA";
+      String firstInitial = nameParts[0].isNotEmpty ? nameParts[0][0] : '';
+      String secondInitial = nameParts.length > 1 && nameParts[1].isNotEmpty
+          ? nameParts[1][0]
+          : '';
+      return (firstInitial + secondInitial).toUpperCase();
+    }
 
-  String getInitials(String? name) {
-    if (name == null || name.trim().isEmpty) return "NA";
-    List<String> nameParts = name.trim().split(" ").where((part) => part.isNotEmpty).toList();
-    if (nameParts.isEmpty) return "NA";
-    String firstInitial = nameParts[0].isNotEmpty ? nameParts[0][0] : '';
-    String secondInitial = nameParts.length > 1 && nameParts[1].isNotEmpty
-        ? nameParts[1][0]
-        : '';
-    return (firstInitial + secondInitial).toUpperCase();
-  }
+    /// Dynamic Gradient Colors for Profile Circle
+    final List<Color> gradientColors = [
+      Colors.blueAccent,
+      Colors.purpleAccent,
+      Colors.deepOrangeAccent,
+      Colors.greenAccent,
+      Colors.tealAccent,
+    ];
 
+    Color gradientStartColor =
+        gradientColors[(userName?.hashCode ?? 0).abs() % gradientColors.length];
+    Color gradientEndColor = gradientColors[
+        ((userName?.hashCode ?? 0).abs() + 1) % gradientColors.length];
 
-  /// Dynamic Gradient Colors for Profile Circle
-  final List<Color> gradientColors = [
-    Colors.blueAccent,
-    Colors.purpleAccent,
-    Colors.deepOrangeAccent,
-    Colors.greenAccent,
-    Colors.tealAccent,
-  ];
+    /// Login Text
+    String loginText = !isLoggedIn
+        ? "You are not signed in"
+        : (userType == "3" && (userName ?? "").isEmpty)
+            ? "${userMobileNo ?? ""}"
+            : "${userName ?? ""}";
 
-  Color gradientStartColor =
-      gradientColors[(userName?.hashCode ?? 0).abs() % gradientColors.length];
-  Color gradientEndColor =
-      gradientColors[((userName?.hashCode ?? 0).abs() + 1) % gradientColors.length];
-
-  /// Login Text
-  String loginText = !isLoggedIn
-      ? "You are not signed in"
-      : (userType == "3" && (userName ?? "").isEmpty)
-          ? "${userMobileNo ?? ""}"
-          : "${userName ?? ""}";
-
-  return Container(
-    width: double.infinity,
-    margin: const EdgeInsets.symmetric(vertical: 10),
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [Colors.black, Color(0xFF1C1C1C), Colors.grey],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      borderRadius: BorderRadius.circular(15),
-      border: Border.all(color: colorPrimary, width: 2),
-    ),
-    child: Stack(
-      children: [
-        Column(
-          children: [
-            /// Profile Info Row
-            Row(
-              children: [
-                /// Profile Icon with Gradient
-                ClipOval(
-                  child: MyUserNetworkImage(
-                    imageUrl: Provider.of<ProfileProvider>(context, listen: false).profileModel.status == 200
-                        ? Provider.of<ProfileProvider>(context, listen: false).profileModel.result != null
-                        ? (Provider.of<ProfileProvider>(context, listen: false).profileModel.result?[0].image ?? "")
-                        : ""
-                        : "",
-                    fit: BoxFit.cover,
-                    imgHeight: 90,
-                    imgWidth: 90,
-                  ),
-                ),
-                // Container(
-                //   width: 65,
-                //   height: 65,
-                //   decoration: BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     gradient: LinearGradient(
-                //       colors: [gradientStartColor, gradientEndColor],
-                //       begin: Alignment.topLeft,
-                //       end: Alignment.bottomRight,
-                //     ),
-                //   ),
-                //   alignment: Alignment.center,
-                //   child: Text(
-                //     isLoggedIn ? getInitials(profile).toUpperCase() : "NA",
-                //     style: const TextStyle(
-                //       fontSize: 22,
-                //       fontWeight: FontWeight.bold,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
-                const SizedBox(width: 16),
-
-                /// User Info
-                Expanded(
-                  child: Text(
-                    loginText,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-
-            /// Delete & Logout Button Row or Login Button
-            isLoggedIn
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      /// Delete Account Button
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: onDeleteAccountPressed,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.red,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: const Text(
-                            "Delete Account",
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-
-                      /// Logout Button (Circular)
-                      GestureDetector(
-                        onTap: onLogoutPressed,
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [Colors.black, Colors.grey],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            CupertinoIcons.square_arrow_right,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : ElevatedButton(
-                    onPressed: onLoginPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: colorPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text("Login", style: TextStyle(fontSize: 13)),
-                  ),
-          ],
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.black, Color(0xFF1C1C1C), Colors.grey],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: colorPrimary, width: 2),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              /// Profile Info Row
+              Row(
+                children: [
+                  /// Profile Icon with Gradient
+                  ClipOval(
+                    child: MyUserNetworkImage(
+                      imageUrl: Provider.of<ProfileProvider>(context,
+                                      listen: false)
+                                  .profileModel
+                                  .status ==
+                              200
+                          ? Provider.of<ProfileProvider>(context, listen: false)
+                                      .profileModel
+                                      .result !=
+                                  null
+                              ? (Provider.of<ProfileProvider>(context,
+                                          listen: false)
+                                      .profileModel
+                                      .result?[0]
+                                      .image ??
+                                  "")
+                              : ""
+                          : "",
+                      fit: BoxFit.cover,
+                      imgHeight: 90,
+                      imgWidth: 90,
+                    ),
+                  ),
+                  // Container(
+                  //   width: 65,
+                  //   height: 65,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     gradient: LinearGradient(
+                  //       colors: [gradientStartColor, gradientEndColor],
+                  //       begin: Alignment.topLeft,
+                  //       end: Alignment.bottomRight,
+                  //     ),
+                  //   ),
+                  //   alignment: Alignment.center,
+                  //   child: Text(
+                  //     isLoggedIn ? getInitials(profile).toUpperCase() : "NA",
+                  //     style: const TextStyle(
+                  //       fontSize: 22,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(width: 16),
 
-        if (isLoggedIn)
-          Positioned(
-            top: 5,
-            right: -10,
-            child: IconButton(
-              icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
-              onPressed: onEditProfilePressed,
-            ),
+                  /// User Info
+                  Expanded(
+                    child: Text(
+                      loginText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withOpacity(0.7),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              /// Delete & Logout Button Row or Login Button
+              isLoggedIn
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /// Delete Account Button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: onDeleteAccountPressed,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              "Delete Account",
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+
+                        /// Logout Button (Circular)
+                        GestureDetector(
+                          onTap: onLogoutPressed,
+                          child: Container(
+                            width: 38,
+                            height: 38,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Colors.black, Colors.grey],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              CupertinoIcons.square_arrow_right,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : ElevatedButton(
+                      onPressed: onLoginPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: colorPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child:
+                          const Text("Login", style: TextStyle(fontSize: 13)),
+                    ),
+            ],
           ),
-      ],
-    ),
-  );
-}
+          if (isLoggedIn)
+            Positioned(
+              top: 5,
+              right: -10,
+              child: IconButton(
+                icon: const Icon(CupertinoIcons.pencil, color: Colors.white),
+                onPressed: onEditProfilePressed,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
   // Widget profileCardWidget({
   //   required String? userID,
   //   required String? userName,
@@ -1844,7 +1850,7 @@ Widget profileCardWidget({
                               'screen_name': 'LogOut',
                               'user_id': Constant.userID.toString(),
                             };
-                             MoEngageService.instance.logout();
+                            MoEngageService.instance.logout();
 
                             Singular.eventWithArgs('LogOut', screenViewEvent);
                             await GoogleSignIn().signOut();
@@ -1950,8 +1956,6 @@ Widget profileCardWidget({
                           isPositive: true,
                           isMultilang: true,
                           onClick: () async {
-
-
                             final homeProvider = Provider.of<HomeProvider>(
                                 context,
                                 listen: false);
@@ -1972,7 +1976,7 @@ Widget profileCardWidget({
                             };
                             Singular.eventWithArgs('LogOut', screenViewEvent);
                             MoEngageService.instance.logout();
-                            
+
                             await GoogleSignIn().signOut();
                             await Utils.setUserId(null);
                             sectionDataProvider.getSectionBanner("0", "1");
@@ -2003,8 +2007,6 @@ Widget profileCardWidget({
       setState(() {});
     });
   }
-
-
 
   Widget _buildDialogBtn({
     required String title,
@@ -2038,6 +2040,4 @@ Widget profileCardWidget({
       ),
     );
   }
-
-
 }
