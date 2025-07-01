@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/bottom_bar.dart';
 import 'package:dtlive/provider/generalprovider.dart';
 import 'package:dtlive/provider/homeprovider.dart';
@@ -60,9 +61,44 @@ class OTPVerifyState extends State<OTPVerify> {
     // _getDeviceToken();
     startResendTimer();
     _sendWhatsappOTP();
+  
     prDialog = ProgressDialog(context);
+    trackMoEngageEventOnce();
     // codeSend(false);
   }
+
+    bool _eventTracked = false;
+
+  void trackMoEngageEventOnce() {
+    if (_eventTracked) return;
+    _eventTracked = true;
+
+      analytics.logEvent(
+      name: "OTP_Verify_Screen",
+      parameters: {
+        "screen_name": "OTP Verify Screen",
+        "user_id": Constant.userID,
+      },
+    );
+       Map<String, Object> screenViewEvent = {
+      'screen_name': 'OTP Verify Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('OTP_Verify_Screen', screenViewEvent);
+
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'OTP_Verify_Screen')
+      ..addAttribute('user_id', Constant.userID.toString())
+
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+
+    Future.delayed(Duration(seconds: 2), () {
+
+      MoEngageService.instance.trackEvent('OTP_Verify_Screen', properties);
+    });
+  }
+ 
 
   void startResendTimer() {
     _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -103,11 +139,7 @@ class OTPVerifyState extends State<OTPVerify> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'OTP Verify Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
+
     return Scaffold(
       backgroundColor: appBgColor,
       resizeToAvoidBottomInset: true,
@@ -593,9 +625,6 @@ class OTPVerifyState extends State<OTPVerify> {
         MoEngageService.instance.setPhoneNumber(widget.mobileNumber.toString());
         MoEngageService.instance.setEmail(widget.email.toString());
         MoEngageService.instance.identifyUser(Constant.userID.toString());
-
-
-
 
 
         final properties = MoEProperties()

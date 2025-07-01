@@ -40,6 +40,19 @@ class RentStoreState extends State<RentStore> {
     if (_eventTracked) return;
     _eventTracked = true;
 
+     analytics.logEvent(
+      name: "Rent_store_screen_view",
+      parameters: {
+        "screen_name": "Rent Stor",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Rent Stor Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Rent_store_screen_view', screenViewEvent);
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Rent Store')
       ..addAttribute('user_id', Constant.userID.toString())
@@ -49,7 +62,7 @@ class RentStoreState extends State<RentStore> {
 
     Future.delayed(Duration(seconds: 2), () {
 
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Rent_store_screen_view', properties);
     });
   }
   void _getData() async {
@@ -67,18 +80,7 @@ class RentStoreState extends State<RentStore> {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Rent Stor",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Rent Stor Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
+   
 
     if (kIsWeb || Constant.isTV) {
       return Scaffold(

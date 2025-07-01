@@ -1,3 +1,4 @@
+import 'package:dtlive/main.dart';
 import 'package:dtlive/model/couponmodel.dart';
 import 'package:dtlive/model/paymentoptionmodel.dart';
 import 'package:dtlive/model/paytmmodel.dart';
@@ -33,26 +34,6 @@ class PaymentProvider extends ChangeNotifier {
     debugPrint("applyPackageCouponCode packageId :==> $packageId");
     couponLoading = true;
     couponModel = await ApiService().applyPackageCoupon(couponCode, packageId);
-    Map<String, Object> screenViewEvent = {
-      'event_name': 'Apply Package Coupon',
-      "couponCode": couponCode,
-      "packageId": packageId,
-      "totalAmount": "${couponModel.result?.totalAmount}",
-      "discountAmount": "${couponModel.result?.discountAmount}",
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('Apply Package Coupon', screenViewEvent);
-    final timestamp = DateTime.now().toIso8601String();
-
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('couponCode', couponCode)
-      ..addAttribute('packageId', packageId)
-      ..addAttribute('totalAmount', '${couponModel.result?.totalAmount}')
-      ..addAttribute('discountAmount', '${couponModel.result?.discountAmount}')
-      ..addAttribute('timestamp', timestamp);
-
-    MoEngageService.instance.trackEvent('Package_promo_code_Applied', properties);
     debugPrint("applyPackageCouponCode status :==> ${couponModel.status}");
     debugPrint("applyPackageCouponCode message :==> ${couponModel.message}");
     couponLoading = false;
@@ -69,32 +50,6 @@ class PaymentProvider extends ChangeNotifier {
     couponLoading = true;
     couponModel = await ApiService()
         .applyRentCoupon(couponCode, videoId, typeId, videoType, price);
-    Map<String, Object> screenViewEvent = {
-      'event_name': 'Apply Rent Coupon',
-      "couponCode": couponCode,
-      "videoId": videoId,
-      "typeId": typeId,
-      "videoType": videoType,
-      "price": price,
-      "totalAmount": "${couponModel.result?.totalAmount}",
-      "discountAmount": "${couponModel.result?.discountAmount}",
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('Apply Rent Coupon', screenViewEvent);
-    final timestamp = DateTime.now().toIso8601String();
-
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('couponCode', couponCode)
-      ..addAttribute('videoId', videoId)
-      ..addAttribute('typeId', typeId)
-      ..addAttribute('videoType', videoType)
-      ..addAttribute('price', price)
-      ..addAttribute('totalAmount', '${couponModel.result?.totalAmount}')
-      ..addAttribute('discountAmount', '${couponModel.result?.discountAmount}')
-      ..addAttribute('timestamp', timestamp);
-
-    MoEngageService.instance.trackEvent('Rent_promo_code_Applied', properties);
     debugPrint("applyRentCouponCode status :==> ${couponModel.status}");
     debugPrint("applyRentCouponCode message :==> ${couponModel.message}");
     couponLoading = false;
@@ -140,7 +95,7 @@ class PaymentProvider extends ChangeNotifier {
         currencyCode,
         couponCode,
         orderStatus,
-        orderId, 
+        orderId,
         purchesVia);
     debugPrint("addTransaction status :==> ${successModel.status}");
     debugPrint("addTransaction message :==> ${successModel.message}");

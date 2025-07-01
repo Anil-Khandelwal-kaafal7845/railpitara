@@ -53,6 +53,20 @@ class _MyWatchlistState extends State<MyWatchlist> {
     if (_eventTracked) return;
     _eventTracked = true;
 
+      analytics.logEvent(
+      name: "Watchlist_screen_view",
+      parameters: {
+        "screen_name": "WatchList Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'WatchList Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Watchlist_screen_view', screenViewEvent);
+
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'WatchList Screen')
       ..addAttribute('user_id', Constant.userID.toString())
@@ -62,9 +76,10 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
     Future.delayed(Duration(seconds: 2), () {
 
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Watchlist_screen_view', properties);
     });
   }
+ 
   _getData() async {
     await watchlistProvider.getWatchlist();
   }
@@ -77,19 +92,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "WatchList Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'WatchList Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-
+  
     return Scaffold(
       backgroundColor: appBgColor,
       // appBar: Utils.myAppBarWithBack(
@@ -1173,8 +1176,7 @@ class _MyWatchlistState extends State<MyWatchlist> {
                 .watchlistModel.result?[position].videoUploadType ??
             "",
         videoThumb:
-        watchlistProvider.watchlistModel.result?[position].name ?? "",
-            // watchlistProvider.watchlistModel.result?[position].landscape ?? "",
+            watchlistProvider.watchlistModel.result?[position].name ?? "",
         vStopTime:
             watchlistProvider.watchlistModel.result?[position].stopTime ?? 0);
     if (isContinue != null && isContinue == true) {

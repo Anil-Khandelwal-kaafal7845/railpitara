@@ -59,6 +59,21 @@ class SplashState extends State<Splash> {
     });
 
     getUserData();
+
+       analytics.logEvent(
+        name: "Splash_screen_view",
+        parameters: {
+          "screen_name": "Splash Screen",
+          "user_id": Constant.userID,
+        },
+      );
+    
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Splash Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Splash_screen_view', screenViewEvent);
+    
     // moEngagePlugin();
   }
 
@@ -77,21 +92,7 @@ class SplashState extends State<Splash> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (Constant.userID != null) {
-      analytics.logEvent(
-        name: "screen_view",
-        parameters: {
-          "screen_name": "Splash Screen",
-          "user_id": Constant.userID,
-        },
-      );
-    }
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Splash Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
+  Widget build(BuildContext context) {  
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

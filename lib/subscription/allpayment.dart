@@ -91,7 +91,23 @@ class AllPaymentState extends State<AllPayment>
     // if (!kIsWeb) _payUCheckoutPro = PayUCheckoutProFlutter(this);
     prDialog = ProgressDialog(context);
     _getData();
+    analytics.logEvent(
+      name: "Payment_screen_view",
+      parameters: {
+        "screen_name": "Payment screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Payment screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Payment_screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('screen_name', 'Payment Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
+    MoEngageService.instance.trackEvent('Payment_screen_view', properties);
     super.initState();
   }
 
@@ -170,29 +186,36 @@ class AllPaymentState extends State<AllPayment>
           await videoDetailsProvider.updateRentPurchase();
           await showDetailsProvider.updateRentPurchase();
           print("Payment DONE 1 ----${orderStatus}");
+          print("Payment -----------${amount}");
+          // Singular.eventWithArgs('Razorpay Payment Success', {
+          //   'event_name': 'Razorpay Payment Success',
+          //   "packageId": packageId,
+          //   "description": description,
+          //   "amount": amount,
+          //   "paymentId": paymentId,
+          //   "couponCode": '${strCouponCode}',
+          //   "orderStatus": orderStatus,
+          //   "orderId": orderId,
+          //   'user_id': Constant.userID.toString(),
+          //   'is_revenue_event': true,
+          //   'currencyCode': currencyCode
+          // });
 
-          Singular.eventWithArgs('Razorpay Payment Success', {
-            'event_name': 'Razorpay Payment Success',
-            "packageId": packageId,
-            "description": description,
-            "amount": amount,
-            "paymentId": paymentId,
-            "couponCode": '${strCouponCode}',
-            "orderStatus": orderStatus,
-            "orderId": orderId,
-            'user_id': Constant.userID.toString(),
-            'is_revenue_event': true,
-            'currencyCode': currencyCode
-          });
-//revenue event-----
-          Singular.eventWithArgs('__iap__', {
-            'product_id': packageId.toString(),
-            'price': amount,
-            'revenue': amount,
-            'currency': currencyCode,
-            'order_id': orderId,
-            'user_id': Constant.userID.toString(),
-          });
+          Singular.customRevenueWithAttributes(
+            "Subscription_Purchased", // eventName
+            "INR", // currency
+            double.parse(amount), //double
+            {
+              "packageId": packageId,
+              "description": description.toString(),
+              "paymentId": paymentId,
+              "couponCode": strCouponCode.toString(),
+              "orderStatus": orderStatus.toString(),
+              "orderId": orderId,
+              "user_id": Constant.userID.toString(),
+            },
+          );
+
           final timestamp = DateTime.now().toIso8601String();
           MoEngageService.instance.setPhoneNumber(userMobileNo.toString());
           final properties = MoEProperties()
@@ -207,7 +230,7 @@ class AllPaymentState extends State<AllPayment>
             ..addAttribute('timestamp', timestamp);
 
           MoEngageService.instance
-              .trackEvent('Razorpay_Payment_Successful', properties);
+              .trackEvent('Subscription_Purchased', properties);
 
           print("MoEngage event tracked with and timestamp: $timestamp");
 
@@ -218,34 +241,35 @@ class AllPaymentState extends State<AllPayment>
 
           print("Payment DONE 2 ----${orderStatus}");
 
-          Singular.eventWithArgs('Razorpay Payment Failed', {
-            'event_name': 'Razorpay Payment Failed',
-            "packageId": packageId,
-            "description": description,
-            "amount": amount,
-            "paymentId": paymentId,
-            "couponCode": '${strCouponCode}',
-            "orderStatus": orderStatus,
-            "orderId": orderId,
-            'user_id': Constant.userID.toString(),
-            'is_revenue_event': true,
-            'currencyCode': currencyCode
-          });
-          final timestamp = DateTime.now().toIso8601String();
-          MoEngageService.instance.setUserName(userMobileNo.toString());
-          final properties = MoEProperties()
-            ..addAttribute('user_id', userMobileNo.toString())
-            ..addAttribute('payment_method', 'Razorpay Payment')
-            ..addAttribute('error_code', orderStatus)
-            ..addAttribute('timestamp', timestamp)
-            ..addAttribute('amount', amount)
-            ..addAttribute('paymentId', paymentId)
-            ..addAttribute('couponCode', '${strCouponCode}')
-            ..addAttribute('orderId', orderId)
-            ..addAttribute('packageId', packageId);
+          // Singular.customRevenueWithAttributes(
+          //   "Subscription_failed", // eventName
+          //   "INR", // currency
+          //   double.parse(amount), //double
+          //   {
+          //     "packageId": packageId.toString(),
+          //     "description": description,
+          //     "paymentId": paymentId.toString(),
+          //     "couponCode": strCouponCode,
+          //     "orderStatus": orderStatus,
+          //     "orderId": orderId.toString(),
+          //     "user_id": Constant.userID.toString(),
+          //   },
+          // );
+          // final timestamp = DateTime.now().toIso8601String();
+          // MoEngageService.instance.setUserName(userMobileNo.toString());
+          // final properties = MoEProperties()
+          //   ..addAttribute('user_id', userMobileNo.toString())
+          //   ..addAttribute('payment_method', 'Razorpay Payment')
+          //   ..addAttribute('error_code', orderStatus)
+          //   ..addAttribute('timestamp', timestamp)
+          //   ..addAttribute('amount', amount)
+          //   ..addAttribute('paymentId', paymentId)
+          //   ..addAttribute('couponCode', '${strCouponCode}')
+          //   ..addAttribute('orderId', orderId)
+          //   ..addAttribute('packageId', packageId);
 
-          MoEngageService.instance
-              .trackEvent('Razorpay_Payment_Failed', properties);
+          // MoEngageService.instance
+          //     .trackEvent('Subscription_failed', properties);
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         }
@@ -286,46 +310,39 @@ class AllPaymentState extends State<AllPayment>
           } else if (videoType == "2") {
             await showDetailsProvider.updateRentPurchase();
           }
-          Singular.eventWithArgs('Razorpay Payment Success', {
-            'event_name': 'Razorpay Payment Success',
-            "videoId": videoId,
-            "amount": amount,
-            "typeId": typeId,
-            "videoType": videoType,
-            "couponCode": '${strCouponCode}',
-            "orderStatus": orderStatus,
-            "orderId": orderId,
-            'user_id': Constant.userID.toString(),
-            'is_revenue_event': true,
-          });
 
-          // ✅ Required __iap__ revenue event for Singular
-          Singular.eventWithArgs('__iap__', {
-            'product_id': videoId.toString(),
-            'price': amount,
-            'revenue': amount,
-            'currency': 'INR', // or use dynamic currencyCode if available
-            'order_id': orderId,
-            'user_id': Constant.userID.toString(),
-            'couponCode': '${strCouponCode}',
-            'is_revenue_event': true,
-          });
+          Singular.customRevenueWithAttributes(
+            "Rent_Video_Purchased", // eventName
+            "INR", // currency
+            double.parse(amount), //double
+            {
+              "videoId": videoId,
+              "typeId": typeId,
+              "videoType": videoType,
+              "couponCode": strCouponCode.toString(),
+              "orderStatus": orderStatus.toString(),
+              "orderId": orderId.toString(),
+              'user_id': Constant.userID.toString(),
+            },
+          );
 
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         } else {
-          Singular.eventWithArgs('Razorpay Payment Failed', {
-            'event_name': 'Razorpay Payment Failed',
-            "videoId": videoId,
-            "amount": amount,
-            "typeId": typeId,
-            "videoType": videoType,
-            "couponCode": '${strCouponCode}',
-            "orderStatus": orderStatus,
-            "orderId": orderId,
-            'user_id': Constant.userID.toString(),
-            'is_revenue_event': true,
-          });
+          // Singular.customRevenueWithAttributes(
+          //   "Rent_Video_Purchased_faild", // eventName
+          //   "INR", // currency
+          //   double.parse(amount), //double
+          //   {
+          //     "videoId": videoId,
+          //     "typeId": typeId,
+          //     "videoType": videoType,
+          //     "couponCode": strCouponCode.toString(),
+          //     "orderStatus": orderStatus.toString(),
+          //     "orderId": orderId.toString(),
+          //     'user_id': Constant.userID.toString(),
+          //   },
+          // );
           if (!mounted) return;
           Navigator.pop(context, isPaymentDone);
         }
@@ -479,23 +496,6 @@ class AllPaymentState extends State<AllPayment>
   }
 
   Widget _buildPage() {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Payment screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Payment screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Payment Screen')
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
-    MoEngageService.instance.trackEvent('screen_view', properties);
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: AppBar(
@@ -954,70 +954,52 @@ class AllPaymentState extends State<AllPayment>
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () async {
-                            print(
-                                "FINAL PAYMENT IS: ${paymentProvider.finalAmount}");
+                            double amount = double.tryParse(
+                                    paymentProvider.finalAmount ?? "0") ??
+                                0;
+                            int roundedAmount = amount
+                                .round(); // optional if amount already correct
 
-                            if (paymentProvider.finalAmount == "0") {
-                              // Directly call the addRentTransaction API
-                              print("CALL rent api WHEN PAYMENT ZERO");
-                              //               await paymentProvider.addRentTransaction( widget.itemId, paymentProvider.finalAmount,
-                              //                   widget.typeId,
-                              //                   widget.videoType,
-                              // strCouponCode, "success", "CouponCode");
+                            print("💰 FINAL PAYMENT IS: ₹$amount");
+
+                            if (amount < 1) {
+                              print("✅ Amount < ₹1 => Direct Transaction");
 
                               if (widget.payType == "Package") {
                                 addTransaction(
-                                    widget.itemId,
-                                    widget.itemTitle,
-                                    paymentProvider.finalAmount,
-                                    paymentId,
-                                    widget.currency,
-                                    "success",
-                                    "amount");
+                                  widget.itemId,
+                                  widget.itemTitle,
+                                  paymentProvider.finalAmount,
+                                  paymentId,
+                                  widget.currency,
+                                  "success",
+                                  "amount",
+                                );
                               } else if (widget.payType == "Rent") {
                                 addRentTransaction(
-                                    widget.itemId,
-                                    paymentProvider.finalAmount,
-                                    widget.typeId,
-                                    widget.videoType,
-                                    "success");
+                                  widget.itemId,
+                                  paymentProvider.finalAmount,
+                                  widget.typeId,
+                                  widget.videoType,
+                                  "success",
+                                );
                               }
-
-                              // await addRentTransaction(
-                              //       widget.itemId,
-                              //       paymentProvider.finalAmount,
-                              //       widget.typeId,
-                              //       widget.videoType,
-                              //       "success");
                             } else {
                               print(
-                                  "FINAL PAYMENT IS: ${paymentProvider.finalAmount}");
-                              // Proceed with the existing payment flow
+                                  "✅ Amount ≥ ₹1 => Proceed with Razorpay order creation");
 
-                              print(
-                                  "CALL ORDER CREATION WHEN PAYMENT NOT ZERO");
-                              var id = await createOrder();
+                              try {
+                                var id = await createOrder();
+                                setState(() {
+                                  orderId = id;
+                                });
 
-                              setState(() {
-                                orderId = id;
-                              });
-
-                              await paymentProvider
-                                  .setCurrentPayment("razorpay");
-                              openPayment(pgName: "razorpay");
-                              // try {
-                              //   print("CALL ORDER CREATION WHEN PAYMENT NOT ZERO");
-                              //   var id = await createOrder();
-
-                              //   setState(() {
-                              //     orderId = id;
-                              //   });
-
-                              //   await paymentProvider.setCurrentPayment("razorpay");
-                              //   openPayment(pgName: "razorpay");
-                              // } catch (e) {
-                              //   print("Error creating order: $e");
-                              // }
+                                await paymentProvider
+                                    .setCurrentPayment("razorpay");
+                                openPayment(pgName: "razorpay");
+                              } catch (e) {
+                                print("❌ Error creating Razorpay order: $e");
+                              }
                             }
                           },
                           child: _buildPGButtonRazorpay("", "Pay", 35, 130),
@@ -1545,7 +1527,7 @@ class AllPaymentState extends State<AllPayment>
               'wallets': ['paytm']
             },
             'theme': {
-              'color.xml': '#B80E07',
+          'color': '#B80E07', // ✅ Corrected key here
             },
             'image':
                 'https://play-lh.googleusercontent.com/9TNMnjC76gfYthQk69SRgXkDSARSr0UYUvvFmpueSBAL1Njh2vNehZab64nezdoh_-w',
@@ -1572,7 +1554,7 @@ class AllPaymentState extends State<AllPayment>
     debugPrint("============ Payment Failed event hit--- ============");
 
     analytics.logEvent(
-      name: "Razorpay Payment Faild",
+      name: "Razorpay_payment_failed",
       parameters: {
         "user_id": Constant.userID,
         "PayType": widget.payType,
@@ -1583,7 +1565,7 @@ class AllPaymentState extends State<AllPayment>
       },
     );
     Map<String, Object> screenViewEvent = {
-      'event_name': 'Razorpay Payment Faield',
+      'event_name': 'Razorpay_payment_failed',
       "PayType": '${widget.payType}',
       "price": '${widget.price}',
       "name": '${widget.itemTitle}',
@@ -1591,7 +1573,8 @@ class AllPaymentState extends State<AllPayment>
       "VId": '${widget.itemId}',
       'user_id': Constant.userID.toString(),
     };
-    Singular.eventWithArgs('Razorpay Payment Faild', screenViewEvent);
+    Singular.eventWithArgs('Razorpay_payment_failed', screenViewEvent);
+
     /*
     * PaymentFailureResponse contains three values:
     * 1. Error Code
@@ -1634,7 +1617,7 @@ class AllPaymentState extends State<AllPayment>
     debugPrint("============ Success paykment event hit--- ============");
 
     analytics.logEvent(
-      name: "Razorpay Payment Success",
+      name: "Razorpay_Payment_Success",
       parameters: {
         "user_id": Constant.userID,
         "PayType": widget.payType,
@@ -1644,24 +1627,22 @@ class AllPaymentState extends State<AllPayment>
         "VId": widget.itemId
       },
     );
-    final timestamp = DateTime.now().toIso8601String();
-    MoEngageService.instance.setUserName(userMobileNo.toString());
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('plan_type ', widget.itemTitle)
-      ..addAttribute('payment_method', widget.payType)
-      ..addAttribute('timestamp', timestamp)
-      ..addAttribute('PayType', '${widget.payType}')
-      ..addAttribute('price', '${widget.price}')
-      ..addAttribute('name', '${widget.itemTitle}')
-      ..addAttribute('final amount', '${paymentProvider.finalAmount}')
-      ..addAttribute('VID', '${widget.itemId}');
+    // final timestamp = DateTime.now().toIso8601String();
+    // MoEngageService.instance.setUserName(userMobileNo.toString());
+    // final properties = MoEProperties()
+    //   ..addAttribute('user_id', Constant.userID.toString())
+    //   ..addAttribute('plan_type ', widget.itemTitle)
+    //   ..addAttribute('payment_method', widget.payType)
+    //   ..addAttribute('timestamp', timestamp)
+    //   ..addAttribute('PayType', '${widget.payType}')
+    //   ..addAttribute('price', '${widget.price}')
+    //   ..addAttribute('name', '${widget.itemTitle}')
+    //   ..addAttribute('final amount', '${paymentProvider.finalAmount}')
+    //   ..addAttribute('VID', '${widget.itemId}');
 
+    // MoEngageService.instance.trackEvent('Razorpay_Payment_Success', properties);
 
-
-    MoEngageService.instance.trackEvent('Razorpay_Payment_Success', properties);
-
-    print("MoEngage event tracked with and timestamp: $timestamp");
+    // print("MoEngage event tracked with and timestamp: $timestamp");
     /*
     * Payment Success Response contains three values:
     * 1. Order ID
@@ -2510,7 +2491,7 @@ class AllPaymentState extends State<AllPayment>
     if (!isPaymentDone) {
       print("----------AAAA");
       analytics.logEvent(
-        name: "subscription_canceled",
+        name: "Subscription_Canceled",
         parameters: {
           "user_id": Constant.userID,
           "package_id": widget.itemId, // Add the actual package id if available
@@ -2521,7 +2502,7 @@ class AllPaymentState extends State<AllPayment>
         },
       );
       Map<String, Object> screenViewEvent = {
-        'event_name': 'subscription_canceled',
+        'event_name': 'Subscription_Canceled',
         "PayType": '${widget.payType}',
         "price": '${widget.price}',
         "name": '${widget.itemTitle}',
@@ -2530,7 +2511,7 @@ class AllPaymentState extends State<AllPayment>
         "VId": '${widget.itemId}',
         'user_id': Constant.userID.toString(),
       };
-      Singular.eventWithArgs('subscription_canceled', screenViewEvent);
+      Singular.eventWithArgs('Subscription_Canceled', screenViewEvent);
     }
     final timestamp = DateTime.now().toIso8601String();
     MoEngageService.instance.setUserName(userMobileNo.toString());

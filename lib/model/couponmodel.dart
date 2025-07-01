@@ -40,10 +40,10 @@ class Result {
     this.discountAmount,
   });
 
-  int? id;
-  String? uniqueId;
-  int? totalAmount;
-  int? discountAmount;
+  dynamic id;
+  dynamic uniqueId;
+  dynamic totalAmount;
+  dynamic discountAmount;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],

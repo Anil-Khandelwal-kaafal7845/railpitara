@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:advertising_id/advertising_id.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dtlive/firebase_options.dart';
@@ -91,7 +92,7 @@ Future<void> main() async {
 
   // Request App Tracking Transparency Permission
   final trackingStatus =
-  await AppTrackingTransparency.requestTrackingAuthorization();
+      await AppTrackingTransparency.requestTrackingAuthorization();
   debugPrint("Tracking Authorization Status: $trackingStatus");
 
   SingularConfig config = SingularConfig('ott_snap_37c31355',
@@ -177,7 +178,7 @@ Future<void> main() async {
 }
 
 final RouteObserver<ModalRoute<void>> routeObserver =
-RouteObserver<ModalRoute<void>>();
+    RouteObserver<ModalRoute<void>>();
 
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -193,7 +194,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseAnalyticsObserver analyticsObserver =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   // final _noScreenshot = NoScreenshot.instance;
@@ -227,63 +228,64 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
             path: '/',
             builder: (_, __) => LocaleBuilder(
-              builder: (locale) => MaterialApp(
-                navigatorKey: navigatorKey,
-                debugShowCheckedModeBanner: false,
-                navigatorObservers: [
-                  routeObserver,
-                  analyticsObserver
-                ], //HERE
-                theme: ThemeData(
-                  primaryColor: colorPrimary,
-                  primaryColorDark: colorPrimaryDark,
-                  primaryColorLight: primaryLight,
-                  scaffoldBackgroundColor: appBgColor,
-                ).copyWith(
-                  scrollbarTheme: const ScrollbarThemeData().copyWith(
-                    thumbColor: MaterialStateProperty.all(white),
-                    trackVisibility: MaterialStateProperty.all(true),
-                    trackColor: MaterialStateProperty.all(whiteTransparent),
-                  ),
-                ),
-                title: Constant.appName,
-                localizationsDelegates: Locales.delegates,
-                supportedLocales: Locales.supportedLocales,
-                locale: locale,
-                localeResolutionCallback:
-                    (Locale? locale, Iterable<Locale> supportedLocales) {
-                  return locale;
-                },
-                builder: (context, child) {
-                  return ResponsiveBreakpoints.builder(
-                    child: child!,
-                    breakpoints: [
-                      const Breakpoint(start: 0, end: 360, name: MOBILE),
-                      const Breakpoint(start: 361, end: 800, name: TABLET),
-                      const Breakpoint(
-                          start: 801, end: 1000, name: DESKTOP),
-                      const Breakpoint(
-                          start: 1001, end: double.infinity, name: '4K'),
-                    ],
-                  );
-                },
-                // home: const StartUpPage(),
+                  builder: (locale) => MaterialApp(
+                    navigatorKey: navigatorKey,
+                    debugShowCheckedModeBanner: false,
+                    navigatorObservers: [
+                      routeObserver,
+                      analyticsObserver
+                    ], //HERE
+                    theme: ThemeData(
+                      primaryColor: colorPrimary,
+                      primaryColorDark: colorPrimaryDark,
+                      primaryColorLight: primaryLight,
+                      scaffoldBackgroundColor: appBgColor,
+                    ).copyWith(
+                      scrollbarTheme: const ScrollbarThemeData().copyWith(
+                        thumbColor: MaterialStateProperty.all(white),
+                        trackVisibility: MaterialStateProperty.all(true),
+                        trackColor: MaterialStateProperty.all(whiteTransparent),
+                      ),
+                    ),
+                    title: Constant.appName,
+                    localizationsDelegates: Locales.delegates,
+                    supportedLocales: Locales.supportedLocales,
+                    locale: locale,
+                    localeResolutionCallback:
+                        (Locale? locale, Iterable<Locale> supportedLocales) {
+                      return locale;
+                    },
+                    builder: (context, child) {
+                      return ResponsiveBreakpoints.builder(
+                        child: child!,
+                        breakpoints: [
+                          const Breakpoint(start: 0, end: 360, name: MOBILE),
+                          const Breakpoint(start: 361, end: 800, name: TABLET),
+                          const Breakpoint(
+                              start: 801, end: 1000, name: DESKTOP),
+                          const Breakpoint(
+                              start: 1001, end: double.infinity, name: '4K'),
+                        ],
+                      );
+                    },
+                    // home: const StartUpPage(),
 
-                home: (kIsWeb)
-                    ? const TVHome(pageName: "")
-                    : Splash(isDynamicLink: false,
-                ),
-                scrollBehavior: const MaterialScrollBehavior().copyWith(
-                  dragDevices: {
-                    PointerDeviceKind.mouse,
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.stylus,
-                    PointerDeviceKind.unknown,
-                    PointerDeviceKind.trackpad
-                  },
-                ),
-              ),
-            )),
+                    home: (kIsWeb)
+                        ? const TVHome(pageName: "")
+                        : Splash(
+                            isDynamicLink: false,
+                          ),
+                    scrollBehavior: const MaterialScrollBehavior().copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.mouse,
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.stylus,
+                        PointerDeviceKind.unknown,
+                        PointerDeviceKind.trackpad
+                      },
+                    ),
+                  ),
+                )),
         GoRoute(
           path: '/home/:title/:encodedParams',
           builder: (context, state) {
@@ -430,18 +432,18 @@ class _MyAppState extends State<MyApp> {
       }
 
       // For Android
-      // if (defaultTargetPlatform == TargetPlatform.android) {
-      //   final advertisingId =
-      //   await AdvertisingId.id(false); // Pass false to not limit tracking
-      //   if (advertisingId != null) {
-      //     debugPrint("Google Advertising ID (GAID): $advertisingId");
-      //
-      //     // Pass GAID to Singular SDK
-      //     Singular.setCustomUserId(advertisingId);
-      //   } else {
-      //     debugPrint("Failed to retrieve Google Advertising ID (GAID)");
-      //   }
-      // }
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final advertisingId =
+            await AdvertisingId.id(false); // Pass false to not limit tracking
+        if (advertisingId != null) {
+          debugPrint("Google Advertising ID (GAID): $advertisingId");
+
+          // Pass GAID to Singular SDK
+          Singular.setCustomUserId(advertisingId);
+        } else {
+          debugPrint("Failed to retrieve Google Advertising ID (GAID)");
+        }
+      }
 
       // For iOS
       else if (defaultTargetPlatform == TargetPlatform.iOS) {

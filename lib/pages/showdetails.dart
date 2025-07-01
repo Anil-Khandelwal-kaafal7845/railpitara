@@ -108,14 +108,29 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
     if (_eventTracked) return;
     _eventTracked = true;
 
+
+    analytics.logEvent(
+      name: "Show_details_screen_view",
+      parameters: {
+        "screen_name": "Tv Show Details",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Tv Show Details Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Show_details_screen_view', screenViewEvent);
+
+
     final properties = MoEProperties()
-      ..addAttribute('screen_name', 'Tv Show Details')
+      ..addAttribute('screen_name', 'Show_details_screen_view')
       ..addAttribute('user_id', Constant.userID.toString())
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
 
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Show_details_screen_view', properties);
     });
   }
   @override
@@ -378,19 +393,6 @@ class ShowDetailsState extends State<ShowDetails> with RouteAware {
   Widget build(BuildContext context) {
     debugPrint(
         "Back button pressed. Can pop: ${Navigator.of(context).canPop()}");
-
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Tv Show Details",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Tv Show Details Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
 
     if (showDetailsProvider.sectionDetailModel.status == 200) {
       if (showDetailsProvider.sectionDetailModel.cast != null &&

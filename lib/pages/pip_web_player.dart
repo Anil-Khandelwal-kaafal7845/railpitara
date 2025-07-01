@@ -32,6 +32,18 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
   @override
   void initState() {
     super.initState();
+     analytics.logEvent(
+      name: "screen_view",
+      parameters: {
+        "screen_name": "Player Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Player Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('screen_view', screenViewEvent);
     // Lock the orientation to portrait when the screen is initialized
     setPortraitOrientation();
   }
@@ -76,18 +88,7 @@ class _TestPlayerWebState extends State<TestPlayerWeb> {
   }
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Player Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Player Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
+   
     // HTML player code with autoplay and muted settings
     String htmlPlayer = '''
       <!DOCTYPE html>

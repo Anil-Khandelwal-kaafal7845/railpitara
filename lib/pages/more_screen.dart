@@ -48,12 +48,24 @@ class MoreScreenState extends State<MoreScreen> {
     if (_eventTracked) return;
     _eventTracked = true;
 
+       analytics.logEvent(
+      name: "More_screen_view",
+      parameters: {
+        "screen_name": "More Section Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Singular.eventWithArgs('More_screen_view', {
+      'screen_name': 'More Section Screen',
+      'user_id': Constant.userID.toString(),
+    });
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'More Section Screen')
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
     Future.delayed(const Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('More_screen_view', properties);
     });
   }
 
@@ -65,18 +77,6 @@ class MoreScreenState extends State<MoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "More Section Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Singular.eventWithArgs('screen_view', {
-      'screen_name': 'More Section Screen',
-      'user_id': Constant.userID.toString(),
-    });
-
     return Scaffold(
       backgroundColor: appBgColor,
       appBar: Utils.myAppBarWithBack(context, widget.appBarTitle, false),

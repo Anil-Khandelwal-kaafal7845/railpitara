@@ -1,4 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/pages/search.dart';
 import 'package:dtlive/pages/sectionbytype.dart';
 import 'package:dtlive/provider/findprovider.dart';
@@ -50,6 +51,22 @@ class FindState extends State<Find> {
     if (_eventTracked) return;
     _eventTracked = true;
 
+                analytics.logEvent(
+  name: "Search_screen_view",
+  parameters: {
+    "screen_name": "Find Screen",
+    "user_id": Constant.userID,
+  },
+);
+
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Search Screen',
+      'user_id': Constant.userID.toString(),
+    };
+
+    Singular.eventWithArgs('Search_screen_view', screenViewEvent);
+
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Search Screen')
       ..addAttribute('user_id', Constant.userID.toString())
@@ -58,8 +75,10 @@ class FindState extends State<Find> {
 
 
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Search_screen_view', properties);
     });
+
+
   }
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
@@ -263,20 +282,6 @@ class FindState extends State<Find> {
 
   @override
   Widget build(BuildContext context) {
-//         analytics.logEvent(
-//   name: "screen_view",
-//   parameters: {
-//     "screen_name": "Find Screen",
-//     "user_id": Constant.userID,
-//   },
-// );
-
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Search Screen',
-      'user_id': Constant.userID.toString(),
-    };
-
-    Singular.eventWithArgs('screen_view', screenViewEvent);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -451,11 +456,11 @@ class FindState extends State<Find> {
                 onSubmitted: (value) async {
                   if (value.isNotEmpty) {
                     Map<String, Object> screenViewEvent = {
-                      'screen_name': 'Search_content',
+                      'screen_name': 'Content_Searched',
                       "search_item": value,
                       'user_id': Constant.userID.toString(),
                     };
-                    Singular.eventWithArgs('Search_content', screenViewEvent);
+                    Singular.eventWithArgs('Content_Searched', screenViewEvent);
                     final timestamp = DateTime.now().toIso8601String();
                     MoEngageService.instance
                         .setUserName(userMobileNo.toString());

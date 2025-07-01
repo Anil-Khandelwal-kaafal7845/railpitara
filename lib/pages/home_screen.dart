@@ -151,20 +151,25 @@ class HomeState extends State<Home> with RouteAware {
       setState(() {});
     });
   }
+
   bool hasFetchedData = false;
   int? lastTappedTab;
   DateTime? lastTapTime;
   @override
   void initState() {
     print("-----${Constant.userID}");
+
     sectionScrollController.addListener(() {
-      final sectionProvider = Provider.of<SectionDataProvider>(context, listen: false);
+      final sectionProvider =
+          Provider.of<SectionDataProvider>(context, listen: false);
       if (sectionScrollController.position.pixels >=
-          sectionScrollController.position.maxScrollExtent - 200 &&
+              sectionScrollController.position.maxScrollExtent - 200 &&
           !sectionProvider.loadingSection &&
           sectionProvider.hasMoreData) {
         print("Triggering Pagination");
-        getTabData(homeProvider.selectedIndex ?? 0, homeProvider.sectionTypeModel.result, loadMore: true);
+        getTabData(homeProvider.selectedIndex ?? 0,
+            homeProvider.sectionTypeModel.result,
+            loadMore: true);
       }
     });
     Provider.of<GeneralProvider>(context, listen: false);
@@ -174,7 +179,8 @@ class HomeState extends State<Home> with RouteAware {
 
     fetchForceUpdateData();
 
-    sectionDataProvider = Provider.of<SectionDataProvider>(context, listen: false);
+    sectionDataProvider =
+        Provider.of<SectionDataProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     findProvider = Provider.of<FindProvider>(context, listen: false);
     observerController =
@@ -188,11 +194,12 @@ class HomeState extends State<Home> with RouteAware {
       }
     });
     if (!kIsWeb) {
-
       OneSignal.Notifications.addClickListener(_handleNotificationOpened);
     }
+
     trackMoEngageEventOnce();
   }
+
   Future<void> onTabTap(int index) async {
     final now = DateTime.now();
     if (lastTappedTab == index &&
@@ -206,10 +213,11 @@ class HomeState extends State<Home> with RouteAware {
 
     await getTabData(index, homeProvider.sectionTypeModel.result);
   }
+
   void _scrollListener() {
     print("SCROLLING - Offset: ${sectionScrollController.position.pixels}");
     if (sectionScrollController.position.pixels >=
-        sectionScrollController.position.maxScrollExtent - 200 &&
+            sectionScrollController.position.maxScrollExtent - 200 &&
         !sectionDataProvider.loadingSection &&
         sectionDataProvider.hasMoreData) {
       print("TRIGGERING PAGINATION API");
@@ -221,11 +229,25 @@ class HomeState extends State<Home> with RouteAware {
       );
     }
   }
+
   bool _eventTracked = false;
 
   void trackMoEngageEventOnce() {
     if (_eventTracked) return;
     _eventTracked = true;
+
+    analytics.logEvent(
+      name: "Home_screen_view",
+      parameters: {
+        "screen_name": "HomePage",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Home Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Home_screen_view', screenViewEvent);
 
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'HomePage')
@@ -236,7 +258,7 @@ class HomeState extends State<Home> with RouteAware {
 
     // Optional delay
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Home_screen_view', properties);
     });
   }
 
@@ -257,17 +279,13 @@ class HomeState extends State<Home> with RouteAware {
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
-
-    checkForUpdate() async {
+  checkForUpdate() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
 
     if ((Platform.isAndroid
             ? forceUpdateData!.result!.appVersion!
             : forceUpdateData!.result!.appVersionIos!) >
         num.parse(packageInfo.buildNumber)) {
-    
-    
       showDialog(
         barrierDismissible:
             forceUpdateData!.result!.forceUpdateAndroid == 0 ? false : true,
@@ -285,7 +303,8 @@ class HomeState extends State<Home> with RouteAware {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Visibility(
-                       visible: forceUpdateData!.result!.forceUpdateAndroid == 0,// Show Cancel button if not forced
+                      visible: forceUpdateData!.result!.forceUpdateAndroid ==
+                          0, // Show Cancel button if not forced
                       child: TextButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -298,7 +317,7 @@ class HomeState extends State<Home> with RouteAware {
                         if (Platform.isAndroid || Platform.isIOS) {
                           final url = Uri.parse(
                             Platform.isAndroid
-                            ?"${Constant.androidAppUrl}"
+                                ? "${Constant.androidAppUrl}"
                                 : "https://apps.apple.com/in/app/om-tv/id${Constant.appleAppId}",
                           );
                           launchUrl(
@@ -316,10 +335,9 @@ class HomeState extends State<Home> with RouteAware {
           );
         },
       );
-   
-    
     }
   }
+
   // What to do when the user opens/taps on a notification
   _handleNotificationOpened(OSNotificationClickEvent result) {
     /* id, video_type, type_id */
@@ -419,8 +437,7 @@ class HomeState extends State<Home> with RouteAware {
     }
   }
 
-  Future<void> getTabData(
-      int position, List<type.Result>? sectionTypeList,
+  Future<void> getTabData(int position, List<type.Result>? sectionTypeList,
       {bool loadMore = false}) async {
     debugPrint("getTabData position ====> $position");
     final currentTab = position;
@@ -445,7 +462,6 @@ class HomeState extends State<Home> with RouteAware {
       debugPrint("Tab switched before data loaded — skipping update");
       return;
     }
-
   }
   // Future<void> getTabData(
   //     int position, List<type.Result>? sectionTypeList) async {
@@ -581,19 +597,6 @@ class HomeState extends State<Home> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "HomePage",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Home Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: appBgColor,
@@ -1369,9 +1372,7 @@ class HomeState extends State<Home> with RouteAware {
       },
       body: homeProvider.loading
           ? ShimmerUtils.buildHomeMobileShimmer(context)
-
           : (homeProvider.sectionTypeModel.status == 200)
-
               ? (homeProvider.sectionTypeModel.result != null ||
                       (homeProvider.sectionTypeModel.result?.length ?? 0) > 0)
                   ? Stack(
@@ -1387,7 +1388,6 @@ class HomeState extends State<Home> with RouteAware {
                       ],
                     )
                   : ShimmerUtils.buildHomeMobileShimmer(context)
-              
               : ShimmerUtils.buildHomeMobileShimmer(context),
     );
   }
@@ -1628,7 +1628,8 @@ class HomeState extends State<Home> with RouteAware {
       constraints: const BoxConstraints.expand(),
       child: RefreshIndicator(
         onRefresh: () async {
-          await getTabData(homeProvider.selectedIndex ?? 0, homeProvider.sectionTypeModel.result);
+          await getTabData(homeProvider.selectedIndex ?? 0,
+              homeProvider.sectionTypeModel.result);
         },
         child: CustomScrollView(
           controller: sectionScrollController,
@@ -1643,7 +1644,8 @@ class HomeState extends State<Home> with RouteAware {
                     return ShimmerUtils.bannerMobile(context);
                   } else {
                     if (sectionDataProvider.sectionBannerModel.status == 200) {
-                      return _mobileHomeBanner(sectionDataProvider.sectionBannerModel.result);
+                      return _mobileHomeBanner(
+                          sectionDataProvider.sectionBannerModel.result);
                     } else {
                       return const SizedBox.shrink();
                     }
@@ -1665,7 +1667,8 @@ class HomeState extends State<Home> with RouteAware {
                   return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
 
-                final sections = sectionDataProvider.sectionListModel.result ?? [];
+                final sections =
+                    sectionDataProvider.sectionListModel.result ?? [];
                 if (sections.every((s) => s.data?.isEmpty ?? true)) {
                   return SliverToBoxAdapter(
                     child: Center(
@@ -1680,29 +1683,30 @@ class HomeState extends State<Home> with RouteAware {
                   );
                 }
 
-              return SliverList(
+                return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == sections.length && sectionDataProvider.loadingMore) {
-                            return Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Center(child: ShimmerUtils.setHomeSections(context, "landscape"),
-                              // CircularProgressIndicator(color: complimentryColor,)
+                    (context, index) {
+                      if (index == sections.length &&
+                          sectionDataProvider.loadingMore) {
+                        return Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: ShimmerUtils.setHomeSections(
+                                context, "landscape"),
+                            // CircularProgressIndicator(color: complimentryColor,)
+                          ),
+                        );
+                      }
 
-                              ),
-
-                            );
-                          }
-
-
-                          final section = sections[index];
-                      if (section.data == null || section.data!.isEmpty) return const SizedBox.shrink();
+                      final section = sections[index];
+                      if (section.data == null || section.data!.isEmpty)
+                        return const SizedBox.shrink();
 
                       return _buildSection(section); // define separately
                     },
                     // childCount: sections.length + (sectionDataProvider.loadingSection ? 1 : 0),
-                    childCount: sections.length + (sectionDataProvider.loadingMore ? 1 : 0),
-
+                    childCount: sections.length +
+                        (sectionDataProvider.loadingMore ? 1 : 0),
                   ),
                 );
               },
@@ -1721,8 +1725,9 @@ class HomeState extends State<Home> with RouteAware {
 
   Widget _buildSection(list.Result section) {
     final bool isBannerVisible = (section.bannerVisible ?? "0") == "1";
-    final bool isGenreOrLanguage =
-        section.videoType == 3 || section.videoType == 4 || section.videoType == 6;
+    final bool isGenreOrLanguage = section.videoType == 3 ||
+        section.videoType == 4 ||
+        section.videoType == 6;
     final bool isReelShow = section.videoType == 7;
     final bool isFMSection = section.title == "FM";
     return Column(
@@ -1783,7 +1788,8 @@ class HomeState extends State<Home> with RouteAware {
           ],
         ),
         SizedBox(
-          height: getRemainingDataHeight(section.videoType.toString(), section.screenLayout ?? ""),
+          height: getRemainingDataHeight(
+              section.videoType.toString(), section.screenLayout ?? ""),
           child: setSectionData(sectionList: [section], index: 0),
         ),
         if (isBannerVisible)
@@ -1802,6 +1808,7 @@ class HomeState extends State<Home> with RouteAware {
       ],
     );
   }
+
   ///
 
   // Widget tabItem(List<type.Result>? sectionTypeList) {
@@ -2009,7 +2016,7 @@ class HomeState extends State<Home> with RouteAware {
                       } else {
                         final timestamp = DateTime.now().toIso8601String();
                         final properties = MoEProperties()
-                        // ..addAttribute('userName', Constant.userID.toString())
+                          // ..addAttribute('userName', Constant.userID.toString())
                           ..addAttribute('user_id', Constant.userID.toString())
                           ..addAttribute('stream_id', videoType)
                           ..addAttribute('stream_category', typeId)
@@ -2652,7 +2659,7 @@ class HomeState extends State<Home> with RouteAware {
       } else {
         final timestamp = DateTime.now().toIso8601String();
         final properties = MoEProperties()
-        // ..addAttribute('userName', Constant.userID.toString())
+          // ..addAttribute('userName', Constant.userID.toString())
           ..addAttribute('user_id', Constant.userID.toString())
           ..addAttribute('stream_id', videoType)
           ..addAttribute('stream_category', typeId)
@@ -3353,8 +3360,7 @@ class HomeState extends State<Home> with RouteAware {
                                   .toString(), // Pass the section ID
                             );
                           },
-                        )
-                        );
+                        ));
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -3596,9 +3602,6 @@ class HomeState extends State<Home> with RouteAware {
     }
   }
 
-
-
-
   Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -3627,7 +3630,7 @@ class HomeState extends State<Home> with RouteAware {
                 } else {
                   final timestamp = DateTime.now().toIso8601String();
                   final properties = MoEProperties()
-                  // ..addAttribute('userName', Constant.userID.toString())
+                    // ..addAttribute('userName', Constant.userID.toString())
                     ..addAttribute('user_id', Constant.userID.toString())
                     ..addAttribute('stream_id', videoType)
                     ..addAttribute('stream_category', typeId)
@@ -3793,7 +3796,7 @@ class HomeState extends State<Home> with RouteAware {
                 } else {
                   final timestamp = DateTime.now().toIso8601String();
                   final properties = MoEProperties()
-                  // ..addAttribute('userName', Constant.userID.toString())
+                    // ..addAttribute('userName', Constant.userID.toString())
                     ..addAttribute('user_id', Constant.userID.toString())
                     ..addAttribute('stream_id', videoType)
                     ..addAttribute('stream_category', typeId)
@@ -3959,7 +3962,7 @@ class HomeState extends State<Home> with RouteAware {
                 } else {
                   final timestamp = DateTime.now().toIso8601String();
                   final properties = MoEProperties()
-                  // ..addAttribute('userName', Constant.userID.toString())
+                    // ..addAttribute('userName', Constant.userID.toString())
                     ..addAttribute('user_id', userMobileNo)
                     ..addAttribute('stream_id', videoType)
                     ..addAttribute('stream_category', typeId)
@@ -4146,7 +4149,7 @@ class HomeState extends State<Home> with RouteAware {
                 } else {
                   final timestamp = DateTime.now().toIso8601String();
                   final properties = MoEProperties()
-                  // ..addAttribute('userName', Constant.userID.toString())
+                    // ..addAttribute('userName', Constant.userID.toString())
                     ..addAttribute('user_id', userMobileNo)
                     ..addAttribute('stream_id', videoType)
                     ..addAttribute('stream_category', typeId)
@@ -4276,8 +4279,6 @@ class HomeState extends State<Home> with RouteAware {
                     ),
                   ),
                 ),
-            
-            
               ],
             ),
           );
@@ -4321,7 +4322,7 @@ class HomeState extends State<Home> with RouteAware {
 
                     final timestamp = DateTime.now().toIso8601String();
                     final properties = MoEProperties()
-                    // ..addAttribute('userName', Constant.userID.toString())
+                      // ..addAttribute('userName', Constant.userID.toString())
                       ..addAttribute('user_id', Constant.userID.toString())
                       ..addAttribute('stream_id', videoType)
                       ..addAttribute('stream_category', typeId)
@@ -4330,7 +4331,8 @@ class HomeState extends State<Home> with RouteAware {
                     print(
                         "MoEngage event tracked with Constant userID: ${userMobileNo}");
                     MoEngageService.instance
-                        .trackEvent('Live_Stream_Joined', properties);                    Navigator.of(context).push(MaterialPageRoute(
+                        .trackEvent('Live_Stream_Joined', properties);
+                    Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => TestPlayerWeb(
                             loadURL: sectionDataList![index].video320!)));
                   }
@@ -4829,13 +4831,12 @@ class HomeState extends State<Home> with RouteAware {
                 if (Constant.userID == null) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginViaSocial()),
+                    MaterialPageRoute(builder: (context) => LoginViaSocial()),
                   );
                 } else {
                   final timestamp = DateTime.now().toIso8601String();
                   final properties = MoEProperties()
-                  // ..addAttribute('userName', Constant.userID.toString())
+                    // ..addAttribute('userName', Constant.userID.toString())
                     ..addAttribute('user_id', Constant.userID.toString())
                     ..addAttribute('stream_id', videoType)
                     ..addAttribute('stream_category', typeId)

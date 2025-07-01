@@ -63,6 +63,7 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
     prDialog = ProgressDialog(context);
     _getDeviceToken();
     _getData();
+     
     trackMoEngageEventOnce();
   }
   bool _eventTracked = false;
@@ -71,6 +72,20 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
     if (_eventTracked) return;
     _eventTracked = true;
 
+     analytics.logEvent(
+      name: "Login_email_screen_view",
+      parameters: {
+        "screen_name": "Login Email",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Email Login',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('scrLogin_email_screen_vieween_view', screenViewEvent);
+
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Login Email')
       ..addAttribute('user_id', Constant.userID.toString())
@@ -78,7 +93,7 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
 
     // Optional delay
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Login_email_screen_view', properties);
     });
   }
   _getDeviceToken() async {
@@ -182,19 +197,6 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Login Email",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Email Login',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -271,8 +273,8 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
 
                                         children: [
 
-                                          generalProvider.isMobileLogin == "1"
-                                              ? Container(
+                                     
+                                            Container(
                                             child: Column(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -427,7 +429,6 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                                     // // Get device ID
                                                     // final deviceInfoPlugin = DeviceInfoPlugin();
                                                     // String deviceId;
-                                                    //
                                                     // if (Platform.isAndroid) {
                                                     //   final androidInfo = await deviceInfoPlugin.androidInfo;
                                                     //   deviceId = androidInfo.id ?? 'unknown';
@@ -437,18 +438,18 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                                     // } else {
                                                     //   deviceId = 'unsupported_platform';
                                                     // }
-                                                    //
+
                                                     // MoEngageService.instance.identifyUser(emailController.text.toString());
                                                     // final timestamp = DateTime.now().toIso8601String();
-                                                    //
+
                                                     // final properties = MoEProperties()
                                                     //   ..addAttribute('user_id ', emailController.text.toString())
                                                     //   ..addAttribute('signup_method ', 'email')
                                                     //   ..addAttribute('device_id', deviceId)
                                                     //   ..addAttribute('timestamp', timestamp);
-                                                    //
+
                                                     // MoEngageService.instance.trackEvent('User_Registration', properties);
-                                                    //
+
                                                     // print("MoEngage event tracked with device ID: $deviceId and timestamp: $timestamp");
 
                                                     String email = emailController.text.toString();
@@ -550,9 +551,9 @@ class LoginViaSocialState extends State<LoginViaSocialEmail> {
                                               ],
                                             ),
                                           )
-                                              : SizedBox.shrink(),
+                                         
 
-                                          ClipRRect(
+                                        ,  ClipRRect(
                                             borderRadius: BorderRadius.circular(
                                                 30), // Clipping to round the edges
                                             child: Container(

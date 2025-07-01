@@ -56,7 +56,26 @@ class SubscriptionState extends State<Subscription> with RouteAware {
 
     generalProvider.getGeneralsetting(context);
     super.initState();
+
     _getData();
+    analytics.logEvent(
+      name: "Subscription_screen_view",
+      parameters: {
+        "screen_name": "Subscription Package Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Subscription Package Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Subscription_screen_view', screenViewEvent);
+    final properties = MoEProperties()
+      ..addAttribute('user_id', Constant.userID.toString())
+      ..addAttribute('screen_name', 'Subscription Package Screen')
+      ..addAttribute('timestamp', DateTime.now().toIso8601String());
+
+    MoEngageService.instance.trackEvent('Subscription_screen_view', properties);
   }
 
   _getData() async {
@@ -114,6 +133,18 @@ class SubscriptionState extends State<Subscription> with RouteAware {
           "package_price": '${packageList?[index].price}',
         };
         Singular.eventWithArgs('choose_subscription_plan_pay', screenViewEvent);
+
+        final timestamp = DateTime.now().toIso8601String();
+        final properties = MoEProperties()
+          ..addAttribute('user_id', Constant.userID.toString())
+          ..addAttribute('package_id', '${packageList?[index].id}')
+          ..addAttribute('package_name', '${packageList?[index].name}')
+          ..addAttribute('package_price', '${packageList?[index].price}')
+          ..addAttribute('timestamp', timestamp);
+
+        MoEngageService.instance
+            .trackEvent('choose_subscription_plan_pay', properties);
+
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -421,24 +452,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
   @override
   Widget build(BuildContext context) {
     print("COIN---${generalProvider.isCoinShow}");
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Subscription Package Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Subscription Package Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-    final properties = MoEProperties()
-      ..addAttribute('user_id', Constant.userID.toString())
-      ..addAttribute('screen_name', 'Subscription Package Screen')
-      ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-    MoEngageService.instance.trackEvent('screen_view', properties);
     if (kIsWeb) {
       return Scaffold(
         backgroundColor: appBgColor,
@@ -524,10 +538,10 @@ class SubscriptionState extends State<Subscription> with RouteAware {
             ),
             GestureDetector(
               onTap: () {
-                  generalProvider.isCoinShow == "1"?
-                _checkPackageAndShowBottomSheet(
-                    packageList, selectedIndex, context): _checkAndPay(packageList, selectedIndex);
-
+                generalProvider.isCoinShow == "1"
+                    ? _checkPackageAndShowBottomSheet(
+                        packageList, selectedIndex, context)
+                    : _checkAndPay(packageList, selectedIndex);
               },
               child: Container(
                 margin: EdgeInsets.only(top: 0, bottom: 20),
@@ -603,6 +617,17 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                   "package_price": '${packageList[index].price}',
                 };
                 Singular.eventWithArgs('package_selected', screenViewEvent);
+
+                final timestamp = DateTime.now().toIso8601String();
+                final properties = MoEProperties()
+                  ..addAttribute('user_id', Constant.userID.toString())
+                  ..addAttribute('timestamp', timestamp)
+                  ..addAttribute('package_id', '${packageList[index].id}')
+                  ..addAttribute('package_name', '${packageList[index].name}')
+                  ..addAttribute('package_price', '${packageList[index].price}')
+                  ..addAttribute('timestamp', timestamp);
+                MoEngageService.instance
+                    .trackEvent('package_selected', properties);
               },
               child: Container(
                 child: Card(
@@ -936,8 +961,7 @@ class SubscriptionState extends State<Subscription> with RouteAware {
                         ),
                       ),
                     ),
-                   
-                   
+
                     const SizedBox(height: 10),
                   ],
                 ),

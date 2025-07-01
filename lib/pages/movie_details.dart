@@ -122,14 +122,26 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     if (_eventTracked) return;
     _eventTracked = true;
 
+    analytics.logEvent(
+      name: "Details_screen_view",
+      parameters: {
+        "screen_name": "Details Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Details Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Details_screen_view', screenViewEvent);
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Details Screen')
       ..addAttribute('user_id', Constant.userID.toString())
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
 
-
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Details_screen_view', properties);
     });
   }
 
@@ -429,30 +441,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-
-
     debugPrint(
-        "timeee: ${videoDetailsProvider
-            .sectionDetailModel
-            .result
-            ?.videoDuration }");
-
+        "timeee: ${videoDetailsProvider.sectionDetailModel.result?.videoDuration}");
 
     debugPrint(
         "Back button pressed. Can pop: ${Navigator.of(context).canPop()}");
-
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Details Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Details Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
 
     if (videoDetailsProvider.sectionDetailModel.status == 200) {
       if (videoDetailsProvider.sectionDetailModel.cast != null &&
@@ -648,10 +641,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           .result
                                           ?.videoDuration ??
                                       0),
-
                                 ),
-
-
                             ],
                           ),
                         ],
@@ -865,7 +855,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                     borderRadius: BorderRadius.circular(5),
                                     onTap: () {
                                       analytics.logEvent(
-                                          name: 'watch_trailer',
+                                          name: 'Trailer_watched',
                                           parameters: {
                                             'video_id': widget.videoId,
                                             'video_name': videoDetailsProvider
@@ -875,7 +865,8 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                                 "",
                                           });
 
-                                      Singular.eventWithArgs('watch_trailer', {
+                                      Singular.eventWithArgs(
+                                          'Trailer_watched', {
                                         'video_id': widget.videoId,
                                         'video_name': videoDetailsProvider
                                                 .sectionDetailModel
@@ -885,17 +876,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                         'user_id': Constant.userID.toString(),
                                       });
                                       final timestamp =
-                                      DateTime.now().toIso8601String();
+                                          DateTime.now().toIso8601String();
 
                                       final properties = MoEProperties()
                                         ..addAttribute(
                                             'trailer_id', widget.videoId)
-                                        ..addAttribute(
-                                            'user_id', Constant.userID.toString())
+                                        ..addAttribute('user_id',
+                                            Constant.userID.toString())
                                         ..addAttribute(
                                             'trailer_name',
                                             videoDetailsProvider
-                                                .sectionDetailModel.result?.name)
+                                                .sectionDetailModel
+                                                .result
+                                                ?.name)
                                         ..addAttribute(
                                             'category_name',
                                             videoDetailsProvider
@@ -921,7 +914,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
 
                                       print(
                                           "MoEngage event tracked with and timestamp: $timestamp");
-
 
                                       openPlayer("Trailer");
                                     },
@@ -956,15 +948,13 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                               ?.isBookmark ??
                                           0;
                                       final timestamp =
-                                      DateTime.now().toIso8601String();
+                                          DateTime.now().toIso8601String();
 
                                       final properties = MoEProperties()
                                         ..addAttribute('user_id',
                                             Constant.userID.toString())
                                         ..addAttribute('platform',
                                             Platform.isIOS ? 'iOS' : 'Android')
-
-
                                         ..addAttribute('timestamp', timestamp)
                                         ..addAttribute(
                                             'video_id', widget.videoId)
@@ -982,11 +972,11 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       if (isBookmarked == 1) {
                                         // User is removing the bookmark
                                         MoEngageService.instance.trackEvent(
-                                            'bookmark_removed', properties);
+                                            'watchlist_removed', properties);
                                       } else {
                                         // User is adding a bookmark
                                         MoEngageService.instance.trackEvent(
-                                            'bookmark_added', properties);
+                                            'watchlist_added', properties);
                                       }
                                       print(
                                           "MoEngage event tracked with and timestamp: $timestamp");
@@ -1015,15 +1005,17 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           "user_id": Constant.userID.toString(),
                                         },
                                       );
-                                      final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+                                      final watchlistProvider =
+                                          Provider.of<WatchlistProvider>(
+                                              context,
+                                              listen: false);
 
                                       await videoDetailsProvider.setBookMark(
-                                        context,
-                                        widget.typeId,
-                                        widget.videoType,
-                                        widget.videoId,
-                                          watchlistProvider
-                                      );
+                                          context,
+                                          widget.typeId,
+                                          widget.videoType,
+                                          widget.videoId,
+                                          watchlistProvider);
                                     } else {
                                       if (kIsWeb || Constant.isTV) {
                                         Utils.buildWebAlertDialog(
@@ -1407,43 +1399,24 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
           borderRadius: BorderRadius.circular(30),
           //focusColor:: white,
           onTap: () {
-            final timestamp =
-            DateTime.now().toIso8601String();
+            final timestamp = DateTime.now().toIso8601String();
 
             final properties = MoEProperties()
-              ..addAttribute(
-                  'trailer_id', widget.videoId)
-              ..addAttribute(
-                  'user_id', Constant.userID.toString())
-              ..addAttribute(
-                  'trailer_name',
-                  videoDetailsProvider
-                      .sectionDetailModel.result?.name)
-              ..addAttribute(
-                  'category_name',
-                  videoDetailsProvider
-                      .sectionDetailModel
-                      .result
-                      ?.categoryName)
-              ..addAttribute(
-                  'duration_watched',
-                  videoDetailsProvider
-                      .sectionDetailModel
-                      .result
-                      ?.stopTime)
-              ..addAttribute(
-                  'language_id',
-                  videoDetailsProvider
-                      .sectionDetailModel
-                      .result
-                      ?.languageId)
+              ..addAttribute('trailer_id', widget.videoId)
+              ..addAttribute('user_id', Constant.userID.toString())
+              ..addAttribute('trailer_name',
+                  videoDetailsProvider.sectionDetailModel.result?.name)
+              ..addAttribute('category_name',
+                  videoDetailsProvider.sectionDetailModel.result?.categoryName)
+              ..addAttribute('duration_watched',
+                  videoDetailsProvider.sectionDetailModel.result?.stopTime)
+              ..addAttribute('language_id',
+                  videoDetailsProvider.sectionDetailModel.result?.languageId)
               ..addAttribute('timestamp', timestamp);
 
-            MoEngageService.instance.trackEvent(
-                'Trailer_watched', properties);
+            MoEngageService.instance.trackEvent('Trailer_watched', properties);
 
-            print(
-                "MoEngage event tracked with and timestamp: $timestamp");
+            print("MoEngage event tracked with and timestamp: $timestamp");
 
             openPlayer("Trailer");
           },
@@ -2213,11 +2186,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               borderRadius: BorderRadius.circular(5),
                               onTap: () {
                                 final timestamp =
-                                DateTime.now().toIso8601String();
+                                    DateTime.now().toIso8601String();
 
                                 final properties = MoEProperties()
-                                  ..addAttribute(
-                                      'trailer_id', widget.videoId)
+                                  ..addAttribute('trailer_id', widget.videoId)
                                   ..addAttribute(
                                       'user_id', Constant.userID.toString())
                                   ..addAttribute(
@@ -2226,26 +2198,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                           .sectionDetailModel.result?.name)
                                   ..addAttribute(
                                       'category_name',
-                                      videoDetailsProvider
-                                          .sectionDetailModel
-                                          .result
-                                          ?.categoryName)
+                                      videoDetailsProvider.sectionDetailModel
+                                          .result?.categoryName)
                                   ..addAttribute(
                                       'duration_watched',
                                       videoDetailsProvider
-                                          .sectionDetailModel
-                                          .result
-                                          ?.stopTime)
+                                          .sectionDetailModel.result?.stopTime)
                                   ..addAttribute(
                                       'language_id',
-                                      videoDetailsProvider
-                                          .sectionDetailModel
-                                          .result
-                                          ?.languageId)
+                                      videoDetailsProvider.sectionDetailModel
+                                          .result?.languageId)
                                   ..addAttribute('timestamp', timestamp);
 
-                                MoEngageService.instance.trackEvent(
-                                    'Trailer_watched', properties);
+                                MoEngageService.instance
+                                    .trackEvent('Trailer_watched', properties);
 
                                 print(
                                     "MoEngage event tracked with and timestamp: $timestamp");
@@ -2275,7 +2241,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               "isBookmark ====> ${videoDetailsProvider.sectionDetailModel.result?.isBookmark ?? 0}");
                           if (Constant.userID != null) {
                             final isBookmarked = videoDetailsProvider
-                                .sectionDetailModel.result?.isBookmark ??
+                                    .sectionDetailModel.result?.isBookmark ??
                                 0;
 
                             final timestamp = DateTime.now().toIso8601String();
@@ -2286,9 +2252,9 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ..addAttribute('platform',
                                   Platform.isIOS ? 'iOS' : 'Android')
 
-                            // ..addAttribute('Bookmark_type', isBookmarked == 1
-                            //                     ? "Bookmark_removed"
-                            //                     : "Bookmark_added",)
+                              // ..addAttribute('Bookmark_type', isBookmarked == 1
+                              //                     ? "Bookmark_removed"
+                              //                     : "Bookmark_added",)
                               ..addAttribute('timestamp', timestamp)
                               ..addAttribute('video_id', widget.videoId)
                               ..addAttribute('video_type', widget.videoType)
@@ -2307,15 +2273,16 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               MoEngageService.instance
                                   .trackEvent('bookmark_added', properties);
                             }
-                            final watchlistProvider = Provider.of<WatchlistProvider>(context, listen: false);
+                            final watchlistProvider =
+                                Provider.of<WatchlistProvider>(context,
+                                    listen: false);
 
                             await videoDetailsProvider.setBookMark(
-                              context,
-                              widget.typeId,
-                              widget.videoType,
-                              widget.videoId,
-                                watchlistProvider
-                            );
+                                context,
+                                widget.typeId,
+                                widget.videoType,
+                                widget.videoId,
+                                watchlistProvider);
                           } else {
                             if ((kIsWeb || Constant.isTV)) {
                               Utils.buildWebAlertDialog(context, "login", "")
@@ -2412,43 +2379,24 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       alignment: Alignment.centerLeft,
       child: InkWell(
         onTap: () {
-          final timestamp =
-          DateTime.now().toIso8601String();
+          final timestamp = DateTime.now().toIso8601String();
 
           final properties = MoEProperties()
-            ..addAttribute(
-                'trailer_id', widget.videoId)
-            ..addAttribute(
-                'user_id', Constant.userID.toString())
-            ..addAttribute(
-                'trailer_name',
-                videoDetailsProvider
-                    .sectionDetailModel.result?.name)
-            ..addAttribute(
-                'category_name',
-                videoDetailsProvider
-                    .sectionDetailModel
-                    .result
-                    ?.categoryName)
-            ..addAttribute(
-                'duration_watched',
-                videoDetailsProvider
-                    .sectionDetailModel
-                    .result
-                    ?.stopTime)
-            ..addAttribute(
-                'language_id',
-                videoDetailsProvider
-                    .sectionDetailModel
-                    .result
-                    ?.languageId)
+            ..addAttribute('trailer_id', widget.videoId)
+            ..addAttribute('user_id', Constant.userID.toString())
+            ..addAttribute('trailer_name',
+                videoDetailsProvider.sectionDetailModel.result?.name)
+            ..addAttribute('category_name',
+                videoDetailsProvider.sectionDetailModel.result?.categoryName)
+            ..addAttribute('duration_watched',
+                videoDetailsProvider.sectionDetailModel.result?.stopTime)
+            ..addAttribute('language_id',
+                videoDetailsProvider.sectionDetailModel.result?.languageId)
             ..addAttribute('timestamp', timestamp);
 
-          MoEngageService.instance.trackEvent(
-              'Trailer_watched', properties);
+          MoEngageService.instance.trackEvent('Trailer_watched', properties);
 
-          print(
-              "MoEngage event tracked with and timestamp: $timestamp");
+          print("MoEngage event tracked with and timestamp: $timestamp");
 
           openPlayer("Trailer");
         },
@@ -2584,14 +2532,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 TextButton(
                                   onPressed: () {
                                     final timestamp =
-                                    DateTime.now().toIso8601String();
+                                        DateTime.now().toIso8601String();
 
                                     final properties = MoEProperties()
-                                      ..addAttribute('status', 'I Confirm that i am 18 years and above')
+                                      ..addAttribute('status',
+                                          'I Confirm that i am 18 years and above')
                                       ..addAttribute(
                                           'user_id', Constant.userID.toString())
                                       ..addAttribute('method_used', 'Video')
-
                                       ..addAttribute('timestamp', timestamp);
 
                                     MoEngageService.instance.trackEvent(
@@ -2629,7 +2577,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 TextButton(
                                   onPressed: () {
                                     final timestamp =
-                                    DateTime.now().toIso8601String();
+                                        DateTime.now().toIso8601String();
 
                                     final properties = MoEProperties()
                                       ..addAttribute(
@@ -2637,7 +2585,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       ..addAttribute(
                                           'reason', 'Age_Verification')
                                       ..addAttribute('method_used', 'Video')
-
                                       ..addAttribute('timestamp', timestamp);
 
                                     MoEngageService.instance.trackEvent(
@@ -2860,14 +2807,14 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 TextButton(
                                   onPressed: () {
                                     final timestamp =
-                                    DateTime.now().toIso8601String();
+                                        DateTime.now().toIso8601String();
 
                                     final properties = MoEProperties()
-                                      ..addAttribute('status', 'I Confirm that i am 18 years and above')
+                                      ..addAttribute('status',
+                                          'I Confirm that i am 18 years and above')
                                       ..addAttribute(
                                           'user_id', Constant.userID.toString())
                                       ..addAttribute('method_used', 'Video')
-
                                       ..addAttribute('timestamp', timestamp);
 
                                     MoEngageService.instance.trackEvent(
@@ -2905,7 +2852,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                 TextButton(
                                   onPressed: () {
                                     final timestamp =
-                                    DateTime.now().toIso8601String();
+                                        DateTime.now().toIso8601String();
 
                                     final properties = MoEProperties()
                                       ..addAttribute(
@@ -2913,7 +2860,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                                       ..addAttribute(
                                           'reason', 'Age_Verification')
                                       ..addAttribute('method_used', 'Video')
-
                                       ..addAttribute('timestamp', timestamp);
 
                                     MoEngageService.instance.trackEvent(
@@ -4205,7 +4151,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                     onTap: () {
                       Navigator.pop(context);
                       analytics.logEvent(
-                        name: 'share_video',
+                        name: 'Content_Shared',
                         parameters: {
                           'video_id': widget.videoId,
                           'video_name': videoDetailsProvider
@@ -4216,7 +4162,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         },
                       );
                       Map<String, Object> screenViewEvent = {
-                        'event_name': 'share_video',
+                        'event_name': 'Content_Shared',
                         'video_id': widget.videoId,
                         'video_name': videoDetailsProvider
                                 .sectionDetailModel.result?.name ??
@@ -4224,14 +4170,20 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                         'type_id': widget.typeId,
                         'user_id': Constant.userID.toString(),
                       };
-                      Singular.eventWithArgs('share_video', screenViewEvent);
+                      Singular.eventWithArgs('Content_Shared', screenViewEvent);
                       final timestamp = DateTime.now().toIso8601String();
 
                       final properties = MoEProperties()
                         ..addAttribute('user_id', Constant.userID.toString())
-                        ..addAttribute('content_id', 'share_video')
-                        ..addAttribute('timestamp', timestamp);
-
+                        ..addAttribute('content_id', 'Content_Shared')
+                        ..addAttribute('timestamp', timestamp)
+                        ..addAttribute('video_id', widget.videoId)
+                        ..addAttribute(
+                            'video_name',
+                            videoDetailsProvider
+                                    .sectionDetailModel.result?.name ??
+                                "")
+                        ..addAttribute('type_id', widget.typeId);
                       MoEngageService.instance
                           .trackEvent('Content_Shared', properties);
 
@@ -4274,12 +4226,10 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                             };
                             Singular.eventWithArgs(
                                 'watch_trailer', screenViewEvent);
-                            final timestamp =
-                            DateTime.now().toIso8601String();
+                            final timestamp = DateTime.now().toIso8601String();
 
                             final properties = MoEProperties()
-                              ..addAttribute(
-                                  'trailer_id', widget.videoId)
+                              ..addAttribute('trailer_id', widget.videoId)
                               ..addAttribute(
                                   'user_id', Constant.userID.toString())
                               ..addAttribute(
@@ -4289,25 +4239,19 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
                               ..addAttribute(
                                   'category_name',
                                   videoDetailsProvider
-                                      .sectionDetailModel
-                                      .result
-                                      ?.categoryName)
+                                      .sectionDetailModel.result?.categoryName)
                               ..addAttribute(
                                   'duration_watched',
                                   videoDetailsProvider
-                                      .sectionDetailModel
-                                      .result
-                                      ?.stopTime)
+                                      .sectionDetailModel.result?.stopTime)
                               ..addAttribute(
                                   'language_id',
                                   videoDetailsProvider
-                                      .sectionDetailModel
-                                      .result
-                                      ?.languageId)
+                                      .sectionDetailModel.result?.languageId)
                               ..addAttribute('timestamp', timestamp);
 
-                            MoEngageService.instance.trackEvent(
-                                'Trailer_watched', properties);
+                            MoEngageService.instance
+                                .trackEvent('Trailer_watched', properties);
 
                             print(
                                 "MoEngage event tracked with and timestamp: $timestamp");
@@ -4803,7 +4747,7 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     // String? videoThumb =
     //     (videoDetailsProvider.sectionDetailModel.result?.landscape ?? "");
     String? videoThumb =
-    (videoDetailsProvider.sectionDetailModel.result?.name ?? "");
+        (videoDetailsProvider.sectionDetailModel.result?.name ?? "");
 
     String? vUrl, vUploadType;
     if (playType == "Trailer") {
@@ -4848,7 +4792,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
     debugPrint("vUploadType ===> $vUploadType");
     debugPrint("stopTime ===> $stopTime");
     debugPrint("player url ifreme  ===> $iframeVideoUrl");
-
 
     if (!mounted) return;
     if (vUrl.isEmpty || vUrl == "") {
@@ -5367,6 +5310,4 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
       return await _checkSubsRentLogin();
     }
   }
-
-
 }

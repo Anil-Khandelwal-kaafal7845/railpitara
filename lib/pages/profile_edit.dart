@@ -43,6 +43,11 @@ class ProfileEditState extends State<ProfileEdit> {
   void initState() {
     prDialog = ProgressDialog(context);
     getUserData();
+      Map<String, Object> screenViewEvent = {
+      'screen_name': 'Profile Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Profile Screen', screenViewEvent);
     super.initState();
   }
 
@@ -66,11 +71,6 @@ class ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Profile Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('Profile Screen', screenViewEvent);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     if (!profileProvider.loading) {

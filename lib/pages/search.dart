@@ -1,5 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:dtlive/main.dart';
+import 'package:dtlive/pages/login_mobile.dart';
+import 'package:dtlive/pages/pip_web_player.dart';
 import 'package:dtlive/provider/searchprovider.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
@@ -32,90 +34,91 @@ class Search extends StatefulWidget {
   State<Search> createState() => SearchState();
 }
 
-  class SearchState extends State<Search> {
-    final ScrollController _scrollController = ScrollController();
-    final ScrollController _videoScrollController = ScrollController();
-    final ScrollController _showScrollController = ScrollController();
+class SearchState extends State<Search> {
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _videoScrollController = ScrollController();
+  final ScrollController _showScrollController = ScrollController();
 
-    final searchController = TextEditingController();
+  final searchController = TextEditingController();
 
-    late SearchProvider searchProvider = SearchProvider();
-    final SpeechToText _speechToText = SpeechToText();
-    bool speechEnabled = false, _isListening = false;
-    String _lastWords = '';
-    late BuildContext dialogContext;
-    String? userMobileNo;
-    SharedPre sharedPref = SharedPre();
-    @override
-    void initState() {
-      // _initSpeech();
-      searchProvider = Provider.of<SearchProvider>(context, listen: false);
-      searchController.text = widget.searchText ?? "";
-      // _getData();
-      // getUserData();
-      super.initState();
-      // trackMoEngageEventOnce();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _getData();
-        getUserData();
-        trackMoEngageEventOnce();
-      });
-      // _scrollController.addListener(() {
-      //   print("Scroll position: ${_scrollController.position.pixels} / ${_scrollController.position.maxScrollExtent}");
-      //
-      //   if (_scrollController.position.pixels >=
-      //       _scrollController.position.maxScrollExtent - 200 &&
-      //       !searchProvider.isFetchingMore &&
-      //       searchProvider.hasMoreData) {
-      //     print("Pagination triggered!");
-      //     searchProvider.getSearchVideopagination(
-      //       searchController.text,
-      //       '',
-      //       loadMore: true,
-      //     );
-      //   }
-      // });
+  late SearchProvider searchProvider = SearchProvider();
+  final SpeechToText _speechToText = SpeechToText();
+  bool speechEnabled = false, _isListening = false;
+  String _lastWords = '';
+  late BuildContext dialogContext;
+  String? userMobileNo;
+  SharedPre sharedPref = SharedPre();
+  @override
+  void initState() {
+    // _initSpeech();
+    searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    searchController.text = widget.searchText ?? "";
+    // _getData();
+    // getUserData();
+    super.initState();
+    // trackMoEngageEventOnce();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getData();
+      getUserData();
+      trackMoEngageEventOnce();
+    });
+    // _scrollController.addListener(() {
+    //   print("Scroll position: ${_scrollController.position.pixels} / ${_scrollController.position.maxScrollExtent}");
+    //
+    //   if (_scrollController.position.pixels >=
+    //       _scrollController.position.maxScrollExtent - 200 &&
+    //       !searchProvider.isFetchingMore &&
+    //       searchProvider.hasMoreData) {
+    //     print("Pagination triggered!");
+    //     searchProvider.getSearchVideopagination(
+    //       searchController.text,
+    //       '',
+    //       loadMore: true,
+    //     );
+    //   }
+    // });
 
-      _videoScrollController.addListener(() {
-        if (_videoScrollController.position.pixels >=
-            _videoScrollController.position.maxScrollExtent - 200 &&
-            !searchProvider.isFetchingMore &&
-            searchProvider.hasMoreData &&
-            searchProvider.isVideoClick) {
-          debugPrint("Video Pagination triggered!");
-          searchProvider.getSearchVideopagination(
-            searchController.text,
-            '',
-            loadMore: true,
-          );
-        }
-      });
+    _videoScrollController.addListener(() {
+      if (_videoScrollController.position.pixels >=
+              _videoScrollController.position.maxScrollExtent - 200 &&
+          !searchProvider.isFetchingMore &&
+          searchProvider.hasMoreData &&
+          searchProvider.isVideoClick) {
+        debugPrint("Video Pagination triggered!");
+        searchProvider.getSearchVideopagination(
+          searchController.text,
+          '',
+          loadMore: true,
+        );
+      }
+    });
 
-      _showScrollController.addListener(() {
-        if (_showScrollController.position.pixels >=
-            _showScrollController.position.maxScrollExtent - 200 &&
-            !searchProvider.isFetchingMore &&
-            searchProvider.hasMoreData &&
-            searchProvider.isShowClick) {
-          debugPrint("Show Pagination triggered!");
-          searchProvider.getSearchVideopagination(
-            searchController.text,
-            '',
-            loadMore: true,
-          );
-        }
-      });
-    }
+    _showScrollController.addListener(() {
+      if (_showScrollController.position.pixels >=
+              _showScrollController.position.maxScrollExtent - 200 &&
+          !searchProvider.isFetchingMore &&
+          searchProvider.hasMoreData &&
+          searchProvider.isShowClick) {
+        debugPrint("Show Pagination triggered!");
+        searchProvider.getSearchVideopagination(
+          searchController.text,
+          '',
+          loadMore: true,
+        );
+      }
+    });
+  }
+
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200 && // near bottom
+            _scrollController.position.maxScrollExtent - 200 && // near bottom
         !searchProvider.isFetchingMore &&
         searchProvider.hasMoreData) {
       // Trigger load more
-      searchProvider.getSearchVideopagination(searchController.text,"", loadMore: true);
+      searchProvider.getSearchVideopagination(searchController.text, "",
+          loadMore: true);
     }
   }
-
 
   bool _eventTracked = false;
 
@@ -123,23 +126,36 @@ class Search extends StatefulWidget {
     if (_eventTracked) return;
     _eventTracked = true;
 
+     analytics.logEvent(
+      name: "Search_screen_view",
+      parameters: {
+        "screen_name": "Search Screen",
+        "user_id": Constant.userID,
+      },
+    );
+    Map<String, Object> screenViewEvent = {
+      'screen_name': 'Search Screen',
+      'user_id': Constant.userID.toString(),
+    };
+    Singular.eventWithArgs('Search_screen_view', screenViewEvent);
+
+
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Search Screen')
       ..addAttribute('user_id', Constant.userID.toString())
-
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
-
 
     // Optional delay
     Future.delayed(Duration(seconds: 2), () {
-      MoEngageService.instance.trackEvent('screen_view', properties);
+      MoEngageService.instance.trackEvent('Search_screen_view', properties);
     });
   }
+
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
     debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
   }
+
   /// Initialize speech recognition
   void _initSpeech() async {
     speechEnabled = await _speechToText.initialize();
@@ -161,8 +177,7 @@ class Search extends StatefulWidget {
     var micStatus = statuses[Permission.microphone]!;
     var connectStatus = statuses[Permission.bluetoothConnect]!;
 
-    if (micStatus.isPermanentlyDenied ||
-        connectStatus.isPermanentlyDenied) {
+    if (micStatus.isPermanentlyDenied || connectStatus.isPermanentlyDenied) {
       // _showPermissionDialog();
       return;
     }
@@ -186,7 +201,7 @@ class Search extends StatefulWidget {
     showDialog(
       context: context,
       barrierDismissible:
-      false, // Prevents dismissing the dialog by tapping outside
+          false, // Prevents dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         dialogContext = context; // Save the dialog context to close it later
         return AlertDialog(
@@ -307,33 +322,20 @@ class Search extends StatefulWidget {
 
   _getData() async {
     if ((widget.searchText ?? "").isNotEmpty) {
-
-      final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+      final searchProvider =
+          Provider.of<SearchProvider>(context, listen: false);
       searchProvider.loading = true;
       searchProvider.notifyListeners();
-      await  searchProvider.getSearchVideopagination(searchController.text,"", loadMore: true);
+      await searchProvider.getSearchVideopagination(searchController.text, "",
+          loadMore: true);
       // await searchProvider.getSearchVideo(searchController.text, "");
       // await searchProvider.getSearchVideo(context,widget.searchText ?? "");
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    analytics.logEvent(
-      name: "screen_view",
-      parameters: {
-        "screen_name": "Search Screen",
-        "user_id": Constant.userID,
-      },
-    );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Search Screen',
-      'user_id': Constant.userID.toString(),
-    };
-    Singular.eventWithArgs('screen_view', screenViewEvent);
-
+   
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appBgColor,
@@ -363,11 +365,12 @@ class Search extends StatefulWidget {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    searchProvider.setDataVisibility(true, false);
+                                    searchProvider.setDataVisibility(
+                                        true, false);
                                   },
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -390,7 +393,7 @@ class Search extends StatefulWidget {
                                         visible: searchProvider.isVideoClick,
                                         child: Container(
                                           width:
-                                          MediaQuery.of(context).size.width,
+                                              MediaQuery.of(context).size.width,
                                           height: 2,
                                           color: white,
                                         ),
@@ -402,11 +405,12 @@ class Search extends StatefulWidget {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    searchProvider.setDataVisibility(false, true);
+                                    searchProvider.setDataVisibility(
+                                        false, true);
                                   },
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -429,7 +433,7 @@ class Search extends StatefulWidget {
                                         visible: searchProvider.isShowClick,
                                         child: Container(
                                           width:
-                                          MediaQuery.of(context).size.width,
+                                              MediaQuery.of(context).size.width,
                                           height: 2,
                                           color: white,
                                         ),
@@ -445,8 +449,8 @@ class Search extends StatefulWidget {
                         searchProvider.isVideoClick
                             ? _buildVideoUI()
                             : searchProvider.isShowClick
-                            ? _buildShowUI()
-                            : const SizedBox.shrink(),
+                                ? _buildShowUI()
+                                : const SizedBox.shrink(),
                       ],
                     );
                   },
@@ -501,16 +505,17 @@ class Search extends StatefulWidget {
               alignment: Alignment.center,
               child: TextField(
                 onChanged: (value) async {
-                   print("Search keyword: $value");
+                  print("Search keyword: $value");
                   if (value.isNotEmpty) {
                     await searchProvider.setLoading(true);
-                    await searchProvider.getSearchVideopagination(context, value);
+                    await searchProvider.getSearchVideopagination(
+                        context, value);
                     Map<String, Object> screenViewEvent = {
-                      'screen_name': 'Search_content',
+                      'screen_name': 'Content_Searched',
                       "search_item": value,
                       'user_id': Constant.userID.toString(),
                     };
-                    Singular.eventWithArgs('search_content', screenViewEvent);
+                    Singular.eventWithArgs('Content_Searched', screenViewEvent);
                     final timestamp = DateTime.now().toIso8601String();
                     MoEngageService.instance
                         .setUserName(userMobileNo.toString());
@@ -561,7 +566,7 @@ class Search extends StatefulWidget {
                     debugPrint("Clear Search!");
                     searchController.clear();
                     await searchProvider.clearProvider();
-                     searchProvider.notifyProvider();
+                    searchProvider.notifyProvider();
                   },
                   child: Container(
                     width: 50,
@@ -635,14 +640,11 @@ class Search extends StatefulWidget {
 
   Widget _buildVideoUI() {
     if (searchProvider.loading) {
-      print("SHIMMER TRIGGERED");
       return _shimmerSearch();
     } else {
       if (searchProvider.searchModel.status == 200) {
         if (searchProvider.searchModel.video != null &&
             searchProvider.searchModel.video!.isNotEmpty) {
-          print("qqqqqq${searchProvider.searchVideoList.length}");
-          print("aaaaa${searchProvider.searchModel.video?.length }");
           return Expanded(
             child: AlignedGridView.count(
               controller: _videoScrollController,
@@ -650,61 +652,204 @@ class Search extends StatefulWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              physics: const AlwaysScrollableScrollPhysics(),
-
               // Add 1 to show loader item if more data is being fetched
               itemCount: searchProvider.searchModel.video!.length +
                   (searchProvider.isFetchingMore ? 1 : 0),
-
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int position) {
-                // If it's the loader position
                 if (position == searchProvider.searchModel.video!.length) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: CircularProgressIndicator(color: complimentryColor),
+                      child:
+                          CircularProgressIndicator(color: complimentryColor),
                     ),
                   );
                 }
 
                 final video = searchProvider.searchModel.video![position];
-
                 return Material(
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(4),
                     onTap: () {
                       debugPrint("Clicked on position ==> $position");
-                      Utils.openDetails(
-                        context: context,
-                        videoId: video.id ?? 0,
-                        upcomingType: 0,
-                        videoType: video.videoType ?? 0,
-                        typeId: video.typeId ?? 0,
-                      );
+
+                      if (searchProvider
+                              .searchModel.video?[position].isLiveUrl ==
+                          1) {
+                        if (Constant.userID == null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginViaSocial()));
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TestPlayerWeb(
+                                loadURL: searchProvider.searchModel
+                                        .video?[position].video1080 ??
+                                    ""),
+                          ));
+                        }
+                      } else {
+                        Utils.openDetails(
+                          context: context,
+                          videoId:
+                              searchProvider.searchModel.video?[position].id ??
+                                  0,
+                          upcomingType: 0,
+                          videoType: searchProvider
+                                  .searchModel.video?[position].videoType ??
+                              0,
+                          typeId: searchProvider
+                                  .searchModel.video?[position].typeId ??
+                              0,
+                        );
+                      }
                     },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Dimens.heightLand,
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: MyNetworkImage(
-                          imageUrl: video.landscape?.toString() ?? "",
-                          fit: BoxFit.cover,
-                          imgHeight: MediaQuery.of(context).size.height,
-                          imgWidth: MediaQuery.of(context).size.width,
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        // Background image with gradient overlay for better visibility
+                        Container(
+                          width: Dimens.widthLand,
+                          height: Dimens.heightLand,
+                          padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black26, blurRadius: 5)
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                              children: [
+                                MyNetworkImage(
+                                  imageUrl: searchProvider.searchModel
+                                          .video?[position].landscape
+                                          .toString() ??
+                                      "",
+                                  fit: BoxFit.cover,
+                                  imgHeight: MediaQuery.of(context).size.height,
+                                  imgWidth: MediaQuery.of(context).size.width,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black.withOpacity(0.6),
+                                        Colors.transparent
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+
+                        // Rent Tag
+                        Visibility(
+                          visible: searchProvider
+                                      .searchModel.video?[position].isRent ==
+                                  1 &&
+                              searchProvider
+                                      .searchModel.video?[position].isPremium ==
+                                  0,
+                          child: _buildTag('assets/images/rupee.png'),
+                        ),
+
+                        // Premium Tag
+                        Visibility(
+                          visible: searchProvider
+                                  .searchModel.video?[position].isPremium ==
+                              1,
+                          child: _buildTag('assets/images/crown.png'),
+                        ),
+
+                        // Both Rent & Premium Tag
+                        Visibility(
+                          visible: searchProvider
+                                      .searchModel.video?[position].isRent ==
+                                  1 &&
+                              searchProvider
+                                      .searchModel.video?[position].isPremium ==
+                                  1,
+                          child: _buildTag('assets/images/crown.png'),
+                        ),
+
+                        // Live Indicator
+                        Visibility(
+                          visible: searchProvider
+                                  .searchModel.video?[position].isLiveUrl ==
+                              1,
+                          child: Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black26, blurRadius: 4)
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 6,
+                                    width: 6,
+                                    margin: const EdgeInsets.only(right: 5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  const Text(
+                                    "LIVE",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   height: Dimens.heightLand,
+                    //   alignment: Alignment.center,
+                    //   child: ClipRRect(
+                    //     borderRadius: BorderRadius.circular(4),
+                    //     clipBehavior: Clip.antiAliasWithSaveLayer,
+                    //     child: MyNetworkImage(
+                    //       imageUrl: searchProvider
+                    //               .searchModel.video?[position].landscape
+                    //               .toString() ??
+                    //           "",
+                    //       fit: BoxFit.cover,
+                    //       imgHeight: MediaQuery.of(context).size.height,
+                    //       imgWidth: MediaQuery.of(context).size.width,
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 );
               },
             ),
           );
-
         } else {
           return const Expanded(
             child: NoData(title: "", subTitle: ""),
@@ -716,7 +861,26 @@ class Search extends StatefulWidget {
     }
   }
 
-
+  // Tag Widget for Rent & Premium badges
+  Widget _buildTag(String iconPath) {
+    return Positioned(
+      top: 8,
+      left: 15,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        child: Image.asset(
+          iconPath,
+          height: 16,
+          width: 16,
+        ),
+      ),
+    );
+  }
 
   Widget _buildShowUI() {
     if (searchProvider.loading) {
@@ -756,29 +920,117 @@ class Search extends StatefulWidget {
                       debugPrint("Clicked on position ==> $position");
                       Utils.openDetails(
                         context: context,
-                        videoId:tvshow.id ?? 0,
+                        videoId:
+                            searchProvider.searchModel.tvshow?[position].id ??
+                                0,
                         upcomingType: 0,
-                        videoType: tvshow.videoType ?? 0,
-                        typeId: tvshow.typeId ?? 0,
+                        videoType: searchProvider
+                                .searchModel.tvshow?[position].videoType ??
+                            0,
+                        typeId: searchProvider
+                                .searchModel.tvshow?[position].typeId ??
+                            0,
                       );
                     },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Dimens.heightLand,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: MyNetworkImage(
-                          imageUrl: tvshow.landscape?.toString() ?? "",
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        // Background image with gradient overlay for better visibility
+                        Container(
+                          width: Dimens.widthLand,
+                          height: Dimens.heightLand,
+                          padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black26, blurRadius: 5)
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                              children: [
+                                MyNetworkImage(
+                                  imageUrl: tvshow.landscape?.toString() ?? "",
                           fit: BoxFit.cover,
                           imgHeight: MediaQuery.of(context).size.height,
                           imgWidth: MediaQuery.of(context).size.width,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black.withOpacity(0.6),
+                                        Colors.transparent
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+
+                        // Rent Tag
+                        Visibility(
+                          visible: searchProvider.searchModel.tvshow
+                                      ?.elementAt(position)
+                                      .isRent ==
+                                  1 &&
+                              searchProvider.searchModel.tvshow
+                                      ?.elementAt(position)
+                                      .isPremium ==
+                                  0,
+                          child: _buildTag('assets/images/rupee.png'),
+                        ),
+
+                        // Premium Tag
+                        Visibility(
+                          visible: searchProvider.searchModel.tvshow
+                                  ?.elementAt(position)
+                                  .isPremium ==
+                              1,
+                          child: _buildTag('assets/images/crown.png'),
+                        ),
+
+                        // Both Rent & Premium Tag
+                        Visibility(
+                          visible: searchProvider.searchModel.tvshow
+                                      ?.elementAt(position)
+                                      .isRent ==
+                                  1 &&
+                              searchProvider.searchModel.tvshow
+                                      ?.elementAt(position)
+                                      .isPremium ==
+                                  1,
+                          child: _buildTag('assets/images/crown.png'),
+                        ),
+                      ],
                     ),
+
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   height: Dimens.heightLand,
+                    //   alignment: Alignment.centerLeft,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(4),
+                    //   ),
+                    //   child: ClipRRect(
+                    //     borderRadius: BorderRadius.circular(4),
+                    //     child: MyNetworkImage(
+                    //       imageUrl: searchProvider.searchModel.tvshow
+                    //               ?.elementAt(position)
+                    //               .landscape
+                    //               .toString() ??
+                    //           "",
+                    //       fit: BoxFit.cover,
+                    //       imgHeight: MediaQuery.of(context).size.height,
+                    //       imgWidth: MediaQuery.of(context).size.width,
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 );
               },
@@ -794,6 +1046,83 @@ class Search extends StatefulWidget {
       }
     }
   }
+
+  // Widget _buildShowUI() {
+  //   if (searchProvider.loading) {
+  //     return _shimmerSearch();
+  //   } else {
+  //     if (searchProvider.searchModel.status == 200) {
+  //       if (searchProvider.searchModel.tvshow != null &&
+  //           searchProvider.searchModel.tvshow!.isNotEmpty) {
+  //         print("11111${searchProvider.searchShowList.length}");
+  //         print("2222${searchProvider.searchModel.tvshow?.length }");
+  //         return Expanded(
+  //           child: AlignedGridView.count(
+  //             controller: _showScrollController,
+  //             shrinkWrap: true,
+  //             crossAxisCount: 2,
+  //             crossAxisSpacing: 8,
+  //             mainAxisSpacing: 8,
+  //             itemCount: searchProvider.searchModel.tvshow!.length + (searchProvider.isFetchingMore ? 1 : 0),
+
+  //             // itemCount: searchProvider.searchModel.tvshow?.length ?? 0,
+  //             padding: const EdgeInsets.only(left: 20, right: 20),
+  //             physics: const AlwaysScrollableScrollPhysics(),
+  //             itemBuilder: (BuildContext context, int position) {
+  //               if (position == searchProvider.searchModel.tvshow!.length) {
+  //                 return const Center(
+  //                   child: Padding(
+  //                     padding: EdgeInsets.all(16.0),
+  //                     child: CircularProgressIndicator(color: complimentryColor),
+  //                   ),
+  //                 );
+  //               }
+  //               final tvshow = searchProvider.searchModel.tvshow![position];
+  //               return Material(
+  //                 type: MaterialType.transparency,
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     debugPrint("Clicked on position ==> $position");
+  //                     Utils.openDetails(
+  //                       context: context,
+  //                       videoId:tvshow.id ?? 0,
+  //                       upcomingType: 0,
+  //                       videoType: tvshow.videoType ?? 0,
+  //                       typeId: tvshow.typeId ?? 0,
+  //                     );
+  //                   },
+  //                   child: Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     height: Dimens.heightLand,
+  //                     alignment: Alignment.centerLeft,
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.circular(4),
+  //                     ),
+  //                     child: ClipRRect(
+  //                       borderRadius: BorderRadius.circular(4),
+  //                       child: MyNetworkImage(
+  //                         imageUrl: tvshow.landscape?.toString() ?? "",
+  //                         fit: BoxFit.cover,
+  //                         imgHeight: MediaQuery.of(context).size.height,
+  //                         imgWidth: MediaQuery.of(context).size.width,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         );
+  //       } else {
+  //         return const Expanded(
+  //           child: NoData(title: "", subTitle: ""),
+  //         );
+  //       }
+  //     } else {
+  //       return const SizedBox.shrink();
+  //     }
+  //   }
+  // }
 
   Widget _shimmerSearch() {
     return Expanded(

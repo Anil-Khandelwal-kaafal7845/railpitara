@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dtlive/main.dart';
 import 'package:dtlive/model/auditionmodel.dart';
 import 'package:dtlive/model/avatarmodel.dart';
 import 'package:dtlive/model/browsebyartistmodel.dart';
@@ -35,8 +36,10 @@ import 'package:dtlive/model/viewallmodel.dart';
 import 'package:dtlive/model/wallettransction.dart';
 import 'package:dtlive/model/watchlistmodel.dart';
 import 'package:dtlive/utils/constant.dart';
+import 'package:dtlive/utils/moenage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:singular_flutter_sdk/singular.dart';
@@ -49,7 +52,6 @@ class API {
   }
   Dio get sendRequest => _dio;
 }
-
 
 Options optHeaders = Options(headers: <String, dynamic>{
   'Content-Type': 'application/json',
@@ -64,7 +66,8 @@ class HomeScreenRepo {
           ? Constant.curentAppVersion
           : Constant.curentiosAppVersion;
 
-      final deviceType = Constant.deviceType; // e.g., "android_app" or "ios_app"
+      final deviceType =
+          Constant.deviceType; // e.g., "android_app" or "ios_app"
 
       Response response = await api.sendRequest.get(
         "/force_update",
@@ -492,7 +495,12 @@ class ApiService {
   //   return sectionListModel;
   // }
   // section_list API
-  Future<SectionListModel> sectionList(typeId, isHomePage, languageId, {int page = 1,}) async {
+  Future<SectionListModel> sectionList(
+    typeId,
+    isHomePage,
+    languageId, {
+    int page = 1,
+  }) async {
     SectionListModel sectionListModel;
     String sectionList = "v1/section_list";
     Object appVersion = Platform.isAndroid
@@ -522,7 +530,6 @@ class ApiService {
   }
 
   //viewall api ---
-
 
   Future<ViewAllModelClass> viewAll(String sectionId, int page) async {
     String viewAllEndpoint = "v1/view-all";
@@ -798,7 +805,6 @@ class ApiService {
     return searchModel;
   }
 
-
   // channel_section_list API
   Future<ChannelSectionModel> channelSectionList() async {
     ChannelSectionModel channelSectionModel;
@@ -962,31 +968,41 @@ class ApiService {
   }
 
   // apply_coupon API
-  Future<CouponModel> applyPackageCoupon(couponCode, packageId) async {
-    CouponModel couponModel;
-    String applyCoupon = "apply_coupon";
-    debugPrint("applyPackageCoupon API :==> $baseUrl$applyCoupon");
-    Response response = await dio.post(
-      '$baseUrl$applyCoupon',
-      options: optHeaders,
-      data: {
-        'user_id': Constant.userID,
-        'apply_coupon_type': "1",
-        'unique_id': couponCode,
-        'package_id': packageId,
-      },
-    );
 
-    couponModel = CouponModel.fromJson(response.data);
-    return couponModel;
-  }
+  
+  // Future<CouponModel> applyPackageCoupon(couponCode, packageId) async {
+  //   CouponModel couponModel;
+  //   String applyCoupon = "apply_coupon";
+  //   debugPrint("applyPackageCoupon API :==> $baseUrl$applyCoupon");
+  //   Response response = await dio.post(
+  //     '$baseUrl$applyCoupon',
+  //     options: optHeaders,
+  //     data: {
+  //       'user_id': Constant.userID,
+  //       'apply_coupon_type': "1",
+  //       'unique_id': couponCode,
+  //       'package_id': packageId,
+  //     },
+  //   );
+
+  //   couponModel = CouponModel.fromJson(response.data);
+  //   return couponModel;
+  // }
 
   // apply_coupon API
+
   Future<CouponModel> applyRentCoupon(
-      couponCode, videoId, typeId, videoType, price) async {
-    CouponModel couponModel;
-    String applyCoupon = "apply_coupon";
-    debugPrint("applyRentCoupon API :==> $baseUrl$applyCoupon");
+  String couponCode,
+  String videoId,
+  String typeId,
+  String videoType,
+  dynamic price,
+) async {
+  CouponModel couponModel;
+  String applyCoupon = "apply_coupon";
+  debugPrint("applyRentCoupon API :==> $baseUrl$applyCoupon");
+
+  try {
     Response response = await dio.post(
       '$baseUrl$applyCoupon',
       options: optHeaders,
@@ -1002,8 +1018,92 @@ class ApiService {
     );
 
     couponModel = CouponModel.fromJson(response.data);
-    return couponModel;
+
+    debugPrint("applyRentCoupon response status ==> ${couponModel.status}");
+    debugPrint("applyRentCoupon response message ==> ${couponModel.message}");
+
+    if (couponModel.status == 200) {
+      final totalAmount = "${couponModel.result?.totalAmount}";
+      final discountAmount = "${couponModel.result?.discountAmount}";
+      final userId = Constant.userID.toString();
+      final timestamp = DateTime.now().toIso8601String();
+
+      // Firebase Analytics
+      analytics.logEvent(
+        name: "Rent_promo_code_Applied",
+        parameters: {
+          'event_name': 'Rent_promo_code_Applied',
+          "couponCode": couponCode,
+          "videoId": videoId,
+          "typeId": typeId,
+          "videoType": videoType,
+          "price": price,
+          "totalAmount": totalAmount,
+          "discountAmount": discountAmount,
+          'user_id': userId,
+        },
+      );
+
+      // Singular
+      Map<String, Object> screenViewEvent = {
+        'event_name': 'Rent_promo_code_Applied',
+        "couponCode": couponCode,
+        "videoId": videoId,
+        "typeId": typeId,
+        "videoType": videoType,
+        "price": price,
+        "totalAmount": totalAmount,
+        "discountAmount": discountAmount,
+        'user_id': userId,
+      };
+      Singular.eventWithArgs('Rent_promo_code_Applied', screenViewEvent);
+
+      // MoEngage
+      final properties = MoEProperties()
+        ..addAttribute('user_id', userId)
+        ..addAttribute('couponCode', couponCode)
+        ..addAttribute('videoId', videoId)
+        ..addAttribute('typeId', typeId)
+        ..addAttribute('videoType', videoType)
+        ..addAttribute('price', price)
+        ..addAttribute('totalAmount', totalAmount)
+        ..addAttribute('discountAmount', discountAmount)
+        ..addAttribute('timestamp', timestamp);
+
+      MoEngageService.instance.trackEvent('Rent_promo_code_Applied', properties);
+    } else {
+      debugPrint("❌ Rent Coupon Apply Failed [status=400]: ${couponModel.message}");
+    }
+  } catch (e) {
+    debugPrint("❌ Exception in applyRentCoupon: $e");
+    rethrow;
   }
+
+  return couponModel;
+}
+
+  // Future<CouponModel> applyRentCoupon(
+  //     couponCode, videoId, typeId, videoType, price) async {
+  //   CouponModel couponModel;
+  //   String applyCoupon = "apply_coupon";
+  //   debugPrint("applyRentCoupon API :==> $baseUrl$applyCoupon");
+  //   Response response = await dio.post(
+  //     '$baseUrl$applyCoupon',
+  //     options: optHeaders,
+  //     data: {
+  //       'user_id': Constant.userID,
+  //       'apply_coupon_type': "2",
+  //       'unique_id': couponCode,
+  //       'video_id': videoId,
+  //       'type_id': typeId,
+  //       'video_type': videoType,
+  //       'price': price,
+  //     },
+  //   );
+
+  //   couponModel = CouponModel.fromJson(response.data);
+  //   return couponModel;
+  // }
 
   // get_payment_token API
   Future<PayTmModel> getPaytmToken(merchantID, orderId, custmoreID, channelID,
@@ -1124,7 +1224,81 @@ class ApiService {
     return historyModel;
   }
 
-//coin system ----
+//aply coin ----
+Future<CouponModel> applyPackageCoupon(String couponCode, String packageId) async {
+  CouponModel couponModel;
+  String applyCoupon = "apply_coupon";
+  debugPrint("applyPackageCoupon API :==> $baseUrl$applyCoupon");
+
+  try {
+    Response response = await dio.post(
+      '$baseUrl$applyCoupon',
+      options: optHeaders,
+      data: {
+        'user_id': Constant.userID,
+        'apply_coupon_type': "1",
+        'unique_id': couponCode,
+        'package_id': packageId,
+      },
+    );
+
+    couponModel = CouponModel.fromJson(response.data);
+
+    debugPrint("applyPackageCoupon response status ==> ${couponModel.status}");
+    debugPrint("applyPackageCoupon response message ==> ${couponModel.message}");
+
+    if (couponModel.status == 200) {
+      // Only fire event if coupon is valid
+      final totalAmount = "${couponModel.result?.totalAmount}";
+      final discountAmount = "${couponModel.result?.discountAmount}";
+      final userId = Constant.userID.toString();
+      final timestamp = DateTime.now().toIso8601String();
+
+      /// Firebase Analytics
+      analytics.logEvent(
+        name: "Package_promo_code_Applied",
+        parameters: {
+          'event_name': 'Package_promo_code_Applied',
+          "couponCode": couponCode,
+          "packageId": packageId,
+          "totalAmount": totalAmount,
+          "discountAmount": discountAmount,
+          'user_id': userId,
+        },
+      );
+
+      /// Singular
+      Map<String, Object> screenViewEvent = {
+        'event_name': 'Package_promo_code_Applied',
+        "couponCode": couponCode,
+        "packageId": packageId,
+        "totalAmount": totalAmount,
+        "discountAmount": discountAmount,
+        'user_id': userId,
+      };
+      Singular.eventWithArgs('Package_promo_code_Applied', screenViewEvent);
+
+      /// MoEngage
+      final properties = MoEProperties()
+        ..addAttribute('user_id', userId)
+        ..addAttribute('couponCode', couponCode)
+        ..addAttribute('packageId', packageId)
+        ..addAttribute('totalAmount', totalAmount)
+        ..addAttribute('discountAmount', discountAmount)
+        ..addAttribute('timestamp', timestamp);
+
+      MoEngageService.instance.trackEvent('Package_promo_code_Applied', properties);
+    } else {
+      debugPrint("❌ Coupon Apply Failed [status=400]: ${couponModel.message}");
+    }
+  } catch (e) {
+    debugPrint("❌ Exception in applyPackageCoupon: $e");
+    rethrow;
+  }
+
+  return couponModel;
+}
+
 
 // Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
 //   String endpoint = "get-user-wallet-balance";
