@@ -3658,7 +3658,9 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -3762,6 +3764,8 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
+         
+         
           );
         },
       ),
@@ -3824,7 +3828,8 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: Stack(
+            child: 
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -3928,6 +3933,7 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
+         
           );
         },
       ),
@@ -3990,7 +3996,9 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -4094,6 +4102,7 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
+         
           );
         },
       ),
@@ -4177,7 +4186,9 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -4281,6 +4292,7 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
+          
           );
         },
       ),

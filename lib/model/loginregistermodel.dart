@@ -55,6 +55,7 @@ class Result {
   String? createdAt;
   String? updatedAt;
   int? isBuy;
+  dynamic isrigistered;
 
   Result({
     this.id,
@@ -67,6 +68,7 @@ class Result {
     this.status,
     this.expiryDate,
     this.apiToken,
+    this.isrigistered,
     this.emailVerifyToken,
     this.isEmailVerify,
     this.createdAt,
@@ -83,6 +85,7 @@ class Result {
         image: json["image"],
         type: json["type"],
         status: json["status"],
+        isrigistered: json['is_registor'],
         expiryDate: json["expiry_date"],
         apiToken: json["api_token"],
         emailVerifyToken: json["email_verify_token"],
@@ -97,6 +100,7 @@ class Result {
         "user_name": userName,
         "name": name,
         "mobile": mobile,
+        "is_registor":isrigistered,
         "email": email,
         "image": image,
         "type": type,

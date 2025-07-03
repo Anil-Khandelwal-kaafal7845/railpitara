@@ -49,48 +49,53 @@ class _ReelScreenState extends State<ReelScreen> {
     });
   }
 
-@override
-void dispose() {
-  debugPrint("[DEBUG] Disposing all video controllers...");
-  
-  for (var controller in _controllers.values) {
-    controller.dispose();
+  @override
+  void dispose() {
+    debugPrint("[DEBUG] Disposing all video controllers...");
+
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    _controllers.clear();
+
+    _pageController.dispose();
+    super.dispose();
   }
-  _controllers.clear();
 
-  _pageController.dispose();
-  super.dispose();
-}
-
-
+bool _showSubscriptionBox = false;
 void _playController(int index) {
   debugPrint("[DEBUG] Request to play video at index: $index");
 
-  // Pause currently playing video
+  // Pause the currently playing video
   if (_controllers.containsKey(_currentIndex)) {
     debugPrint("[DEBUG] Pausing current video at index: $_currentIndex");
     _controllers[_currentIndex]?.pause();
   }
-
-  _currentIndex = index;
 
   String isPremium = videos[index]['is_premium'] ?? '0';
   String isBuy = videos[index]['is_premium_buy'] ?? '0';
 
   debugPrint("[DEBUG] Video Index: $index | is_premium: $isPremium | is_buy: $isBuy");
 
+  // ✅ Check access before updating _currentIndex or playing video
   if (isPremium == '1' && isBuy != '1') {
-    debugPrint("[DEBUG] ❌ Premium Video Requires Purchase. Redirecting to Subscription.");
+    debugPrint("[DEBUG] ❌ Premium video – show subscription popup.");
 
-    // Pause the current video before navigating
-    _controllers[_currentIndex]?.pause();
-    Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(builder: (context) => Subscription()),
-);
+    // ✅ Force pause the target video
+    if (_controllers.containsKey(index)) {
+      _controllers[index]?.pause();
+      debugPrint("[DEBUG] ⏸️ Paused premium video at index: $index");
+    }
+
+    setState(() {
+      _showSubscriptionBox = true;
+    });
 
     return;
   }
+
+  // ✅ Only update currentIndex and play if allowed
+  _currentIndex = index;
 
   if (_controllers.containsKey(index)) {
     debugPrint("[DEBUG] ✅ Playing video at index: $index");
@@ -100,45 +105,90 @@ void _playController(int index) {
   }
 }
 
-//   void _playController(int index) {
-//   debugPrint("[DEBUG] Request to play video at index: $index");
 
-//   if (_controllers.containsKey(_currentIndex)) {
-//     debugPrint("[DEBUG] Pausing current video at index: $_currentIndex");
-//     _controllers[_currentIndex]?.pause();
-//   }
+  Widget _buildSubscriptionBox() {
+    return Container(
+      color: Colors.black54,
+      alignment: Alignment.center,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+           Image(image: AssetImage("assets/images/appicon.png"),height: 70,),
+            SizedBox(height: 10),
+            Text(
+              "Premium Content",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              "To watch this reel, you need an active subscription.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[300],
+                      foregroundColor: Colors.black87,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showSubscriptionBox = false;
+                      });
 
-//   _currentIndex = index;
-
-//   // Check if the video requires a subscription
-//   if (videos[index]['is_premium'] == '0') {
-//     debugPrint("[DEBUG] Video at index: $index is premium. Redirecting to Subscription.");
-//     Navigator.pushNamed(context, '/subscription'); // Change this as per your route setup
-//     return; // Exit without playing the video
-//   }
-
-//   if (_controllers.containsKey(index)) {
-//     debugPrint("[DEBUG] Playing video at index: $index");
-//     _controllers[index]?.play();
-//   } else {
-//     debugPrint("[ERROR] Video at index: $index not found in controllers");
-//   }
-// }
-
-  // void _playController(int index) {
-  //   debugPrint("[DEBUG] Request to play video at index: $index");
-  //   if (_controllers.containsKey(_currentIndex)) {
-  //     debugPrint("[DEBUG] Pausing current video at index: $_currentIndex");
-  //     _controllers[_currentIndex]?.pause();
-  //   }
-  //   _currentIndex = index;
-  //   if (_controllers.containsKey(index)) {
-  //     debugPrint("[DEBUG] Playing video at index: $index");
-  //     _controllers[index]?.play();
-  //   } else {
-  //     debugPrint("[ERROR] Video at index: $index not found in controllers");
-  //   }
-  // }
+                      // ✅ Exit the Reel screen
+                      Navigator.pop(context);
+                    },
+                    child: Text("Maybe Later"),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showSubscriptionBox = false;
+                      });
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Subscription(),
+                        ),
+                      );
+                    },
+                    child: Text("Subscribe Now"),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   void _initializeController(int startIndex) {
     for (int i = startIndex; i < videos.length; i++) {
@@ -181,88 +231,79 @@ void _playController(int index) {
     }
   }
 
-Future<void> fetchReels({int? page}) async {
-  if (isLoading || (page != null && page > lastPage)) return;
+  Future<void> fetchReels({int? page}) async {
+    if (isLoading || (page != null && page > lastPage)) return;
 
-  setState(() => isLoading = true);
+    setState(() => isLoading = true);
 
-  final url = Uri.parse('${Constant.baseurl}reels-video');
-  final requestBody = {
-    "type_id": widget.typeId,
-    "video_type": widget.videoType,
-    "video_id": widget.videoId,
-    "page": page ?? currentPage,
-    "user_id": Constant.userID,
-  };
+    final url = Uri.parse('${Constant.baseurl}reels-video');
+    final requestBody = {
+      "type_id": widget.typeId,
+      "video_type": widget.videoType,
+      "video_id": widget.videoId,
+      "page": page ?? currentPage,
+      "user_id": Constant.userID,
+    };
 
-  debugPrint("[DEBUG] Sending Request to API: $url");
-  debugPrint("[DEBUG] Request Body: ${jsonEncode(requestBody)}");
+    debugPrint("[DEBUG] Sending Request to API: $url");
+    debugPrint("[DEBUG] Request Body: ${jsonEncode(requestBody)}");
 
-  try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(requestBody),
-    );
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
+      );
 
-    debugPrint("[DEBUG] API Response (${response.statusCode}): ${response.body}");
+      debugPrint(
+          "[DEBUG] API Response (${response.statusCode}): ${response.body}");
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final List<dynamic> reels = data['result']['data'] ?? [];
-      lastPage = data['result']['last_page'] ?? lastPage;
-      totalReels = data['result']['total'] ?? totalReels;
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List<dynamic> reels = data['result']['data'] ?? [];
+        lastPage = data['result']['last_page'] ?? lastPage;
+        totalReels = data['result']['total'] ?? totalReels;
 
-      if (reels.isNotEmpty) {
-        setState(() {
-          int previousLength = videos.length;
+        if (reels.isNotEmpty) {
+          setState(() {
+            int previousLength = videos.length;
 
-          videos.addAll(reels.map((reel) {
-  debugPrint("[DEBUG] Reel ID: ${reel['id']} -> is_buy: ${reel['is_buy']}");
+            videos.addAll(reels
+                .map((reel) {
+                  debugPrint(
+                      "[DEBUG] Reel ID: ${reel['id']} -> is_buy: ${reel['is_buy']}");
 
-  return {
-    'video': reel['video_320'] as String? ?? '',
-    'thumbnail': reel['thumbnail'] as String? ?? '',
-    'name': reel['name'] as String? ?? 'Reel',
-    'is_premium': reel['is_premium'].toString(),
-    'is_premium_buy': reel['is_buy'].toString(), // Ensure this is stored as a string
-  };
-}).where((map) => map['video']!.isNotEmpty).toList());
+                  return {
+                    'video': reel['video_320'] as String? ?? '',
+                    'thumbnail': reel['thumbnail'] as String? ?? '',
+                    'name': reel['name'] as String? ?? 'Reel',
+                    'is_premium': reel['is_premium'].toString(),
+                    'is_premium_buy': reel['is_buy'].toString(),
+                  };
+                })
+                .where((map) => map['video']!.isNotEmpty)
+                .toList());
 
+            currentPage++; // Move to next page **only if we got new data**
 
-          // videos.addAll(reels
-          //     .map((reel) {
-          //       debugPrint("[DEBUG] Reel ID: ${reel['id']} -> is_buy: ${reel['is_buy']}");
+            debugPrint(
+                "[DEBUG] Added ${videos.length - previousLength} new videos. Total videos: ${videos.length}");
+          });
 
-          //       return {
-          //         'video': reel['video_320'] as String? ?? '',
-          //         'thumbnail': reel['thumbnail'] as String? ?? '',
-          //         'name': reel['name'] as String? ?? 'Reel',
-          //         'is_premium': reel['is_premium'].toString(),
-          //         'is_premium_buy': reel['is_buy'].toString(),
-          //       };
-          //     })
-          //     .where((map) => map['video']!.isNotEmpty)
-          //     .toList());
-
-          currentPage++; // Move to next page **only if we got new data**
-
-          debugPrint("[DEBUG] Added ${videos.length - previousLength} new videos. Total videos: ${videos.length}");
-        });
-
-        _initializeController(videos.length - reels.length);
+          _initializeController(videos.length - reels.length);
+        } else {
+          debugPrint("[WARNING] No more reels found for page $page.");
+        }
       } else {
-        debugPrint("[WARNING] No more reels found for page $page.");
+        debugPrint(
+            "[ERROR] API Request Failed: ${response.statusCode} - ${response.body}");
       }
-    } else {
-      debugPrint("[ERROR] API Request Failed: ${response.statusCode} - ${response.body}");
+    } catch (e) {
+      debugPrint("[ERROR] Network Error: $e");
+    } finally {
+      setState(() => isLoading = false);
     }
-  } catch (e) {
-    debugPrint("[ERROR] Network Error: $e");
-  } finally {
-    setState(() => isLoading = false);
   }
-}
 
   Future<void> _jumpToReel(int targetIndex) async {
     debugPrint("[DEBUG] User requested to jump to reel at index: $targetIndex");
@@ -445,45 +486,101 @@ Future<void> fetchReels({int? page}) async {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    print("REEL NAME ___${widget.nameReelVideo}");
-    return Scaffold(
-      body: Stack(
-        children: [
-          videos.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : PageView.builder(
-                  controller: _pageController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: videos.length,
-                  onPageChanged: (index) {
-                    debugPrint("[DEBUG] User scrolled to video index: $index");
-                    _playController(index);
-                    if (index >= videos.length - 3) {
+@override
+Widget build(BuildContext context) {
+  return WillPopScope(
+    onWillPop: () async {
+      if (_showSubscriptionBox) {
+        // ✅ If popup is visible, treat back press as "Maybe Later"
+        Navigator.pop(context); // Exit the reel screen completely
+        return false;
+      }
+
+      return true; // default back behavior
+    },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            videos.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : PageView.builder(
+                    controller: _pageController,
+                    scrollDirection: Axis.vertical,
+                    itemCount: videos.length,
+                    onPageChanged: (index) {
                       debugPrint(
-                          "[DEBUG] Fetching more videos as user reached end");
-                      fetchReels();
-                    }
-                  },
-                  itemBuilder: (context, index) {
-                    return ContentScreen(
-                      controller: _controllers[index]!,
-                      title: videos[index]['name']!,
-                    );
-                  },
-                ),
-          Positioned(
-            bottom: 40,
-            right: 15,
-            child: GestureDetector(
-              onTap: _showReelSelectionSheet,
-              child:
-                  Icon(CupertinoIcons.list_dash, color: Colors.white, size: 30),
+                          "[DEBUG] User scrolled to video index: $index");
+                      _playController(index);
+                      if (index >= videos.length - 3) {
+                        debugPrint(
+                            "[DEBUG] Fetching more videos as user reached end");
+                        fetchReels();
+                      }
+                    },
+                    itemBuilder: (context, index) {
+                      return ContentScreen(
+                        controller: _controllers[index]!,
+                        title: videos[index]['name']!,
+                      );
+                    },
+                  ),
+            Positioned(
+              bottom: 40,
+              right: 15,
+              child: GestureDetector(
+                onTap: _showReelSelectionSheet,
+                child: Icon(CupertinoIcons.list_dash,
+                    color: Colors.white, size: 30),
+              ),
             ),
-          ),
-        ],
+
+            // ⬇️ Subscription UI Overlay
+            if (_showSubscriptionBox) _buildSubscriptionBox(),
+          ],
+        ),
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   print("REEL NAME ___${widget.nameReelVideo}");
+  //   return Scaffold(
+  //     body: Stack(
+  //       children: [
+  //         videos.isEmpty
+  //             ? const Center(child: CircularProgressIndicator())
+  //             : PageView.builder(
+  //                 controller: _pageController,
+  //                 scrollDirection: Axis.vertical,
+  //                 itemCount: videos.length,
+  //                 onPageChanged: (index) {
+  //                   debugPrint("[DEBUG] User scrolled to video index: $index");
+  //                   _playController(index);
+  //                   if (index >= videos.length - 3) {
+  //                     debugPrint(
+  //                         "[DEBUG] Fetching more videos as user reached end");
+  //                     fetchReels();
+  //                   }
+  //                 },
+  //                 itemBuilder: (context, index) {
+  //                   return ContentScreen(
+  //                     controller: _controllers[index]!,
+  //                     title: videos[index]['name']!,
+  //                   );
+  //                 },
+  //               ),
+  //         Positioned(
+  //           bottom: 40,
+  //           right: 15,
+  //           child: GestureDetector(
+  //             onTap: _showReelSelectionSheet,
+  //             child:
+  //                 Icon(CupertinoIcons.list_dash, color: Colors.white, size: 30),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

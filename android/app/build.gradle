@@ -36,7 +36,7 @@ android {
     configurations{
         all*.exclude module: 'bcprov-jdk15on'
     }
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -55,7 +55,7 @@ android {
     defaultConfig {
         applicationId "com.ott.chulbull"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 6
         versionName '1.6.0'
         multiDexEnabled true

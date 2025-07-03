@@ -10,6 +10,7 @@ import 'package:dtlive/pages/pip_web_player.dart';
 import 'package:dtlive/pages/videosbyartist.dart';
 import 'package:dtlive/pages/videosbyid.dart';
 import 'package:dtlive/provider/sectionbytypeprovider.dart';
+import 'package:dtlive/reel%20feature/reel_screen.dart';
 import 'package:dtlive/shimmer/shimmerutils.dart';
 import 'package:dtlive/utils/color.dart';
 import 'package:dtlive/utils/constant.dart';
@@ -70,7 +71,7 @@ class SectionByTypeState extends State<SectionByType> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appBgColor,
-      appBar: (kIsWeb || Constant.isTV)
+      appBar: (widget.appBarTitle == "Reels")
           ? Utils.myAppBar(context, widget.appBarTitle, false)
           : Utils.myAppBarWithBack(context, widget.appBarTitle, false),
       body: RefreshIndicator(
@@ -364,6 +365,8 @@ class SectionByTypeState extends State<SectionByType> {
           bool isGenreOrLanguage = sectionList[index].videoType == 3 ||
               sectionList[index].videoType == 4 ||
               sectionList[index].videoType == 6;
+
+              final bool isReelShow = sectionList[index].videoType == 7;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,7 +389,7 @@ class SectionByTypeState extends State<SectionByType> {
                       fontstyle: FontStyle.normal,
                     ),
                   ),
-                  if (!isGenreOrLanguage)
+                  if (!isGenreOrLanguage && !isReelShow)
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(
@@ -659,6 +662,43 @@ class SectionByTypeState extends State<SectionByType> {
               debugPrint(
                   "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
 
+                   debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
+              debugPrint("reelName =======> ${sectionDataList?[index].name}");
+              debugPrint(
+                  "videoId ========> ${sectionDataList?[index].id ?? 0}");
+              debugPrint(
+                  "videoType ======> ${sectionDataList?[index].videoType ?? 0}");
+              debugPrint(
+                  "typeId =========> ${sectionDataList?[index].typeId ?? 0}"); // Check if the videoType is 7
+
+              if (sectionDataList?[index].videoType == 7) {
+                if (Constant.userID == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginViaSocial(),
+                    ),
+                  );
+                  return;
+                }
+                // Navigate to PreloadPage if videoType is 7
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReelScreen(
+                      videoId: sectionDataList?[index].id ?? 0,
+                      videoType: sectionDataList?[index].videoType ?? 0,
+                      typeId: sectionDataList?[index].typeId ?? 0,
+                      nameReelVideo: sectionDataList?[index].name ?? "",
+                    ),
+                  ),
+                );
+                return; // Early return to prevent further code execution
+              }
+
+
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
                   Navigator.push(
@@ -681,7 +721,9 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -785,255 +827,13 @@ class SectionByTypeState extends State<SectionByType> {
                 ),
               ],
             ),
+         
+         
           );
         },
       ),
     );
   }
-
-  // Widget landscape(int? upcomingType, List<Datum>? sectionDataList) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width,
-  //     height: Dimens.heightLand,
-  //     child: ListView.separated(
-  //       itemCount: sectionDataList?.length ?? 0,
-  //       shrinkWrap: true,
-  //       physics: const AlwaysScrollableScrollPhysics(),
-  //       padding: const EdgeInsets.only(left: 20, right: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
-  //       itemBuilder: (BuildContext context, int index) {
-  //         return InkWell(
-  //           //focusColor:: white,
-  //           borderRadius: BorderRadius.circular(6),
-
-  //           onTap: () {
-  //             debugPrint("Clicked userid ==> ${Constant.userID}");
-  //             debugPrint(
-  //                 "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //             if (sectionDataList?[index].isLiveUrl == 1) {
-  //               if (Constant.userID == null) {
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //                 );
-  //               } else {
-  //                 // Navigator.push(
-  //                 //   context,
-  //                 //   MaterialPageRoute(
-  //                 //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-  //                 //           sectionDataList?[index].video320, 0, "", "")),
-  //                 // );
-  //                 Navigator.of(context).push(MaterialPageRoute(
-  //                     builder: (context) => TestPlayerWeb(
-  //                         loadURL: sectionDataList![index].video320!)));
-  //               }
-  //             } else {
-  //               Utils.openDetails(
-  //                 context: context,
-  //                 videoId: sectionDataList?[index].id ?? 0,
-  //                 upcomingType: upcomingType ?? 0,
-  //                 videoType: sectionDataList?[index].videoType ?? 0,
-  //                 typeId: sectionDataList?[index].typeId ?? 0,
-  //               );
-  //             }
-  //           },
-
-  //           // onTap: () {
-  //           //   debugPrint("Clicked userid ==> ${Constant.userID}");
-  //           //   debugPrint(
-  //           //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //           //   if (Constant.userID == null) {
-  //           //     Navigator.push(
-  //           //       context,
-  //           //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //           //     );
-
-  //           //     // Utils.buildWebAlertDialog(context, "login", "");
-  //           //   } else {
-  //           //     sectionDataList?[index].isLiveUrl == 1
-  //           //         ? Navigator.push(
-  //           //             context,
-  //           //             MaterialPageRoute(
-  //           //                 builder: (context) => PlayerVideo(
-  //           //                     '',
-  //           //                     0,
-  //           //                     0,
-  //           //                     typeId,
-  //           //                     0,
-  //           //                     sectionDataList?[index].video320,
-  //           //                     0,
-  //           //                     "",
-  //           //                     "")),
-  //           //           )
-  //           //         : openDetailPage(
-  //           //             (sectionDataList?[index].videoType ?? 0) == 2
-  //           //                 ? "showdetail"
-  //           //                 : "videodetail",
-  //           //             sectionDataList?[index].id ?? 0,
-  //           //             upcomingType ?? 0,
-  //           //             sectionDataList?[index].videoType ?? 0,
-  //           //             sectionDataList?[index].typeId ?? 0,
-  //           //           );
-  //           //   }
-  //           // },
-
-  //           child: Stack(
-  //             alignment: Alignment.topRight,
-  //             children: [
-  //               Container(
-  //                 width: Dimens.widthLand,
-  //                 height: Dimens.heightLand,
-  //                 alignment: Alignment.center,
-  //                 padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-  //                 child: ClipRRect(
-  //                   borderRadius: BorderRadius.circular(4),
-  //                   clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                   child: MyNetworkImage(
-  //                     imageUrl:
-  //                         sectionDataList?[index].landscape.toString() ?? "",
-  //                     fit: BoxFit.cover,
-  //                     imgHeight: MediaQuery.of(context).size.height,
-  //                     imgWidth: MediaQuery.of(context).size.width,
-  //                   ),
-  //                 ),
-  //               ),
-  //               Visibility(
-  //                 visible: sectionDataList?[index].isRent == 1 &&
-  //                     sectionDataList?[index].isPremium == 0,
-  //                 child: FittedBox(
-  //                   child: Container(
-  //                       constraints: const BoxConstraints(
-  //                         minHeight: 15,
-  //                         minWidth: 30,
-  //                       ),
-  //                       alignment: Alignment.center,
-  //                       padding: const EdgeInsets.all(5),
-  //                       decoration: const BoxDecoration(
-  //                         color.xml: colorPrimary,
-  //                         borderRadius: BorderRadius.only(
-  //                             topLeft: Radius.circular(3),
-  //                             topRight: Radius.circular(4),
-  //                             bottomLeft: Radius.circular(8),
-  //                             bottomRight: Radius.circular(3)),
-  //                       ),
-  //                       child: Row(
-  //                         children: [
-  //                           Image.asset(
-  //                             'assets/images/rupee.png',
-  //                             height: 13,
-  //                             width: 13,
-  //                           ),
-  //                         ],
-  //                       )),
-  //                 ),
-  //               ),
-  //               Visibility(
-  //                 visible: sectionDataList?[index].isPremium == 1,
-  //                 child: FittedBox(
-  //                   child: Container(
-  //                       constraints: const BoxConstraints(
-  //                         minHeight: 15,
-  //                         minWidth: 30,
-  //                       ),
-  //                       alignment: Alignment.center,
-  //                       padding: const EdgeInsets.all(5),
-  //                       decoration: const BoxDecoration(
-  //                         color.xml: colorPrimary,
-  //                         borderRadius: BorderRadius.only(
-  //                             topLeft: Radius.circular(3),
-  //                             topRight: Radius.circular(4),
-  //                             bottomLeft: Radius.circular(8),
-  //                             bottomRight: Radius.circular(3)),
-  //                       ),
-  //                       child: Row(
-  //                         children: [
-  //                           Image.asset(
-  //                             'assets/images/crown.png',
-  //                             height: 15,
-  //                             width: 15,
-  //                           ),
-  //                         ],
-  //                       )),
-  //                 ),
-  //               ),
-  //               Visibility(
-  //                 visible: sectionDataList?[index].isRent == 1 &&
-  //                     sectionDataList?[index].isPremium == 1,
-  //                 child: FittedBox(
-  //                   child: Container(
-  //                       constraints: const BoxConstraints(
-  //                         minHeight: 15,
-  //                         minWidth: 30,
-  //                       ),
-  //                       alignment: Alignment.center,
-  //                       padding: const EdgeInsets.all(5),
-  //                       decoration: const BoxDecoration(
-  //                         color.xml: colorPrimary,
-  //                         borderRadius: BorderRadius.only(
-  //                             topLeft: Radius.circular(3),
-  //                             topRight: Radius.circular(4),
-  //                             bottomLeft: Radius.circular(8),
-  //                             bottomRight: Radius.circular(3)),
-  //                       ),
-  //                       child: Row(
-  //                         children: [
-  //                           Image.asset(
-  //                             'assets/images/crown.png',
-  //                             height: 15,
-  //                             width: 15,
-  //                           ),
-  //                         ],
-  //                       )),
-  //                 ),
-  //               ),
-  //               Visibility(
-  //                 visible: sectionDataList?[index].isLiveUrl == 1,
-  //                 child: FittedBox(
-  //                   child: Container(
-  //                       constraints: const BoxConstraints(
-  //                         minHeight: 15,
-  //                         minWidth: 30,
-  //                       ),
-  //                       alignment: Alignment.center,
-  //                       padding: const EdgeInsets.all(5),
-  //                       // decoration: const BoxDecoration(
-  //                       //   color.xml: colorPrimary,
-  //                       //   borderRadius: BorderRadius.only(
-  //                       //       topLeft: Radius.circular(3),
-  //                       //       topRight: Radius.circular(4),
-  //                       //       bottomLeft: Radius.circular(8),
-  //                       //       bottomRight: Radius.circular(3)),
-  //                       // ),
-  //                       child: Row(
-  //                         children: [
-  //                           Container(
-  //                             height: 5,
-  //                             width: 5,
-  //                             margin: EdgeInsets.only(right: 3),
-  //                             decoration: BoxDecoration(
-  //                               color.xml: redColor,
-  //                               borderRadius: BorderRadius.circular(30),
-  //                             ),
-  //                           ),
-  //                           Text(
-  //                             "LIVE",
-  //                             style: TextStyle(
-  //                                 color.xml: redColor,
-  //                                 fontSize: 10,
-  //                                 fontWeight: FontWeight.w700),
-  //                           )
-  //                         ],
-  //                       )),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget landscapeTwo(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -1053,6 +853,43 @@ class SectionByTypeState extends State<SectionByType> {
               debugPrint("Clicked userid ==> ${Constant.userID}");
               debugPrint(
                   "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
+                   debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
+              debugPrint("reelName =======> ${sectionDataList?[index].name}");
+              debugPrint(
+                  "videoId ========> ${sectionDataList?[index].id ?? 0}");
+              debugPrint(
+                  "videoType ======> ${sectionDataList?[index].videoType ?? 0}");
+              debugPrint(
+                  "typeId =========> ${sectionDataList?[index].typeId ?? 0}"); // Check if the videoType is 7
+
+              if (sectionDataList?[index].videoType == 7) {
+                if (Constant.userID == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginViaSocial(),
+                    ),
+                  );
+                  return;
+                }
+                // Navigate to PreloadPage if videoType is 7
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReelScreen(
+                      videoId: sectionDataList?[index].id ?? 0,
+                      videoType: sectionDataList?[index].videoType ?? 0,
+                      typeId: sectionDataList?[index].typeId ?? 0,
+                      nameReelVideo: sectionDataList?[index].name ?? "",
+                    ),
+                  ),
+                );
+                return; // Early return to prevent further code execution
+              }
+
 
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
@@ -1076,7 +913,9 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+            Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -1180,6 +1019,7 @@ class SectionByTypeState extends State<SectionByType> {
                 ),
               ],
             ),
+         
           );
         },
       ),
@@ -1205,6 +1045,38 @@ class SectionByTypeState extends State<SectionByType> {
               debugPrint(
                   "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
 
+              debugPrint("reelName =======> ${sectionDataList?[index].name}");
+              debugPrint(
+                  "videoId ========> ${sectionDataList?[index].id ?? 0}");
+              debugPrint(
+                  "videoType ======> ${sectionDataList?[index].videoType ?? 0}");
+              debugPrint(
+                  "typeId =========> ${sectionDataList?[index].typeId ?? 0}"); // Check if the videoType is 7
+
+              if (sectionDataList?[index].videoType == 7) {
+                if (Constant.userID == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginViaSocial(),
+                    ),
+                  );
+                  return;
+                }
+                // Navigate to PreloadPage if videoType is 7
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReelScreen(
+                      videoId: sectionDataList?[index].id ?? 0,
+                      videoType: sectionDataList?[index].videoType ?? 0,
+                      typeId: sectionDataList?[index].typeId ?? 0,
+                      nameReelVideo: sectionDataList?[index].name ?? "",
+                    ),
+                  ),
+                );
+                return; // Early return to prevent further code execution
+              }
+
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
                   Navigator.push(
@@ -1227,7 +1099,9 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-            child: Stack(
+            child: 
+            
+          Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -1331,6 +1205,8 @@ class SectionByTypeState extends State<SectionByType> {
                 ),
               ],
             ),
+         
+         
           );
         },
       ),
@@ -1356,6 +1232,43 @@ class SectionByTypeState extends State<SectionByType> {
               debugPrint(
                   "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
 
+                   debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
+              debugPrint("reelName =======> ${sectionDataList?[index].name}");
+              debugPrint(
+                  "videoId ========> ${sectionDataList?[index].id ?? 0}");
+              debugPrint(
+                  "videoType ======> ${sectionDataList?[index].videoType ?? 0}");
+              debugPrint(
+                  "typeId =========> ${sectionDataList?[index].typeId ?? 0}"); // Check if the videoType is 7
+
+              if (sectionDataList?[index].videoType == 7) {
+                if (Constant.userID == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginViaSocial(),
+                    ),
+                  );
+                  return;
+                }
+                // Navigate to PreloadPage if videoType is 7
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReelScreen(
+                      videoId: sectionDataList?[index].id ?? 0,
+                      videoType: sectionDataList?[index].videoType ?? 0,
+                      typeId: sectionDataList?[index].typeId ?? 0,
+                      nameReelVideo: sectionDataList?[index].name ?? "",
+                    ),
+                  ),
+                );
+                return; // Early return to prevent further code execution
+              }
+
+
               if (sectionDataList?[index].isLiveUrl == 1) {
                 if (Constant.userID == null) {
                   Navigator.push(
@@ -1378,7 +1291,9 @@ class SectionByTypeState extends State<SectionByType> {
                 );
               }
             },
-            child: Stack(
+            child:   
+            
+             Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -1482,491 +1397,119 @@ class SectionByTypeState extends State<SectionByType> {
                 ),
               ],
             ),
+          
+            
+            // Stack(
+            //   alignment: Alignment.topRight,
+            //   children: [
+            //     // Background image with gradient overlay for better visibility
+            //     Container(
+            //       width: Dimens.widthPortTwo,
+            //       height: Dimens.heightPortTwo,
+            //       padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         boxShadow: [
+            //           BoxShadow(color: Colors.black26, blurRadius: 5)
+            //         ],
+            //       ),
+            //       child: ClipRRect(
+            //         borderRadius: BorderRadius.circular(10),
+            //         child: Stack(
+            //           children: [
+            //             MyNetworkImage(
+            //               imageUrl:
+            //                   sectionDataList?[index].thumbnail1.toString() ??
+            //                       "",
+            //               fit: BoxFit.cover,
+            //               imgHeight: MediaQuery.of(context).size.height,
+            //               imgWidth: MediaQuery.of(context).size.width,
+            //             ),
+            //             Container(
+            //               decoration: BoxDecoration(
+            //                 gradient: LinearGradient(
+            //                   begin: Alignment.bottomCenter,
+            //                   end: Alignment.topCenter,
+            //                   colors: [
+            //                     Colors.black.withOpacity(0.6),
+            //                     Colors.transparent
+            //                   ],
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+
+            //     // Rent Tag
+            //     Visibility(
+            //       visible: sectionDataList?[index].isRent == 1 &&
+            //           sectionDataList?[index].isPremium == 0,
+            //       child: _buildTag('assets/images/rupee.png'),
+            //     ),
+
+            //     // Premium Tag
+            //     Visibility(
+            //       visible: sectionDataList?[index].isPremium == 1,
+            //       child: _buildTag('assets/images/crown.png'),
+            //     ),
+
+            //     // Both Rent & Premium Tag
+            //     Visibility(
+            //       visible: sectionDataList?[index].isRent == 1 &&
+            //           sectionDataList?[index].isPremium == 1,
+            //       child: _buildTag('assets/images/crown.png'),
+            //     ),
+
+            //     // Live Indicator
+            //     Visibility(
+            //       visible: sectionDataList?[index].isLiveUrl == 1,
+            //       child: Positioned(
+            //         top: 8,
+            //         right: 8,
+            //         child: Container(
+            //           padding: const EdgeInsets.symmetric(
+            //               horizontal: 8, vertical: 4),
+            //           decoration: BoxDecoration(
+            //             color: Colors.red,
+            //             borderRadius: BorderRadius.circular(12),
+            //             boxShadow: [
+            //               BoxShadow(color: Colors.black26, blurRadius: 4)
+            //             ],
+            //           ),
+            //           child: Row(
+            //             children: [
+            //               Container(
+            //                 height: 6,
+            //                 width: 6,
+            //                 margin: const EdgeInsets.only(right: 5),
+            //                 decoration: BoxDecoration(
+            //                   color: Colors.white,
+            //                   borderRadius: BorderRadius.circular(10),
+            //                 ),
+            //               ),
+            //               const Text(
+            //                 "LIVE",
+            //                 style: TextStyle(
+            //                     color: Colors.white,
+            //                     fontSize: 12,
+            //                     fontWeight: FontWeight.bold),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+         
+         
           );
         },
       ),
     );
   }
-
-  // Widget portrait(int? upcomingType, List<Datum>? sectionDataList) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width,
-  //     height: Dimens.heightPort,
-  //     child: ListView.separated(
-  //       itemCount: sectionDataList?.length ?? 0,
-  //       shrinkWrap: true,
-  //       padding: const EdgeInsets.only(left: 20, right: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       physics: const AlwaysScrollableScrollPhysics(),
-  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
-  //       itemBuilder: (BuildContext context, int index) {
-  //         return InkWell(
-  //             //focusColor:: white,
-  //             borderRadius: BorderRadius.circular(4),
-  //             // onTap: () {
-  //             //   debugPrint("Clicked userid ==> ${Constant.userID}");
-  //             //   debugPrint(
-  //             //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //             //   if (Constant.userID == null) {
-  //             //     Navigator.push(
-  //             //       context,
-  //             //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //             //     );
-
-  //             //     // Utils.buildWebAlertDialog(context, "login", "");
-  //             //   } else {
-  //             //     sectionDataList?[index].isLiveUrl == 1
-  //             //         ? Navigator.push(
-  //             //             context,
-  //             //             MaterialPageRoute(
-  //             //                 builder: (context) => PlayerVideo(
-  //             //                     '',
-  //             //                     0,
-  //             //                     0,
-  //             //                     typeId,
-  //             //                     0,
-  //             //                     sectionDataList?[index].video320,
-  //             //                     0,
-  //             //                     "",
-  //             //                     "")),
-  //             //           )
-  //             //         : openDetailPage(
-  //             //             (sectionDataList?[index].videoType ?? 0) == 2
-  //             //                 ? "showdetail"
-  //             //                 : "videodetail",
-  //             //             sectionDataList?[index].id ?? 0,
-  //             //             upcomingType ?? 0,
-  //             //             sectionDataList?[index].videoType ?? 0,
-  //             //             sectionDataList?[index].typeId ?? 0,
-  //             //           );
-  //             //   }
-  //             // },
-  //             onTap: () {
-  //               debugPrint("Clicked userid ==> ${Constant.userID}");
-  //               debugPrint(
-  //                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //               if (sectionDataList?[index].isLiveUrl == 1) {
-  //                 if (Constant.userID == null) {
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //                   );
-  //                 } else {
-  //                   // Navigator.push(
-  //                   //   context,
-  //                   //   MaterialPageRoute(
-  //                   //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-  //                   //           sectionDataList?[index].video320, 0, "", "")),
-  //                   // );
-  //                   Navigator.of(context).push(MaterialPageRoute(
-  //                       builder: (context) => TestPlayerWeb(
-  //                           loadURL: sectionDataList![index].video320!)));
-  //                 }
-  //               } else {
-  //                 Utils.openDetails(
-  //                   context: context,
-  //                   videoId: sectionDataList?[index].id ?? 0,
-  //                   upcomingType: upcomingType ?? 0,
-  //                   videoType: sectionDataList?[index].videoType ?? 0,
-  //                   typeId: sectionDataList?[index].typeId ?? 0,
-  //                 );
-  //               }
-  //             },
-  //             child: Stack(
-  //               alignment: Alignment.topRight,
-  //               children: [
-  //                 Container(
-  //                   width: Dimens.widthPort,
-  //                   height: Dimens.heightPort,
-  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-  //                   alignment: Alignment.center,
-  //                   child: ClipRRect(
-  //                     borderRadius: BorderRadius.circular(4),
-  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                     child: MyNetworkImage(
-  //                       imageUrl:
-  //                           sectionDataList?[index].thumbnail.toString() ?? "",
-  //                       fit: BoxFit.cover,
-  //                       imgHeight: MediaQuery.of(context).size.height,
-  //                       imgWidth: MediaQuery.of(context).size.width,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isRent == 1 &&
-  //                       sectionDataList?[index].isPremium == 0,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/rupee.png',
-  //                               height: 13,
-  //                               width: 13,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isPremium == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/crown.png',
-  //                               height: 15,
-  //                               width: 15,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isRent == 1 &&
-  //                       sectionDataList?[index].isPremium == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/crown.png',
-  //                               height: 15,
-  //                               width: 15,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isLiveUrl == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         // decoration: const BoxDecoration(
-  //                         //   color.xml: colorPrimary,
-  //                         //   borderRadius: BorderRadius.only(
-  //                         //       topLeft: Radius.circular(3),
-  //                         //       topRight: Radius.circular(4),
-  //                         //       bottomLeft: Radius.circular(8),
-  //                         //       bottomRight: Radius.circular(3)),
-  //                         // ),
-  //                         child: Row(
-  //                           children: [
-  //                             Container(
-  //                               height: 5,
-  //                               width: 5,
-  //                               margin: EdgeInsets.only(right: 3),
-  //                               decoration: BoxDecoration(
-  //                                 color.xml: redColor,
-  //                                 borderRadius: BorderRadius.circular(30),
-  //                               ),
-  //                             ),
-  //                             Text(
-  //                               "LIVE",
-  //                               style: TextStyle(
-  //                                   color.xml: redColor,
-  //                                   fontSize: 10,
-  //                                   fontWeight: FontWeight.w700),
-  //                             )
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ));
-  //       },
-  //     ),
-  //   );
-  // }
-
-  // Widget portraitTwo(int? upcomingType, List<Datum>? sectionDataList) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width,
-  //     height: Dimens.heightPortTwo,
-  //     child: ListView.separated(
-  //       itemCount: sectionDataList?.length ?? 0,
-  //       shrinkWrap: true,
-  //       padding: const EdgeInsets.only(left: 20, right: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       physics: const AlwaysScrollableScrollPhysics(),
-  //       separatorBuilder: (context, index) => const SizedBox(width: 5),
-  //       itemBuilder: (BuildContext context, int index) {
-  //         return InkWell(
-  //             //focusColor:: white,
-  //             borderRadius: BorderRadius.circular(4),
-  //             onTap: () {
-  //               debugPrint("Clicked userid ==> ${Constant.userID}");
-  //               debugPrint(
-  //                   "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //               if (sectionDataList?[index].isLiveUrl == 1) {
-  //                 if (Constant.userID == null) {
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //                   );
-  //                 } else {
-  //                   // Navigator.push(
-  //                   //   context,
-  //                   //   MaterialPageRoute(
-  //                   //       builder: (context) => PlayerVideo('', 0, 0, typeId, 0,
-  //                   //           sectionDataList?[index].video320, 0, "", "")),
-  //                   // );
-  //                   Navigator.of(context).push(MaterialPageRoute(
-  //                       builder: (context) => TestPlayerWeb(
-  //                           loadURL: sectionDataList![index].video320!)));
-  //                 }
-  //               } else {
-  //                 Utils.openDetails(
-  //                   context: context,
-  //                   videoId: sectionDataList?[index].id ?? 0,
-  //                   upcomingType: upcomingType ?? 0,
-  //                   videoType: sectionDataList?[index].videoType ?? 0,
-  //                   typeId: sectionDataList?[index].typeId ?? 0,
-  //                 );
-  //               }
-  //             },
-  //             // onTap: () {
-  //             //   debugPrint("Clicked userid ==> ${Constant.userID}");
-  //             //   debugPrint(
-  //             //       "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
-  //             //   if (Constant.userID == null) {
-  //             //     Navigator.push(
-  //             //       context,
-  //             //       MaterialPageRoute(builder: (context) => LoginViaSocial()),
-  //             //     );
-
-  //             //     // Utils.buildWebAlertDialog(context, "login", "");
-  //             //   } else {
-  //             //     sectionDataList?[index].isLiveUrl == 1
-  //             //         ? Navigator.push(
-  //             //             context,
-  //             //             MaterialPageRoute(
-  //             //                 builder: (context) => PlayerVideo(
-  //             //                     '',
-  //             //                     0,
-  //             //                     0,
-  //             //                     typeId,
-  //             //                     0,
-  //             //                     sectionDataList?[index].video320,
-  //             //                     0,
-  //             //                     "",
-  //             //                     "")),
-  //             //           )
-  //             //         : openDetailPage(
-  //             //             (sectionDataList?[index].videoType ?? 0) == 2
-  //             //                 ? "showdetail"
-  //             //                 : "videodetail",
-  //             //             sectionDataList?[index].id ?? 0,
-  //             //             upcomingType ?? 0,
-  //             //             sectionDataList?[index].videoType ?? 0,
-  //             //             sectionDataList?[index].typeId ?? 0,
-  //             //           );
-  //             //   }
-  //             // },
-  //             child: Stack(
-  //               alignment: Alignment.topRight,
-  //               children: [
-  //                 Container(
-  //                   width: Dimens.widthPortTwo,
-  //                   height: Dimens.heightPortTwo,
-  //                   padding: EdgeInsets.all(Constant.isTV ? 2 : 0),
-  //                   alignment: Alignment.center,
-  //                   child: ClipRRect(
-  //                     borderRadius: BorderRadius.circular(4),
-  //                     clipBehavior: Clip.antiAliasWithSaveLayer,
-  //                     child: MyNetworkImage(
-  //                       imageUrl:
-  //                           sectionDataList?[index].thumbnail1.toString() ?? "",
-  //                       fit: BoxFit.cover,
-  //                       imgHeight: MediaQuery.of(context).size.height,
-  //                       imgWidth: MediaQuery.of(context).size.width,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isRent == 1 &&
-  //                       sectionDataList?[index].isPremium == 0,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/rupee.png',
-  //                               height: 13,
-  //                               width: 13,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isPremium == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/crown.png',
-  //                               height: 15,
-  //                               width: 15,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isRent == 1 &&
-  //                       sectionDataList?[index].isPremium == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         decoration: const BoxDecoration(
-  //                           color.xml: colorPrimary,
-  //                           borderRadius: BorderRadius.only(
-  //                               topLeft: Radius.circular(3),
-  //                               topRight: Radius.circular(4),
-  //                               bottomLeft: Radius.circular(8),
-  //                               bottomRight: Radius.circular(3)),
-  //                         ),
-  //                         child: Row(
-  //                           children: [
-  //                             Image.asset(
-  //                               'assets/images/crown.png',
-  //                               height: 15,
-  //                               width: 15,
-  //                             ),
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //                 Visibility(
-  //                   visible: sectionDataList?[index].isLiveUrl == 1,
-  //                   child: FittedBox(
-  //                     child: Container(
-  //                         constraints: const BoxConstraints(
-  //                           minHeight: 15,
-  //                           minWidth: 30,
-  //                         ),
-  //                         alignment: Alignment.center,
-  //                         padding: const EdgeInsets.all(5),
-  //                         // decoration: const BoxDecoration(
-  //                         //   color.xml: colorPrimary,
-  //                         //   borderRadius: BorderRadius.only(
-  //                         //       topLeft: Radius.circular(3),
-  //                         //       topRight: Radius.circular(4),
-  //                         //       bottomLeft: Radius.circular(8),
-  //                         //       bottomRight: Radius.circular(3)),
-  //                         // ),
-  //                         child: Row(
-  //                           children: [
-  //                             Container(
-  //                               height: 5,
-  //                               width: 5,
-  //                               margin: EdgeInsets.only(right: 3),
-  //                               decoration: BoxDecoration(
-  //                                 color.xml: redColor,
-  //                                 borderRadius: BorderRadius.circular(30),
-  //                               ),
-  //                             ),
-  //                             Text(
-  //                               "LIVE",
-  //                               style: TextStyle(
-  //                                   color.xml: redColor,
-  //                                   fontSize: 10,
-  //                                   fontWeight: FontWeight.w700),
-  //                             )
-  //                           ],
-  //                         )),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ));
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget square(int? upcomingType, List<Datum>? sectionDataList) {
     return SizedBox(
@@ -1987,6 +1530,43 @@ class SectionByTypeState extends State<SectionByType> {
                 debugPrint("Clicked userid ==> ${Constant.userID}");
                 debugPrint(
                     "Clicked on link is  ==> ${sectionDataList?[index].video320.toString()}");
+
+                     debugPrint("Clicked userid ==> ${Constant.userID}");
+              debugPrint(
+                  "Clicked on link ==> ${sectionDataList?[index].video320.toString()}");
+
+              debugPrint("reelName =======> ${sectionDataList?[index].name}");
+              debugPrint(
+                  "videoId ========> ${sectionDataList?[index].id ?? 0}");
+              debugPrint(
+                  "videoType ======> ${sectionDataList?[index].videoType ?? 0}");
+              debugPrint(
+                  "typeId =========> ${sectionDataList?[index].typeId ?? 0}"); // Check if the videoType is 7
+
+              if (sectionDataList?[index].videoType == 7) {
+                if (Constant.userID == null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginViaSocial(),
+                    ),
+                  );
+                  return;
+                }
+                // Navigate to PreloadPage if videoType is 7
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReelScreen(
+                      videoId: sectionDataList?[index].id ?? 0,
+                      videoType: sectionDataList?[index].videoType ?? 0,
+                      typeId: sectionDataList?[index].typeId ?? 0,
+                      nameReelVideo: sectionDataList?[index].name ?? "",
+                    ),
+                  ),
+                );
+                return; // Early return to prevent further code execution
+              }
+
                 if (sectionDataList?[index].isLiveUrl == 1) {
                   if (Constant.userID == null) {
                     Navigator.push(

@@ -199,25 +199,62 @@ class ApiService {
 
   /* type => 3-OTP */
   // login API
-  Future<LoginRegisterModel> loginWithOTP(mobile, email) async {
-    debugPrint("mobile :==> $mobile");
-    debugPrint("mobile :==> $email");
+  // Future<LoginRegisterModel> loginWithOTP(mobile, email) async {
+  //   debugPrint("mobile :==> $mobile");
+  //   debugPrint("mobile :==> $email");
 
-    LoginRegisterModel loginModel;
+  //   LoginRegisterModel loginModel;
+  //   String doctorLogin = "login";
+  //   Response response = await dio.post(
+  //     '$baseUrl$doctorLogin',
+  //     options: optHeaders,
+  //     data: {'type': '3', 'mobile': mobile, 'email': email},
+  //   );
+  //   Map<String, Object> screenViewEvent = {
+  //     'screen_name': 'Login Success',
+  //     'user_id': Constant.userID.toString(),
+  //     'mobile': mobile,
+  //     'email': email
+  //   };
+  //   Singular.eventWithArgs('Login Success', screenViewEvent);
+  //   loginModel = LoginRegisterModel.fromJson(response.data);
+  //   return loginModel;
+  // }
+
+  Future<LoginRegisterModel> loginWithOTP(String mobile, String email) async {
+    debugPrint("mobile :==> $mobile");
+    debugPrint("email :==> $email");
+
     String doctorLogin = "login";
     Response response = await dio.post(
       '$baseUrl$doctorLogin',
       options: optHeaders,
       data: {'type': '3', 'mobile': mobile, 'email': email},
     );
-    Map<String, Object> screenViewEvent = {
-      'screen_name': 'Login Success',
-      'user_id': Constant.userID.toString(),
-      'mobile': mobile,
-      'email': email
-    };
-    Singular.eventWithArgs('Login Success', screenViewEvent);
-    loginModel = LoginRegisterModel.fromJson(response.data);
+
+    LoginRegisterModel loginModel = LoginRegisterModel.fromJson(response.data);
+
+    // Extract user data safely from result list
+    final userData =
+        loginModel.result?.isNotEmpty == true ? loginModel.result!.first : null;
+
+    if (userData != null) {
+      Map<String, Object> screenViewEvent = {
+        'user_id': userData.id?.toString() ?? "",
+        'mobile': userData.mobile ?? "",
+        'email': userData.email ?? ""
+      };
+
+      // Send the appropriate event to Singular
+      if (userData.isrigistered == 1) {
+        Singular.eventWithArgs('Register Success', screenViewEvent);
+      } else {
+        Singular.eventWithArgs('Login Success', screenViewEvent);
+      }
+    } else {
+      debugPrint("⚠️ No user data found in response");
+    }
+
     return loginModel;
   }
 
@@ -969,7 +1006,6 @@ class ApiService {
 
   // apply_coupon API
 
-  
   // Future<CouponModel> applyPackageCoupon(couponCode, packageId) async {
   //   CouponModel couponModel;
   //   String applyCoupon = "apply_coupon";
@@ -992,46 +1028,60 @@ class ApiService {
   // apply_coupon API
 
   Future<CouponModel> applyRentCoupon(
-  String couponCode,
-  String videoId,
-  String typeId,
-  String videoType,
-  dynamic price,
-) async {
-  CouponModel couponModel;
-  String applyCoupon = "apply_coupon";
-  debugPrint("applyRentCoupon API :==> $baseUrl$applyCoupon");
+    String couponCode,
+    String videoId,
+    String typeId,
+    String videoType,
+    dynamic price,
+  ) async {
+    CouponModel couponModel;
+    String applyCoupon = "apply_coupon";
+    debugPrint("applyRentCoupon API :==> $baseUrl$applyCoupon");
 
-  try {
-    Response response = await dio.post(
-      '$baseUrl$applyCoupon',
-      options: optHeaders,
-      data: {
-        'user_id': Constant.userID,
-        'apply_coupon_type': "2",
-        'unique_id': couponCode,
-        'video_id': videoId,
-        'type_id': typeId,
-        'video_type': videoType,
-        'price': price,
-      },
-    );
+    try {
+      Response response = await dio.post(
+        '$baseUrl$applyCoupon',
+        options: optHeaders,
+        data: {
+          'user_id': Constant.userID,
+          'apply_coupon_type': "2",
+          'unique_id': couponCode,
+          'video_id': videoId,
+          'type_id': typeId,
+          'video_type': videoType,
+          'price': price,
+        },
+      );
 
-    couponModel = CouponModel.fromJson(response.data);
+      couponModel = CouponModel.fromJson(response.data);
 
-    debugPrint("applyRentCoupon response status ==> ${couponModel.status}");
-    debugPrint("applyRentCoupon response message ==> ${couponModel.message}");
+      debugPrint("applyRentCoupon response status ==> ${couponModel.status}");
+      debugPrint("applyRentCoupon response message ==> ${couponModel.message}");
 
-    if (couponModel.status == 200) {
-      final totalAmount = "${couponModel.result?.totalAmount}";
-      final discountAmount = "${couponModel.result?.discountAmount}";
-      final userId = Constant.userID.toString();
-      final timestamp = DateTime.now().toIso8601String();
+      if (couponModel.status == 200) {
+        final totalAmount = "${couponModel.result?.totalAmount}";
+        final discountAmount = "${couponModel.result?.discountAmount}";
+        final userId = Constant.userID.toString();
+        final timestamp = DateTime.now().toIso8601String();
 
-      // Firebase Analytics
-      analytics.logEvent(
-        name: "Rent_promo_code_Applied",
-        parameters: {
+        // Firebase Analytics
+        analytics.logEvent(
+          name: "Rent_promo_code_Applied",
+          parameters: {
+            'event_name': 'Rent_promo_code_Applied',
+            "couponCode": couponCode,
+            "videoId": videoId,
+            "typeId": typeId,
+            "videoType": videoType,
+            "price": price,
+            "totalAmount": totalAmount,
+            "discountAmount": discountAmount,
+            'user_id': userId,
+          },
+        );
+
+        // Singular
+        Map<String, Object> screenViewEvent = {
           'event_name': 'Rent_promo_code_Applied',
           "couponCode": couponCode,
           "videoId": videoId,
@@ -1041,46 +1091,34 @@ class ApiService {
           "totalAmount": totalAmount,
           "discountAmount": discountAmount,
           'user_id': userId,
-        },
-      );
+        };
+        Singular.eventWithArgs('Rent_promo_code_Applied', screenViewEvent);
 
-      // Singular
-      Map<String, Object> screenViewEvent = {
-        'event_name': 'Rent_promo_code_Applied',
-        "couponCode": couponCode,
-        "videoId": videoId,
-        "typeId": typeId,
-        "videoType": videoType,
-        "price": price,
-        "totalAmount": totalAmount,
-        "discountAmount": discountAmount,
-        'user_id': userId,
-      };
-      Singular.eventWithArgs('Rent_promo_code_Applied', screenViewEvent);
+        // MoEngage
+        final properties = MoEProperties()
+          ..addAttribute('user_id', userId)
+          ..addAttribute('couponCode', couponCode)
+          ..addAttribute('videoId', videoId)
+          ..addAttribute('typeId', typeId)
+          ..addAttribute('videoType', videoType)
+          ..addAttribute('price', price)
+          ..addAttribute('totalAmount', totalAmount)
+          ..addAttribute('discountAmount', discountAmount)
+          ..addAttribute('timestamp', timestamp);
 
-      // MoEngage
-      final properties = MoEProperties()
-        ..addAttribute('user_id', userId)
-        ..addAttribute('couponCode', couponCode)
-        ..addAttribute('videoId', videoId)
-        ..addAttribute('typeId', typeId)
-        ..addAttribute('videoType', videoType)
-        ..addAttribute('price', price)
-        ..addAttribute('totalAmount', totalAmount)
-        ..addAttribute('discountAmount', discountAmount)
-        ..addAttribute('timestamp', timestamp);
-
-      MoEngageService.instance.trackEvent('Rent_promo_code_Applied', properties);
-    } else {
-      debugPrint("❌ Rent Coupon Apply Failed [status=400]: ${couponModel.message}");
+        MoEngageService.instance
+            .trackEvent('Rent_promo_code_Applied', properties);
+      } else {
+        debugPrint(
+            "❌ Rent Coupon Apply Failed [status=400]: ${couponModel.message}");
+      }
+    } catch (e) {
+      debugPrint("❌ Exception in applyRentCoupon: $e");
+      rethrow;
     }
-  } catch (e) {
-    debugPrint("❌ Exception in applyRentCoupon: $e");
-    rethrow;
-  }
 
-  return couponModel;
-}
+    return couponModel;
+  }
 
   // Future<CouponModel> applyRentCoupon(
   //     couponCode, videoId, typeId, videoType, price) async {
@@ -1225,80 +1263,84 @@ class ApiService {
   }
 
 //aply coin ----
-Future<CouponModel> applyPackageCoupon(String couponCode, String packageId) async {
-  CouponModel couponModel;
-  String applyCoupon = "apply_coupon";
-  debugPrint("applyPackageCoupon API :==> $baseUrl$applyCoupon");
+  Future<CouponModel> applyPackageCoupon(
+      String couponCode, String packageId) async {
+    CouponModel couponModel;
+    String applyCoupon = "apply_coupon";
+    debugPrint("applyPackageCoupon API :==> $baseUrl$applyCoupon");
 
-  try {
-    Response response = await dio.post(
-      '$baseUrl$applyCoupon',
-      options: optHeaders,
-      data: {
-        'user_id': Constant.userID,
-        'apply_coupon_type': "1",
-        'unique_id': couponCode,
-        'package_id': packageId,
-      },
-    );
+    try {
+      Response response = await dio.post(
+        '$baseUrl$applyCoupon',
+        options: optHeaders,
+        data: {
+          'user_id': Constant.userID,
+          'apply_coupon_type': "1",
+          'unique_id': couponCode,
+          'package_id': packageId,
+        },
+      );
 
-    couponModel = CouponModel.fromJson(response.data);
+      couponModel = CouponModel.fromJson(response.data);
 
-    debugPrint("applyPackageCoupon response status ==> ${couponModel.status}");
-    debugPrint("applyPackageCoupon response message ==> ${couponModel.message}");
+      debugPrint(
+          "applyPackageCoupon response status ==> ${couponModel.status}");
+      debugPrint(
+          "applyPackageCoupon response message ==> ${couponModel.message}");
 
-    if (couponModel.status == 200) {
-      // Only fire event if coupon is valid
-      final totalAmount = "${couponModel.result?.totalAmount}";
-      final discountAmount = "${couponModel.result?.discountAmount}";
-      final userId = Constant.userID.toString();
-      final timestamp = DateTime.now().toIso8601String();
+      if (couponModel.status == 200) {
+        // Only fire event if coupon is valid
+        final totalAmount = "${couponModel.result?.totalAmount}";
+        final discountAmount = "${couponModel.result?.discountAmount}";
+        final userId = Constant.userID.toString();
+        final timestamp = DateTime.now().toIso8601String();
 
-      /// Firebase Analytics
-      analytics.logEvent(
-        name: "Package_promo_code_Applied",
-        parameters: {
+        /// Firebase Analytics
+        analytics.logEvent(
+          name: "Package_promo_code_Applied",
+          parameters: {
+            'event_name': 'Package_promo_code_Applied',
+            "couponCode": couponCode,
+            "packageId": packageId,
+            "totalAmount": totalAmount,
+            "discountAmount": discountAmount,
+            'user_id': userId,
+          },
+        );
+
+        /// Singular
+        Map<String, Object> screenViewEvent = {
           'event_name': 'Package_promo_code_Applied',
           "couponCode": couponCode,
           "packageId": packageId,
           "totalAmount": totalAmount,
           "discountAmount": discountAmount,
           'user_id': userId,
-        },
-      );
+        };
+        Singular.eventWithArgs('Package_promo_code_Applied', screenViewEvent);
 
-      /// Singular
-      Map<String, Object> screenViewEvent = {
-        'event_name': 'Package_promo_code_Applied',
-        "couponCode": couponCode,
-        "packageId": packageId,
-        "totalAmount": totalAmount,
-        "discountAmount": discountAmount,
-        'user_id': userId,
-      };
-      Singular.eventWithArgs('Package_promo_code_Applied', screenViewEvent);
+        /// MoEngage
+        final properties = MoEProperties()
+          ..addAttribute('user_id', userId)
+          ..addAttribute('couponCode', couponCode)
+          ..addAttribute('packageId', packageId)
+          ..addAttribute('totalAmount', totalAmount)
+          ..addAttribute('discountAmount', discountAmount)
+          ..addAttribute('timestamp', timestamp);
 
-      /// MoEngage
-      final properties = MoEProperties()
-        ..addAttribute('user_id', userId)
-        ..addAttribute('couponCode', couponCode)
-        ..addAttribute('packageId', packageId)
-        ..addAttribute('totalAmount', totalAmount)
-        ..addAttribute('discountAmount', discountAmount)
-        ..addAttribute('timestamp', timestamp);
-
-      MoEngageService.instance.trackEvent('Package_promo_code_Applied', properties);
-    } else {
-      debugPrint("❌ Coupon Apply Failed [status=400]: ${couponModel.message}");
+        MoEngageService.instance
+            .trackEvent('Package_promo_code_Applied', properties);
+      } else {
+        debugPrint(
+            "❌ Coupon Apply Failed [status=400]: ${couponModel.message}");
+      }
+    } catch (e) {
+      debugPrint("❌ Exception in applyPackageCoupon: $e");
+      rethrow;
     }
-  } catch (e) {
-    debugPrint("❌ Exception in applyPackageCoupon: $e");
-    rethrow;
+
+    return couponModel;
   }
-
-  return couponModel;
-}
-
 
 // Future<UserWalletBalanceModel> getUserWalletBalance(String userId) async {
 //   String endpoint = "get-user-wallet-balance";

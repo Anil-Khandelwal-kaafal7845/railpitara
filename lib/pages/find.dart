@@ -35,7 +35,7 @@ class FindState extends State<Find> {
   bool speechEnabled = false, _isListening = false;
   String _lastWords = '';
   late BuildContext dialogContext;
-  String?   userMobileNo;
+  String? userMobileNo;
   SharedPre sharedPref = SharedPre();
   @override
   void initState() {
@@ -45,19 +45,20 @@ class FindState extends State<Find> {
     getUserData();
     trackMoEngageEventOnce();
   }
+
   bool _eventTracked = false;
 
   void trackMoEngageEventOnce() {
     if (_eventTracked) return;
     _eventTracked = true;
 
-                analytics.logEvent(
-  name: "Search_screen_view",
-  parameters: {
-    "screen_name": "Find Screen",
-    "user_id": Constant.userID,
-  },
-);
+    analytics.logEvent(
+      name: "Search_screen_view",
+      parameters: {
+        "screen_name": "Find Screen",
+        "user_id": Constant.userID,
+      },
+    );
 
     Map<String, Object> screenViewEvent = {
       'screen_name': 'Search Screen',
@@ -66,24 +67,21 @@ class FindState extends State<Find> {
 
     Singular.eventWithArgs('Search_screen_view', screenViewEvent);
 
-
     final properties = MoEProperties()
       ..addAttribute('screen_name', 'Search Screen')
       ..addAttribute('user_id', Constant.userID.toString())
-
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
 
     Future.delayed(Duration(seconds: 2), () {
       MoEngageService.instance.trackEvent('Search_screen_view', properties);
     });
-
-
   }
+
   getUserData() async {
     userMobileNo = await sharedPref.read("usermobile");
     debugPrint('getUserData userMobileNo1 ==> $userMobileNo');
   }
+
   /// Start listening to speech
   void _startListening() async {
     debugPrint("<============== _startListening ==============>");
@@ -282,7 +280,6 @@ class FindState extends State<Find> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: appBgColor,
@@ -357,17 +354,22 @@ class FindState extends State<Find> {
                                   return InkWell(
                                     borderRadius: BorderRadius.circular(4),
                                     onTap: () {
-                                      debugPrint("Item Clicked! => $position");
+                                      final tappedItem = findProvider
+                                          .sectionTypeModel.result?[position];
+
+                                      debugPrint("🟢 Item Clicked!");
+                                      debugPrint("📌 Position: $position");
+                                      debugPrint("🆔 ID: ${tappedItem?.id}");
+                                      debugPrint(
+                                          "📝 Name: ${tappedItem?.name}");
+
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) => SectionByType(
-                                              findProvider.sectionTypeModel
-                                                      .result?[position].id ??
-                                                  0,
-                                              findProvider.sectionTypeModel
-                                                      .result?[position].name ??
-                                                  "",
-                                              "2"),
+                                            tappedItem?.id ?? 0,
+                                            tappedItem?.name ?? "",
+                                            "2",
+                                          ),
                                         ),
                                       );
                                     },

@@ -595,6 +595,8 @@ class SettingState extends State<Setting> {
                               color: primaryDark,
                             ),
                           )),
+
+                          SizedBox(height: 20),
               ],
             ),
           ),
