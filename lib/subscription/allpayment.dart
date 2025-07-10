@@ -956,20 +956,19 @@ class AllPaymentState extends State<AllPayment>
                           onTap: () async {
                             double amount = double.tryParse(
                                     paymentProvider.finalAmount ?? "0") ??
-                                0;
-                            int roundedAmount = amount
-                                .round(); // optional if amount already correct
+                                0.0;
+                            print("💰 FINAL PAYMENT (raw): ₹$amount");
 
-                            print("💰 FINAL PAYMENT IS: ₹$amount");
-
-                            if (amount < 1) {
-                              print("✅ Amount < ₹1 => Direct Transaction");
+                            if (amount < 0.49) {
+                              // Treat as ₹0 → No Razorpay
+                              print(
+                                  "✅ Amount < ₹0.49 → Treat as ₹0 and call transaction API");
 
                               if (widget.payType == "Package") {
                                 addTransaction(
                                   widget.itemId,
                                   widget.itemTitle,
-                                  paymentProvider.finalAmount,
+                                  "0",
                                   paymentId,
                                   widget.currency,
                                   "success",
@@ -978,28 +977,32 @@ class AllPaymentState extends State<AllPayment>
                               } else if (widget.payType == "Rent") {
                                 addRentTransaction(
                                   widget.itemId,
-                                  paymentProvider.finalAmount,
+                                  "0",
                                   widget.typeId,
                                   widget.videoType,
                                   "success",
                                 );
                               }
                             } else {
-                              print(
-                                  "✅ Amount ≥ ₹1 => Proceed with Razorpay order creation");
-
-                              try {
-                                var id = await createOrder();
-                                setState(() {
-                                  orderId = id;
-                                });
-
-                                await paymentProvider
-                                    .setCurrentPayment("razorpay");
-                                openPayment(pgName: "razorpay");
-                              } catch (e) {
-                                print("❌ Error creating Razorpay order: $e");
+                              if (amount >= 0.49 && amount < 1.0) {
+                                // Treat as ₹1 for Razorpay
+                                print(
+                                    "⚠️ Amount between ₹0.49 and ₹1.0 → Forcing ₹1 for Razorpay");
+                                paymentProvider.finalAmount = "1";
                               }
+
+                              print(
+                                  "🚀 Proceeding to Razorpay with ₹${paymentProvider.finalAmount}");
+
+                              var id = await createOrder();
+
+                              setState(() {
+                                orderId = id;
+                              });
+
+                              await paymentProvider
+                                  .setCurrentPayment("razorpay");
+                              openPayment(pgName: "razorpay");
                             }
                           },
                           child: _buildPGButtonRazorpay("", "Pay", 35, 130),
@@ -1429,15 +1432,15 @@ class AllPaymentState extends State<AllPayment>
       ),
     );
   }
-  /* ********* Razorpay START ********* */
 
+  /* ********* Razorpay START ********* */
   Future<String> createOrder() async {
     try {
       var mapHeader = <String, String>{};
       mapHeader['Content-Type'] = 'application/json';
 
       var requestBody = jsonEncode({
-        "amount": (double.parse(paymentProvider.finalAmount ?? "")).toInt(),
+        "amount": paymentProvider.finalAmount,
         "currency": "INR",
         "name": widget.itemTitle,
         "mobile": userMobileNo,
@@ -1495,14 +1498,14 @@ class AllPaymentState extends State<AllPayment>
               "name": widget.itemTitle
             },
           );
-          Map<String, Object> screenViewEvent = {
-            'event_name': 'Razorpay Open',
-            "PayType": '${widget.payType}',
-            "price": '${widget.price}',
-            "name": '${widget.itemTitle}',
-            'user_id': Constant.userID.toString(),
-          };
-          Singular.eventWithArgs('Razorpay Open', screenViewEvent);
+          // Map<String, Object> screenViewEvent = {
+          //   'event_name': 'Razorpay Open',
+          //   "PayType": '${widget.payType}',
+          //   "price": '${widget.price}',
+          //   "name": '${widget.itemTitle}',
+          //   'user_id': Constant.userID.toString(),
+          // };
+          // Singular.eventWithArgs('Razorpay Open', screenViewEvent);
           Razorpay razorpay = Razorpay();
           var options = {
             'key':
@@ -1516,7 +1519,7 @@ class AllPaymentState extends State<AllPayment>
                             .paymentOptionModel.result?.razorpay?.testKey1 ??
                         ""),
             'currency': Constant.currency,
-            'amount': (double.parse(paymentProvider.finalAmount ?? "") * 100),
+            'amount': paymentProvider.finalAmount,
             'name': widget.itemTitle ?? "",
             'order_id': orderId,
             'description': widget.itemTitle ?? "",
@@ -1527,10 +1530,8 @@ class AllPaymentState extends State<AllPayment>
               'wallets': ['paytm']
             },
             'theme': {
-          'color': '#B80E07', // ✅ Corrected key here
+              'color': '#99236D',
             },
-            'image':
-                'https://play-lh.googleusercontent.com/9TNMnjC76gfYthQk69SRgXkDSARSr0UYUvvFmpueSBAL1Njh2vNehZab64nezdoh_-w',
             'autocapture': 1
           };
           razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
