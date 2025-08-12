@@ -9,7 +9,7 @@ class Constant {
   static const String dynamicBaseUrl = 'https://chull.tv/';
   static const String baseurlwithoutapi = 'https://chull.ottsnap.in';
   static String appName = "Chull";
-  static String appPackageName = "com.ott.chulbull";
+  static String appPackageName = "com.ott.railpitara";
   static String appleAppId = "";
   static double curentAppVersion = 6;
   static dynamic curentiosAppVersion = 1;

@@ -63,9 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '188395223241',
     projectId: 'chulltv',
     storageBucket: 'chulltv.firebasestorage.app',
-    androidClientId: '188395223241-1c63iksddu87f2v8dorh5jjua2fng0l4.apps.googleusercontent.com',
-    iosClientId: '188395223241-18fu9it4gsaonmog9prnr3mtqq106ihv.apps.googleusercontent.com',
-    iosBundleId: 'com.ott.chulbull',
+    androidClientId:
+        '188395223241-1c63iksddu87f2v8dorh5jjua2fng0l4.apps.googleusercontent.com',
+    iosClientId:
+        '188395223241-18fu9it4gsaonmog9prnr3mtqq106ihv.apps.googleusercontent.com',
+    iosBundleId: 'com.ott.railpitara',
   );
-
 }

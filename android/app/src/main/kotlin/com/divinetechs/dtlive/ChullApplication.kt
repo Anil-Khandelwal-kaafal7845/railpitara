@@ -1,4 +1,4 @@
-package com.ott.chulbull
+package com.ott.railpitara
 
 import android.app.Application
 import com.moengage.core.MoEngage
