@@ -129,14 +129,6 @@ class BottombarState extends State<Bottombar> {
                   icon:
                       _buildBottomNavIcon(iconName: 'ic_find', iconColor: gray),
                 ),
-
-                // 📌 New Reel Tab with custom image
-                BottomNavigationBarItem(
-                  label: 'Reel',
-                  activeIcon: _buildCustomImageIcon('ic_reel', colorPrimary),
-                  icon: _buildCustomImageIcon('ic_reel', gray),
-                ),
-
                 BottomNavigationBarItem(
                   label: bottomView6,
                   activeIcon: _buildBottomNavIcon(
