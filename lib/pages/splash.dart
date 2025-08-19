@@ -44,36 +44,36 @@ class SplashState extends State<Splash> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset("assets/images/splash.mp4")
-      ..initialize().then((_) {
-        setState(() {
-          _initialized = true;
-        });
-        _controller.play();
-      });
+    // _controller = VideoPlayerController.asset("assets/images/splash.mp4")
+    //   ..initialize().then((_) {
+    //     setState(() {
+    //       _initialized = true;
+    //     });
+    //     _controller.play();
+    //   });
 
     // Simulating a delay of 5 seconds before proceeding to the next screen
-    Future.delayed(const Duration(seconds: 7)).then((value) {
+    Future.delayed(const Duration(seconds: 2)).then((value) {
       if (!mounted) return;
       isFirstCheck();
     });
 
     getUserData();
 
-       analytics.logEvent(
-        name: "Splash_screen_view",
-        parameters: {
-          "screen_name": "Splash Screen",
-          "user_id": Constant.userID,
-        },
-      );
-    
+    analytics.logEvent(
+      name: "Splash_screen_view",
+      parameters: {
+        "screen_name": "Splash Screen",
+        "user_id": Constant.userID,
+      },
+    );
+
     Map<String, Object> screenViewEvent = {
       'screen_name': 'Splash Screen',
       'user_id': Constant.userID.toString(),
     };
     Singular.eventWithArgs('Splash_screen_view', screenViewEvent);
-    
+
     // moEngagePlugin();
   }
 
@@ -92,23 +92,17 @@ class SplashState extends State<Splash> {
   }
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.center,
         color: Colors.transparent,
-        child: _initialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              )
-            : MyImage(
-                imagePath:
-                    (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
-                fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
-              ),
+        child: MyImage(
+          imagePath: (kIsWeb || Constant.isTV) ? "appicon.png" : "splash.png",
+          fit: (kIsWeb || Constant.isTV) ? BoxFit.contain : BoxFit.cover,
+        ),
       ),
     );
   }

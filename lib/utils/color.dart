@@ -1,24 +1,22 @@
-
-
 import 'package:flutter/material.dart';
 
-const colorPrimary = Color(0xFFB80E07);
+const colorPrimary = Color(0xFF0054A8);
 const colorPrimaryDark = Color(0xff0e0e16);
-const colorAccent = Color(0xFFB80E07);
+const colorAccent = Color(0xFF0054A8);
 const subscriblue = Color(0xff03084C);
 const subscrimain = Color(0xffFDAF5A);
 const subscridark = Color(0xffD57648);
 const subscrigreen = Color(0xff06802F);
-const topTen =Color(0xfffe9eced);
+const topTen = Color(0xfffe9eced);
 
 const colorGraidentLeft = Color(0xffF9D1A0);
 const colorGraidentRight = Color(0xffFFFFFF);
 
-const complimentryColor = Color(0xFFB80E07);
-const primaryLight = Color.fromARGB(255, 237, 25, 18);
-const primaryDark =Color(0xFFB80E07);
-const primaryTras75 = Color(0xFFB80E07);
-const primaryTras50 = Color(0xFFB80E07);
+const complimentryColor = Color(0xFF0054A8);
+const primaryLight = Color.fromARGB(255, 29, 126, 224);
+const primaryDark = Color.fromARGB(255, 1, 53, 104);
+const primaryTras75 = Color(0xFF0054A8);
+const primaryTras50 = Color(0xFF0054A8);
 const primaryTras25 = Color(0x40bafa34);
 const primaryTras10 = Color(0x1Abafa34);
 const primaryTras5 = Color(0x0Dbafa34);
@@ -64,7 +62,3 @@ const lightGray = Color(0xffc3c3c3);
 const white = Color(0xffffffff);
 const whiteLight = Color(0xCCFAF9F6);
 const whiteTransparent = Color(0x50FFFFFF);
-
-
-
-

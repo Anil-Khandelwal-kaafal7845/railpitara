@@ -57,7 +57,6 @@ class _PlayerVideoState extends State<PlayerVideo> {
     print("---Trailer ifreme Url --${widget.iframeTrailerUrl}");
     print("---name of the content  --${widget.videoThumb}");
 
-
     // print("---Video Url --${widget.trailerUrl}");
 
     SystemChrome.setPreferredOrientations([
@@ -111,7 +110,6 @@ class _PlayerVideoState extends State<PlayerVideo> {
       };
       Singular.eventWithArgs('video_watch_event', screenViewEvent);
 
-
       final timestamp = DateTime.now().toIso8601String();
 
       final properties = MoEProperties()
@@ -121,7 +119,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
         // ..addAttribute('content_type', widget.videoType)
         ..addAttribute('play_type', '${widget.playType}')
         ..addAttribute('video_url', widget.videoUrl)
-      // ..addAttribute('genre', widget.isLive)
+        // ..addAttribute('genre', widget.isLive)
         ..addAttribute('duration_watched', '${watchDuration} Second')
         ..addAttribute('timestamp', timestamp);
 
@@ -150,7 +148,6 @@ class _PlayerVideoState extends State<PlayerVideo> {
       ..addAttribute('screen_name', 'Player Screen')
       ..addAttribute('user_id', Constant.userID.toString())
       ..addAttribute('timestamp', DateTime.now().toIso8601String());
-
 
     MoEngageService.instance.trackEvent('Player_screen_view', properties);
     return Scaffold(
@@ -202,7 +199,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
   <div id="videoWrapper">
     <iframe
       id="videoIframe"
-      src="${widget.iframeTrailerUrl != null && widget.iframeTrailerUrl.toString().isNotEmpty ? widget.iframeTrailerUrl : 'https://chull.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true'}"
+      src="${widget.iframeTrailerUrl != null && widget.iframeTrailerUrl.toString().isNotEmpty ? widget.iframeTrailerUrl : 'https://Railpitara.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true'}"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
@@ -318,7 +315,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
   <div id="videoWrapper">
     <iframe
       id="videoIframe"
-      src="${widget.iframeVideoUrl != null && widget.iframeVideoUrl.toString().isNotEmpty ? widget.iframeVideoUrl : 'https://chull.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true'}"
+      src="${widget.iframeVideoUrl != null && widget.iframeVideoUrl.toString().isNotEmpty ? widget.iframeVideoUrl : 'https://Railpitara.tv/unviiplayer.html?url=${widget.videoUrl}&autoplay=true&loop=false&muted=false&preload=true&responsive=true'}"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>

@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAQDNHTjU12AF6b68AKyYSDj6wOhQh8PvY',
-    appId: '1:188395223241:android:5582b2b1c278ef3262b518',
-    messagingSenderId: '188395223241',
-    projectId: 'chulltv',
-    storageBucket: 'chulltv.firebasestorage.app',
+    apiKey: 'AIzaSyDo5PjT9GeIX9Ed_IFM6f2oWCTrLm5xLUU',
+    appId: '1:1092993559412:android:60bce935fe994868fa9a21',
+    messagingSenderId: '1092993559412',
+    projectId: 'railpitara',
+    storageBucket: 'railpitara.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC3xbbflZr438bgFI7yp329OPpEoAmY7kI',
     appId: '1:188395223241:ios:aa43b8a56eece82862b518',
     messagingSenderId: '188395223241',
-    projectId: 'chulltv',
-    storageBucket: 'chulltv.firebasestorage.app',
+    projectId: 'Railpitaratv',
+    storageBucket: 'Railpitaratv.firebasestorage.app',
     androidClientId:
         '188395223241-1c63iksddu87f2v8dorh5jjua2fng0l4.apps.googleusercontent.com',
     iosClientId:

@@ -1459,11 +1459,9 @@ class HomeState extends State<Home> with RouteAware {
                     gradient: isSelected
                         ? const LinearGradient(
                             colors: [
-                              Color.fromARGB(255, 169, 11, 6), // Dark Red
-                              Color.fromARGB(
-                                  255, 237, 48, 41), // Light Red/Orange Mix
-                              Color.fromARGB(
-                                  226, 230, 62, 56), // White for smooth blend
+                              primaryDark, // Dark Red
+                              complimentryColor, // Light Red/Orange Mix
+                              primaryLight, // White for smooth blend
                             ], // Dark Red → Light Red/Orange
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
@@ -1736,7 +1734,7 @@ class HomeState extends State<Home> with RouteAware {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 9, 18, 4),
+              padding: const EdgeInsets.fromLTRB(15, 9, 0, 4),
               child: MyTextTWO(
                 color: white,
                 text: section.title ?? '',
@@ -1745,6 +1743,7 @@ class HomeState extends State<Home> with RouteAware {
                 fontweight: FontWeight.w500,
               ),
             ),
+            const Spacer(), // Pushes the "More" text to the right
             if (!isFMSection && !isGenreOrLanguage && !isReelShow)
               GestureDetector(
                 onTap: () {
@@ -1759,7 +1758,8 @@ class HomeState extends State<Home> with RouteAware {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 0),
+                  padding:
+                      const EdgeInsets.only(right: 5), // Proper right padding
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -3300,182 +3300,156 @@ class HomeState extends State<Home> with RouteAware {
     }
   }
 
-  Widget setSectionByType(List<list.Result>? sectionList) {
-    // Check if sectionList is not null
+  Widget setSectionByType({
+    required List<list.Result>? sectionList,
+    required ScrollController scrollController,
+    required bool isLoadingMore,
+  }) {
     if (sectionList == null || sectionList.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    // Sort the sectionList based on sectionOrder
     sectionList
         .sort((a, b) => (a.sectionOrder ?? 0).compareTo(b.sectionOrder ?? 0));
 
     return ListView.builder(
-      itemCount: sectionList.length,
+      controller: scrollController,
+      itemCount: sectionList.length + (isLoadingMore ? 1 : 0),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        if (sectionList[index].data != null &&
-            sectionList[index].data!.isNotEmpty) {
-          bool isBannerVisible =
-              (sectionList[index].bannerVisible ?? "0") == "1";
-          bool isGenreOrLanguage = sectionList[index].videoType == 3 ||
-              sectionList[index].videoType == 4 ||
-              sectionList[index].videoType == 6;
-          bool isReelShow = sectionList[index].videoType == 7;
-
-          bool isFMSection = sectionList[index].title == "FM";
-
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 9, 18, 4),
-                    child: MyTextTWO(
-                      maxline: 2,
-                      color: white,
-                      text: sectionList[index].title.toString(),
-                      textalign: TextAlign.left,
-                      fontsizeNormal: 11,
-                      fontweight: FontWeight.w500,
-                      fontsizeWeb: 11,
-                      multilanguage: false,
-                      overflow: TextOverflow.ellipsis,
-                      fontstyle: FontStyle.normal,
-                    ),
-                  ),
-                  if (!isFMSection && !isGenreOrLanguage && !isReelShow)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return MoreScreen(
-                              sectionList[index].title.toString(),
-                              sectionList[index]
-                                  .id
-                                  .toString(), // Pass the section ID
-                            );
-                          },
-                        ));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 6), // Adjust padding to avoid overflow
-                        child: Row(
-                          mainAxisSize: MainAxisSize
-                              .min, // Prevents the row from stretching
-                          children: [
-                            MyText(
-                              color: primaryLight,
-                              text: "More",
-                              textalign: TextAlign.center,
-                              fontsizeNormal: 8,
-                              fontweight: FontWeight.w500,
-                              fontsizeWeb: 14,
-                              multilanguage: false,
-                              maxline: 1,
-                              overflow: TextOverflow
-                                  .ellipsis, // Prevents text overflow
-                              fontstyle: FontStyle.normal,
-                            ),
-                            const SizedBox(
-                                width: 4), // Space between text and icon
-                            Icon(
-                              CupertinoIcons.right_chevron,
-                              color: primaryLight, // White color arrow
-                              size: 14, // Adjust size as needed
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 5),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: getRemainingDataHeight(
-                  sectionList[index].videoType.toString(),
-                  sectionList[index].screenLayout ?? "",
-                ),
-                child: setSectionData(sectionList: sectionList, index: index),
-              ),
-              if (isBannerVisible)
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
-                      child: SizedBox(
-                        height: Dimens.upcomingHeight,
-                        width: MediaQuery.of(context).size.width,
-                        child: GestureDetector(
-                          onTap: () {
-                            if (sectionList[index].bannerLinkType == 0) {
-                              // Handle onTap for bannerLinkType = 0
-                              if (sectionList[index].bannerBacklink != null &&
-                                  sectionList[index]
-                                      .bannerBacklink
-                                      .toString()
-                                      .isNotEmpty) {
-                                launchUrl(Uri.parse(sectionList[index]
-                                    .bannerBacklink
-                                    .toString()));
-                              }
-                            } else {
-                              // Handle onTap for bannerLinkType = 1
-                              if (Constant.userID == null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginViaSocial()),
-                                );
-                                // Utils.buildWebAlertDialog(context, "login", "");
-                              } else {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => PlayerVideo(
-                                //           '',
-                                //           0,
-                                //           0,
-                                //           typeId,
-                                //           0,
-                                //           sectionList[index]
-                                //               .bannerBacklink
-                                //               .toString(),
-                                //           0,
-                                //           "",
-                                //           "")),
-                                // );
-
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => TestPlayerWeb(
-                                        loadURL: sectionList[index]
-                                            .bannerBacklink
-                                            .toString())));
-                              }
-                            }
-                          },
-                          child: Image.network(
-                              sectionList[index].bannerImage.toString(),
-                              fit: BoxFit.fill),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
+        if (index == sectionList.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
           );
-        } else {
+        }
+
+        final section = sectionList[index];
+        if (section.data == null || section.data!.isEmpty) {
           return const SizedBox.shrink();
         }
+
+        final bool isBannerVisible = (section.bannerVisible ?? "0") == "1";
+        final bool isGenreOrLanguage = section.videoType == 3 ||
+            section.videoType == 4 ||
+            section.videoType == 6;
+        final bool isReelShow = section.videoType == 7;
+        final bool isFMSection = section.title == "FM";
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 9, 18, 4),
+                  child: MyTextTWO(
+                    maxline: 2,
+                    color: white,
+                    text: section.title.toString(),
+                    textalign: TextAlign.left,
+                    fontsizeNormal: 11,
+                    fontweight: FontWeight.w500,
+                    fontsizeWeb: 11,
+                    multilanguage: false,
+                    overflow: TextOverflow.ellipsis,
+                    fontstyle: FontStyle.normal,
+                  ),
+                ),
+                if (!isFMSection && !isGenreOrLanguage && !isReelShow)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MoreScreen(
+                            section.title.toString(),
+                            section.id.toString(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          MyText(
+                            color: primaryLight,
+                            text: "More",
+                            textalign: TextAlign.center,
+                            fontsizeNormal: 8,
+                            fontweight: FontWeight.w500,
+                            fontsizeWeb: 14,
+                            multilanguage: false,
+                            maxline: 1,
+                            overflow: TextOverflow.ellipsis,
+                            fontstyle: FontStyle.normal,
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(
+                            CupertinoIcons.right_chevron,
+                            color: primaryLight,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: getRemainingDataHeight(
+                section.videoType.toString(),
+                section.screenLayout ?? "",
+              ),
+              child: setSectionData(sectionList: sectionList, index: index),
+            ),
+            if (isBannerVisible)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 15, 5, 0),
+                child: SizedBox(
+                  height: Dimens.upcomingHeight,
+                  width: MediaQuery.of(context).size.width,
+                  child: GestureDetector(
+                    onTap: () {
+                      final link = section.bannerBacklink?.toString();
+                      if ((section.bannerLinkType ?? 0) == 0) {
+                        if (link != null && link.isNotEmpty) {
+                          launchUrl(Uri.parse(link));
+                        }
+                      } else {
+                        if (Constant.userID == null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginViaSocial()),
+                          );
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => TestPlayerWeb(
+                                loadURL: link!,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: Image.network(
+                      section.bannerImage.toString(),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
       },
     );
   }
@@ -3658,9 +3632,7 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: 
-            
-            Stack(
+            child: Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -3764,8 +3736,6 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
-         
-         
           );
         },
       ),
@@ -3828,8 +3798,7 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: 
-            Stack(
+            child: Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -3933,7 +3902,6 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
-         
           );
         },
       ),
@@ -3996,9 +3964,7 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: 
-            
-            Stack(
+            child: Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -4102,7 +4068,6 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
-         
           );
         },
       ),
@@ -4186,9 +4151,7 @@ class HomeState extends State<Home> with RouteAware {
                 );
               }
             },
-            child: 
-            
-            Stack(
+            child: Stack(
               alignment: Alignment.topRight,
               children: [
                 // Background image with gradient overlay for better visibility
@@ -4292,7 +4255,6 @@ class HomeState extends State<Home> with RouteAware {
                 ),
               ],
             ),
-          
           );
         },
       ),

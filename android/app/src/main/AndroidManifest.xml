@@ -43,8 +43,8 @@
         android:required="false"/>
 
     <application
-        android:label="Chull"
-        android:name=".ChullApplication"
+        android:label="Railpitara"
+        android:name=".RailpitaraApplication"
         android:icon="@mipmap/ic_launcher"
         android:keepScreenOn="true"
         android:banner="@drawable/banner"
@@ -85,7 +85,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="chull.tv"/>
+                <data android:scheme="http" android:host="https://railpitara.ottpeople.com"/>
                 <data android:scheme="https"/>
             </intent-filter>
 

@@ -70,7 +70,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp(
-      name: 'chulltv', options: DefaultFirebaseOptions.currentPlatform);
+      name: 'railpitara', options: DefaultFirebaseOptions.currentPlatform);
   await Locales.init([
     'en',
     'af',

@@ -13,7 +13,7 @@ import com.moengage.pushbase.MoEPushHelper
 import com.moengage.core.analytics.MoEAnalyticsHelper // ✅ Required for setAppStatus
 import com.moengage.core.model.AppStatus // ✅ Required for AppStatus
 
-class ChullApplication : Application() {
+class RailpitaraApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
