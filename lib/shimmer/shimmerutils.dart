@@ -48,12 +48,13 @@ class ShimmerUtils {
           width: MediaQuery.of(context).size.width,
           height: Dimens.homeTabHeight,
           padding: const EdgeInsets.only(top: 8, bottom: 8),
-          color: black.withOpacity(0.8),
+          color: whiteTransparent.withOpacity(0.8),
           child: ListView.separated(
             itemCount: 5,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const PageScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.fromLTRB(13, 5, 13, 5),
             separatorBuilder: (context, index) => const SizedBox(width: 5),
             itemBuilder: (BuildContext context, int index) {
@@ -65,7 +66,7 @@ class ShimmerUtils {
                 child: const ShimmerWidget.roundrectborder(
                   height: 15,
                   width: 80,
-                  shimmerBgColor: black,
+                  shimmerBgColor: shimmerItemColor,
                   shapeBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                 ),
@@ -107,8 +108,8 @@ class ShimmerUtils {
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
                     colors: [
-                      transparentColor,
-                      transparentColor,
+                      whiteTransparent,
+                      whiteTransparent,
                       appBgColor,
                     ],
                   ),
@@ -143,13 +144,13 @@ class ShimmerUtils {
         borderRadius: BorderRadius.circular(4),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Container(
-          color: shimmerItemColor,
+          color: whiteTransparent,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: Dimens.homeWebBanner,
             child: ShimmerWidget.roundcorner(
               height: Dimens.homeWebBanner,
-              shimmerBgColor: shimmerItemColor,
+              shimmerBgColor: whiteTransparent,
               shapeBorder: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(4))),
             ),
@@ -189,8 +190,8 @@ class ShimmerUtils {
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
                     colors: [
-                      transparentColor,
-                      transparentColor,
+                      whiteTransparent,
+                      whiteTransparent,
                       appBgColor,
                     ],
                   ),
@@ -266,7 +267,8 @@ class ShimmerUtils {
             shrinkWrap: true,
             padding: const EdgeInsets.only(left: 20, right: 20),
             scrollDirection: Axis.horizontal,
-            physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const PageScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             separatorBuilder: (context, index) => const SizedBox(width: 5),
             itemBuilder: (BuildContext context, int index) {
               return Stack(
@@ -279,7 +281,7 @@ class ShimmerUtils {
                     child: ShimmerWidget.roundcorner(
                       width: Dimens.widthContiLand,
                       height: Dimens.heightContiLand,
-                      shimmerBgColor: shimmerItemColor,
+                      shimmerBgColor: whiteTransparent,
                       shapeBorder: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(4))),
                     ),
@@ -294,7 +296,7 @@ class ShimmerUtils {
                         child: ShimmerWidget.circular(
                           width: 30,
                           height: 30,
-                          shimmerBgColor: black,
+                          shimmerBgColor: whiteTransparent,
                         ),
                       ),
                       Container(
@@ -304,7 +306,7 @@ class ShimmerUtils {
                         child: ShimmerWidget.roundcorner(
                           width: Dimens.widthContiLand,
                           height: 4,
-                          shimmerBgColor: black,
+                          shimmerBgColor: whiteTransparent,
                           shapeBorder: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(2))),
@@ -333,7 +335,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 15,
             width: 100,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -359,7 +361,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 10,
             width: 60,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -370,7 +372,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 15,
             width: 100,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -398,13 +400,13 @@ class ShimmerUtils {
               ShimmerWidget.circular(
                 height: 20,
                 width: 20,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
               ),
               SizedBox(width: 8),
               ShimmerWidget.roundrectborder(
                 height: 18,
                 width: 80,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
                 shapeBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
@@ -412,7 +414,7 @@ class ShimmerUtils {
               ShimmerWidget.roundrectborder(
                 height: 13,
                 width: 50,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
                 shapeBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
@@ -432,13 +434,13 @@ class ShimmerUtils {
               ShimmerWidget.circular(
                 height: 20,
                 width: 20,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
               ),
               SizedBox(width: 8),
               ShimmerWidget.roundrectborder(
                 height: 18,
                 width: 80,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
                 shapeBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
@@ -446,7 +448,7 @@ class ShimmerUtils {
               ShimmerWidget.roundrectborder(
                 height: 13,
                 width: 50,
-                shimmerBgColor: shimmerItemColor,
+                shimmerBgColor: whiteTransparent,
                 shapeBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
@@ -471,7 +473,7 @@ class ShimmerUtils {
           alignment: Alignment.centerLeft,
           child: const ShimmerWidget.roundrectborder(
             height: 20,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -489,7 +491,7 @@ class ShimmerUtils {
           alignment: Alignment.centerLeft,
           child: const ShimmerWidget.roundrectborder(
             height: 20,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -504,7 +506,7 @@ class ShimmerUtils {
           child: const ShimmerWidget.roundrectborder(
             height: 30,
             width: 80,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -534,7 +536,7 @@ class ShimmerUtils {
           child: const ShimmerWidget.roundrectborder(
             height: 30,
             width: 80,
-            shimmerBgColor: shimmerItemColor,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -551,7 +553,8 @@ class ShimmerUtils {
       child: ListView.separated(
         itemCount: kIsWeb ? 20 : 10,
         shrinkWrap: true,
-        physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -578,7 +581,8 @@ class ShimmerUtils {
       child: ListView.separated(
         itemCount: kIsWeb ? 20 : 10,
         shrinkWrap: true,
-        physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -605,7 +609,8 @@ class ShimmerUtils {
       child: ListView.separated(
         itemCount: kIsWeb ? 20 : 10,
         shrinkWrap: true,
-        physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -632,7 +637,8 @@ class ShimmerUtils {
       child: ListView.separated(
         itemCount: kIsWeb ? 20 : 10,
         shrinkWrap: true,
-        physics: const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics:
+            const PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 5),
@@ -657,7 +663,7 @@ class ShimmerUtils {
                   padding: EdgeInsets.all(3),
                   child: ShimmerWidget.roundrectborder(
                     height: 10,
-                    shimmerBgColor: black,
+                    shimmerBgColor: whiteTransparent,
                     shapeBorder: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(2))),
                   ),
@@ -785,8 +791,8 @@ class ShimmerUtils {
                   begin: Alignment.center,
                   end: Alignment.bottomCenter,
                   colors: [
-                    transparentColor,
-                    transparentColor,
+                    whiteTransparent,
+                    whiteTransparent,
                     appBgColor,
                   ],
                 ),
@@ -795,7 +801,7 @@ class ShimmerUtils {
             const ShimmerWidget.circular(
               height: 60,
               width: 60,
-              shimmerBgColor: black,
+              shimmerBgColor: whiteTransparent,
             ),
           ],
         ),
@@ -850,7 +856,7 @@ class ShimmerUtils {
                                 child: const ShimmerWidget.roundrectborder(
                                   height: 15,
                                   width: 80,
-                                  shimmerBgColor: shimmerItemColor,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -861,7 +867,7 @@ class ShimmerUtils {
                                 child: const ShimmerWidget.roundrectborder(
                                   height: 15,
                                   width: 80,
-                                  shimmerBgColor: shimmerItemColor,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -875,7 +881,7 @@ class ShimmerUtils {
                             child: const ShimmerWidget.roundrectborder(
                               height: 15,
                               width: 80,
-                              shimmerBgColor: shimmerItemColor,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -900,7 +906,7 @@ class ShimmerUtils {
                         ShimmerWidget.roundrectborder(
                           height: 18,
                           width: 100,
-                          shimmerBgColor: shimmerItemColor,
+                          shimmerBgColor: whiteTransparent,
                           shapeBorder: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
@@ -909,7 +915,7 @@ class ShimmerUtils {
                         ShimmerWidget.circular(
                           height: 12,
                           width: 12,
-                          shimmerBgColor: shimmerItemColor,
+                          shimmerBgColor: whiteTransparent,
                         ),
                       ],
                     ),
@@ -1680,7 +1686,7 @@ class ShimmerUtils {
                           child: ShimmerWidget.circular(
                             width: 30,
                             height: 30,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                           ),
                         ),
                         Container(
@@ -1690,7 +1696,7 @@ class ShimmerUtils {
                           child: ShimmerWidget.roundcorner(
                             width: Dimens.widthContiLand,
                             height: 4,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                             shapeBorder: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(2))),
@@ -1720,7 +1726,7 @@ class ShimmerUtils {
                             const ShimmerWidget.roundrectborder(
                               height: 18,
                               width: 100,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -1736,7 +1742,7 @@ class ShimmerUtils {
                                   child: const ShimmerWidget.roundrectborder(
                                     height: 15,
                                     width: 60,
-                                    shimmerBgColor: black,
+                                    shimmerBgColor: whiteTransparent,
                                     shapeBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5))),
@@ -1747,7 +1753,7 @@ class ShimmerUtils {
                                   child: const ShimmerWidget.roundrectborder(
                                     height: 15,
                                     width: 80,
-                                    shimmerBgColor: black,
+                                    shimmerBgColor: whiteTransparent,
                                     shapeBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5))),
@@ -1764,7 +1770,7 @@ class ShimmerUtils {
                                 ShimmerWidget.roundrectborder(
                                   height: 13,
                                   width: 80,
-                                  shimmerBgColor: black,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -1774,7 +1780,7 @@ class ShimmerUtils {
                                 ShimmerWidget.roundrectborder(
                                   height: 13,
                                   width: 80,
-                                  shimmerBgColor: black,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -1795,7 +1801,7 @@ class ShimmerUtils {
                           child: const ShimmerWidget.circular(
                             height: 18,
                             width: 18,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                           ),
                         ),
                       ),
@@ -1855,7 +1861,7 @@ class ShimmerUtils {
                           child: ShimmerWidget.circular(
                             width: 30,
                             height: 30,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                           ),
                         ),
                         Container(
@@ -1865,7 +1871,7 @@ class ShimmerUtils {
                           child: ShimmerWidget.roundcorner(
                             width: Dimens.widthContiLand,
                             height: 4,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                             shapeBorder: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(2))),
@@ -1895,7 +1901,7 @@ class ShimmerUtils {
                             const ShimmerWidget.roundrectborder(
                               height: 18,
                               width: 100,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -1911,7 +1917,7 @@ class ShimmerUtils {
                                   child: const ShimmerWidget.roundrectborder(
                                     height: 15,
                                     width: 60,
-                                    shimmerBgColor: black,
+                                    shimmerBgColor: whiteTransparent,
                                     shapeBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5))),
@@ -1922,7 +1928,7 @@ class ShimmerUtils {
                                   child: const ShimmerWidget.roundrectborder(
                                     height: 15,
                                     width: 80,
-                                    shimmerBgColor: black,
+                                    shimmerBgColor: whiteTransparent,
                                     shapeBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5))),
@@ -1939,7 +1945,7 @@ class ShimmerUtils {
                                 ShimmerWidget.roundrectborder(
                                   height: 13,
                                   width: 80,
-                                  shimmerBgColor: black,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -1949,7 +1955,7 @@ class ShimmerUtils {
                                 ShimmerWidget.roundrectborder(
                                   height: 13,
                                   width: 80,
-                                  shimmerBgColor: black,
+                                  shimmerBgColor: whiteTransparent,
                                   shapeBorder: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
@@ -1970,7 +1976,7 @@ class ShimmerUtils {
                           child: const ShimmerWidget.circular(
                             height: 18,
                             width: 18,
-                            shimmerBgColor: black,
+                            shimmerBgColor: whiteTransparent,
                           ),
                         ),
                       ),
@@ -1996,7 +2002,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 20,
             width: MediaQuery.of(context).size.width,
-            shimmerBgColor: black,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -2009,7 +2015,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 20,
             width: MediaQuery.of(context).size.width,
-            shimmerBgColor: black,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -2021,7 +2027,7 @@ class ShimmerUtils {
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
-            color: black,
+            color: whiteTransparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -2131,7 +2137,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 20,
             width: MediaQuery.of(context).size.width,
-            shimmerBgColor: black,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -2144,7 +2150,7 @@ class ShimmerUtils {
           child: ShimmerWidget.roundrectborder(
             height: 20,
             width: MediaQuery.of(context).size.width,
-            shimmerBgColor: black,
+            shimmerBgColor: whiteTransparent,
             shapeBorder: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -2161,7 +2167,7 @@ class ShimmerUtils {
                 child: Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   elevation: 5,
-                  color: black,
+                  color: whiteTransparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -2325,7 +2331,7 @@ class ShimmerUtils {
                 child: Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   elevation: 5,
-                  color: black,
+                  color: whiteTransparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -2489,7 +2495,7 @@ class ShimmerUtils {
                 child: Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   elevation: 5,
-                  color: black,
+                  color: whiteTransparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -2694,7 +2700,7 @@ class ShimmerUtils {
         return Container(
           width: MediaQuery.of(context).size.width,
           constraints: BoxConstraints(minHeight: Dimens.heightHistory),
-          decoration: Utils.setBackground(lightBlack, 5),
+          decoration: Utils.setBackground(whiteTransparent, 5),
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -2709,7 +2715,7 @@ class ShimmerUtils {
                       const ShimmerWidget.roundrectborder(
                         height: 20,
                         width: 120,
-                        shimmerBgColor: black,
+                        shimmerBgColor: whiteTransparent,
                         shapeBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                       ),
@@ -2724,7 +2730,7 @@ class ShimmerUtils {
                             ShimmerWidget.roundrectborder(
                               height: 15,
                               width: 80,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -2733,7 +2739,7 @@ class ShimmerUtils {
                             ShimmerWidget.roundrectborder(
                               height: 15,
                               width: 3,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -2743,7 +2749,7 @@ class ShimmerUtils {
                               child: ShimmerWidget.roundrectborder(
                                 height: 18,
                                 width: 120,
-                                shimmerBgColor: black,
+                                shimmerBgColor: whiteTransparent,
                                 shapeBorder: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5))),
@@ -2763,7 +2769,7 @@ class ShimmerUtils {
                             ShimmerWidget.roundrectborder(
                               height: 15,
                               width: 80,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -2772,7 +2778,7 @@ class ShimmerUtils {
                             ShimmerWidget.roundrectborder(
                               height: 15,
                               width: 3,
-                              shimmerBgColor: black,
+                              shimmerBgColor: whiteTransparent,
                               shapeBorder: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
@@ -2782,7 +2788,7 @@ class ShimmerUtils {
                               child: ShimmerWidget.roundrectborder(
                                 height: 18,
                                 width: 120,
-                                shimmerBgColor: black,
+                                shimmerBgColor: whiteTransparent,
                                 shapeBorder: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5))),
@@ -2803,7 +2809,7 @@ class ShimmerUtils {
                 child: const ShimmerWidget.roundrectborder(
                   height: 20,
                   width: 100,
-                  shimmerBgColor: black,
+                  shimmerBgColor: whiteTransparent,
                   shapeBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                 ),

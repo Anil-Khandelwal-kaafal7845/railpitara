@@ -170,31 +170,6 @@ class MovieDetailsState extends State<MovieDetails> with RouteAware {
   @override
   void didPopNext() {
     _fetchDataAgain();
-
-    // debugPrint("didPopNext");
-    // if (videoDetailsProvider.sectionDetailModel.result?.trailerType ==
-    //     "youtube") {
-    //   if (_trailerYoutubeController == null) {
-    //     loadTrailer(
-    //         videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-    //         videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-    //   } else {
-    //     if (_trailerYoutubeController != null) {
-    //       _trailerYoutubeController?.seekTo(seconds: 0.0);
-    //       _trailerYoutubeController?.playVideo();
-    //     }
-    //   }
-    // } else {
-    //   if (_trailerNormalController == null) {
-    //     loadTrailer(
-    //         videoDetailsProvider.sectionDetailModel.result?.trailerUrl ?? "",
-    //         videoDetailsProvider.sectionDetailModel.result?.trailerType ?? "");
-    //   } else {
-    //     if (_trailerNormalController != null) {
-    //       _trailerNormalController?.play();
-    //     }
-    //   }
-    // }
     super.didPopNext();
   }
 

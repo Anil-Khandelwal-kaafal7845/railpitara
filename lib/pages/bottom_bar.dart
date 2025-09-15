@@ -109,7 +109,7 @@ class BottombarState extends State<Bottombar> {
               ),
               selectedFontSize: 12,
               unselectedFontSize: 12,
-              elevation: 5,
+              elevation: 0,
               currentIndex: selectedIndex,
               unselectedItemColor: gray,
               selectedItemColor: colorPrimary,

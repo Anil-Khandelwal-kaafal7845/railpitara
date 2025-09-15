@@ -12,7 +12,7 @@ class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget.rectangular(
       {super.key,
       this.width = double.infinity,
-      this.shimmerBgColor = lightBlack,
+      this.shimmerBgColor = gray,
       required this.height})
       : shapeBorder = const RoundedRectangleBorder();
 
@@ -20,7 +20,7 @@ class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget.circular({
     super.key,
     this.width = double.infinity,
-    this.shimmerBgColor = lightBlack,
+    this.shimmerBgColor = gray,
     required this.height,
     this.shapeBorder = const CircleBorder(),
   });
@@ -29,7 +29,7 @@ class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget.roundcorner({
     super.key,
     this.width = double.infinity,
-    this.shimmerBgColor = lightBlack,
+    this.shimmerBgColor = gray,
     required this.height,
     this.shapeBorder = const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -39,7 +39,7 @@ class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget.roundrectborder({
     super.key,
     this.width = double.infinity,
-    this.shimmerBgColor = lightBlack,
+    this.shimmerBgColor = gray,
     required this.height,
     this.shapeBorder = const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(4))),
@@ -49,7 +49,7 @@ class ShimmerWidget extends StatelessWidget {
   Widget build(BuildContext context) => Shimmer(
         duration: const Duration(milliseconds: 800),
         interval: const Duration(milliseconds: 800),
-        color: shimmerColor,
+        color: whiteTransparent,
         colorOpacity: 0.3,
         enabled: true,
         direction: const ShimmerDirection.fromLTRB(),
@@ -57,7 +57,7 @@ class ShimmerWidget extends StatelessWidget {
           width: width,
           height: height,
           decoration: ShapeDecoration(
-            color: shimmerBgColor,
+            color: whiteTransparent,
             shape: shapeBorder,
           ),
         ),

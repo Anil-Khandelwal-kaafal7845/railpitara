@@ -650,7 +650,7 @@ class HomeState extends State<Home> with RouteAware {
             MyImage(width: 110, height: 110, imagePath: "appicon.png"),
           ],
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: SafeArea(
         child: (kIsWeb || Constant.isTV)
@@ -1382,7 +1382,7 @@ class HomeState extends State<Home> with RouteAware {
                           width: MediaQuery.of(context).size.width,
                           height: Dimens.homeTabHeight,
                           padding: const EdgeInsets.only(top: 6, bottom: 6),
-                          color: black.withOpacity(0.8),
+                          // color: black.withOpacity(0.8),
                           child: tabTitle(homeProvider.sectionTypeModel.result),
                         ),
                       ],
@@ -1710,11 +1710,11 @@ class HomeState extends State<Home> with RouteAware {
               },
             ),
 
-            // Footer (Optional)
-            if (kIsWeb)
-              const SliverToBoxAdapter(
-                child: FooterWeb(),
-              ),
+            // // Footer (Optional)
+            // if (kIsWeb)
+            //   const SliverToBoxAdapter(
+            //     child: FooterWeb(),
+            //   ),
           ],
         ),
       ),
@@ -1736,11 +1736,11 @@ class HomeState extends State<Home> with RouteAware {
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 9, 0, 4),
               child: MyTextTWO(
-                color: white,
+                color: black,
                 text: section.title ?? '',
                 textalign: TextAlign.left,
-                fontsizeNormal: 11,
-                fontweight: FontWeight.w500,
+                fontsizeNormal: 12,
+                fontweight: FontWeight.w600,
               ),
             ),
             const Spacer(), // Pushes the "More" text to the right

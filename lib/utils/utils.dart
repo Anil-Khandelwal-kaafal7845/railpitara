@@ -504,7 +504,7 @@ class Utils {
                   stopTime,
                   vUploadType,
                   videoThumb,
-                 iframeTrailerUrl: iframeTrailerUrl,
+                  iframeTrailerUrl: iframeTrailerUrl,
                   trailerUrlVideoId: trailerUrlVideoId,
                   iframeVideoUrl: iframeVideoUrl,
                   videoUrlId: videoUrlVideoId,
@@ -606,8 +606,8 @@ class Utils {
                     vUploadType,
                     videoThumb,
                     iframeTrailerUrl: iframeTrailerUrl,
-                  trailerUrlVideoId: trailerUrlVideoId,
-                  iframeVideoUrl: iframeVideoUrl,
+                    trailerUrlVideoId: trailerUrlVideoId,
+                    iframeVideoUrl: iframeVideoUrl,
                     videoUrlId: videoUrlVideoId,
                     isLive: isLive,
                     trailerUrl: trailerUrl);
@@ -634,7 +634,7 @@ class Utils {
                   stopTime,
                   vUploadType,
                   videoThumb,
-                 iframeTrailerUrl: iframeTrailerUrl,
+                  iframeTrailerUrl: iframeTrailerUrl,
                   trailerUrlVideoId: trailerUrlVideoId,
                   iframeVideoUrl: iframeVideoUrl,
                   videoUrlId: videoUrlVideoId,
@@ -1001,7 +1001,7 @@ class Utils {
           fit: BoxFit.contain,
           height: 17,
           width: 17,
-          color: white,
+          color: black,
         ),
       ),
       title: MyText(
@@ -1035,7 +1035,7 @@ class Utils {
                 fit: BoxFit.contain,
                 height: 17,
                 width: 17,
-                color: white,
+                color: black,
               ),
             )
           : null, // No back button if showBackButton is false
@@ -1186,7 +1186,6 @@ class Utils {
       return "$minutes m";
     }
   }
-
 
   static String remainTimeInMin(int remainWatch) {
     String convTime = "";
@@ -1394,7 +1393,7 @@ class Utils {
   // }
 
   //for share feature with images ----
-   static Future<void> shareApp(String shareMessage, {String? imageUrl}) async {
+  static Future<void> shareApp(String shareMessage, {String? imageUrl}) async {
     try {
       if (imageUrl != null && imageUrl.isNotEmpty) {
         // Download the image
@@ -1417,7 +1416,6 @@ class Utils {
       await Share.share(shareMessage); // Fallback to text-only sharing
     }
   }
-
 
   /* ***************** generate Unique OrderID START ***************** */
   static String generateRandomOrderID() {

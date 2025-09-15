@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const colorPrimary = Color(0xFFE15D01);
+const colorPrimary = Color(0xFF0054A8);
 const colorPrimaryDark = Color(0xff0e0e16);
 const colorAccent = Color(0xFFE15D01);
 const subscriblue = Color(0xffE15D01);
@@ -12,16 +12,16 @@ const topTen = Color(0xfffe9eced);
 const colorGraidentLeft = Color(0xffF9D1A0);
 const colorGraidentRight = Color(0xffFFFFFF);
 
-const complimentryColor = Color(0xFFE15D01);
-const primaryLight = Color(0xFFE15D01);
-const primaryDark = Color(0xFFE15D01);
-const primaryTras75 = Color(0xFFE15D01);
-const primaryTras50 = Color(0xFFE15D01);
+const complimentryColor = Color(0xFF0054A8);
+const primaryLight = Color.fromARGB(255, 2, 94, 186);
+const primaryDark = Color.fromARGB(255, 2, 72, 142);
+const primaryTras75 = Color.fromARGB(255, 2, 73, 144);
+const primaryTras50 = Color(0xFF0054A8);
 const primaryTras25 = Color(0x40bafa34);
 const primaryTras10 = Color(0x1Abafa34);
 const primaryTras5 = Color(0x0Dbafa34);
 
-const appBgColor = Color(0xFF000000);
+const appBgColor = Color.fromARGB(255, 255, 255, 255);
 const dotsDefaultColor = Color(0xFF2D2D2D);
 const dotsActiveColor = Color(0xFFFFFFFF);
 const statusBarColor = Color.fromRGBO(0, 0, 0, 0);
@@ -55,7 +55,7 @@ const blackTrans20 = Color(0x20000000);
 const blackTrans10 = Color(0x10000000);
 const lightBlack = Color(0xff0c0c0d);
 const shimmerColor = Color(0xff454545);
-const shimmerItemColor = Color(0xff0c0c0d);
+const shimmerItemColor = Color.fromARGB(255, 198, 198, 207);
 const gray = Color(0xffa9aaac);
 const grayDark = Color(0xff454545);
 const lightGray = Color(0xffc3c3c3);
